@@ -1,0 +1,17 @@
+{
+  "name": "programming-lab-2024",
+  "version": "1.0.0",
+  "description": "start autocompiler: F1 -> Tasks: Run Build Task -> tsc: watch\r start server: npx nodemon dist/index.js    // old: node dist/index.js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
