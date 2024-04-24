@@ -1,16 +1,19 @@
 # Programming-Lab-2024
 
+Download and install NODE
+https://nodejs.org/en/download
 
 # How to code:
 start autocompiler: F1 -> Tasks: Run Build Task -> tsc: watch
 start server (auto restart after edit): npx nodemon dist/index.js (copy paste in console)
 
-Error fixes:
+
+# Error fixes
 Der Befehl ""node"" ist entweder falsch geschrieben oder
 konnte nicht gefunden werden.
 
 Solution:
-Download NODE
+Download and install NODE
 https://nodejs.org/en/download
 
 
