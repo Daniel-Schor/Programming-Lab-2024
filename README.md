@@ -36,3 +36,13 @@ Need to install the following packages:
 nodemon@3.1.0
 
 Y drücken dann wird es installiert
+
+# PostgresSQL
+
+## Download and instal PostgresSQL
+https://www.postgresql.org/download/
+
+Click on until you reach the password input.
+You will choose your own password.
+Then click on until you reach the "Locale" setting. There you select "English, United States".
+Then click further.
