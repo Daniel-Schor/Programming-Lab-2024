@@ -5,18 +5,21 @@
 
 import express from 'express';
 import pkg from 'pg';
+import { stringify } from 'querystring';
 const { Client } = pkg;
 
 // TODO export everything that has nothing to do with Endpoints to separate file
 
 // Database connection
 const client = new Client({
-    user: 'your_database_user',
+    user: 'postgres',
     host: 'localhost',
-    database: 'your_database_name',
-    password: 'your_database_password',
+    database: 'pizza',
+    password: 'admin',
     port: 5432,
 });
+
+const defaultDate = "2022-12-01";
 
 client
 	.connect()
@@ -24,20 +27,9 @@ client
 		console.log('Connected to PostgreSQL database');
 	})
 	.catch((err) => {
-        // TODO change when Database is running
-		console.log('Not Connected');
-		//console.error('Error connecting to PostgreSQL database', err);
+		console.error('Error connecting to PostgreSQL database', err);
 	});
 // Database connection end
-
-// Functions
-function defaultDate() {
-    // TODO hardcode date to be the last entry in the database
-    let date = new Date();
-    date.setDate(date.getDate() - 30);
-    return date.toISOString().split('T')[0];
-}
-// Functions end
 
 const app = express();
 app.use(express.static('./static'));
@@ -84,33 +76,19 @@ app.get('/bsp', async (req, res) => {
 // Revenue
 app.get('/revenue', async (req, res) => {
     try {
-        // TODO build correct SQL request
-        let query = "SELECT * FROM revenue WHERE date >= $1 ORDER BY date DESC;";
-        let dropOffDate = req.query.date || defaultDate();
+        // ">=" or ">" and how bout timezones?
+        let query = `
+                    SELECT "storeID", "purchaseDate"::DATE AS day, SUM("total") AS sum
+                    FROM purchase 
+                    WHERE \"purchaseDate\" >= $1 
+                    GROUP BY "storeID", day
+                    ORDER BY day DESC
+                    `;
+        let dropOffDate = req.query.date || defaultDate;
 
-        // TODO uncomment when Database is running
-        let result = null;//await client.query(query, dropOffDate);
+        let result = await client.query(query, [dropOffDate]);
 
-        // sample data in JSON format
-        let sampleData = [
-            {
-                id: 0,
-                date: dropOffDate,
-                revenue: 500,
-                description: "drop-off date"
-            },
-            {
-                id: 1,
-                date: "2023-04-01",
-                revenue: 1000
-            },
-            {
-                id: 2,
-                date: "2023-04-02",
-                revenue: 1500
-            }
-        ];
-        res.status(200).json(result || sampleData);
+        res.status(200).json(result.rows);
     }
     catch (err) {
         console.error(err);
