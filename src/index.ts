@@ -1,35 +1,9 @@
-// Endpoints liefern Daten im .json format und keine .html-Dateien
-// Verschiedene objekte im Frontend greifen per .js auf die Endpoints zu und verarbeiten die Daten 
-//      -> somit wird jeweils nur der Inhalt der Objekte geladen und nicht die ganze Seite (Single Page Application)
-// function to get date from 30 days ago ago in format yyyy-mm-dd
-
 import express from 'express';
-import pkg from 'pg';
-import { stringify } from 'querystring';
-const { Client } = pkg;
+import client from './connector.js';
+import queries from './queries.json' assert { type: 'json' };
 
-// TODO export everything that has nothing to do with Endpoints to separate file
-
-// Database connection
-const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'pizza',
-    password: 'admin',
-    port: 5432,
-});
 
 const defaultDate = "2022-12-01";
-
-client
-	.connect()
-	.then(() => {
-		console.log('Connected to PostgreSQL database');
-	})
-	.catch((err) => {
-		console.error('Error connecting to PostgreSQL database', err);
-	});
-// Database connection end
 
 const app = express();
 app.use(express.static('./static'));
@@ -77,13 +51,7 @@ app.get('/bsp', async (req, res) => {
 app.get('/revenue', async (req, res) => {
     try {
         // ">=" or ">" and how bout timezones?
-        let query = `
-                    SELECT "storeID", "purchaseDate"::DATE AS day, SUM("total") AS sum
-                    FROM purchase 
-                    WHERE \"purchaseDate\" >= $1 
-                    GROUP BY "storeID", day
-                    ORDER BY day DESC
-                    `;
+        let query = queries.revenue;
         let dropOffDate = req.query.date || defaultDate;
 
         let result = await client.query(query, [dropOffDate]);
