@@ -9,11 +9,19 @@ app.use(express.static('./static'));
 
 app.get('/revenue', async (req, res) => {
     try {
-        // ">=" or ">" and how bout timezones?
-        let query = queries.revenue;
-        let dropOffDate = req.query.date || defaultDate;
+        let conditions: string[] = [req.query.date || defaultDate]; 
+        let query: string;
 
-        let result = await client.query(query, [dropOffDate]);
+        // if store/s is provided, only display revenue for those stores
+        if (req.query.store) {
+            query = queries.revenues;
+            conditions.push(req.query.store.split(","));
+        // else display revenue for all stores
+        } else {
+            query = queries.revenue;
+        }
+
+        let result = await client.query(query, conditions);
 
         res.status(200).json(result.rows);
     }
