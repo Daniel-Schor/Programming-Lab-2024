@@ -1,11 +1,16 @@
 import express from 'express';
 import client from './connector.js';
 import queries from './queries.json' assert { type: 'json' };
+import cors from 'cors';
 
 const defaultDate = "2022-12-01";
 
 const app = express();
-app.use(express.static('./static'));
+app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000' // replace with the origin of your client
+  }));
+
 
 // Get specified stores
 app.get('/revenue', async (req, res) => {

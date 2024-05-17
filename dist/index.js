@@ -1,8 +1,10 @@
 import express from 'express';
 import client from './connector.js';
 import queries from './queries.json' assert { type: 'json' };
+import cors from 'cors';
 const defaultDate = "2022-12-01";
 const app = express();
+app.use(cors());
 app.use(express.static('./static'));
 // Get specified stores
 app.get('/revenue', async (req, res) => {
@@ -19,6 +21,7 @@ app.get('/revenue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// XXX NOT NEEDED
 // Get all stores or specified stores
 app.get('/revenue2', async (req, res) => {
     try {
