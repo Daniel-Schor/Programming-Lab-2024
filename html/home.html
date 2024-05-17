@@ -12,7 +12,7 @@
   <script type="text/javascript">
     var myChart = echarts.init(document.getElementById("main"));
     //get data from api
-    fetch('https')
+    fetch('http://localhost:3000/revenue')
       .then(response => response.json())
       .then(data => {
 
