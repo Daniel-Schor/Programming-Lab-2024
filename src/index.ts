@@ -12,7 +12,7 @@ app.get('/revenue', async (req, res) => {
     try {
         let query: string = queries.revenue;
 
-        let cutOfDate: string[] = req.query.date || defaultDate; 
+        let cutOfDate: string = req.query.date || defaultDate; 
         let store: string = req.query.store || "";
         let stores: string[] = store.split(",");
 
