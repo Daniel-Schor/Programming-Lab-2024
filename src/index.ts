@@ -12,7 +12,7 @@ app.get('/revenue', async (req, res) => {
     try {
         let query: string = queries.revenue;
 
-        let cutOfDate: string = req.query.date || defaultDate; 
+        let cutOfDate: string = req.query.date || defaultDate;
         let store: string = req.query.store || "";
         let stores: string[] = store.split(",");
 
@@ -26,10 +26,11 @@ app.get('/revenue', async (req, res) => {
     }
 });
 
+// XXX NOT NEEDED
 // Get all stores or specified stores
 app.get('/revenue2', async (req, res) => {
     try {
-        let conditions: string[] = [req.query.date || defaultDate]; 
+        let conditions: string[] = [req.query.date || defaultDate];
         let query: string;
 
         if (req.query.store) {
@@ -42,6 +43,30 @@ app.get('/revenue2', async (req, res) => {
         let result = await client.query(query, conditions);
 
         res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+// Customer quality
+app.get('/quality', async (req, res) => {
+    try {
+        // - Compare order count to customer count
+        //   - (Problem: some customers could order a lot)
+        // - Get one-time customers
+        // - Get customers who have ordered more than x times
+        // 
+        // Make score based on these (or more) factors, compare to other stores and make a percantage compared to best score
+
+        /*let query: string = queries.quality;
+
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);*/
+
+        res.status(200).json([{ "score": 12345, "percentage": 70, "avgOrderPerCustomer": 3, "oneTimeCustomer": 12, "loyalCustomer": 30 }]);
     }
     catch (err) {
         console.error(err);

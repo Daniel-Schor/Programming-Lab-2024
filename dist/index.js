@@ -39,5 +39,26 @@ app.get('/revenue2', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// Customer quality
+app.get('/quality', async (req, res) => {
+    try {
+        // - Compare order count to customer count
+        //   - (Problem: some customers could order a lot)
+        // - Get one-time customers
+        // - Get customers who have ordered more than x times
+        // 
+        // Make score based on these (or more) factors, compare to other stores and make a percantage compared to best score
+        /*let query: string = queries.quality;
+
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);*/
+        res.status(200).json([{ "score": 12345, "percentage": 70, "avgOrderPerCustomer": 3, "oneTimeCustomer": 12, "loyalCustomer": 30 }]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 app.listen(process.env.PORT || 3000, () => console.log('App available on http://localhost:3000'));
 //# sourceMappingURL=index.js.map
