@@ -2,15 +2,24 @@ import express from 'express';
 import client from './connector.js';
 import queries from './queries.json' assert { type: 'json' };
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const defaultDate = "2022-12-01";
 
-const app = express();
+const app: express = express();
 app.use(cors());
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
   }));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../html/test.html'));
+});
 
 // Get specified stores
 app.get('/revenue', async (req, res) => {
