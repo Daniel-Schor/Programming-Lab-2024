@@ -31,14 +31,14 @@
           console.log("Days:", days);
           console.log("Sums:", sums);
 
-          var option = {
+          let option = {
             tooltip: {},
             legend: {
               data: ["sales"],
             },
             xAxis: {
               //api data
-              data: data.storeID,
+              data: storeIDs,
             },
             yAxis: {},
             series: [
@@ -46,7 +46,7 @@
                 name: "sales",
                 type: "bar",
                 //api data
-                data: data.sum,
+                data: sums,
               },
             ],
           };
