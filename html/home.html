@@ -1,82 +1,92 @@
 <!DOCTYPE hmtl>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <script src="echarts.js"></script>
-  </head>
 
-  <body>
-    <h1>Echarts Test</h1>
-    <div id="main" style="width: 600px; height: 400px"></div>
-    <script type="text/javascript">
-      // Initialize the echarts instance based on the prepared dom
-      var myChart = echarts.init(document.getElementById("main"));
+<head>
+  <meta charset="UTF-8" />
+  <script src="echarts.js"></script>
+</head>
 
-      // Specify the configuration items and data for the chart
-      var option = {
-        tooltip: {},
-        legend: {
-          data: ["sales"],
-        },
-        xAxis: {
-          data: ["Shirts", "Cardigans", "Chiffons", "Pants", "Heels", "Socks"],
-        },
-        yAxis: {},
-        series: [
-          {
-            name: "sales",
-            type: "bar",
-            data: [5, 20, 36, 10, 10, 20],
+<body>
+  <h1>Echarts Test</h1>
+  <div id="main" style="width: 600px; height: 400px"></div>
+  <script type="text/javascript">
+    var myChart = echarts.init(document.getElementById("main"));
+    //get data from api
+    fetch('https')
+      .then(response => response.json())
+      .then(data => {
+
+        var option = {
+          tooltip: {},
+          legend: {
+            data: ["sales"],
           },
-        ],
-      };
+          xAxis: {
+            //api data
+            data: data.storeID,
+          },
+          yAxis: {},
+          series: [
+            {
+              name: "sales",
+              type: "bar",
+              //api data
+              data: data.sum,
+            },
+          ],
+        };
 
-      // Display the chart using the configuration items and data just specified.
-      myChart.setOption(option);
-    </script>
-    <div id="most-ordered" style="width: 600px; height: 400px"></div>
-    <script type="text/javascript">
-      // Initialize the echarts instance based on the prepared dom
-      var myChart = echarts.init(document.getElementById("most-ordered"));
-      option = {
-        title: {
-          text: "Most ordered Items",
-        },
-        legend: {
-          data: ["Allocated Budget", "Actual Spending"],
-        },
-        radar: {
-          // shape: 'circle',
-          indicator: [
-            { name: "Pizza 1", max: 6500 },
-            { name: "Pizza 2", max: 16000 },
-            { name: "Pizza 3", max: 30000 },
-            { name: "Pizza 4", max: 38000 },
-            { name: "Pizza 5", max: 52000 },
-            { name: "Pizza 6", max: 25000 },
+        // Display the chart using the configuration items and data just specified.
+        myChart.setOption(option);
+      })
+      .catch(error => {
+        console.error('Error fetching the data:', error);
+      });
+  </script>
+  <div id="most-ordered" style="width: 600px; height: 400px"></div>
+  <script type="text/javascript">
+    // Initialize the echarts instance based on the prepared dom
+    var myChart = echarts.init(document.getElementById("most-ordered"));
+    option = {
+      title: {
+        text: "Most ordered Items",
+      },
+      legend: {
+        data: ["Allocated Budget", "Actual Spending"],
+      },
+      radar: {
+        // shape: 'circle',
+        indicator: [
+          { name: "Pizza 1", max: 6500 },
+          { name: "Pizza 2", max: 16000 },
+          { name: "Pizza 3", max: 30000 },
+          { name: "Pizza 4", max: 38000 },
+          { name: "Pizza 5", max: 52000 },
+          { name: "Pizza 6", max: 25000 },
+        ],
+      },
+      series: [
+        {
+          name: "This Month vs Last Month",
+          type: "radar",
+          data: [
+            {
+              value: [4200, 3000, 20000, 35000, 50000, 18000],
+              name: "This Month",
+            },
+            {
+              value: [5000, 14000, 28000, 26000, 42000, 21000],
+              name: "Last Month",
+            },
           ],
         },
-        series: [
-          {
-            name: "This Month vs Last Month",
-            type: "radar",
-            data: [
-              {
-                value: [4200, 3000, 20000, 35000, 50000, 18000],
-                name: "This Month",
-              },
-              {
-                value: [5000, 14000, 28000, 26000, 42000, 21000],
-                name: "Last Month",
-              },
-            ],
-          },
-        ],
-      };
+      ],
+    };
 
-      // Display the chart using the configuration items and data just specified.
-      myChart.setOption(option);
-    </script>
-    
-  </body>
+    // Display the chart using the configuration items and data just specified.
+    myChart.setOption(option);
+  </script>
+
+</body>
+
 </html>
