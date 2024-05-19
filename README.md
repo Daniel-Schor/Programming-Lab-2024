@@ -53,7 +53,7 @@ Then click further.
 
 ## Load Database
 download database file : https://mega.nz/file/tN8GzaCZ#K1GlpgOKlsHDx8J_3XowRR2DTZFKJOXlJXFbXKXp3Yo
-open pgAdmin4
-create a database named "pizza"
-right click on pizza and choose "restore"
-now choose the downloaded file through the explorer 
+- open pgAdmin4
+- create a database named "pizza"
+- right click on pizza and choose "restore"
+- now choose the downloaded file through the explorer 
