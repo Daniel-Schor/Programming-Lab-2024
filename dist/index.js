@@ -17,7 +17,6 @@ function getTimeframeInDays(startDate, endDate = '2022-12-31') {
 }
 const app = express();
 app.use(cors());
-app.use(express.static('public'));
 app.use("/static", express.static('./static/'));
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
@@ -84,12 +83,20 @@ app.get('/quality', async (req, res) => {
                 metric.customer_quality_score = (orderPerCustomer * weightOrderPerCustomer +
                     (1 - oneTimePerCustomer) * weightOneTimeCustomer +
                     loyalPerCustomer * weightLoyalCustomer);
+                metric.order_score = orderPerCustomer * 100;
+                metric.single_buy_score = (1 - oneTimePerCustomer) * 100;
+                metric.loyalty_score = loyalPerCustomer * 100;
             });
             // ---------- score from 0 to 100 ---------------
             const minScore = Math.min(...metrics.map(metric => metric.customer_quality_score));
             const maxScore = Math.max(...metrics.map(metric => metric.customer_quality_score));
             metrics.forEach(metric => {
-                metric.normalized_score = ((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100;
+                metric.customer_relations_score = ((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100;
+                delete metric.total_customers;
+                delete metric.total_orders;
+                delete metric.one_time_customers;
+                delete metric.loyal_customers;
+                delete metric.customer_quality_score;
             });
             // ------------------------------------------------
             return metrics;
