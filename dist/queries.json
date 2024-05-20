@@ -1,4 +1,5 @@
 {
     "revenue": "SELECT \"storeID\", \"purchaseDate\"::DATE AS day, SUM(\"total\") AS sum FROM purchase WHERE \"purchaseDate\" >= $1 AND \"storeID\" = ANY($2) GROUP BY \"storeID\", day ORDER BY day DESC",
-    "revenue2": "SELECT \"storeID\", \"purchaseDate\"::DATE AS day, SUM(\"total\") AS sum FROM purchase WHERE \"purchaseDate\" >= $1 GROUP BY \"storeID\", day ORDER BY day DESC"
+    "revenue2": "SELECT \"storeID\", \"purchaseDate\"::DATE AS day, SUM(\"total\") AS sum FROM purchase WHERE \"purchaseDate\" >= $1 GROUP BY \"storeID\", day ORDER BY day DESC",
+    "quality": "SELECT \"storeID\", COUNT(DISTINCT \"customerID\") AS total_customers, SUM(\"order_count\") AS total_orders, COUNT(DISTINCT CASE WHEN order_count = 1 THEN \"customerID\" END) AS one_time_customers, COUNT(DISTINCT CASE WHEN order_count > $2 THEN \"customerID\" END) AS loyal_customers FROM (SELECT \"storeID\", \"customerID\", COUNT(\"purchaseID\") AS order_count FROM purchase WHERE \"purchaseDate\" > $1 GROUP BY \"storeID\", \"customerID\") AS customer_orders GROUP BY \"storeID\";"
 }

@@ -11,11 +11,22 @@ const __dirname = dirname(__filename);
 
 const defaultDate = "2022-12-01";
 
+function getTimeframeInDays(startDate: string, endDate: string = '2022-12-31'): number {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const diffInMilliseconds = end.getTime() - start.getTime();
+
+    const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+
+    return diffInDays;
+}
+
 const app: express = express();
 app.use(cors());
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
-  }));
+}));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../html/test.html'));
@@ -67,20 +78,54 @@ app.get('/revenue2', async (req, res) => {
 // Customer quality
 app.get('/quality', async (req, res) => {
     try {
-        // - Compare order count to customer count
-        //   - (Problem: some customers could order a lot)
-        // - Get one-time customers
-        // - Get customers who have ordered more than x times
-        // 
-        // Make score based on these (or more) factors, compare to other stores and make a percantage compared to best score
+        const date: string = req.query.date || defaultDate;
+        const query: string = queries.quality;
 
-        /*let query: string = queries.quality;
+        const daysPerOrder: number = 15;
+        const loyalCustomerOrderCount: number = Math.floor(getTimeframeInDays(date) / daysPerOrder);
 
-        let result = await client.query(query);
+        const result = await client.query(query, [date, loyalCustomerOrderCount]);
+        let metrics = result.rows;
 
-        res.status(200).json(result.rows);*/
+        // Potential Problem: takes values from different stores -> comparison might be unfair 
+        // Solution: Don't use percentage in visualization. Use normalized score instead
+        const maxOrderPerCustomer: number = Math.max(...metrics.map(metric => metric.total_orders / metric.total_customers));
+        const minOneTimePerCustomer: number = Math.min(...metrics.map(metric => metric.one_time_customers / metric.total_customers));
+        const maxLoyalPerCustomer: number = Math.max(...metrics.map(metric => metric.loyal_customers / metric.total_customers));
 
-        res.status(200).json([{ "score": 12345, "percentage": 70, "avgOrderPerCustomer": 3, "oneTimeCustomer": 12, "loyalCustomer": 30 }]);
+        // Calculate and normalize customer quality scores
+        const calculateCustomerQuality = (metrics: any[], weightOrderPerCustomer = 0.4, weightOneTimeCustomer = 0.2, weightLoyalCustomer = 0.4) => {
+            metrics.forEach(metric => {
+                let orderPerCustomer = (metric.total_orders / metric.total_customers) / maxOrderPerCustomer;
+                let oneTimePerCustomer = minOneTimePerCustomer / (metric.one_time_customers / metric.total_customers);
+                let loyalPerCustomer = (metric.loyal_customers / metric.total_customers) / maxLoyalPerCustomer;
+
+                metric.customer_quality_score = (
+                    orderPerCustomer * weightOrderPerCustomer +
+                    (1 - oneTimePerCustomer) * weightOneTimeCustomer +
+                    loyalPerCustomer * weightLoyalCustomer
+                );
+            });
+
+            // ---------- score from 0 to 100 ---------------
+            const minScore = Math.min(...metrics.map(metric => metric.customer_quality_score));
+            const maxScore = Math.max(...metrics.map(metric => metric.customer_quality_score));
+
+            metrics.forEach(metric => {
+                metric.normalized_score = ((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100;
+            });
+            // ------------------------------------------------
+
+            return metrics;
+        };
+
+        let scoredMetrics = calculateCustomerQuality(metrics);
+
+        if (req.query.store) {
+            scoredMetrics = scoredMetrics.filter(metric => metric.storeID === req.query.store);
+        }
+
+        res.status(200).json(scoredMetrics);
     }
     catch (err) {
         console.error(err);
