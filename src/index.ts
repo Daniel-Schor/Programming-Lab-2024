@@ -81,8 +81,8 @@ app.get('/quality', async (req, res) => {
         const date: string = req.query.date || defaultDate;
         const query: string = queries.quality;
 
-        const daysPerOrder: number = 15;
-        const loyalCustomerOrderCount: number = Math.floor(getTimeframeInDays(date) / daysPerOrder);
+        const daysPerOrder: number = 14;
+        const loyalCustomerOrderCount: number = Math.ceil(getTimeframeInDays(date) / daysPerOrder);
 
         const result = await client.query(query, [date, loyalCustomerOrderCount]);
         let metrics = result.rows;

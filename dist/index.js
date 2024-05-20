@@ -64,8 +64,8 @@ app.get('/quality', async (req, res) => {
     try {
         const date = req.query.date || defaultDate;
         const query = queries.quality;
-        const daysPerOrder = 15;
-        const loyalCustomerOrderCount = Math.floor(getTimeframeInDays(date) / daysPerOrder);
+        const daysPerOrder = 14;
+        const loyalCustomerOrderCount = Math.ceil(getTimeframeInDays(date) / daysPerOrder);
         const result = await client.query(query, [date, loyalCustomerOrderCount]);
         let metrics = result.rows;
         // Potential Problem: takes values from different stores -> comparison might be unfair 
