@@ -50,3 +50,10 @@ Click on until you reach the password input.
 You will choose your own password.
 Then click on until you reach the "Locale" setting. There you select "English, United States".
 Then click further.
+
+## Load Database
+download database file : https://mega.nz/file/tN8GzaCZ#K1GlpgOKlsHDx8J_3XowRR2DTZFKJOXlJXFbXKXp3Yo
+- open pgAdmin4
+- create a database named "pizza"
+- right click on pizza and choose "restore"
+- now choose the downloaded file through the explorer 
