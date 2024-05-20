@@ -25,6 +25,7 @@ function getTimeframeInDays(startDate: string, endDate: string = '2022-12-31'): 
 const app: express = express();
 app.use(cors());
 app.use("/static", express.static('./static/'));
+
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
 }));
