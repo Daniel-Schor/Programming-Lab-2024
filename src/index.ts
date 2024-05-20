@@ -78,6 +78,12 @@ app.get('/revenue2', async (req, res) => {
 });
 
 // Customer quality
+// Retuns following metrics for each store:
+// orders per customer compared to best store
+// one time customers per customers compared to best store
+// loyal customers per customers compared to best store
+// overall customer quality score 0-100 
+//    worst store 0, best store 100
 app.get('/quality', async (req, res) => {
     try {
         const date: string = req.query.date || defaultDate;
@@ -89,8 +95,6 @@ app.get('/quality', async (req, res) => {
         const result = await client.query(query, [date, loyalCustomerOrderCount]);
         let metrics = result.rows;
 
-        // Potential Problem: takes values from different stores -> comparison might be unfair 
-        // Solution: Don't use percentage in visualization. Use normalized score instead
         const maxOrderPerCustomer: number = Math.max(...metrics.map(metric => metric.total_orders / metric.total_customers));
         const minOneTimePerCustomer: number = Math.min(...metrics.map(metric => metric.one_time_customers / metric.total_customers));
         const maxLoyalPerCustomer: number = Math.max(...metrics.map(metric => metric.loyal_customers / metric.total_customers));
@@ -108,9 +112,9 @@ app.get('/quality', async (req, res) => {
                     loyalPerCustomer * weightLoyalCustomer
                 );
 
-                metric.order_score = orderPerCustomer * 100;
-                metric.single_buy_score = (1 - oneTimePerCustomer) * 100;
-                metric.loyalty_score = loyalPerCustomer * 100;
+                metric.order = parseFloat((orderPerCustomer * 100).toFixed(2));
+                metric.single = parseFloat(((oneTimePerCustomer) * 100).toFixed(2));
+                metric.loyalty = parseFloat((loyalPerCustomer * 100).toFixed(2));
                 
             });
 
@@ -119,7 +123,7 @@ app.get('/quality', async (req, res) => {
             const maxScore: number = Math.max(...metrics.map(metric => metric.customer_quality_score));
 
             metrics.forEach(metric => {
-                metric.customer_relations_score = ((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100;
+                metric.overall = parseFloat((((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100).toFixed(2));
                 delete metric.total_customers;
                 delete metric.total_orders;
                 delete metric.one_time_customers;
