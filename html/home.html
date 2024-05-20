@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script src="echarts.js"></script>
+    <script src="static/echarts.js"></script>
   </head>
 
   <body>
@@ -12,7 +12,7 @@
       var myChart = echarts.init(document.getElementById("main"));
       //get data from api
       fetch(
-        "http://localhost:3000/revenue?date=2022-12-31&store=S062214,S013343,S216043" )
+        "/revenue?date=2022-12-31&store=S062214,S013343,S216043" )
         .then((response) => response.json())
         .then((data) => {
           const storeIDs = [];

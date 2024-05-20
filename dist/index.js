@@ -17,11 +17,13 @@ function getTimeframeInDays(startDate, endDate = '2022-12-31') {
 }
 const app = express();
 app.use(cors());
+app.use(express.static('public'));
+app.use("/static", express.static('./static/'));
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
 }));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../html/test.html'));
+    res.sendFile(path.join(__dirname, '../html/home.html'));
 });
 // Get specified stores
 app.get('/revenue', async (req, res) => {
