@@ -46,6 +46,9 @@ app.get('/revenue', async (req, res) => {
 
         let result = await client.query(query, [cutOfDate, stores]);
 
+        result.rows.forEach(row => {
+            row.day = row.day.toISOString().split('T')[0];
+        });
         res.status(200).json(result.rows);
     }
     catch (err) {
@@ -114,9 +117,9 @@ app.get('/quality', async (req, res) => {
                     loyalPerCustomer * weightLoyalCustomer
                 );
 
-                metric.order = parseFloat((orderPerCustomer * 100).toFixed(2));
-                metric.single = parseFloat(((oneTimePerCustomer) * 100).toFixed(2));
-                metric.loyalty = parseFloat((loyalPerCustomer * 100).toFixed(2));
+                metric.order = orderPerCustomer * 100;
+                metric.single = (oneTimePerCustomer) * 100;
+                metric.loyalty = loyalPerCustomer * 100;
                 
             });
 
@@ -125,7 +128,7 @@ app.get('/quality', async (req, res) => {
             const maxScore: number = Math.max(...metrics.map(metric => metric.customer_quality_score));
 
             metrics.forEach(metric => {
-                metric.overall = parseFloat((((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100).toFixed(2));
+                metric.overall = ((metric.customer_quality_score - minScore) / (maxScore - minScore)) * 100;
                 delete metric.total_customers;
                 delete metric.total_orders;
                 delete metric.one_time_customers;
