@@ -188,6 +188,7 @@ function revenueChart() {
   var storeS013343 = [];
   var storeS216043 = [];
   var days = [];
+
   fetch("/revenue?store=S062214,S013343,S216043")
     .then((response) => response.json())
     .then((data) => {
@@ -201,106 +202,106 @@ function revenueChart() {
             days.push(date.getDate());
             storeS013343.push(Number(item.sum));
             break;
-
           case "S216043":
             storeS216043.push(Number(item.sum));
             break;
         }
       });
 
-      
+      console.log("Data for S062214:", storeS062214);
+      console.log("Data for S013343:", storeS013343);
+      console.log("Data for S216043:", storeS216043);
+      console.log("Days:", days);
+
+      var dom = document.getElementById("revenue");
+      var myChart = echarts.init(dom, null, {
+        renderer: "canvas",
+        useDirtyRect: false,
+      });
+      var app = {};
+
+      var option;
+
+      option = {
+        title: {
+          text: "Stacked Area Chart",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "cross",
+            label: {
+              backgroundColor: "#6a7985",
+            },
+          },
+        },
+        legend: {
+          data: ["storeS062214", "storeS013343", "storeS216043"],
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: "category",
+            boundaryGap: false,
+            data: days,
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
+        series: [
+          {
+            name: "storeS062214",
+            type: "line",
+            stack: "Total",
+            areaStyle: {},
+            emphasis: {
+              focus: "series",
+            },
+            data: storeS062214,
+          },
+          {
+            name: "storeS013343",
+            type: "line",
+            stack: "Total",
+            areaStyle: {},
+            emphasis: {
+              focus: "series",
+            },
+            data: storeS013343,
+          },
+          {
+            name: "storeS216043",
+            type: "line",
+            stack: "Total",
+            areaStyle: {},
+            emphasis: {
+              focus: "series",
+            },
+            data: storeS216043,
+          },
+        ],
+      };
+
+      if (option && typeof option === "object") {
+        myChart.setOption(option);
+      }
+
+      window.addEventListener("resize", myChart.resize);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
     });
-
-    console.log("Data for S062214:", storeS062214);
-    console.log("Data for S013343:", storeS013343);
-    console.log("Data for S216043:", storeS216043);
-    console.log("Days:", days);
-  var dom = document.getElementById("revenue");
-  var myChart = echarts.init(dom, null, {
-    renderer: "canvas",
-    useDirtyRect: false,
-  });
-  var app = {};
-
-  var option;
-
-  option = {
-    title: {
-      text: "Stacked Area Chart",
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "cross",
-        label: {
-          backgroundColor: "#6a7985",
-        },
-      },
-    },
-    legend: {
-      data: ["storeS062214", "storeS013343", "storeS216043"],
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    grid: {
-      left: "3%",
-      right: "4%",
-      bottom: "3%",
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        data: days,
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-      },
-    ],
-    series: [
-      {
-        name: "storeS062214",
-        type: "line",
-        stack: "Total",
-        areaStyle: {},
-        emphasis: {
-          focus: "series",
-        },
-        data: storeS062214,
-      },
-      {
-        name: "storeS013343",
-        type: "line",
-        stack: "Total",
-        areaStyle: {},
-        emphasis: {
-          focus: "series",
-        },
-        data: storeS013343,
-      },
-      {
-        name: "storeS216043",
-        type: "line",
-        stack: "Total",
-        areaStyle: {},
-        emphasis: {
-          focus: "series",
-        },
-        //test spaeter ersetzen mit storeS216043
-        data: [1,3.5,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-      },
-    ],
-  };
-
-  if (option && typeof option === "object") {
-    myChart.setOption(option);
-  }
-
-  window.addEventListener("resize", myChart.resize);
 }
