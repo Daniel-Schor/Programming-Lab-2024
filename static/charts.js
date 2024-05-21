@@ -207,7 +207,10 @@ function revenueChart() {
             break;
         }
       });
-
+      storeS062214.reverse();
+      storeS013343.reverse();
+      storeS216043.reverse();
+      days.reverse();
       console.log("Data for S062214:", storeS062214);
       console.log("Data for S013343:", storeS013343);
       console.log("Data for S216043:", storeS216043);
