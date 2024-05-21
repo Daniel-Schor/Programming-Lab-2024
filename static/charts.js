@@ -49,12 +49,14 @@ function testbarchart() {
     });
 }
 function gaugeChart() {
+  
   var dom = document.getElementById("container");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
     useDirtyRect: false,
   });
   var app = {};
+  document.getElementById("Store-quality").innerHTML = "Store: S013343 Quality";
 
   var option;
   fetch("quality?store=S013343")
@@ -227,7 +229,7 @@ function revenueChart() {
 
       option = {
         title: {
-          text: "Stacked Area Chart",
+          text: "Revenue Chart",
         },
         tooltip: {
           trigger: "axis",
