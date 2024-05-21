@@ -194,21 +194,13 @@ function revenueChart() {
   fetch("/revenue?store=S062214,S013343,S216043")
     .then((response) => response.json())
     .then((data) => {
-      data.forEach((item) => {
-        switch (item.storeID) {
-          case "S062214":
-            storeS062214.push(Number(item.sum));
-            break;
-          case "S013343":
-            var date = new Date(item.day);
-            days.push(date.getDate());
-            storeS013343.push(Number(item.sum));
-            break;
-          case "S216043":
-            storeS216043.push(Number(item.sum));
-            break;
-        }
-      });
+      storeS062214 = Object.values(data['S062214']);
+      storeS013343 = Object.values(data['S013343']);
+      storeS216043 = Object.values(data['S216043']);
+      storeS062214.pop();
+      storeS013343.pop();
+      storeS216043.pop();   
+
       storeS062214.reverse();
       storeS013343.reverse();
       storeS216043.reverse();
