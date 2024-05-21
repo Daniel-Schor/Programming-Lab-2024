@@ -10,9 +10,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const defaultDate: string = "2022-12-01";
-const currentDate: string = "2022-12-30";
+const currentDate: string = "2022-12-31";
 
-function getTimeframeInDays(startDate: string, endDate: string = '2022-12-31'): number {
+function getTimeframeInDays(startDate: string, endDate: string = currentDate): number {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
@@ -23,12 +23,61 @@ function getTimeframeInDays(startDate: string, endDate: string = '2022-12-31'): 
     return diffInDays;
 }
 
-function reformatDate(result) {
-    result.rows.forEach(row => {
-        row.day = row.day.toISOString().split('T')[0];
+// ----------------- Functions -----------------
+function revenuePercentageChange(cutOFDate: string, result: any, best: boolean = true) {
+    let newResult = result;
+
+    Object.keys(newResult).forEach(key => {
+        newResult[key].percentageIncrease = ((newResult[key][currentDate] - newResult[key][cutOFDate]) / newResult[key][cutOFDate]) * 100;
     });
+
+    // Extract the percentage increases and sort them
+    let sortedPercentageIncreases = Object.keys(newResult)
+        .map(key => ({
+            storeID: key,
+            percentageIncrease: newResult[key].percentageIncrease
+        }))
+        .sort((a, b) => b.percentageIncrease - a.percentageIncrease);
+
+    if (!best) {
+        sortedPercentageIncreases = sortedPercentageIncreases.reverse();
+    }
+
+    let sortedResult = {};
+    sortedPercentageIncreases.forEach(item => {
+        sortedResult[item.storeID] = newResult[item.storeID];
+    });
+
+    return sortedResult;
 }
 
+function reformatRevenueQueryResults(result) {
+    function reformatDate(result) {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': tz, year: 'numeric', month: '2-digit', day: '2-digit' });
+
+        result.forEach(row => {
+            const formattedDate = formatter.format(new Date(row.day));
+            const [month, day, year] = formattedDate.split('/');
+            row.day = `${year}-${month}-${day}`;
+        });
+    }
+
+    reformatDate(result);
+
+    let stores = {};
+
+    result.forEach(element => {
+        if (!stores[element.storeID]) {
+            stores[element.storeID] = {};
+        }
+        stores[element.storeID][element.day] = element.sum;
+    });
+    return stores;
+}
+// ----------------- Functions end --------------
+
+// ----------------- App init ---------------------
 const app: express.Application = express();
 app.use("/static", express.static('./static/'));
 
@@ -38,108 +87,46 @@ app.use(cors({
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../html/home.html'));
-
 });
+// ----------------- App init end ---------------------
 
-// TODO change format to: 
-// storeID:
-//          day: revenue
-//          day: revenue
-//          percentageIncrease: value
-//          and so on
-// Should be done in querie or in the code?
-
-
-function topChangeRevenuePercentageIDs(cutOFDate: string, result: any, best: boolean = true) {
-    const specificDates = [cutOFDate, currentDate];
-
-    // Filter the rows to include only specific dates
-    let removedDays = result.rows.filter(row => specificDates.includes(row.day));
-
-    // Initialize the dictionary
-    let daySum = {};
-
-    // Populate the dictionary
-    removedDays.forEach(element => {
-        if (!daySum[element.storeID]) {
-            daySum[element.storeID] = {};
-        }
-        daySum[element.storeID][element.day] = element.sum;
-    });
-
-    // Calculate percentage increases
-    Object.keys(daySum).forEach(key => {
-        daySum[key].percentageIncrease = ((daySum[key][currentDate] - daySum[key][cutOFDate]) / daySum[key][cutOFDate]) * 100;
-    });
-
-    // Extract the percentage increases and sort them
-    let sortedPercentageIncreases = Object.keys(daySum)
-        .map(key => ({
-            storeID: key,
-            percentageIncrease: daySum[key].percentageIncrease
-        }))
-        .sort((a, b) => b.percentageIncrease - a.percentageIncrease);
-
-    if (!best) {
-        sortedPercentageIncreases = sortedPercentageIncreases.reverse();
-    }
-
-    // Get the top 5 percentage increases
-    let top5PercentageIncreases = sortedPercentageIncreases.slice(0, 5);
-
-    // Construct a new object with the top 5 stores
-    let top5DaySum = {};
-    top5PercentageIncreases.forEach(item => {
-        top5DaySum[item.storeID] = daySum[item.storeID];
-    });
-
-    return Object.keys(top5DaySum)
-}
-
-app.get('/revenue2', async (req, res) => {
-    try {
-        let conditions: string[] = [req.query.date || defaultDate];
-        let query: string;
-
-        if (req.query.store) {
-            query = queries.revenue;
-            conditions.push(req.query.store.split(","));
-            req.query.best = undefined;
-        } else {
-            query = queries.revenue2;
-        }
-        let result = await client.query(query, conditions);
-
-        reformatDate(result);
-
-        if (req.query.best) {
-            let topChangedIDs = topChangeRevenuePercentageIDs(conditions[0], result, JSON.parse(req.query.best));
-
-            result.rows = result.rows.filter(row => topChangedIDs.includes(row.storeID));
-        }
-
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-
-// Get specified stores
+// ----------------- Endpoints ---------------------
+// Revenue endpoint
+// ----
+// Query options:
+// date: cutOfDate (default 2022-12-01)
+// best: true/false (default true)
+// limit: max number of stores to return (default undefined)
+// store: comma separated list of storeIDs to return (default all)
+// ----
+// example: http://localhost:3000/revenue?date=2022-12-01&best=true&store=S486166,S263879,S449313,S799887,S147185,S505400&limit=3
+// ----
+// Returns revenue for each store for days between given date and currentDate and calculates percentage increase in that timeframe
+// provides data in this format:
+// {storeID: {date: revenue, 'percentageIncrease': float}}
+// ----
 app.get('/revenue', async (req, res) => {
     try {
+        let date: string = req.query.date || defaultDate;
         let query: string = queries.revenue;
 
-        let cutOfDate: string = req.query.date || defaultDate;
-        let store: string = req.query.store || "";
-        let stores: string[] = store.split(",");
+        let result = await client.query(query, [date]);
 
-        let result = await client.query(query, [cutOfDate, stores]);
+        result = reformatRevenueQueryResults(result.rows);
 
-        reformatDate(result);
+        result = revenuePercentageChange(date, result, JSON.parse(req.query.best || true));
 
-        res.status(200).json(result.rows);
+        if (req.query.store) {
+            req.query.store.split(",");
+            Object.keys(result).forEach(store => { if (!req.query.store.includes(store)) { delete result[store]; } });
+        }
+
+        if (req.query.limit) {
+            let i = 0;
+            Object.keys(result).forEach(store => { if (i >= parseInt(req.query.limit)) { delete result[store]; } i++; });
+        }
+
+        res.status(200).json(result);
     }
     catch (err) {
         console.error(err);
@@ -219,5 +206,6 @@ app.get('/quality', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// ----------------- Endpoints end ---------------------
 
 app.listen(process.env.PORT || 3000, () => console.log('App available on http://localhost:3000'));

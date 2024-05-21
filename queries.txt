@@ -1,7 +1,7 @@
 revenue:
 SELECT "storeID", "purchaseDate"::DATE AS day, SUM("total") AS sum
 FROM purchase 
-WHERE \"purchaseDate\" >= $1 
+WHERE "purchaseDate" >= $1 
 GROUP BY "storeID", day
 ORDER BY day DESC
 
