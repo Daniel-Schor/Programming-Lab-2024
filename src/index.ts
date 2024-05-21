@@ -85,6 +85,7 @@ app.get('/revenue2', async (req, res) => {
 // loyal customers per customers compared to best store
 // overall customer quality score 0-100 
 //    worst store 0, best store 100
+//http://localhost:3000/quality?store=S013343
 app.get('/quality', async (req, res) => {
     try {
         const date: string = req.query.date || defaultDate;
