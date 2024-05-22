@@ -185,6 +185,7 @@ function gaugeChart() {
       console.error("Error:", error);
     });
 }
+// TODO dont fill background
 function revenueChart() {
   var storeS062214 = [];
   var storeS013343 = [];

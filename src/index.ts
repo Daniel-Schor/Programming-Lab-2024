@@ -126,6 +126,11 @@ app.get('/revenue', async (req, res) => {
             Object.keys(result).forEach(store => { if (i >= parseInt(req.query.limit)) { delete result[store]; } i++; });
         }
 
+        // OUTDATED
+        if (req.query.keys) {
+            result = Object.keys(result);
+        }
+
         res.status(200).json(result);
     }
     catch (err) {

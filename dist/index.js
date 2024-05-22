@@ -103,6 +103,10 @@ app.get('/revenue', async (req, res) => {
                 delete result[store];
             } i++; });
         }
+        // OUTDATED
+        if (req.query.keys) {
+            result = Object.keys(result);
+        }
         res.status(200).json(result);
     }
     catch (err) {
