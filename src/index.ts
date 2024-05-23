@@ -94,6 +94,9 @@ app.get('/mapTest', (req, res) => {
     res.sendFile(path.join(__dirname, '../html/mapStores.html'));
 });
 
+app.get('/mapTestCustomers', (req, res) => {
+    res.sendFile(path.join(__dirname, '../html/mapCustomers.html'));
+});
 // ----------------- App init end ---------------------
 
 // ----------------- Endpoints ---------------------
@@ -104,6 +107,20 @@ app.get('/mapTest', (req, res) => {
 app.get('/storeLocations', async (req, res) => {
     try {
         let query: string = `select "storeID", latitude as lat, longitude as lon from stores`;
+
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+app.get('/customerLocations', async (req, res) => {
+    try {
+        let query: string = `select latitude as lat, longitude as lon from customers`;
 
         let result = await client.query(query);
 
