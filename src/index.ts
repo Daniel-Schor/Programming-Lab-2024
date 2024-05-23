@@ -11,6 +11,8 @@ const __dirname = dirname(__filename);
 
 const defaultDate: string = "2022-12-01";
 const currentDate: string = "2022-12-31";
+const tz: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const tzDB = "America/Los_Angeles" || tz;
 
 function getTimeframeInDays(startDate: string, endDate: string = currentDate): number {
     const start = new Date(startDate);
@@ -53,7 +55,6 @@ function revenuePercentageChange(cutOFDate: string, result: any, best: boolean =
 
 function reformatRevenueQueryResults(result) {
     function reformatDate(result) {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': tz, year: 'numeric', month: '2-digit', day: '2-digit' });
 
         result.forEach(row => {
@@ -133,12 +134,11 @@ app.get('/revenue', async (req, res) => {
         result = revenuePercentageChange(date, result, JSON.parse(req.query.best || true));
 
         if (req.query.store) {
-            req.query.store.split(",");
             Object.keys(result).forEach(store => { if (!req.query.store.includes(store)) { delete result[store]; } });
         }
 
         if (req.query.limit) {
-            let i = 0;
+            let i: number = 0;
             Object.keys(result).forEach(store => { if (i >= parseInt(req.query.limit)) { delete result[store]; } i++; });
         }
 
@@ -276,12 +276,12 @@ app.get('/quality', async (req, res) => {
 app.get('/daily-orders-analysis', async (req, res) => {
     try {
         let date: string = req.query.date || defaultDate;
-        let store = req.store || "S302800";
-        let dayOfWeek = req.dow || 1;
+        let store: string = req.store || "S302800";
+        let dayOfWeek: string = req.query.dow || 5;
 
-        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date]);
-        let days = await client.query(queries.weekdayCount, [store, dayOfWeek, date]);
-        days = days.rows[0].count;
+        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, tzDB]);
+        let result2 = await client.query(queries.weekdayCount, [store, dayOfWeek, date, tzDB]);
+        let days: number = result2.rows[0].count;
 
         function reformat(result) {
             let reformattedResult = {};
@@ -291,14 +291,14 @@ app.get('/daily-orders-analysis', async (req, res) => {
             }
 
             result.rows.forEach(row => {
-                let totalOrders = parseInt(row.total_orders)
+                let totalOrders: number = parseInt(row.total_orders)
                 reformattedResult[row.hour]['total'] = totalOrders;
-                reformattedResult[row.hour]['avg'] = totalOrders/days;
+                reformattedResult[row.hour]['avg'] = totalOrders / days;
             });
 
             return reformattedResult
         }
-        
+
         res.status(200).json(reformat(result));
     }
     catch (err) {

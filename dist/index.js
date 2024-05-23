@@ -9,6 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const tzDB = "America/Los_Angeles" || tz;
 function getTimeframeInDays(startDate, endDate = currentDate) {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -40,7 +42,6 @@ function revenuePercentageChange(cutOFDate, result, best = true) {
 }
 function reformatRevenueQueryResults(result) {
     function reformatDate(result) {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': tz, year: 'numeric', month: '2-digit', day: '2-digit' });
         result.forEach(row => {
             const formattedDate = formatter.format(new Date(row.day));
@@ -105,7 +106,6 @@ app.get('/revenue', async (req, res) => {
         result = reformatRevenueQueryResults(result.rows);
         result = revenuePercentageChange(date, result, JSON.parse(req.query.best || true));
         if (req.query.store) {
-            req.query.store.split(",");
             Object.keys(result).forEach(store => { if (!req.query.store.includes(store)) {
                 delete result[store];
             } });
@@ -231,10 +231,10 @@ app.get('/daily-orders-analysis', async (req, res) => {
     try {
         let date = req.query.date || defaultDate;
         let store = req.store || "S302800";
-        let dayOfWeek = req.dow || 1;
-        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date]);
-        let days = await client.query(queries.weekdayCount, [store, dayOfWeek, date]);
-        days = days.rows[0].count;
+        let dayOfWeek = req.query.dow || 5;
+        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, tzDB]);
+        let result2 = await client.query(queries.weekdayCount, [store, dayOfWeek, date, tzDB]);
+        let days = result2.rows[0].count;
         function reformat(result) {
             let reformattedResult = {};
             for (let i = 0; i < 24; i++) {
