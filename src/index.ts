@@ -91,20 +91,36 @@ app.get('/', (req, res) => {
 // ----------------- App init end ---------------------
 
 // ----------------- Endpoints ---------------------
-// Revenue endpoint
-// ----
-// Query options:
-// date: cutOfDate (default 2022-12-01)
-// best: true/false (default true)
-// limit: max number of stores to return (default undefined)
-// store: comma separated list of storeIDs to return (default all)
-// ----
-// example: http://localhost:3000/revenue?date=2022-12-01&best=true&store=S486166,S263879,S449313,S799887,S147185,S505400&limit=3
-// ----
-// Returns revenue for each store for days between given date and currentDate and calculates percentage increase in that timeframe
-// provides data in this format:
-// {storeID: {date: revenue, 'percentageIncrease': float}}
-// ----
+
+// ------------------ Franchise view ------------------
+
+/**
+ * Revenue Endpoint
+ * ----
+ * Query Options:
+ * <ul>
+ *     <li>date: cutOfDate (default 2022-12-01)</li>
+ *     <li>best: true/false (default true)</li>
+ *     <li>limit: max number of stores to return (default undefined)</li>
+ *     <li>store: comma-separated list of storeIDs to return (default all)</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/revenue?date=2022-12-01&best=true&store=S486166,S263879,S449313,S799887,S147185,S505400&limit=3
+ * ----
+ * Returns:
+ * Revenue for each store for days between the given date and currentDate, and calculates percentage increase in that timeframe.
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     storeID: {
+ *         date: revenue,
+ *         'percentageIncrease': float
+ *     }
+ * }
+ * </pre>
+ */
+
 app.get('/revenue', async (req, res) => {
     try {
         let date: string = req.query.date || defaultDate;
@@ -130,6 +146,7 @@ app.get('/revenue', async (req, res) => {
         if (req.query.keys) {
             result = Object.keys(result);
         }
+        // ---------
 
         res.status(200).json(result);
     }
@@ -139,14 +156,34 @@ app.get('/revenue', async (req, res) => {
     }
 });
 
-// Customer quality
-// Retuns following metrics for each store:
-// orders per customer compared to best store
-// one time customers per customers compared to best store
-// loyal customers per customers compared to best store
-// overall customer quality score 0-100 
-//    worst store 0, best store 100
-//http://localhost:3000/quality?store=S013343
+// ------------------ Store view ------------------
+
+/**
+ * Customer Quality Endpoint
+ * ----
+ * Returns the following metrics for each store:
+ * <ul>
+ *     <li>Orders per customer compared to the best store</li>
+ *     <li>One-time customers per customers compared to the best store</li>
+ *     <li>Loyal customers per customers compared to the best store</li>
+ *     <li>Overall customer quality score (0-100), where the worst store is 0 and the best store is 100</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/quality?store=S013343
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     storeID: {
+ *         'ordersPerCustomer': float,
+ *         'oneTimeCustomersPerCustomer': float,
+ *         'loyalCustomersPerCustomer': float,
+ *         'overallCustomerQualityScore': int
+ *     }
+ * }
+ * </pre>
+ */
+
 app.get('/quality', async (req, res) => {
     try {
         const date: string = req.query.date || defaultDate;
@@ -181,7 +218,7 @@ app.get('/quality', async (req, res) => {
 
             });
 
-            // ---------- score from 0 to 100 ---------------
+            // score from 0 to 100 
             const minScore: number = Math.min(...metrics.map(metric => metric.customer_quality_score));
             const maxScore: number = Math.max(...metrics.map(metric => metric.customer_quality_score));
 
@@ -193,7 +230,6 @@ app.get('/quality', async (req, res) => {
                 delete metric.loyal_customers;
                 delete metric.customer_quality_score;
             });
-            // ------------------------------------------------
 
             return metrics;
         };
@@ -205,6 +241,65 @@ app.get('/quality', async (req, res) => {
         }
 
         res.status(200).json(scoredMetrics);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+/**
+ * Daily Orders Analysis Endpoint
+ * ----
+ * Query Options:
+ * <ul>
+ *     <li>date: cutOfDate (default 2022-12-01)</li>
+ *     <li>dow: day of week (0=Monday, 6=Saturday, 7=Sunday) (default 1)</li>
+ *     <li>store: storeID of the specified store (default S302800)</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/daily-orders-analysis?date=2021-01-01&dow=2&store=S486166
+ * ----
+ * Returns:
+ * Orders for each hour for days between the given date and currentDate, and calculates average orders per hour.
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     hour: {
+ *         'total': int,
+ *         'avg': float
+ *     }
+ * }
+ * </pre>
+ */
+app.get('/daily-orders-analysis', async (req, res) => {
+    try {
+        let date: string = req.query.date || defaultDate;
+        let store = req.store || "S302800";
+        let dayOfWeek = req.dow || 1;
+
+        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date]);
+        let days = await client.query(queries.weekdayCount, [store, dayOfWeek, date]);
+        days = days.rows[0].count;
+
+        function reformat(result) {
+            let reformattedResult = {};
+
+            for (let i = 0; i < 24; i++) {
+                reformattedResult[i] = { total: 0, avg: 0 };
+            }
+
+            result.rows.forEach(row => {
+                let totalOrders = parseInt(row.total_orders)
+                reformattedResult[row.hour]['total'] = totalOrders;
+                reformattedResult[row.hour]['avg'] = totalOrders/days;
+            });
+
+            return reformattedResult
+        }
+        
+        res.status(200).json(reformat(result));
     }
     catch (err) {
         console.error(err);

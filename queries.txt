@@ -20,3 +20,19 @@ FROM (
 ) AS customer_orders
 GROUP BY "storeID";
 
+Orders per hour per weekday (commented out for only total per hour):
+SELECT
+    EXTRACT(HOUR FROM "purchaseDate" AT TIME ZONE 'Europe/Berlin') AS hour,
+    COUNT(*) AS total_orders
+	--, (COUNT(*)*1.0)/(
+	--	SELECT COUNT(distinct "purchaseDate"::DATE)
+	--	FROM purchase
+	--	WHERE "storeID" = 'S302800' AND EXTRACT(DOW FROM "purchaseDate" AT TIME ZONE 'Europe/Berlin') = 5 and "purchaseDate" > '2022-12-01')
+FROM
+    purchase
+WHERE
+    "storeID" = 'S302800' AND EXTRACT(DOW FROM "purchaseDate" AT TIME ZONE 'Europe/Berlin') = 5 and "purchaseDate" > '2022-12-01'
+GROUP BY
+    hour
+ORDER BY
+    hour;
