@@ -53,9 +53,9 @@ function revenueChange(cutOFDate, result, best = true, positveWeight = 1.06, neg
     let sortedPercentageIncreases = Object.keys(newResult)
         .map(key => ({
         storeID: key,
-        percentageChangeValue: newResult[key].percentageChangeValue
+        changeValue: newResult[key].changeValue
     }))
-        .sort((a, b) => b.percentageChangeValue - a.percentageChangeValue);
+        .sort((a, b) => b.changeValue - a.changeValue);
     if (!best) {
         sortedPercentageIncreases = sortedPercentageIncreases.reverse();
     }
