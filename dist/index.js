@@ -69,6 +69,9 @@ app.use(cors({
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../html/company.html'));
 });
+app.get('/individualStore', (req, res) => {
+    res.sendFile(path.join(__dirname, '../html/individualStore.html'));
+});
 app.get('/mapTest', (req, res) => {
     res.sendFile(path.join(__dirname, '../html/mapStores.html'));
 });

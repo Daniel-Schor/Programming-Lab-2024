@@ -200,7 +200,9 @@ function revenueChart() {
       storeS216043 = Object.values(data['S216043']);
       storeS062214.pop();
       storeS013343.pop();
-      storeS216043.pop();   
+      storeS216043.pop();
+      days = Object.keys(data['S062214']);
+      days.pop();
 
       storeS062214.reverse();
       storeS013343.reverse();
@@ -226,12 +228,8 @@ function revenueChart() {
         },
         tooltip: {
           trigger: "axis",
-          axisPointer: {
-            type: "cross",
-            label: {
-              backgroundColor: "#6a7985",
-            },
-          },
+          
+          
         },
         legend: {
           data: ["storeS062214", "storeS013343", "storeS216043"],
@@ -264,7 +262,7 @@ function revenueChart() {
             name: "storeS062214",
             type: "line",
             stack: "Total",
-            areaStyle: {},
+            
             emphasis: {
               focus: "series",
             },
@@ -274,7 +272,7 @@ function revenueChart() {
             name: "storeS013343",
             type: "line",
             stack: "Total",
-            areaStyle: {},
+            
             emphasis: {
               focus: "series",
             },
@@ -284,7 +282,7 @@ function revenueChart() {
             name: "storeS216043",
             type: "line",
             stack: "Total",
-            areaStyle: {},
+            
             emphasis: {
               focus: "series",
             },

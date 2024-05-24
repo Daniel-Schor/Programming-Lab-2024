@@ -36,7 +36,8 @@
 
                 // Redirect on click
                 marker.on('click', () => {
-                    window.location.href = `/?storeID=${store.storeID}`;
+                    window.location.href = `/individualStore?storeID=${store.storeID}`;
+                    localStorage.setItem('store', JSON.stringify(store)); // Store the store variable
                 });
             });
         }
