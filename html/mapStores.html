@@ -43,7 +43,7 @@
         }
 
         // Fetch the data and add markers
-        fetch('/storeLocations')
+        fetch('/api/storeLocations')
             .then(response => response.json())
             .then(stores => {
                 console.log(stores); // Log the data for debugging

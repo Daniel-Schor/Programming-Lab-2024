@@ -6,7 +6,7 @@
     <body>
         <h1>Request Test</h1>
         <script>
-            fetch('/revenue2?date=2022-12-31&store=S062214,S013343,S216043')
+            fetch('/api/revenue2?date=2022-12-31&store=S062214,S013343,S216043')
             .then(response => response.json())
             .then(stores => console.log(stores))
         </script>

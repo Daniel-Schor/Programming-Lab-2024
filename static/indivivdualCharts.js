@@ -12,7 +12,7 @@ function monthlyRevenue() {
     renderer: "canvas",
     useDirtyRect: false,
   });
-  fetch(`/revenue?store=${store.storeID}`)
+  fetch(`/api/revenue?store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
       revenue = Object.values(data[`${store.storeID}`]);
@@ -75,7 +75,7 @@ function gaugeChart() {
   ).innerHTML = `Store: ${store.storeID} Quality`;
 
   var option;
-  fetch(`quality?store=${store.storeID}`)
+  fetch(`/api/quality?store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
       var storeID = data.storeID;

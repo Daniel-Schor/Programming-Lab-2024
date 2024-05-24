@@ -1,7 +1,7 @@
 function testbarchart() {
   var myChart = echarts.init(document.getElementById("test"));
   //get data from api
-  fetch("/revenue?date=2022-12-31&store=S062214,S013343,S216043")
+  fetch("/api/revenue?date=2022-12-31&store=S062214,S013343,S216043")
     .then((response) => response.json())
     .then((data) => {
       const storeIDs = [];
@@ -59,7 +59,7 @@ function gaugeChart() {
   document.getElementById("Store-quality").innerHTML = "Store: S013343 Quality";
 
   var option;
-  fetch("quality?store=S013343")
+  fetch("/api/quality?store=S013343")
     .then((response) => response.json())
     .then((data) => {
       var storeID = data.storeID;
@@ -192,7 +192,7 @@ function revenueChart() {
   var storeS216043 = [];
   var days = [];
 
-  fetch("/revenue?store=S062214,S013343,S216043")
+  fetch("/api/revenue?store=S062214,S013343,S216043")
     .then((response) => response.json())
     .then((data) => {
       storeS062214 = Object.values(data['S062214']);

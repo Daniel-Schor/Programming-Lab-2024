@@ -107,7 +107,7 @@ app.get('/mapTestCustomers', (req, res) => {
 // ----------------- Endpoints ---------------------
 // ------------------ Franchise view ------------------
 // 
-app.get('/storeLocations', async (req, res) => {
+app.get('/api/storeLocations', async (req, res) => {
     try {
         let query = `select "storeID", latitude as lat, longitude as lon from stores`;
         let result = await client.query(query);
@@ -118,7 +118,7 @@ app.get('/storeLocations', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-app.get('/customerLocations', async (req, res) => {
+app.get('/api/customerLocations', async (req, res) => {
     try {
         let query = `select latitude as lat, longitude as lon from customers`;
         let result = await client.query(query);
@@ -155,7 +155,7 @@ app.get('/customerLocations', async (req, res) => {
  * }
  * </pre>
  */
-app.get('/revenue', async (req, res) => {
+app.get('/api/revenue', async (req, res) => {
     try {
         let date = req.query.date || defaultDate;
         let query = queries.revenue;
@@ -179,6 +179,56 @@ app.get('/revenue', async (req, res) => {
         }
         // ---------
         res.status(200).json(result);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+/**
+ * pizza Pair endpoint
+ * ----
+ * Query Options:
+ * <ul>
+ *     <li>store: storeID (default all)</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/api/pizzaPair?store=S147185
+ * ----
+ * Returns:
+ * Pizza pairs
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     pizza1: {
+ *         pzza2: int,
+ *     }
+ * }
+ * </pre>
+ */
+app.get('/api/pizzaPair', async (req, res) => {
+    try {
+        let result;
+        function reformatPizzaPair(result) {
+            let pairs = {};
+            result.forEach(element => {
+                if (!pairs[element.pizza1]) {
+                    pairs[element.pizza1] = {};
+                }
+                pairs[element.pizza1][element.pizza2] = parseInt(element.paircount);
+            });
+            return pairs;
+        }
+        if (req.query.store) {
+            let query = queries.pizzaPairStore;
+            result = await client.query(query, [req.query.store]);
+        }
+        else {
+            let query = queries.pizzaPair;
+            result = await client.query(query);
+        }
+        res.status(200).json(reformatPizzaPair(result.rows));
     }
     catch (err) {
         console.error(err);
@@ -211,7 +261,7 @@ app.get('/revenue', async (req, res) => {
  * }
  * </pre>
  */
-app.get('/quality', async (req, res) => {
+app.get('/api/quality', async (req, res) => {
     try {
         const date = req.query.date || defaultDate;
         const query = queries.quality;
@@ -284,7 +334,7 @@ app.get('/quality', async (req, res) => {
  * }
  * </pre>
  */
-app.get('/daily-orders-analysis', async (req, res) => {
+app.get('/api/daily-orders-analysis', async (req, res) => {
     try {
         let date = req.query.date || defaultDate;
         let store = req.store || "S302800";

@@ -30,11 +30,11 @@ function getTimeframeInDays(startDate: string, endDate: string = currentDate): n
 function revenueChange(cutOFDate: string, result: any, best: boolean = true, positveWeight: number = 1.06, negativeWeight: number = 1.19) {
     let newResult = result;
 
-    let numberChanges: number = Object.keys(result[Object.keys(result)[0]]).length -1;
+    let numberChanges: number = Object.keys(result[Object.keys(result)[0]]).length - 1;
 
     Object.keys(newResult).forEach(key => {
         let oldElement = cutOFDate;
-        
+
         Object.keys(newResult[key]).reverse().forEach(element => {
             if (element === cutOFDate) {
                 newResult[key].changeValue = 0;
@@ -53,7 +53,7 @@ function revenueChange(cutOFDate: string, result: any, best: boolean = true, pos
             }
         });
 
-        if (newResult[key].changeValue < 0){
+        if (newResult[key].changeValue < 0) {
             newResult[key].changeValue = -Math.pow(Math.abs(newResult[key].changeValue), negativeWeight);
         } else {
             newResult[key].changeValue = Math.pow(newResult[key].changeValue, positveWeight);
@@ -134,7 +134,7 @@ app.get('/mapTestCustomers', (req, res) => {
 // ------------------ Franchise view ------------------
 
 // 
-app.get('/storeLocations', async (req, res) => {
+app.get('/api/storeLocations', async (req, res) => {
     try {
         let query: string = `select "storeID", latitude as lat, longitude as lon from stores`;
 
@@ -148,7 +148,7 @@ app.get('/storeLocations', async (req, res) => {
     }
 });
 
-app.get('/customerLocations', async (req, res) => {
+app.get('/api/customerLocations', async (req, res) => {
     try {
         let query: string = `select latitude as lat, longitude as lon from customers`;
 
@@ -188,8 +188,7 @@ app.get('/customerLocations', async (req, res) => {
  * }
  * </pre>
  */
-
-app.get('/revenue', async (req, res) => {
+app.get('/api/revenue', async (req, res) => {
     try {
         let date: string = req.query.date || defaultDate;
         let query: string = queries.revenue;
@@ -216,6 +215,62 @@ app.get('/revenue', async (req, res) => {
         // ---------
 
         res.status(200).json(result);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+/**
+ * pizza Pair endpoint
+ * ----
+ * Query Options:
+ * <ul>
+ *     <li>store: storeID (default all)</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/api/pizzaPair?store=S147185
+ * ----
+ * Returns:
+ * Pizza pairs
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     pizza1: {
+ *         pzza2: int,
+ *     }
+ * }
+ * </pre>
+ */
+app.get('/api/pizzaPair', async (req, res) => {
+    try {
+        let result;
+
+        function reformatPizzaPair(result) {
+            let pairs = {};
+
+            result.forEach(element => {
+                if (!pairs[element.pizza1]) {
+                    pairs[element.pizza1] = {};
+                }
+                pairs[element.pizza1][element.pizza2] = parseInt(element.paircount);
+            }
+            );
+
+            return pairs;
+        }
+
+        if (req.query.store) {
+            let query: string = queries.pizzaPairStore;
+            result = await client.query(query, [req.query.store]);
+        } else {
+            let query: string = queries.pizzaPair;
+            result = await client.query(query);
+        }
+
+        res.status(200).json(reformatPizzaPair(result.rows));
     }
     catch (err) {
         console.error(err);
@@ -251,7 +306,7 @@ app.get('/revenue', async (req, res) => {
  * </pre>
  */
 
-app.get('/quality', async (req, res) => {
+app.get('/api/quality', async (req, res) => {
     try {
         const date: string = req.query.date || defaultDate;
         const query: string = queries.quality;
@@ -340,7 +395,7 @@ app.get('/quality', async (req, res) => {
  * }
  * </pre>
  */
-app.get('/daily-orders-analysis', async (req, res) => {
+app.get('/api/daily-orders-analysis', async (req, res) => {
     try {
         let date: string = req.query.date || defaultDate;
         let store: string = req.store || "S302800";
