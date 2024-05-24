@@ -87,7 +87,7 @@ app.use(cors({
 }));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../html/home.html'));
+    res.sendFile(path.join(__dirname, '../html/company.html'));
 });
 
 app.get('/mapTest', (req, res) => {
