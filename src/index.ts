@@ -26,20 +26,48 @@ function getTimeframeInDays(startDate: string, endDate: string = currentDate): n
 }
 
 // ----------------- Functions -----------------
-function revenuePercentageChange(cutOFDate: string, result: any, best: boolean = true) {
+
+function revenueChange(cutOFDate: string, result: any, best: boolean = true, positveWeight: number = 1.06, negativeWeight: number = 1.19) {
     let newResult = result;
 
+    let numberChanges: number = Object.keys(result[Object.keys(result)[0]]).length -1;
+
     Object.keys(newResult).forEach(key => {
-        newResult[key].percentageIncrease = ((newResult[key][currentDate] - newResult[key][cutOFDate]) / newResult[key][cutOFDate]) * 100;
+        let oldElement = cutOFDate;
+        
+        Object.keys(newResult[key]).reverse().forEach(element => {
+            if (element === cutOFDate) {
+                newResult[key].changeValue = 0;
+            } else {
+                let currentValue = ((newResult[key][element] - newResult[key][oldElement]) / newResult[key][oldElement]) * 100;
+                let absValue = Math.abs(currentValue);
+
+                if (absValue !== currentValue) {
+                    currentValue = -Math.pow(absValue, negativeWeight);
+                } else {
+                    currentValue = Math.pow(absValue, positveWeight);
+                }
+
+                newResult[key].changeValue += currentValue;
+                oldElement = element;
+            }
+        });
+
+        if (newResult[key].changeValue < 0){
+            newResult[key].changeValue = -Math.pow(Math.abs(newResult[key].changeValue), negativeWeight);
+        } else {
+            newResult[key].changeValue = Math.pow(newResult[key].changeValue, positveWeight);
+        }
+        newResult[key].changeValue /= numberChanges;
     });
 
     // Extract the percentage increases and sort them
     let sortedPercentageIncreases = Object.keys(newResult)
         .map(key => ({
             storeID: key,
-            percentageIncrease: newResult[key].percentageIncrease
+            percentageChangeValue: newResult[key].percentageChangeValue
         }))
-        .sort((a, b) => b.percentageIncrease - a.percentageIncrease);
+        .sort((a, b) => b.percentageChangeValue - a.percentageChangeValue);
 
     if (!best) {
         sortedPercentageIncreases = sortedPercentageIncreases.reverse();
@@ -49,7 +77,6 @@ function revenuePercentageChange(cutOFDate: string, result: any, best: boolean =
     sortedPercentageIncreases.forEach(item => {
         sortedResult[item.storeID] = newResult[item.storeID];
     });
-
     return sortedResult;
 }
 
@@ -156,7 +183,7 @@ app.get('/customerLocations', async (req, res) => {
  * {
  *     storeID: {
  *         date: revenue,
- *         'percentageIncrease': float
+ *         'changeValue': float
  *     }
  * }
  * </pre>
@@ -171,7 +198,7 @@ app.get('/revenue', async (req, res) => {
 
         result = reformatRevenueQueryResults(result.rows);
 
-        result = revenuePercentageChange(date, result, JSON.parse(req.query.best || true));
+        result = revenueChange(date, result, JSON.parse(req.query.best || true));
 
         if (req.query.store) {
             Object.keys(result).forEach(store => { if (!req.query.store.includes(store)) { delete result[store]; } });
