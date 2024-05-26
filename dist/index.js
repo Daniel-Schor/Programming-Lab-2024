@@ -140,7 +140,7 @@ app.get('/api/customerLocations', async (req, res) => {
  *     <li>store: comma-separated list of storeIDs to return (default all)</li>
  * </ul>
  * ----
- * Example: http://localhost:3000/revenue?date=2022-12-01&best=true&store=S486166,S263879,S449313,S799887,S147185,S505400&limit=3
+ * Example: http://localhost:3000/api/revenue?date=2022-12-01&best=true&store=S486166,S263879,S449313,S799887,S147185,S505400&limit=3
  * ----
  * Returns:
  * Revenue for each store for days between the given date and currentDate, and calculates percentage increase in that timeframe.
@@ -247,7 +247,7 @@ app.get('/api/pizzaPair', async (req, res) => {
  *     <li>Overall customer quality score (0-100), where the worst store is 0 and the best store is 100</li>
  * </ul>
  * ----
- * Example: http://localhost:3000/quality?store=S013343
+ * Example: http://localhost:3000/api/quality?store=S013343
  * ----
  * Response Format:
  * <pre>
@@ -319,7 +319,7 @@ app.get('/api/quality', async (req, res) => {
  *     <li>store: storeID of the specified store (default S302800)</li>
  * </ul>
  * ----
- * Example: http://localhost:3000/daily-orders-analysis?date=2021-01-01&dow=2&store=S486166
+ * Example: http://localhost:3000/api/daily-orders-analysis?date=2021-01-01&dow=2&store=S486166
  * ----
  * Returns:
  * Orders for each hour for days between the given date and currentDate, and calculates average orders per hour.
@@ -329,7 +329,8 @@ app.get('/api/quality', async (req, res) => {
  * {
  *     hour: {
  *         'total': int,
- *         'avg': float
+ *         'avg': float,
+ *         'bestPizza': [string]
  *     }
  * }
  * </pre>
@@ -340,9 +341,26 @@ app.get('/api/daily-orders-analysis', async (req, res) => {
         let store = req.store || "S302800";
         let dayOfWeek = req.query.dow || 5;
         let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, tzDB]);
-        let result2 = await client.query(queries.weekdayCount, [store, dayOfWeek, date, tzDB]);
-        let days = result2.rows[0].count;
+        let resultNumberDays = await client.query(queries.weekdayCount, [store, dayOfWeek, date, tzDB]);
+        let resultBestPizza = await client.query(queries.weekdayBestPizza, [store, dayOfWeek, date, tzDB]);
+        let days = resultNumberDays.rows[0].count;
         function reformat(result) {
+            function reformatBestPizza(result) {
+                let reformattedResult = {};
+                let max;
+                result.rows.forEach(row => {
+                    let currenNumber = parseInt(row.total_orders);
+                    if (!reformattedResult[row.hour]) {
+                        reformattedResult[row.hour] = [];
+                        max = currenNumber;
+                    }
+                    if (currenNumber >= max) {
+                        reformattedResult[row.hour].push(row.product);
+                    }
+                });
+                return reformattedResult;
+            }
+            let bestPizzas = reformatBestPizza(resultBestPizza);
             let reformattedResult = {};
             for (let i = 0; i < 24; i++) {
                 reformattedResult[i] = { total: 0, avg: 0 };
@@ -351,6 +369,7 @@ app.get('/api/daily-orders-analysis', async (req, res) => {
                 let totalOrders = parseInt(row.total_orders);
                 reformattedResult[row.hour]['total'] = totalOrders;
                 reformattedResult[row.hour]['avg'] = totalOrders / days;
+                reformattedResult[row.hour]['bestPizza'] = bestPizzas[row.hour];
             });
             return reformattedResult;
         }

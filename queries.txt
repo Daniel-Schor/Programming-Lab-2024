@@ -36,3 +36,23 @@ GROUP BY
     hour
 ORDER BY
     hour;
+
+Orders per hour per weekday (best pizza)
+SELECT
+    EXTRACT(HOUR FROM p."purchaseDate" AT TIME ZONE 'Europe/Berlin') AS hour,
+    CONCAT(pr."Size", ' ', pr."Name") AS product,
+    COUNT(*) AS total_orders
+FROM
+    purchase p
+JOIN
+    "purchaseItems" pi ON p."purchaseID" = pi."purchaseID"
+JOIN
+    products pr ON pi."SKU" = pr."SKU"
+WHERE
+    p."storeID" = 'S872983' 
+    AND EXTRACT(DOW FROM p."purchaseDate" AT TIME ZONE 'Europe/Berlin') = 0
+    AND p."purchaseDate" > '2022-12-15'
+GROUP BY
+    hour, pr."Name", pr."Size"
+ORDER BY
+    hour, total_orders DESC;
