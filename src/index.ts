@@ -399,7 +399,7 @@ app.get('/api/quality', async (req, res) => {
 app.get('/api/daily-orders-analysis', async (req, res) => {
     try {
         let date: string = req.query.date || defaultDate;
-        let store: string = req.store || "S302800";
+        let store: string = req.query.store || "S302800";
         let dayOfWeek: string = req.query.dow || 5;
 
         let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, tzDB]);
