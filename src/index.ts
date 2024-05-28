@@ -628,6 +628,68 @@ app.get('/api/region-total-product', async (req, res) => {
     }
 });
 
+//TODO echarts
+//TODO sql in json
+app.get('/api/pizza-price-popularity', async (req, res) => {
+    try {
+        let query: string = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
+
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+
+//TODO echarts
+//TODO sql in json
+app.get('/api/Customer-Segmentation-Analysis', async (req, res) => {
+    try {
+        let query: string = `SELECT C."customerID",AVG(P."total") AS AVG_SPENT_PER_PURCHASE,COUNT(P."purchaseID") AS TOTAL_PURCHASES,MAX(P."purchaseDate") - MIN(P."purchaseDate") AS CUSTOMER_LIFETIME,C."latitude",C."longitude" FROM "customers" C JOIN PURCHASE P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+
+//TODO echarts
+//TODO sql in json
+app.get('/api/region-total-product', async (req, res) => {
+    try {
+        let query: string = `SELECT S."state",S."city",PR."Name" AS PRODUCT_NAME,SUM(P."nItems") AS TOTAL_QUANTITY FROM PURCHASE P JOIN "purchaseItems" PI ON P."purchaseID" = PI."purchaseID" JOIN PRODUCTS PR ON PI."SKU" = PR."SKU" JOIN STORES S ON P."storeID" = S."storeID" GROUP BY S."state",S."city",PR."Name" ORDER BY S."state",S."city",TOTAL_QUANTITY DESC;`;
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+//TODO echarts
+//TODO sql in json
+app.get('/api/Customer-Lifetime-Value', async (req, res) => {
+    try {
+        let query: string = `SELECT C."customerID",AVG(P."total") AS avg_spent_per_purchase,COUNT(P."purchaseID") AS total_purchases,SUM(P."total") AS total_spent,(SUM(P."total") / COUNT(P."purchaseID")) * COUNT(P."purchaseID") AS clv FROM customers C JOIN purchase P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 
 // ----------------- Endpoints end ---------------------
 
