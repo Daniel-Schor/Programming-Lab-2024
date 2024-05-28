@@ -182,6 +182,38 @@ app.get('/api/totalPizzas', async (req, res) => {
     }
 });
 
+app.get('/api/totalOrders', async (req, res) => {
+    try {
+        let query: string = `Select COUNT("purchaseID") AS total_orders
+        From "purchase"
+        WHERE "purchaseDate" > $1`;
+        let date: string = req.query.date || defaultDate;
+        let result = await client.query(query,[date]);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+app.get('/api/averageOrderValue', async (req, res) => {
+    try {
+        let query: string = `Select SUM("total") / COUNT(*) AS average_order_value
+        From "purchase"
+        WHERE "purchaseDate" > $1`;
+        let date: string = req.query.date || defaultDate;
+        let result = await client.query(query,[date]);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
 app.get('/api/customerLocations', async (req, res) => {
     try {
         let query: string = `select latitude as lat, longitude as lon from customers`;
