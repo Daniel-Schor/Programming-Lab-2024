@@ -237,9 +237,9 @@ function revenueChart(best = true, storeIDs = []) {
         useDirtyRect: false,
       });
       var option = {
-        title: {
+        /*title: {
           text: "Revenue Chart",
-        },
+        },*/
         tooltip: {
           trigger: "axis",
         },
@@ -254,7 +254,7 @@ function revenueChart(best = true, storeIDs = []) {
         },
         grid: {
           left: "3%",
-          right: "4%",
+          right: "0%",
           bottom: "3%",
           containLabel: true,
         },
@@ -326,7 +326,7 @@ function revenueBarChart() {
         ],
         series: [
           {
-            name: 'Direct',
+            name: 'Total Revenue',
             type: 'bar',
             barWidth: '60%',
             data: Object.values(data)
