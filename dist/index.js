@@ -135,6 +135,20 @@ app.get('/api/totalRevenue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+app.get('/api/totalPizzas', async (req, res) => {
+    try {
+        let query = `Select SUM("nItems") AS total_pizza
+        From "purchase"
+        WHERE "purchaseDate" > $1`;
+        let date = req.query.date || defaultDate;
+        let result = await client.query(query, [date]);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 app.get('/api/customerLocations', async (req, res) => {
     try {
         let query = `select latitude as lat, longitude as lon from customers`;
