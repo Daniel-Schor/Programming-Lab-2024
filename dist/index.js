@@ -161,6 +161,48 @@ app.get('/api/customerLocations', async (req, res) => {
     }
 });
 /**
+ * Total Store Revenue Endpoint
+ * ----
+ * Query Options:
+ * <ul>
+ *     <li>date: cutOfDate (default 2022-12-01)</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/api/total-store-revenue
+ * ----
+ * Returns:
+ * Total revenue for each store for days between the given date and currentDate.
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     storeID: {
+ *         date: revenue,
+ *         'changeValue': float
+ *     }
+ * }
+ * </pre>
+ */
+app.get('/api/total-store-revenue', async (req, res) => {
+    try {
+        function reformat(result) {
+            let stores = {};
+            result.rows.forEach(element => {
+                stores[element.storeID] = element.total_revenue;
+            });
+            return stores;
+        }
+        let date = req.query.date || defaultDate;
+        let query = queries.totalStoreRevenue;
+        let result = await client.query(query, [date]);
+        res.status(200).json(reformat(result));
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+/**
  * Revenue Endpoint
  * ----
  * Query Options:

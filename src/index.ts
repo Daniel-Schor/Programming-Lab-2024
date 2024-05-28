@@ -156,7 +156,7 @@ app.get('/api/totalRevenue', async (req, res) => {
         From "purchase"
         WHERE "purchaseDate" > $1`;
         let date: string = req.query.date || defaultDate;
-        let result = await client.query(query,[date]);
+        let result = await client.query(query, [date]);
 
         res.status(200).json(result.rows);
     }
@@ -172,7 +172,7 @@ app.get('/api/totalPizzas', async (req, res) => {
         From "purchase"
         WHERE "purchaseDate" > $1`;
         let date: string = req.query.date || defaultDate;
-        let result = await client.query(query,[date]);
+        let result = await client.query(query, [date]);
 
         res.status(200).json(result.rows);
     }
@@ -189,6 +189,52 @@ app.get('/api/customerLocations', async (req, res) => {
         let result = await client.query(query);
 
         res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
+/**
+ * Total Store Revenue Endpoint
+ * ----
+ * Query Options:
+ * <ul>
+ *     <li>date: cutOfDate (default 2022-12-01)</li>
+ * </ul>
+ * ----
+ * Example: http://localhost:3000/api/total-store-revenue
+ * ----
+ * Returns:
+ * Total revenue for each store for days between the given date and currentDate.
+ * ----
+ * Response Format:
+ * <pre>
+ * {
+ *     storeID: {
+ *         date: revenue,
+ *         'changeValue': float
+ *     }
+ * }
+ * </pre>
+ */
+app.get('/api/total-store-revenue', async (req, res) => {
+    try {
+        function reformat(result){
+            let stores = {};
+            result.rows.forEach(element => {
+                stores[element.storeID] = element.total_revenue;
+            });
+            return stores;
+        }
+
+        let date: string = req.query.date || defaultDate;
+        let query: string = queries.totalStoreRevenue;
+
+        let result = await client.query(query, [date]);
+
+        res.status(200).json(reformat(result));
     }
     catch (err) {
         console.error(err);
