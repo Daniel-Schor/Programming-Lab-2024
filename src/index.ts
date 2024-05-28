@@ -80,7 +80,7 @@ function revenueChange(cutOFDate: string, result: any, best: boolean = true, pos
     return sortedResult;
 }
 
-function reformatRevenueQueryResults(result) {
+function reformatRevenueQueryResults(result, reverse = false) {
     function reformatDate(result) {
         const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': tz, year: 'numeric', month: '2-digit', day: '2-digit' });
 
@@ -94,6 +94,8 @@ function reformatRevenueQueryResults(result) {
     reformatDate(result);
 
     let stores = {};
+
+    if (reverse) { result.reverse(); }
 
     result.forEach(element => {
         if (!stores[element.storeID]) {
@@ -195,7 +197,7 @@ app.get('/api/revenue', async (req, res) => {
 
         let result = await client.query(query, [date]);
 
-        result = reformatRevenueQueryResults(result.rows);
+        result = reformatRevenueQueryResults(result.rows, JSON.parse(req.query.reverse || false));
 
         result = revenueChange(date, result, JSON.parse(req.query.best || true));
 
@@ -411,7 +413,7 @@ app.get('/api/daily-orders-analysis', async (req, res) => {
             function reformatBestPizza(result) {
                 let reformattedResult = {};
                 let max;
-    
+
                 result.rows.forEach(row => {
                     let currenNumber = parseInt(row.total_orders)
                     if (!reformattedResult[row.hour]) {
@@ -422,7 +424,7 @@ app.get('/api/daily-orders-analysis', async (req, res) => {
                         reformattedResult[row.hour].push(row.product);
                     }
                 });
-    
+
                 return reformattedResult
             }
 

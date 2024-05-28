@@ -65,7 +65,7 @@ function revenueChange(cutOFDate, result, best = true, positveWeight = 1.06, neg
     });
     return sortedResult;
 }
-function reformatRevenueQueryResults(result) {
+function reformatRevenueQueryResults(result, reverse = false) {
     function reformatDate(result) {
         const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': tz, year: 'numeric', month: '2-digit', day: '2-digit' });
         result.forEach(row => {
@@ -76,6 +76,9 @@ function reformatRevenueQueryResults(result) {
     }
     reformatDate(result);
     let stores = {};
+    if (reverse) {
+        result.reverse();
+    }
     result.forEach(element => {
         if (!stores[element.storeID]) {
             stores[element.storeID] = {};
@@ -160,7 +163,7 @@ app.get('/api/revenue', async (req, res) => {
         let date = req.query.date || defaultDate;
         let query = queries.revenue;
         let result = await client.query(query, [date]);
-        result = reformatRevenueQueryResults(result.rows);
+        result = reformatRevenueQueryResults(result.rows, JSON.parse(req.query.reverse || false));
         result = revenueChange(date, result, JSON.parse(req.query.best || true));
         if (req.query.store) {
             Object.keys(result).forEach(store => { if (!req.query.store.includes(store)) {
