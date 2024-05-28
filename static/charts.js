@@ -289,6 +289,7 @@ function revenueChart(best = true, storeIDs = []) {
     });
 }
 
+// TODO migrate to this chart https://echarts.apache.org/examples/en/editor.html?c=dataset-encode0
 function revenueBarChart() {
   var chartDom = document.getElementById('revenueBar');
   var myChart = echarts.init(chartDom);
