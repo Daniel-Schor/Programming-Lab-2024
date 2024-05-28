@@ -57,3 +57,10 @@ download database file : https://mega.nz/file/tN8GzaCZ#K1GlpgOKlsHDx8J_3XowRR2DT
 - create a database named "pizza"
 - right click on pizza and choose "restore"
 - now choose the downloaded file through the explorer 
+
+
+## Analze Data
+https://studfrauasde-my.sharepoint.com/:w:/g/personal/tristan_buls_stud_fra-uas_de/EZX1jaI2qFdCojF1y3b-osABBWreVkqK7syMf01LEtO0Bw?e=Nwg9YH
+
+## Sprint Log
+https://studfrauasde-my.sharepoint.com/:x:/g/personal/fatima_irhzal_stud_fra-uas_de/Ec4mQB_Eqk9HnrkcP1y7kb4BTfjSLtL8Pj2u6e094IZEqQ?e=VrTUaS
