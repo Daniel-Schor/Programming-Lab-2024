@@ -277,6 +277,11 @@ function revenueChart(best = true, storeIDs = []) {
         myChart.setOption(option);
       }
 
+      myChart.on('click', (params) =>{
+          window.location.href = `/individualStore?storeID=${params.seriesName}`;
+          localStorage.setItem('store', JSON.stringify({"storeID": params.seriesName})); // Store the store variable
+      });
+
       window.addEventListener("resize", myChart.resize);
     })
     .catch((error) => {
@@ -333,7 +338,6 @@ function revenueBarChart() {
 
       myChart.on('click', (params) =>{
         //if (params.componentType === 'series') {
-          console.log(params.componentType);
           window.location.href = `/individualStore?storeID=${params.name}`;
           localStorage.setItem('store', JSON.stringify({"storeID": params.name})); // Store the store variable
         //}
