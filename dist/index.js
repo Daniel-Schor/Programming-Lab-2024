@@ -149,6 +149,34 @@ app.get('/api/totalPizzas', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+app.get('/api/totalOrders', async (req, res) => {
+    try {
+        let query = `Select COUNT("purchaseID") AS total_orders
+        From "purchase"
+        WHERE "purchaseDate" > $1`;
+        let date = req.query.date || defaultDate;
+        let result = await client.query(query, [date]);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+app.get('/api/averageOrderValue', async (req, res) => {
+    try {
+        let query = `Select SUM("total") / COUNT(*) AS average_order_value
+        From "purchase"
+        WHERE "purchaseDate" > $1`;
+        let date = req.query.date || defaultDate;
+        let result = await client.query(query, [date]);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 app.get('/api/customerLocations', async (req, res) => {
     try {
         let query = `select latitude as lat, longitude as lon from customers`;
@@ -185,8 +213,11 @@ app.get('/api/customerLocations', async (req, res) => {
  */
 app.get('/api/total-store-revenue', async (req, res) => {
     try {
-        function reformat(result) {
+        function reformat(result, reverse) {
             let stores = {};
+            if (reverse) {
+                result.rows.reverse();
+            }
             result.rows.forEach(element => {
                 stores[element.storeID] = element.total_revenue;
             });
@@ -195,7 +226,7 @@ app.get('/api/total-store-revenue', async (req, res) => {
         let date = req.query.date || defaultDate;
         let query = queries.totalStoreRevenue;
         let result = await client.query(query, [date]);
-        res.status(200).json(reformat(result));
+        res.status(200).json(reformat(result, JSON.parse(req.query.reverse || true)));
     }
     catch (err) {
         console.error(err);
@@ -447,6 +478,17 @@ app.get('/api/daily-orders-analysis', async (req, res) => {
             return reformattedResult;
         }
         res.status(200).json(reformat(result));
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+app.get('/api/pizza-price-popularity', async (req, res) => {
+    try {
+        let query = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
+        let result = await client.query(query);
+        res.status(200).json(result.rows);
     }
     catch (err) {
         console.error(err);

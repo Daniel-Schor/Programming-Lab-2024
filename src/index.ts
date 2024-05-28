@@ -188,7 +188,7 @@ app.get('/api/totalOrders', async (req, res) => {
         From "purchase"
         WHERE "purchaseDate" > $1`;
         let date: string = req.query.date || defaultDate;
-        let result = await client.query(query,[date]);
+        let result = await client.query(query, [date]);
 
         res.status(200).json(result.rows);
     }
@@ -204,7 +204,7 @@ app.get('/api/averageOrderValue', async (req, res) => {
         From "purchase"
         WHERE "purchaseDate" > $1`;
         let date: string = req.query.date || defaultDate;
-        let result = await client.query(query,[date]);
+        let result = await client.query(query, [date]);
 
         res.status(200).json(result.rows);
     }
@@ -253,8 +253,9 @@ app.get('/api/customerLocations', async (req, res) => {
  */
 app.get('/api/total-store-revenue', async (req, res) => {
     try {
-        function reformat(result){
+        function reformat(result, reverse) {
             let stores = {};
+            if (reverse) { result.rows.reverse(); }
             result.rows.forEach(element => {
                 stores[element.storeID] = element.total_revenue;
             });
@@ -266,7 +267,7 @@ app.get('/api/total-store-revenue', async (req, res) => {
 
         let result = await client.query(query, [date]);
 
-        res.status(200).json(reformat(result));
+        res.status(200).json(reformat(result, JSON.parse(req.query.reverse || true)));
     }
     catch (err) {
         console.error(err);
