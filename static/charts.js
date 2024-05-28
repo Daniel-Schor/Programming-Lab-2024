@@ -330,6 +330,14 @@ function revenueBarChart() {
       };
 
       option && myChart.setOption(option);
+
+      myChart.on('click', (params) =>{
+        //if (params.componentType === 'series') {
+          console.log(params.componentType);
+          window.location.href = `/individualStore?storeID=${params.name}`;
+          localStorage.setItem('store', JSON.stringify({"storeID": params.name})); // Store the store variable
+        //}
+      });
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
