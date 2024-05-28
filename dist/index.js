@@ -346,7 +346,7 @@ app.get('/api/pizzaPair', async (req, res) => {
             let query = queries.pizzaPair;
             result = await client.query(query);
         }
-        res.status(200).json(reformatPizzaPair(result.rows));
+        res.status(200).json(result.rows);
     }
     catch (err) {
         console.error(err);
