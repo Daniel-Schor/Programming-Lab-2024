@@ -150,6 +150,22 @@ app.get('/api/storeLocations', async (req, res) => {
     }
 });
 
+app.get('/api/totalRevenue', async (req, res) => {
+    try {
+        let query: string = `Select SUM(total) AS total_revenue
+        From "purchase"
+        WHERE "purchaseDate" > $1`;
+        let date: string = req.query.date || defaultDate;
+        let result = await client.query(query,[date]);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
 app.get('/api/customerLocations', async (req, res) => {
     try {
         let query: string = `select latitude as lat, longitude as lon from customers`;
