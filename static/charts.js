@@ -49,7 +49,7 @@ function testbarchart() {
     });
 }
 function gaugeChart() {
-  
+
   var dom = document.getElementById("container");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
@@ -175,9 +175,7 @@ function gaugeChart() {
         ],
       };
 
-      if (option && typeof option === "object") {
-        myChart.setOption(option);
-      }
+      myChart.setOption(option);
 
       window.addEventListener("resize", myChart.resize);
     }) // This is where the missing parenthesis should be
@@ -185,54 +183,51 @@ function gaugeChart() {
       console.error("Error:", error);
     });
 }
-// TODO dont fill background
-function revenueChart() {
-  var storeS062214 = [];
-  var storeS013343 = [];
-  var storeS216043 = [];
-  var days = [];
 
-  fetch("/api/revenue?store=S062214,S013343,S216043")
+function revenueChart(storeIDs = [], best = true) {
+  var days = [];
+  let lineInfos = [];
+  let req = `/api/revenue?reverse=true&limit=5&best=${best}`;
+  if (storeIDs) {
+    req += "&store=" + storeIDs.join(",");
+  }
+
+  fetch(req)
     .then((response) => response.json())
     .then((data) => {
-      storeS062214 = Object.values(data['S062214']);
-      storeS013343 = Object.values(data['S013343']);
-      storeS216043 = Object.values(data['S216043']);
-      storeS062214.pop();
-      storeS013343.pop();
-      storeS216043.pop();
-      days = Object.keys(data['S062214']);
-      days.pop();
+      Object.keys(data).forEach((storeID) => {
+        delete data[storeID]["changeValue"];
+        storeIDs.push(storeID);
 
-      storeS062214.reverse();
-      storeS013343.reverse();
-      storeS216043.reverse();
-      days.reverse();
-      console.log("Data for S062214:", storeS062214);
-      console.log("Data for S013343:", storeS013343);
-      console.log("Data for S216043:", storeS216043);
-      console.log("Days:", days);
+        lineInfos.push(
+          {
+            name: storeID,
+            type: "line",
+            stack: "Total",
+
+            emphasis: {
+              focus: "series",
+            },
+            data: Object.values(data[storeID]),
+          });
+      });
+
+      days = Object.keys(data[Object.keys(data)[0]]);
 
       var dom = document.getElementById("revenue");
       var myChart = echarts.init(dom, null, {
         renderer: "canvas",
         useDirtyRect: false,
       });
-      var app = {};
-
-      var option;
-
-      option = {
+      var option = {
         title: {
           text: "Revenue Chart",
         },
         tooltip: {
           trigger: "axis",
-          
-          
         },
         legend: {
-          data: ["storeS062214", "storeS013343", "storeS216043"],
+          data: storeIDs,
         },
         toolbox: {
           feature: {
@@ -257,38 +252,7 @@ function revenueChart() {
             type: "value",
           },
         ],
-        series: [
-          {
-            name: "storeS062214",
-            type: "line",
-            stack: "Total",
-            
-            emphasis: {
-              focus: "series",
-            },
-            data: storeS062214,
-          },
-          {
-            name: "storeS013343",
-            type: "line",
-            stack: "Total",
-            
-            emphasis: {
-              focus: "series",
-            },
-            data: storeS013343,
-          },
-          {
-            name: "storeS216043",
-            type: "line",
-            stack: "Total",
-            
-            emphasis: {
-              focus: "series",
-            },
-            data: storeS216043,
-          },
-        ],
+        series: lineInfos,
       };
 
       if (option && typeof option === "object") {
