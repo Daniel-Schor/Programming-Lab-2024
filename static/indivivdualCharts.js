@@ -2,6 +2,14 @@ function ordernumber() {
   //http://localhost:3000/revenue?store=S486166
 }
 
+function backButton() {
+  document
+        .getElementById("redirectButton")
+        .addEventListener("click", function () {
+          window.location.href = "http://localhost:3000/";
+        });
+}
+
 function monthlyRevenue() {
   var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
   //http://localhost:3000/revenue?store=S486166

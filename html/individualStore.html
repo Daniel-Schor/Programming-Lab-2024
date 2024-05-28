@@ -4,22 +4,31 @@
     <meta charset="UTF-8" />
     <script src="/static/echarts.js"></script>
     <script src="static/indivivdualCharts.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/static/echarts.min.js"></script>#
-    
+    <script type="text/javascript" src="/static/echarts.min.js"></script>
+    #
   </head>
 
   <body>
+    <button id="redirectButton">MainPage</button>
+    <script>
+      backButton();
+    </script>
     <h1 id="Store-quality">""</h1>
     <div id="container" style="width: 600px; height: 600px"></div>
     <script>
-        
       gaugeChart();
     </script>
-    <div id="Store-revenue"style="width: 600px; height: 600px">Store-revenue</div>
-    
-    <script>monthlyRevenue()</script>
-    <div id="Heatmap"style="width: 600px; height: 600px"></div>
-    
-    <script>heatmap()</script>
+    <div id="Store-revenue" style="width: 600px; height: 600px">
+      Store-revenue
+    </div>
+
+    <script>
+      monthlyRevenue();
+    </script>
+    <div id="Heatmap" style="width: 600px; height: 600px"></div>
+
+    <script>
+      heatmap();
+    </script>
   </body>
 </html>
