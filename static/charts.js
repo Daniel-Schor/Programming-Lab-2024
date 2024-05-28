@@ -237,9 +237,9 @@ function revenueChart(best = true, storeIDs = []) {
         useDirtyRect: false,
       });
       var option = {
-        title: {
+        /*title: {
           text: "Revenue Chart",
-        },
+        },*/
         tooltip: {
           trigger: "axis",
         },
@@ -254,7 +254,7 @@ function revenueChart(best = true, storeIDs = []) {
         },
         grid: {
           left: "3%",
-          right: "4%",
+          right: "0%",
           bottom: "3%",
           containLabel: true,
         },
@@ -276,6 +276,11 @@ function revenueChart(best = true, storeIDs = []) {
       if (option && typeof option === "object") {
         myChart.setOption(option);
       }
+
+      myChart.on('click', (params) =>{
+          window.location.href = `/individualStore?storeID=${params.seriesName}`;
+          localStorage.setItem('store', JSON.stringify({"storeID": params.seriesName})); // Store the store variable
+      });
 
       window.addEventListener("resize", myChart.resize);
     })
@@ -321,7 +326,7 @@ function revenueBarChart() {
         ],
         series: [
           {
-            name: 'Direct',
+            name: 'Total Revenue',
             type: 'bar',
             barWidth: '60%',
             data: Object.values(data)
@@ -333,7 +338,6 @@ function revenueBarChart() {
 
       myChart.on('click', (params) =>{
         //if (params.componentType === 'series') {
-          console.log(params.componentType);
           window.location.href = `/individualStore?storeID=${params.name}`;
           localStorage.setItem('store', JSON.stringify({"storeID": params.name})); // Store the store variable
         //}
