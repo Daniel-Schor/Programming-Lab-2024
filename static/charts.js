@@ -184,13 +184,27 @@ function gaugeChart() {
     });
 }
 
-function revenueChart(storeIDs = [], best = true) {
+function revenueChart(best = true, storeIDs = []) {
+  
   var days = [];
   let lineInfos = [];
-  let req = `/api/revenue?reverse=true&limit=5&best=${best}`;
-  if (storeIDs) {
+  //let selected = {};
+
+  let req = `/api/revenue?reverse=true&best=${best}`;
+  //let req = `/api/revenue?reverse=true`;
+  if (storeIDs.length != 0) {
     req += "&store=" + storeIDs.join(",");
+  } else {
+    req += "&limit=5";
   }
+
+  /*fetch(req + `&limit=5&best=${best}`)
+    .then((response) => response.json())
+    .then((data) => {
+      Object.keys(data).forEach((storeID) => {
+        selected[storeID] = true;
+      });
+    })*/
 
   fetch(req)
     .then((response) => response.json())
@@ -198,6 +212,10 @@ function revenueChart(storeIDs = [], best = true) {
       Object.keys(data).forEach((storeID) => {
         delete data[storeID]["changeValue"];
         storeIDs.push(storeID);
+
+        /*if (!selected[storeID]) {
+          selected[storeID] = false;
+        }*/
 
         lineInfos.push(
           {
@@ -211,7 +229,6 @@ function revenueChart(storeIDs = [], best = true) {
             data: Object.values(data[storeID]),
           });
       });
-
       days = Object.keys(data[Object.keys(data)[0]]);
 
       var dom = document.getElementById("revenue");
@@ -228,6 +245,7 @@ function revenueChart(storeIDs = [], best = true) {
         },
         legend: {
           data: storeIDs,
+          //selected: selected,
         },
         toolbox: {
           feature: {
