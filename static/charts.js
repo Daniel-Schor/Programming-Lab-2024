@@ -185,7 +185,7 @@ function gaugeChart() {
 }
 
 function revenueChart(best = true, storeIDs = []) {
-  
+
   var days = [];
   let lineInfos = [];
   //let selected = {};
@@ -278,6 +278,58 @@ function revenueChart(best = true, storeIDs = []) {
       }
 
       window.addEventListener("resize", myChart.resize);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}
+
+function revenueBarChart() {
+  var chartDom = document.getElementById('revenueBar');
+  var myChart = echarts.init(chartDom);
+
+  let req = `/api/total-store-revenue`;
+  fetch(req)
+    .then((response) => response.json())
+    .then((data) => {
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        yAxis: [
+          {
+            type: 'category',
+            data: Object.keys(data),
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'Direct',
+            type: 'bar',
+            barWidth: '60%',
+            data: Object.values(data)
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
