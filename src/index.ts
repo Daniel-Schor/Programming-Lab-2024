@@ -530,6 +530,21 @@ app.get('/api/daily-orders-analysis', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+
+app.get('/api/pizza-price-popularity', async (req, res) => {
+    try {
+        let query: string = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
+
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
 // ----------------- Endpoints end ---------------------
 
 app.listen(process.env.PORT || 3000, () => console.log('App available on http://localhost:3000'));
