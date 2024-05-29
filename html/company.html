@@ -19,9 +19,9 @@
 
     #statsOverviewContainer {
       margin-top: 20px;
-      border: 2px solid #c0c0c0; /* Border around the entire stats section */
+      border: 2px solid #c0c0c0;
       border-radius: 10px;
-      padding: 10px; /* Reduced padding */
+      padding: 10px;
       background-color: #f9f9f9;
     }
 
@@ -29,7 +29,7 @@
       display: flex;
       justify-content: space-between;
       gap: 10px;
-      flex-wrap: wrap; /* Allows the boxes to wrap on smaller screens */
+      flex-wrap: wrap;
     }
 
     .stat-item {
@@ -37,8 +37,8 @@
       padding: 10px;
       border-radius: 5px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      flex: 1; /* Allows the boxes to evenly take up the available space */
-      min-width: 150px; /* Ensures the boxes do not get too small */
+      flex: 1;
+      min-width: 150px;
       text-align: center;
     }
 
@@ -59,9 +59,23 @@
     #statsOverviewTitle {
       text-align: center;
       font-size: 24px;
-      margin: 0 0 10px; /* Reduced margin */
-      border-bottom: 2px solid #c0c0c0; /* Border below the title */
-      padding-bottom: 5px; /* Reduced padding */
+      margin: 0 0 10px;
+      border-bottom: 2px solid #c0c0c0;
+      padding-bottom: 5px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
   </style>
   <script src="/static/echarts.js"></script>
@@ -70,29 +84,32 @@
 </head>
 
 <body>
-  <button id="bestButton">Best</button>
-  <button id="worstButton">Worst</button>
-  <button id="customButton">Custom</button>
+  <div class="button-container">
+    <div class="button-group">
+      <button id="bestButton">Best</button>
+      <button id="worstButton">Worst</button>
+      <button id="customButton">Custom</button>
+      <button id="Last-Year">Last Year</button>
+      <button id="Last-Quarter">Last Quarter</button>
+      <button id="Last-Month">Last Month</button>
+    </div>
 
-  <button id="Last-Year">Last Year</button>
-  <button id="Last-Quarter">Last Quarter</button>
-  <button id="Last-Month">Last Month</button>
-  
-  <div class="customdate" id="customDateForm">
-    <form id="dateForm">
-      <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
-      <button id="customDate">Custom Date</button>
-    </form>
+    <div class="customdate" id="customDateForm">
+      <form id="dateForm">
+        <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+        <button id="customDate">Custom Date</button>
+      </form>
+    </div>
+
+    <div id="statsOverviewContainer">
+      <h2 id="statsOverviewTitle">General Statistics</h2>
+      <div id="statsOverview"></div>
+    </div>
   </div>
 
   <div class="chart-container">
     <div id="revenue" class="chart" style="height: 600px;"></div>
     <div id="revenueBar" class="chart" style="height: 600px;"></div>
-  </div>
-
-  <div id="statsOverviewContainer">
-    <h2 id="statsOverviewTitle">General Statistics</h2>
-    <div id="statsOverview"></div>
   </div>
 
   <script>
@@ -225,7 +242,6 @@
         });
     }
   </script>
-
 </body>
 
 </html>
