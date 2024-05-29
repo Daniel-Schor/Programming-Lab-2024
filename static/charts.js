@@ -2,6 +2,21 @@ var finaldate = new Date("2022-12-01");
 
 var choosenDate;
 
+const colorsToExclude = [
+  "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
+  "#000099", "#000088", "#000077", "#000066", "#000055",
+  "#000044", "#000033", "#000022", "#000011", "#000000"
+];
+function randomColor() {
+  let color;
+  do {
+    color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    color = color.toUpperCase();
+    color = color.padEnd(7, '0');
+  } while (colorsToExclude.includes(color));
+  colorsToExclude.push(color);
+  return color;
+}
 function statsOverview() {
   // Abrufen der storeID aus dem localStorage
   var store = JSON.parse(localStorage.getItem("store"));
@@ -273,14 +288,15 @@ function gaugeChart() {
     });
 }
 
-function revenueChart(best = true, storeIDs = []) {
+function revenueChart(best = true, storeIDs = [], storeColors = {}) {
   return new Promise((resolve, reject) => {
     var days = [];
     let lineInfos = [];
-    let storeColors = {};
 
     let req = `/api/revenue?reverse=true&best=${best}`;
-    if (storeIDs.length != 0) {
+    if (Object.keys(storeColors).length != 0) {
+      req += "&store=" + Object.keys(storeColors).join(",");
+    } else if (storeIDs.length != 0) {
       req += "&store=" + storeIDs.join(",");
     } else {
       req += "&limit=5";
@@ -289,13 +305,15 @@ function revenueChart(best = true, storeIDs = []) {
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
-        const colorPalette = ['#FF5733', '#33FF57', '#FF33A1', '#FF8C33', '#57FFB9', '#FF33FF', '#FFC300'];
 
-        storeIDs = [];
+        // TODO check this
+        orderedStoreIDs = [];
         Object.keys(data).forEach((storeID, index) => {
           delete data[storeID]["changeValue"];
-          storeIDs.push(storeID);
-          storeColors[storeID] = colorPalette[index % colorPalette.length];
+          orderedStoreIDs.push(storeID);
+          if (storeColors[storeID] == undefined) {
+            storeColors[storeID] = randomColor();
+          }
 
           lineInfos.push(
             {
@@ -323,7 +341,7 @@ function revenueChart(best = true, storeIDs = []) {
             trigger: "axis",
           },
           legend: {
-            data: storeIDs,
+            data: orderedStoreIDs,
           },
           toolbox: {
             feature: {
@@ -351,6 +369,10 @@ function revenueChart(best = true, storeIDs = []) {
           series: lineInfos,
         };
 
+        if (storeIDs.length != 0 || Object.keys(storeColors).length != 0) {
+          myChart.clear();
+        }
+
         if (option && typeof option === "object") {
           myChart.setOption(option);
         }
@@ -371,67 +393,102 @@ function revenueChart(best = true, storeIDs = []) {
   });
 }
 
-// TODO migrate to this chart https://echarts.apache.org/examples/en/editor.html?c=dataset-encode0
-function revenueBarChart(storeIDsColors = {}) {
-  var chartDom = document.getElementById('revenueBar');
-  var myChart = echarts.init(chartDom);
+function revenueBarChart(storeIDsColors = {}, custom = false) {
+  return new Promise((resolve, reject) => {
 
-  let req = `/api/total-store-revenue`;
-  fetch(req)
-    .then((response) => response.json())
-    .then((data) => {
-      var option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        yAxis: [
-          {
-            type: 'category',
-            data: Object.keys(data),
-            axisTick: {
-              alignWithLabel: true
+    var chartDom = document.getElementById('revenueBar');
+    var myChart = echarts.init(chartDom);
+
+    let req = `/api/total-store-revenue`;
+    fetch(req)
+      .then((response) => response.json())
+      .then((data) => {
+        var option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
             }
-          }
-        ],
-        series: [
-          {
-            name: 'Total Revenue',
-            type: 'bar',
-            barWidth: '60%',
-            data: Object.values(data).map((value, index) => ({
-              value: value,
-              itemStyle: {
-                color: storeIDsColors[Object.keys(data)[index]]
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'value'
+            }
+          ],
+          yAxis: [
+            {
+              type: 'category',
+              data: Object.keys(data),
+              axisTick: {
+                alignWithLabel: true
               }
-            }))
-          }
-        ]
-      };
+            }
+          ],
+          series: [
+            {
+              name: 'Total Revenue',
+              type: 'bar',
+              barWidth: '60%',
+              data: Object.values(data).map((value, index) => ({
+                value: value,
+                itemStyle: {
+                  color: storeIDsColors[Object.keys(data)[index]]
+                }
+              }))
+            }
+          ]
+        };
 
-      option && myChart.setOption(option);
+        option && myChart.setOption(option);
 
-      myChart.on('click', (params) => {
-        //if (params.componentType === 'series') {
-        window.location.href = `/individualStore?storeID=${params.name}`;
-        localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
-        //}
+        if (!custom) {
+          myChart.on('click', (params) => {
+            //if (params.componentType === 'series') {
+            window.location.href = `/individualStore?storeID=${params.name}`;
+            localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
+            //}
+          });
+        } else {
+          myChart.off('click');
+          myChart.on('click', (params) => {
+            if (storeIDsColors[params.name] == undefined) {
+              storeIDsColors[params.name] = randomColor();
+            } else {
+              storeIDsColors[params.name] = undefined;
+            }
+
+            option = {
+              series: [
+                {
+                  name: 'Total Revenue',
+                  type: 'bar',
+                  barWidth: '60%',
+                  data: Object.values(data).map((value, index) => ({
+                    value: value,
+                    itemStyle: {
+                      color: storeIDsColors[Object.keys(data)[index]]
+                    }
+                  }))
+                }
+              ]
+            };
+
+            option && myChart.setOption(option);
+            resolve(storeIDsColors);
+            //window.location.href = `/test?storeID=${params.name}`;
+            //localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
+            //}
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+  });
 }

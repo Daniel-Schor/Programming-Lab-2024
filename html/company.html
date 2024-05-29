@@ -35,7 +35,6 @@
       <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
       <button id="customDate">"Custom Date"</button>
     </form>
-
   </div>
   <script>
     timeButtons();
@@ -46,52 +45,72 @@
     <div id="revenue" class="chart" style="height: 600px;"></div>
     <div id="revenueBar" class="chart" style="height: 600px;"></div>
   </div>
-  <div id="statsOverview">
-  </div>
-
-
+  <div id="statsOverview"></div>
 
   <script>
     function setActiveButton(buttonId) {
       document.getElementById("bestButton").classList.remove("active");
       document.getElementById("worstButton").classList.remove("active");
       document.getElementById("customButton").classList.remove("active");
-
       document.getElementById(buttonId).classList.add("active");
     }
 
+    let best;
+    let custom;
+    let curColors;
+    let firstClick = true;
+
     function bestButton() {
-      revenueChart(true).then(colors => {
-        revenueBarChart(colors);
+      best = true;
+      custom = false;
+      firstClick = false;
+      revenueChart(best).then(colors => {
+        curColors = colors;
+        revenueBarChart(curColors);
       });
       setActiveButton("bestButton");
     }
 
     function worstButton() {
-      revenueChart(false).then(colors => {
-        revenueBarChart(colors);
+      best = false;
+      custom = false;
+      firstClick = false;
+      revenueChart(best).then(colors => {
+        curColors = colors;
+        revenueBarChart(curColors);
       });
       setActiveButton("worstButton");
     }
 
-    function customButton() {
-      //revenueChart(false);
-      revenueBarChart({ "S302800": "red" });
+    async function customButton() {
+      custom = true;
+      firstClick = false;
       setActiveButton("customButton");
+
+      while (custom) {
+        try {
+          const colors = await revenueBarChart(curColors, custom);
+          const filteredColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
+          await revenueChart(best, [], filteredColors);
+        } catch (error) {
+          console.error("Error in customButton loop:", error);
+          custom = false;
+        }
+      }
     }
 
     document.getElementById("bestButton").addEventListener("click", bestButton);
     document.getElementById("worstButton").addEventListener("click", worstButton);
     document.getElementById("customButton").addEventListener("click", customButton);
 
-    setActiveButton("bestButton");
-    revenueChart().then(colors => {
-      revenueBarChart(colors);
-    });
+    if (firstClick) {
+      setActiveButton("bestButton");
+      bestButton();
+    }
+
     // -------------
     statsOverview();
     // -------------
-
   </script>
 
 </body>
