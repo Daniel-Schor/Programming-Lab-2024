@@ -24,7 +24,7 @@ function statsOverview() {
           var order_1 = Math.round(totalPizzasData[0].total_pizza);
           var order_2 = Math.round(totalOrdersData[0].total_orders);
           var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-          var order_4 = Math.round(pizzasPerOrderData[0].pizzas_order);
+          var order_4 = (pizzasPerOrderData[0].pizzas_order / 1.0).toFixed(2);
           // Ausgabe der Daten in der Konsole
           console.log("Total Revenue Data:", order);
           console.log("Total Pizzas Data:", order_1);

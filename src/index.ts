@@ -221,7 +221,7 @@ app.get('/api/pizzasPerOrder', async (req, res) => {
         WHERE "purchaseDate" > $1`;
         let date: string = req.query.date || defaultDate;
         let result = await client.query(query,[date]);
-//console.log(result.rows);
+console.log(result.rows);
         res.status(200).json(result.rows);
     }
     catch (err) {
