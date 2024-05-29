@@ -25,6 +25,7 @@
 <body>
   <button id="bestButton">Best</button>
   <button id="worstButton">Worst</button>
+  <button id="customButton">Custom</button>
 
   <div class="chart-container">
     <div id="revenue" class="chart" style="height: 600px;"></div>
@@ -39,6 +40,7 @@
     function setActiveButton(buttonId) {
       document.getElementById("bestButton").classList.remove("active");
       document.getElementById("worstButton").classList.remove("active");
+      document.getElementById("customButton").classList.remove("active");
 
       document.getElementById(buttonId).classList.add("active");
     }
@@ -51,10 +53,17 @@
     function worstButton() {
       revenueChart(false);
       setActiveButton("worstButton");
+    }    
+    
+    function customButton() {
+      //revenueChart(false);
+      //revenueBarChart();
+      setActiveButton("customButton");
     }
 
     document.getElementById("bestButton").addEventListener("click", bestButton);
     document.getElementById("worstButton").addEventListener("click", worstButton);
+    document.getElementById("customButton").addEventListener("click", customButton);
 
     setActiveButton("bestButton");
     revenueChart();
