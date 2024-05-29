@@ -1,4 +1,5 @@
-
+const defaultDate = "2022-12-01";
+const currentDate = "2022-12-31";
 
 function dashboard() {
   //http://localhost:3000/revenue?store=S486166
@@ -16,53 +17,66 @@ function backButton() {
   });
 }
 
-function timeButtons() {
+function subtractMonths(date, months) {
+  // Create a copy of the date to avoid mutating the original date
+  let newDate = new Date(date);
+
+  // Subtract the months
+  newDate.setMonth(newDate.getMonth() - months);
+
+  // Handle the edge case where the subtraction leads to an invalid date
+  // (e.g., subtracting 1 month from March 31 results in February 31, which is invalid)
+  if (newDate.getDate() !== new Date(date).getDate()) {
+    // Set the date to the last day of the previous month
+    newDate.setDate(0);
+    console.log("Edge case handled.");
+  }
+  console.log("Old Date:", new Date(date));
+  console.log("New Date:", newDate);
+
+  return newDate.toISOString().split("T")[0];
+}
+
+function yearButton() {
   document.getElementById("Last-Year").addEventListener("click", function () {
-    finaldate.setFullYear(finaldate.getFullYear() - 1);
-    choosenDate = finaldate.toISOString().split("T")[0];
-    console.log(choosenDate);
-    monthlyRevenue(choosenDate); // Call monthlyRevenue after date change
-    gaugeChart(choosenDate);
+    let date = subtractMonths(currentDate, 12)
+    monthlyRevenue(date); // Call monthlyRevenue after date change
+    gaugeChart(date);
   });
+}
 
+function monthButton() {
   document.getElementById("Last-Month").addEventListener("click", function () {
-    finaldate = new Date(finaldate); 
-    finaldate.setMonth(finaldate.getMonth() - 1);
-    choosenDate = finaldate.toISOString().split("T")[0]; 
-    console.log(choosenDate);
-    monthlyRevenue(choosenDate);// Call monthlyRevenue after date change
-    gaugeChart(choosenDate);
+    let date = subtractMonths(currentDate, 1)
+    monthlyRevenue(date);// Call monthlyRevenue after date change
+    gaugeChart(date);
   });
+}
 
+function quarterButton() {
   document.getElementById("Last-Quarter").addEventListener("click", function () {
-    finaldate = new Date(finaldate); 
-    finaldate.setMonth(finaldate.getMonth() - 3);
-    choosenDate = finaldate.toISOString().split("T")[0]; 
-    console.log(choosenDate);
-    monthlyRevenue(choosenDate); 
-    gaugeChart(choosenDate);
+    let date = subtractMonths(currentDate, 3)
+    monthlyRevenue(date);
+    gaugeChart(date);
   });
 }
 
 function customDate() {
-  document.getElementById('customDate').addEventListener('click', function() {
+  document.getElementById('customDate').addEventListener('click', function () {
     document.getElementById('customDateForm').style.display = 'block';
   });
 
-  document.getElementById('dateForm').addEventListener('submit', function(event) {
+  document.getElementById('dateForm').addEventListener('submit', function (event) {
     event.preventDefault();
     const startDate = document.getElementById('startDate').value;
-    choosenDate = startDate;
-    console.log(choosenDate);
-    monthlyRevenue(choosenDate); 
+    defaultDate = startDate;
+    console.log(defaultDate);
+    monthlyRevenue(defaultDate);
   });
 }
 
-var finaldate = new Date("2022-12-01");
-var choosenDate = "2022-12-01"; // Default date
-
 function monthlyRevenue(date = "2022-12-01") {
-  var store = JSON.parse(localStorage.getItem("store")); 
+  var store = JSON.parse(localStorage.getItem("store"));
   var days = [];
   var revenue = [];
   var dom = document.getElementById("Store-revenue");
@@ -93,7 +107,7 @@ function monthlyRevenue(date = "2022-12-01") {
           trigger: "axis",
         },
         legend: {
-          data: ["storeS062214"],
+          data: [store.storeID],
         },
         toolbox: {
           feature: {
@@ -305,9 +319,9 @@ function heatmap(date = "2022-12-01") {
     [6, 10, 1], [6, 11, 0], [6, 12, 2], [6, 13, 1], [6, 14, 3], [6, 15, 4], [6, 16, 0], [6, 17, 0], [6, 18, 0],
     [6, 19, 0], [6, 20, 1], [6, 21, 2], [6, 22, 2], [6, 23, 6]
   ]
-  .map(function (item) {
-  return [item[1], item[0], item[2] || '-'];
-});
+    .map(function (item) {
+      return [item[1], item[0], item[2] || '-'];
+    });
   option = {
     tooltip: {
       position: "top",
@@ -362,58 +376,58 @@ function heatmap(date = "2022-12-01") {
 
   window.addEventListener("resize", myChart.resize);
 }
-function pizzaSize(date = "2022-12-01"){
-  
+function pizzaSize(date = "2022-12-01") {
+
   var dom = document.getElementById('PizzaSize');
   var myChart = echarts.init(dom, null, {
     renderer: 'canvas',
     useDirtyRect: false
   });
   var app = {};
-  
+
   var option;
 
   option = {
-tooltip: {
-  trigger: 'item'
-},
-legend: {
-  top: '5%',
-  left: 'center'
-},
-series: [
-  {
-    name: 'Pizza Size Sales',
-    type: 'pie',
-    radius: ['40%', '70%'],
-    avoidLabelOverlap: false,
-    itemStyle: {
-      borderRadius: 10,
-      borderColor: '#fff',
-      borderWidth: 2
+    tooltip: {
+      trigger: 'item'
     },
-    label: {
-      show: false,
-      position: 'center'
+    legend: {
+      top: '5%',
+      left: 'center'
     },
-    emphasis: {
-      label: {
-        show: true,
-        fontSize: 40,
-        fontWeight: 'bold'
+    series: [
+      {
+        name: 'Pizza Size Sales',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { value: 1048, name: 'Small' },
+          { value: 735, name: 'Medium' },
+          { value: 580, name: 'Large' }
+        ]
       }
-    },
-    labelLine: {
-      show: false
-    },
-    data: [
-      { value: 1048, name: 'Small' },
-      { value: 735, name: 'Medium' },
-      { value: 580, name: 'Large' }
     ]
-  }
-]
-};
+  };
 
   if (option && typeof option === 'object') {
     myChart.setOption(option);
