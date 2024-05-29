@@ -1,4 +1,4 @@
-var finaldate = new Date("2022-12-01"); 
+var finaldate = new Date("2022-12-01");
 
 var choosenDate;
 
@@ -20,31 +20,40 @@ function backButton() {
     });
 }
 function timeButtons() {
-  document
-    .getElementById("Last-Year")
-    .addEventListener("click", function () {
-      finaldate.setFullYear(finaldate.getFullYear() - 1);
-      choosenDate = finaldate.toISOString().split('T')[0]; // Convert back to string
-      console.log(choosenDate);
-    });
+  document.getElementById("Last-Year").addEventListener("click", function () {
+    finaldate.setFullYear(finaldate.getFullYear() - 1);
+    choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+    console.log(choosenDate);
+  });
 
-  document
-    .getElementById("Last-Month")
-    .addEventListener("click", function () {
-      finaldate = new Date(finaldate); // Convert back to Date object
-      finaldate.setMonth(finaldate.getMonth() - 1);
-      choosenDate = finaldate.toISOString().split('T')[0]; // Convert back to string
-      console.log(choosenDate);
-    });
+  document.getElementById("Last-Month").addEventListener("click", function () {
+    finaldate = new Date(finaldate); // Convert back to Date object
+    finaldate.setMonth(finaldate.getMonth() - 1);
+    choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+    console.log(choosenDate);
+  });
 
   document
     .getElementById("Last-Quarter")
     .addEventListener("click", function () {
       finaldate = new Date(finaldate); // Convert back to Date object
       finaldate.setMonth(finaldate.getMonth() - 3);
-      choosenDate = finaldate.toISOString().split('T')[0]; // Convert back to string
+      choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
       console.log(choosenDate);
     });
+}
+function customDate() {
+  document.getElementById('customDate').addEventListener('click', function() {
+    document.getElementById('customDateForm').style.display = 'block';
+});
+
+const endDate = '2022-12-01';
+document.getElementById('dateForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const startDate = document.getElementById('startDate').value;
+    choosenDate = startDate;
+    console.log(choosenDate);
+});
 }
 
 function monthlyRevenue() {
