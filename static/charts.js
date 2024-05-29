@@ -9,11 +9,11 @@ function statsOverview() {
 
   // Definieren der API-Endpunkte
   const apiEndpoints = [
-      `/api/totalRevenue?date=${date}`,
-      `/api/totalPizzas?date=${date}`,
-      `/api/totalOrders?date=${date}`,
-      `/api/averageOrderValue?date=${date}`,
-      `/api/pizzasPerOrder?date=${date}`
+    `/api/totalRevenue?date=${date}`,
+    `/api/totalPizzas?date=${date}`,
+    `/api/totalOrders?date=${date}`,
+    `/api/averageOrderValue?date=${date}`,
+    `/api/pizzasPerOrder?date=${date}`
   ];
 
   // Erstellen eines Arrays von Fetch-Promises
@@ -21,35 +21,35 @@ function statsOverview() {
 
   // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
   return Promise.all(fetchPromises)
-      .then(dataArray => {
-          // Kombinieren der Daten von den APIs
-          const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
-          var order = Math.round(totalRevenueData[0].total_revenue);
-          var order_1 = Math.round(totalPizzasData[0].total_pizza);
-          var order_2 = Math.round(totalOrdersData[0].total_orders);
-          var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-          var order_4 = (pizzasPerOrderData[0].pizzas_order / 1.0).toFixed(2);
-          // Ausgabe der Daten in der Konsole
-          console.log("Total Revenue Data:", order);
-          console.log("Total Pizzas Data:", order_1);
-          console.log("Total Orders Data:", order_2);
-          console.log("Average Order Value Data:", order_3);
-          console.log("Pizzas Per Order Data:", order_4);
-          document.getElementById("statsOverview").innerHTML = `Total Revenue: ${order}` +
-                                                   `Total Pizzas: ${order_1}` +
-                                                   `Total Orders: ${order_2}` +
-                                                   `Average Order Value: ${order_3}` +
-                                                   `Average Pizzas per Order: ${order_4}`;
+    .then(dataArray => {
+      // Kombinieren der Daten von den APIs
+      const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
+      var order = Math.round(totalRevenueData[0].total_revenue);
+      var order_1 = Math.round(totalPizzasData[0].total_pizza);
+      var order_2 = Math.round(totalOrdersData[0].total_orders);
+      var order_3 = Math.round(averageOrderValueData[0].average_order_value);
+      var order_4 = (pizzasPerOrderData[0].pizzas_order / 1.0).toFixed(2);
+      // Ausgabe der Daten in der Konsole
+      console.log("Total Revenue Data:", order);
+      console.log("Total Pizzas Data:", order_1);
+      console.log("Total Orders Data:", order_2);
+      console.log("Average Order Value Data:", order_3);
+      console.log("Pizzas Per Order Data:", order_4);
+      document.getElementById("statsOverview").innerHTML = `Total Revenue: ${order}` +
+        `Total Pizzas: ${order_1}` +
+        `Total Orders: ${order_2}` +
+        `Average Order Value: ${order_3}` +
+        `Average Pizzas per Order: ${order_4}`;
 
-          // Hier könnten zusätzliche Verarbeitungen der Daten erfolgen
+      // Hier könnten zusätzliche Verarbeitungen der Daten erfolgen
 
-          // Rückgabe eines Signals, dass die Daten verarbeitet wurden
-      })
-      .catch(error => {
-          console.error('Error fetching data:', error);
-          // Rückgabe eines Fehlers, falls ein Problem beim Abrufen der Daten auftritt
-          throw error;
-      });
+      // Rückgabe eines Signals, dass die Daten verarbeitet wurden
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      // Rückgabe eines Fehlers, falls ein Problem beim Abrufen der Daten auftritt
+      throw error;
+    });
 }
 function timeButtons() {
   document.getElementById("Last-Year").addEventListener("click", function () {
@@ -75,17 +75,17 @@ function timeButtons() {
     });
 }
 function customDate() {
-  document.getElementById('customDate').addEventListener('click', function() {
+  document.getElementById('customDate').addEventListener('click', function () {
     document.getElementById('customDateForm').style.display = 'block';
-});
+  });
 
-const endDate = '2022-12-01';
-document.getElementById('dateForm').addEventListener('submit', function(event) {
+  const endDate = '2022-12-01';
+  document.getElementById('dateForm').addEventListener('submit', function (event) {
     event.preventDefault();
     const startDate = document.getElementById('startDate').value;
     choosenDate = startDate;
     console.log(choosenDate);
-});
+  });
 }
 function testbarchart() {
   var myChart = echarts.init(document.getElementById("test"));
@@ -274,112 +274,105 @@ function gaugeChart() {
 }
 
 function revenueChart(best = true, storeIDs = []) {
+  return new Promise((resolve, reject) => {
+    var days = [];
+    let lineInfos = [];
+    let storeColors = {};
 
-  var days = [];
-  let lineInfos = [];
-  //let selected = {};
+    let req = `/api/revenue?reverse=true&best=${best}`;
+    if (storeIDs.length != 0) {
+      req += "&store=" + storeIDs.join(",");
+    } else {
+      req += "&limit=5";
+    }
 
-  let req = `/api/revenue?reverse=true&best=${best}`;
-  //let req = `/api/revenue?reverse=true`;
-  if (storeIDs.length != 0) {
-    req += "&store=" + storeIDs.join(",");
-  } else {
-    req += "&limit=5";
-  }
+    fetch(req)
+      .then((response) => response.json())
+      .then((data) => {
+        const colorPalette = ['#FF5733', '#33FF57', '#FF33A1', '#FF8C33', '#57FFB9', '#FF33FF', '#FFC300'];
 
-  /*fetch(req + `&limit=5&best=${best}`)
-    .then((response) => response.json())
-    .then((data) => {
-      Object.keys(data).forEach((storeID) => {
-        selected[storeID] = true;
-      });
-    })*/
+        storeIDs = [];
+        Object.keys(data).forEach((storeID, index) => {
+          delete data[storeID]["changeValue"];
+          storeIDs.push(storeID);
+          storeColors[storeID] = colorPalette[index % colorPalette.length];
 
-  fetch(req)
-    .then((response) => response.json())
-    .then((data) => {
-      Object.keys(data).forEach((storeID) => {
-        delete data[storeID]["changeValue"];
-        storeIDs.push(storeID);
+          lineInfos.push(
+            {
+              name: storeID,
+              type: "line",
+              stack: "Total",
+              emphasis: {
+                focus: "series",
+              },
+              itemStyle: {
+                color: storeColors[storeID],
+              },
+              data: Object.values(data[storeID]),
+            });
+        });
+        days = Object.keys(data[Object.keys(data)[0]]);
 
-        /*if (!selected[storeID]) {
-          selected[storeID] = false;
-        }*/
-
-        lineInfos.push(
-          {
-            name: storeID,
-            type: "line",
-            stack: "Total",
-
-            emphasis: {
-              focus: "series",
+        var dom = document.getElementById("revenue");
+        var myChart = echarts.init(dom, null, {
+          renderer: "canvas",
+          useDirtyRect: false,
+        });
+        var option = {
+          tooltip: {
+            trigger: "axis",
+          },
+          legend: {
+            data: storeIDs,
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {},
             },
-            data: Object.values(data[storeID]),
-          });
-      });
-      days = Object.keys(data[Object.keys(data)[0]]);
-
-      var dom = document.getElementById("revenue");
-      var myChart = echarts.init(dom, null, {
-        renderer: "canvas",
-        useDirtyRect: false,
-      });
-      var option = {
-        /*title: {
-          text: "Revenue Chart",
-        },*/
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          data: storeIDs,
-          //selected: selected,
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
           },
-        },
-        grid: {
-          left: "3%",
-          right: "0%",
-          bottom: "3%",
-          containLabel: true,
-        },
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            data: days,
+          grid: {
+            left: "3%",
+            right: "0%",
+            bottom: "3%",
+            containLabel: true,
           },
-        ],
-        yAxis: [
-          {
-            type: "value",
-          },
-        ],
-        series: lineInfos,
-      };
+          xAxis: [
+            {
+              type: "category",
+              boundaryGap: false,
+              data: days,
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+            },
+          ],
+          series: lineInfos,
+        };
 
-      if (option && typeof option === "object") {
-        myChart.setOption(option);
-      }
+        if (option && typeof option === "object") {
+          myChart.setOption(option);
+        }
 
-      myChart.on('click', (params) =>{
+        myChart.on('click', (params) => {
           window.location.href = `/individualStore?storeID=${params.seriesName}`;
-          localStorage.setItem('store', JSON.stringify({"storeID": params.seriesName})); // Store the store variable
-      });
+          localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
+        });
 
-      window.addEventListener("resize", myChart.resize);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+        window.addEventListener("resize", myChart.resize);
+
+        resolve(storeColors);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        reject(error);
+      });
+  });
 }
 
 // TODO migrate to this chart https://echarts.apache.org/examples/en/editor.html?c=dataset-encode0
-function revenueBarChart() {
+function revenueBarChart(storeIDsColors = {}) {
   var chartDom = document.getElementById('revenueBar');
   var myChart = echarts.init(chartDom);
 
@@ -419,17 +412,22 @@ function revenueBarChart() {
             name: 'Total Revenue',
             type: 'bar',
             barWidth: '60%',
-            data: Object.values(data)
+            data: Object.values(data).map((value, index) => ({
+              value: value,
+              itemStyle: {
+                color: storeIDsColors[Object.keys(data)[index]]
+              }
+            }))
           }
         ]
       };
 
       option && myChart.setOption(option);
 
-      myChart.on('click', (params) =>{
+      myChart.on('click', (params) => {
         //if (params.componentType === 'series') {
-          window.location.href = `/individualStore?storeID=${params.name}`;
-          localStorage.setItem('store', JSON.stringify({"storeID": params.name})); // Store the store variable
+        window.location.href = `/individualStore?storeID=${params.name}`;
+        localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
         //}
       });
     })

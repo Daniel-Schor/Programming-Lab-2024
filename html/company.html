@@ -26,16 +26,16 @@
   <button id="bestButton">Best</button>
   <button id="worstButton">Worst</button>
   <button id="customButton">Custom</button>
-  
+
   <button id="Last-Year">Last Year</button>
-    <button id="Last-Quarter">Last Quarter</button>
-    <button id="Last-Month">Last Month</button>
-    <div class="customdate" id="customDateForm">
-      <form id="dateForm">
-          <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
-          <button id="customDate">"Custom Date"</button>
-      </form>
-      
+  <button id="Last-Quarter">Last Quarter</button>
+  <button id="Last-Month">Last Month</button>
+  <div class="customdate" id="customDateForm">
+    <form id="dateForm">
+      <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+      <button id="customDate">"Custom Date"</button>
+    </form>
+
   </div>
   <script>
     timeButtons();
@@ -61,18 +61,22 @@
     }
 
     function bestButton() {
-      revenueChart(true);
+      revenueChart(true).then(colors => {
+        revenueBarChart(colors);
+      });
       setActiveButton("bestButton");
     }
 
     function worstButton() {
-      revenueChart(false);
+      revenueChart(false).then(colors => {
+        revenueBarChart(colors);
+      });
       setActiveButton("worstButton");
-    }    
-    
+    }
+
     function customButton() {
       //revenueChart(false);
-      //revenueBarChart();
+      revenueBarChart({ "S302800": "red" });
       setActiveButton("customButton");
     }
 
@@ -81,10 +85,10 @@
     document.getElementById("customButton").addEventListener("click", customButton);
 
     setActiveButton("bestButton");
-    revenueChart();
-
+    revenueChart().then(colors => {
+      revenueBarChart(colors);
+    });
     // -------------
-    revenueBarChart();
     statsOverview();
     // -------------
 
