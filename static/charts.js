@@ -1,4 +1,5 @@
-var finaldate = new Date("2022-12-01");
+const defaultDate = "2022-12-01";
+const currentDate = "2022-12-31";
 
 var choosenDate;
 
@@ -83,24 +84,24 @@ function statsOverview() {
 
 function timeButtons() {
   document.getElementById("Last-Year").addEventListener("click", function () {
-    finaldate.setFullYear(finaldate.getFullYear() - 1);
-    choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+    defaultDate.setFullYear(defaultDate.getFullYear() - 1);
+    choosenDate = defaultDate.toISOString().split("T")[0]; // Convert back to string
     console.log(choosenDate);
   });
 
   document.getElementById("Last-Month").addEventListener("click", function () {
-    finaldate = new Date(finaldate); // Convert back to Date object
-    finaldate.setMonth(finaldate.getMonth() - 1);
-    choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+    defaultDate = new Date(defaultDate); // Convert back to Date object
+    defaultDate.setMonth(defaultDate.getMonth() - 1);
+    choosenDate = defaultDate.toISOString().split("T")[0]; // Convert back to string
     console.log(choosenDate);
   });
 
   document
     .getElementById("Last-Quarter")
     .addEventListener("click", function () {
-      finaldate = new Date(finaldate); // Convert back to Date object
-      finaldate.setMonth(finaldate.getMonth() - 3);
-      choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+      defaultDate = new Date(defaultDate); // Convert back to Date object
+      defaultDate.setMonth(defaultDate.getMonth() - 3);
+      choosenDate = defaultDate.toISOString().split("T")[0]; // Convert back to string
       console.log(choosenDate);
     });
 }
@@ -116,185 +117,6 @@ function customDate() {
     choosenDate = startDate;
     console.log(choosenDate);
   });
-}
-function testbarchart() {
-  var myChart = echarts.init(document.getElementById("test"));
-  //get data from api
-  fetch("/api/revenue?date=2022-12-31&store=S062214,S013343,S216043")
-    .then((response) => response.json())
-    .then((data) => {
-      const storeIDs = [];
-      const days = [];
-      const sums = [];
-
-      // Splitting the data into separate arrays
-      data.forEach((item) => {
-        storeIDs.push(item.storeID);
-        days.push(item.day);
-        sums.push(item.sum);
-      });
-
-      // Logging the results to the console
-      console.log("Store IDs:", storeIDs);
-      console.log("Days:", days);
-      console.log("Sums:", sums);
-
-      let option = {
-        tooltip: {},
-        legend: {
-          data: ["sales"],
-        },
-        xAxis: {
-          //api data
-          data: storeIDs,
-        },
-        yAxis: {},
-        series: [
-          {
-            name: "sales",
-            type: "bar",
-            //api data
-            data: sums,
-          },
-        ],
-      };
-
-      // Display the chart using the configuration items and data just specified.
-      myChart.setOption(option);
-      return myChart;
-    })
-    .catch((error) => {
-      console.error("Error fetching the data:", error);
-    });
-}
-function gaugeChart() {
-
-  var dom = document.getElementById("container");
-  var myChart = echarts.init(dom, null, {
-    renderer: "canvas",
-    useDirtyRect: false,
-  });
-  var app = {};
-  document.getElementById("Store-quality").innerHTML = "Store: S013343 Quality";
-
-  var option;
-  fetch("/api/quality?store=S013343")
-    .then((response) => response.json())
-    .then((data) => {
-      var storeID = data.storeID;
-      var order = Math.round(data[0].order);
-      var single = Math.round(data[0].single);
-      var loyalty = Math.round(data[0].loyalty);
-      var overall = Math.round(data[0].overall);
-
-      const gaugeData = [
-        {
-          value: overall,
-          name: "Overall",
-          title: {
-            offsetCenter: ["0%", "-60%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "-50%"],
-          },
-        },
-        {
-          value: loyalty,
-          name: "Loyalty",
-          title: {
-            offsetCenter: ["0%", "-40%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "-30%"],
-          },
-        },
-        {
-          value: order,
-          name: "Orders",
-          title: {
-            offsetCenter: ["0%", "-20%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "-10%"],
-          },
-        },
-        {
-          value: single,
-          name: "Single",
-          title: {
-            offsetCenter: ["0%", "00%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "10%"],
-          },
-        },
-      ];
-
-      option = {
-        series: [
-          {
-            type: "gauge",
-            startAngle: 90,
-            endAngle: -270,
-            pointer: {
-              show: false,
-            },
-            progress: {
-              show: true,
-              overlap: false,
-              roundCap: true,
-              clip: false,
-              itemStyle: {
-                borderWidth: 1,
-                borderColor: "#464646",
-              },
-            },
-            axisLine: {
-              lineStyle: {
-                width: 40,
-              },
-            },
-            splitLine: {
-              show: false,
-              distance: 0,
-              length: 10,
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLabel: {
-              show: false,
-              distance: 50,
-            },
-            data: gaugeData,
-            title: {
-              fontSize: 14,
-            },
-            detail: {
-              width: 50,
-              height: 14,
-              fontSize: 14,
-              color: "inherit",
-              borderColor: "inherit",
-              borderRadius: 20,
-              borderWidth: 1,
-              formatter: "{value}",
-            },
-          },
-        ],
-      };
-
-      myChart.setOption(option);
-
-      window.addEventListener("resize", myChart.resize);
-    }) // This is where the missing parenthesis should be
-    .catch((error) => {
-      console.error("Error:", error);
-    });
 }
 
 function revenueChart(best = true, storeIDs = [], storeColors = {}) {
