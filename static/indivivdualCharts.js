@@ -1,6 +1,6 @@
 var finaldate = new Date("2022-12-01");
 
-var choosenDate;
+var choosenDate="2022-12-01";
 
 function dashboard() {
   //http://localhost:3000/revenue?store=S486166
@@ -31,6 +31,7 @@ function timeButtons() {
     finaldate.setMonth(finaldate.getMonth() - 1);
     choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
     console.log(choosenDate);
+    
   });
 
   document
@@ -58,7 +59,7 @@ document.getElementById('dateForm').addEventListener('submit', function(event) {
 
 function monthlyRevenue() {
   var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
-  //http://localhost:3000/api/revenue?store=S486166
+  //localhost:3000/api/revenue?date=2022-05-01&store=S486166
   var days = [];
   var revenue = [];
   var dom = document.getElementById("Store-revenue");
@@ -66,7 +67,7 @@ function monthlyRevenue() {
     renderer: "canvas",
     useDirtyRect: false,
   });
-  fetch(`/api/revenue?store=${store.storeID}`)
+  fetch(`/api/revenue?date=${choosenDate}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
       revenue = Object.values(data[`${store.storeID}`]);
@@ -335,7 +336,7 @@ function heatmap() {
     },
     series: [
       {
-        name: "Punch Card",
+        name: "Combination with",
         type: "heatmap",
         data: data,
         label: {
@@ -356,4 +357,64 @@ function heatmap() {
   }
 
   window.addEventListener("resize", myChart.resize);
+}
+function pizzaSize(){
+  
+  var dom = document.getElementById('PizzaSize');
+  var myChart = echarts.init(dom, null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+  });
+  var app = {};
+  
+  var option;
+
+  option = {
+tooltip: {
+  trigger: 'item'
+},
+legend: {
+  top: '5%',
+  left: 'center'
+},
+series: [
+  {
+    name: 'Pizza Size Sales',
+    type: 'pie',
+    radius: ['40%', '70%'],
+    avoidLabelOverlap: false,
+    itemStyle: {
+      borderRadius: 10,
+      borderColor: '#fff',
+      borderWidth: 2
+    },
+    label: {
+      show: false,
+      position: 'center'
+    },
+    emphasis: {
+      label: {
+        show: true,
+        fontSize: 40,
+        fontWeight: 'bold'
+      }
+    },
+    labelLine: {
+      show: false
+    },
+    data: [
+      { value: 1048, name: 'Small' },
+      { value: 735, name: 'Medium' },
+      { value: 580, name: 'Large' }
+    ]
+  }
+]
+};
+
+  if (option && typeof option === 'object') {
+    myChart.setOption(option);
+  }
+
+  window.addEventListener('resize', myChart.resize);
+
 }
