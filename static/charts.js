@@ -31,13 +31,12 @@ function statsOverview() {
           console.log("Total Orders Data:", order_2);
           console.log("Average Order Value Data:", order_3);
           console.log("Pizzas Per Order Data:", order_4);
-          document.getElementById(
-            "statsOverview"
-          ).innerHTML = `Total Revenue: ${order}` +
-          `Total Pizzas: ${order_1}` +
-          `Total Orders: ${order_2}` +
-          `Average Order Value: ${order_3}` +
-          `Average Pizzas per Order: ${order_4}`;
+          document.getElementById("statsOverview").innerHTML = `Total Revenue: ${order}` +
+                                                   `Total Pizzas: ${order_1}` +
+                                                   `Total Orders: ${order_2}` +
+                                                   `Average Order Value: ${order_3}` +
+                                                   `Average Pizzas per Order: ${order_4}`;
+
           // Hier könnten zusätzliche Verarbeitungen der Daten erfolgen
 
           // Rückgabe eines Signals, dass die Daten verarbeitet wurden
