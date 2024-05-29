@@ -224,6 +224,10 @@ app.get('/api/pizzasPerOrder', async (req, res) => {
 //console.log(result.rows);
         res.status(200).json(result.rows);
     }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
 });
 
 app.get('/api/customerLocations', async (req, res) => {
