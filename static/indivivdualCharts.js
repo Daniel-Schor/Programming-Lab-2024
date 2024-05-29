@@ -71,15 +71,16 @@ function monthlyRevenue(date = "2022-12-01") {
     useDirtyRect: false,
   });
   myChart.clear();
-  fetch(`/api/revenue?date=${date}&store=${store.storeID}`)
+  fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      revenue = Object.values(data[`${store.storeID}`]);
-      days = Object.keys(data[`${store.storeID}`]);
-      days.pop();
+      revenue = data[store.storeID];
+      delete revenue.changeValue;
+      revenue = Object.values(revenue);
 
-      revenue.reverse();
-      days.reverse();
+      days = data[store.storeID];
+      delete days.changeValue;
+      days = Object.keys(days);
 
       console.log("Days:", days);
 
