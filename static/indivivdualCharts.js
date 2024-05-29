@@ -45,7 +45,7 @@ function timeButtons() {
 }
 
 function customDate() {
-  document.getElementById('customDateBtn').addEventListener('click', function() {
+  document.getElementById('customDate').addEventListener('click', function() {
     document.getElementById('customDateForm').style.display = 'block';
   });
 
