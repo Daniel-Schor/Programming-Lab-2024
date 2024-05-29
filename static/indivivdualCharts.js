@@ -1,27 +1,55 @@
+var finaldate = new Date("2022-12-01"); 
+
+var choosenDate;
+
 function dashboard() {
   //http://localhost:3000/revenue?store=S486166
   var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
   fetch(`/api/revenue?store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-
       //CODE HERE
-
-
     });
 }
 
 function backButton() {
   document
-        .getElementById("redirectButton")
-        .addEventListener("click", function () {
-          window.location.href = "http://localhost:3000/";
-        });
+    .getElementById("redirectButton")
+    .addEventListener("click", function () {
+      window.location.href = "http://localhost:3000/";
+    });
+}
+function timeButtons() {
+  document
+    .getElementById("Last-Year")
+    .addEventListener("click", function () {
+      finaldate.setFullYear(finaldate.getFullYear() - 1);
+      choosenDate = finaldate.toISOString().split('T')[0]; // Convert back to string
+      console.log(choosenDate);
+    });
+
+  document
+    .getElementById("Last-Month")
+    .addEventListener("click", function () {
+      finaldate = new Date(finaldate); // Convert back to Date object
+      finaldate.setMonth(finaldate.getMonth() - 1);
+      choosenDate = finaldate.toISOString().split('T')[0]; // Convert back to string
+      console.log(choosenDate);
+    });
+
+  document
+    .getElementById("Last-Quarter")
+    .addEventListener("click", function () {
+      finaldate = new Date(finaldate); // Convert back to Date object
+      finaldate.setMonth(finaldate.getMonth() - 3);
+      choosenDate = finaldate.toISOString().split('T')[0]; // Convert back to string
+      console.log(choosenDate);
+    });
 }
 
 function monthlyRevenue() {
   var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
-  //http://localhost:3000/revenue?store=S486166
+  //http://localhost:3000/api/revenue?store=S486166
   var days = [];
   var revenue = [];
   var dom = document.getElementById("Store-revenue");
@@ -229,7 +257,7 @@ function heatmap() {
   var option;
 
   // prettier-ignore
-  
+
   // prettier-ignore
   const days = [
     "Veggie Pizza",
