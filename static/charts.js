@@ -21,10 +21,10 @@ function statsOverview() {
           // Kombinieren der Daten von den APIs
           const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
           var order = Math.round(totalRevenueData[0].total_revenue);
-          var order_1 = Math.round(totalPizzasData[0].total_pizzas);
+          var order_1 = Math.round(totalPizzasData[0].total_pizza);
           var order_2 = Math.round(totalOrdersData[0].total_orders);
           var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-          var order_4 = Math.round(pizzasPerOrderData[0].pizzas_per_order);
+          var order_4 = Math.round(pizzasPerOrderData[0].pizzas_order);
           // Ausgabe der Daten in der Konsole
           console.log("Total Revenue Data:", order);
           console.log("Total Pizzas Data:", order_1);
@@ -33,11 +33,11 @@ function statsOverview() {
           console.log("Pizzas Per Order Data:", order_4);
           document.getElementById(
             "statsOverview"
-          ).innerHTML = `Total Revenue: ${order}`
-                        `Total Pizzas: ${order_1}`
-                        `Total Orders: ${order_2}`
-                        `Average Order Value: ${order_3}`
-                        `Average Pizzas per Order: ${order_4}`;
+          ).innerHTML = `Total Revenue: ${order}` +
+          `Total Pizzas: ${order_1}` +
+          `Total Orders: ${order_2}` +
+          `Average Order Value: ${order_3}` +
+          `Average Pizzas per Order: ${order_4}`;
           // Hier könnten zusätzliche Verarbeitungen der Daten erfolgen
 
           // Rückgabe eines Signals, dass die Daten verarbeitet wurden
