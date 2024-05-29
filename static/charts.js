@@ -171,12 +171,6 @@ function gaugeChart() {
       var loyalty = Math.round(data[0].loyalty);
       var overall = Math.round(data[0].overall);
 
-      console.log("data:", data);
-      console.log("Order:", order);
-      console.log("Single:", single);
-      console.log("Loyalty:", loyalty);
-      console.log("Overall:", overall);
-
       const gaugeData = [
         {
           value: overall,
@@ -304,7 +298,6 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data:", data);
         orderedStoreIDs = [];
         days = Object.keys(data[Object.keys(data)[0]]);
         days.pop("changeValue");
