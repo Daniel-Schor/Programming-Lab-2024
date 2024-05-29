@@ -216,17 +216,13 @@ app.get('/api/averageOrderValue', async (req, res) => {
 
 app.get('/api/pizzasPerOrder', async (req, res) => {
     try {
-        let query: string = `SELECT SUM("nItems")::FLOAT / COUNT("purchaseID")::FLOAT AS pizzas_order
+        let query: string = `SELECT SUM("nItems") * 1.0 / COUNT("purchaseID") AS pizzas_order
         FROM "purchase"
         WHERE "purchaseDate" > $1`;
         let date: string = req.query.date || defaultDate;
         let result = await client.query(query,[date]);
-
+//console.log(result.rows);
         res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
     }
 });
 

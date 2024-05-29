@@ -1,3 +1,54 @@
+function statsOverview() {
+  // Abrufen der storeID aus dem localStorage
+  var store = JSON.parse(localStorage.getItem("store"));
+  var date = "2022-01-01"; // Beispiel-Datum für die Abfragen
+
+  // Definieren der API-Endpunkte
+  const apiEndpoints = [
+      `/api/totalRevenue?date=${date}`,
+      `/api/totalPizzas?date=${date}`,
+      `/api/totalOrders?date=${date}`,
+      `/api/averageOrderValue?date=${date}`,
+      `/api/pizzasPerOrder?date=${date}`
+  ];
+
+  // Erstellen eines Arrays von Fetch-Promises
+  const fetchPromises = apiEndpoints.map(endpoint => fetch(endpoint).then(response => response.json()));
+
+  // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
+  return Promise.all(fetchPromises)
+      .then(dataArray => {
+          // Kombinieren der Daten von den APIs
+          const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
+          var order = Math.round(totalRevenueData[0].total_revenue);
+          var order_1 = Math.round(totalPizzasData[0].total_pizzas);
+          var order_2 = Math.round(totalOrdersData[0].total_orders);
+          var order_3 = Math.round(averageOrderValueData[0].average_order_value);
+          var order_4 = Math.round(pizzasPerOrderData[0].pizzas_per_order);
+          // Ausgabe der Daten in der Konsole
+          console.log("Total Revenue Data:", order);
+          console.log("Total Pizzas Data:", order_1);
+          console.log("Total Orders Data:", order_2);
+          console.log("Average Order Value Data:", order_3);
+          console.log("Pizzas Per Order Data:", order_4);
+          document.getElementById(
+            "statsOverview"
+          ).innerHTML = `Total Revenue: ${order}`
+                        `Total Pizzas: ${order_1}`
+                        `Total Orders: ${order_2}`
+                        `Average Order Value: ${order_3}`
+                        `Average Pizzas per Order: ${order_4}`;
+          // Hier könnten zusätzliche Verarbeitungen der Daten erfolgen
+
+          // Rückgabe eines Signals, dass die Daten verarbeitet wurden
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error);
+          // Rückgabe eines Fehlers, falls ein Problem beim Abrufen der Daten auftritt
+          throw error;
+      });
+}
+
 function testbarchart() {
   var myChart = echarts.init(document.getElementById("test"));
   //get data from api
