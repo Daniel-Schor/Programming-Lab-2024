@@ -17,12 +17,19 @@
       width: 48%;
     }
 
+    #statsOverviewContainer {
+      margin-top: 20px;
+      border: 2px solid #c0c0c0; /* Border around the entire stats section */
+      border-radius: 10px;
+      padding: 10px; /* Reduced padding */
+      background-color: #f9f9f9;
+    }
+
     #statsOverview {
       display: flex;
       justify-content: space-between;
       gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap; /* Ermöglicht das Umfließen der Boxen bei schmaleren Bildschirmen */
+      flex-wrap: wrap; /* Allows the boxes to wrap on smaller screens */
     }
 
     .stat-item {
@@ -30,8 +37,8 @@
       padding: 10px;
       border-radius: 5px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      flex: 1; /* Ermöglicht den Boxen, gleichmäßig den verfügbaren Platz zu nutzen */
-      min-width: 150px; /* Stellt sicher, dass die Boxen nicht zu klein werden */
+      flex: 1; /* Allows the boxes to evenly take up the available space */
+      min-width: 150px; /* Ensures the boxes do not get too small */
       text-align: center;
     }
 
@@ -47,6 +54,14 @@
 
     .customdate {
       margin-top: 20px;
+    }
+
+    #statsOverviewTitle {
+      text-align: center;
+      font-size: 24px;
+      margin: 0 0 10px; /* Reduced margin */
+      border-bottom: 2px solid #c0c0c0; /* Border below the title */
+      padding-bottom: 5px; /* Reduced padding */
     }
   </style>
   <script src="/static/echarts.js"></script>
@@ -74,7 +89,11 @@
     <div id="revenue" class="chart" style="height: 600px;"></div>
     <div id="revenueBar" class="chart" style="height: 600px;"></div>
   </div>
-  <div id="statsOverview"></div>
+
+  <div id="statsOverviewContainer">
+    <h2 id="statsOverviewTitle">General Statistics</h2>
+    <div id="statsOverview"></div>
+  </div>
 
   <script>
     function setActiveButton(buttonId) {
@@ -140,13 +159,13 @@
     // -------------
     statsOverview();
 
-    // Die Funktion, um die Daten in geordnete Boxen darzustellen
+    // Function to display the data in organized boxes
     function statsOverview() {
-      // Abrufen der storeID aus dem localStorage
+      // Retrieve the storeID from localStorage
       var store = JSON.parse(localStorage.getItem("store"));
-      var date = "2022-01-01"; // Beispiel-Datum für die Abfragen
+      var date = "2022-01-01"; // Example date for the queries
 
-      // Definieren der API-Endpunkte
+      // Define the API endpoints
       const apiEndpoints = [
         `/api/totalRevenue?date=${date}`,
         `/api/totalPizzas?date=${date}`,
@@ -155,13 +174,13 @@
         `/api/pizzasPerOrder?date=${date}`
       ];
 
-      // Erstellen eines Arrays von Fetch-Promises
+      // Create an array of fetch promises
       const fetchPromises = apiEndpoints.map(endpoint => fetch(endpoint).then(response => response.json()));
 
-      // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
+      // Use Promise.all to wait for all fetch requests
       return Promise.all(fetchPromises)
         .then(dataArray => {
-          // Kombinieren der Daten von den APIs
+          // Combine data from the APIs
           const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
           var order = Math.round(totalRevenueData[0].total_revenue);
           var order_1 = Math.round(totalPizzasData[0].total_pizza);
@@ -169,14 +188,14 @@
           var order_3 = Math.round(averageOrderValueData[0].average_order_value);
           var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
 
-          // Ausgabe der Daten in der Konsole
+          // Log the data to the console
           console.log("Total Revenue Data:", order);
           console.log("Total Pizzas Data:", order_1);
           console.log("Total Orders Data:", order_2);
           console.log("Average Order Value Data:", order_3);
           console.log("Pizzas Per Order Data:", order_4);
 
-          // Darstellung der Daten in geordneten Boxen
+          // Display the data in organized boxes
           document.getElementById("statsOverview").innerHTML = `
             <div class="stat-item">
               <h3>Total Revenue</h3>
