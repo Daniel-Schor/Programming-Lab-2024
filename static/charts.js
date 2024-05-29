@@ -4,8 +4,7 @@ var choosenDate;
 
 const colorsToExclude = [
   "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
-  "#000099", "#000088", "#000077", "#000066", "#000055",
-  "#000044", "#000033", "#000022", "#000011", "#000000"
+  "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
 ];
 function randomColor() {
   let color;
@@ -305,9 +304,11 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
-
-        // TODO check this
+        console.log("Data:", data);
         orderedStoreIDs = [];
+        days = Object.keys(data[Object.keys(data)[0]]);
+        days.pop("changeValue");
+
         Object.keys(data).forEach((storeID, index) => {
           delete data[storeID]["changeValue"];
           orderedStoreIDs.push(storeID);
@@ -319,7 +320,6 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
             {
               name: storeID,
               type: "line",
-              stack: "Total",
               emphasis: {
                 focus: "series",
               },
@@ -329,7 +329,6 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
               data: Object.values(data[storeID]),
             });
         });
-        days = Object.keys(data[Object.keys(data)[0]]);
 
         var dom = document.getElementById("revenue");
         var myChart = echarts.init(dom, null, {
@@ -350,7 +349,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
           },
           grid: {
             left: "3%",
-            right: "0%",
+            right: "1%",
             bottom: "3%",
             containLabel: true,
           },
@@ -393,9 +392,9 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
   });
 }
 
+
 function revenueBarChart(storeIDsColors = {}, custom = false) {
   return new Promise((resolve, reject) => {
-
     var chartDom = document.getElementById('revenueBar');
     var myChart = echarts.init(chartDom);
 
@@ -449,10 +448,8 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
 
         if (!custom) {
           myChart.on('click', (params) => {
-            //if (params.componentType === 'series') {
             window.location.href = `/individualStore?storeID=${params.name}`;
             localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
-            //}
           });
         } else {
           myChart.off('click');
@@ -481,9 +478,6 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
 
             option && myChart.setOption(option);
             resolve(storeIDsColors);
-            //window.location.href = `/test?storeID=${params.name}`;
-            //localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
-            //}
           });
         }
       })
