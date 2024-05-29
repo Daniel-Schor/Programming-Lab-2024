@@ -16,6 +16,38 @@
     .chart {
       width: 48%;
     }
+
+    #statsOverview {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap; /* Ermöglicht das Umfließen der Boxen bei schmaleren Bildschirmen */
+    }
+
+    .stat-item {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      flex: 1; /* Ermöglicht den Boxen, gleichmäßig den verfügbaren Platz zu nutzen */
+      min-width: 150px; /* Stellt sicher, dass die Boxen nicht zu klein werden */
+      text-align: center;
+    }
+
+    .stat-item h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .stat-item p {
+      margin: 5px 0 0;
+      font-size: 14px;
+    }
+
+    .customdate {
+      margin-top: 20px;
+    }
   </style>
   <script src="/static/echarts.js"></script>
   <script src="static/charts.js" type="text/javascript"></script>
@@ -30,16 +62,13 @@
   <button id="Last-Year">Last Year</button>
   <button id="Last-Quarter">Last Quarter</button>
   <button id="Last-Month">Last Month</button>
+  
   <div class="customdate" id="customDateForm">
     <form id="dateForm">
       <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
-      <button id="customDate">"Custom Date"</button>
+      <button id="customDate">Custom Date</button>
     </form>
   </div>
-  <script>
-    timeButtons();
-    customDate();
-  </script>
 
   <div class="chart-container">
     <div id="revenue" class="chart" style="height: 600px;"></div>
@@ -110,7 +139,72 @@
 
     // -------------
     statsOverview();
-    // -------------
+
+    // Die Funktion, um die Daten in geordnete Boxen darzustellen
+    function statsOverview() {
+      // Abrufen der storeID aus dem localStorage
+      var store = JSON.parse(localStorage.getItem("store"));
+      var date = "2022-01-01"; // Beispiel-Datum für die Abfragen
+
+      // Definieren der API-Endpunkte
+      const apiEndpoints = [
+        `/api/totalRevenue?date=${date}`,
+        `/api/totalPizzas?date=${date}`,
+        `/api/totalOrders?date=${date}`,
+        `/api/averageOrderValue?date=${date}`,
+        `/api/pizzasPerOrder?date=${date}`
+      ];
+
+      // Erstellen eines Arrays von Fetch-Promises
+      const fetchPromises = apiEndpoints.map(endpoint => fetch(endpoint).then(response => response.json()));
+
+      // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
+      return Promise.all(fetchPromises)
+        .then(dataArray => {
+          // Kombinieren der Daten von den APIs
+          const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
+          var order = Math.round(totalRevenueData[0].total_revenue);
+          var order_1 = Math.round(totalPizzasData[0].total_pizza);
+          var order_2 = Math.round(totalOrdersData[0].total_orders);
+          var order_3 = Math.round(averageOrderValueData[0].average_order_value);
+          var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
+
+          // Ausgabe der Daten in der Konsole
+          console.log("Total Revenue Data:", order);
+          console.log("Total Pizzas Data:", order_1);
+          console.log("Total Orders Data:", order_2);
+          console.log("Average Order Value Data:", order_3);
+          console.log("Pizzas Per Order Data:", order_4);
+
+          // Darstellung der Daten in geordneten Boxen
+          document.getElementById("statsOverview").innerHTML = `
+            <div class="stat-item">
+              <h3>Total Revenue</h3>
+              <p>${order}</p>
+            </div>
+            <div class="stat-item">
+              <h3>Total Pizzas</h3>
+              <p>${order_1}</p>
+            </div>
+            <div class="stat-item">
+              <h3>Total Orders</h3>
+              <p>${order_2}</p>
+            </div>
+            <div class="stat-item">
+              <h3>Average Order Value</h3>
+              <p>${order_3}</p>
+            </div>
+            <div class="stat-item">
+              <h3>Average Pizzas per Order</h3>
+              <p>${order_4}</p>
+            </div>
+          `;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          throw error;
+        });
+    }
   </script>
 
 </body>

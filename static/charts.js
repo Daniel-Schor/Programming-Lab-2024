@@ -16,6 +16,7 @@ function randomColor() {
   colorsToExclude.push(color);
   return color;
 }
+
 function statsOverview() {
   // Abrufen der storeID aus dem localStorage
   var store = JSON.parse(localStorage.getItem("store"));
@@ -42,29 +43,44 @@ function statsOverview() {
       var order_1 = Math.round(totalPizzasData[0].total_pizza);
       var order_2 = Math.round(totalOrdersData[0].total_orders);
       var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-      var order_4 = (pizzasPerOrderData[0].pizzas_order / 1.0).toFixed(2);
+      var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
+
       // Ausgabe der Daten in der Konsole
       console.log("Total Revenue Data:", order);
       console.log("Total Pizzas Data:", order_1);
       console.log("Total Orders Data:", order_2);
       console.log("Average Order Value Data:", order_3);
       console.log("Pizzas Per Order Data:", order_4);
-      document.getElementById("statsOverview").innerHTML = `Total Revenue: ${order}` +
-        `Total Pizzas: ${order_1}` +
-        `Total Orders: ${order_2}` +
-        `Average Order Value: ${order_3}` +
-        `Average Pizzas per Order: ${order_4}`;
 
-      // Hier könnten zusätzliche Verarbeitungen der Daten erfolgen
-
-      // Rückgabe eines Signals, dass die Daten verarbeitet wurden
+      document.getElementById("statsOverview").innerHTML = `
+        <div class="stat-item">
+          <h3>Total Revenue</h3>
+          <p>${order}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Total Pizzas</h3>
+          <p>${order_1}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Total Orders</h3>
+          <p>${order_2}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Average Order Value</h3>
+          <p>${order_3}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Average Pizzas per Order</h3>
+          <p>${order_4}</p>
+        </div>
+      `;
     })
     .catch(error => {
       console.error('Error fetching data:', error);
-      // Rückgabe eines Fehlers, falls ein Problem beim Abrufen der Daten auftritt
       throw error;
     });
 }
+
 function timeButtons() {
   document.getElementById("Last-Year").addEventListener("click", function () {
     finaldate.setFullYear(finaldate.getFullYear() - 1);
