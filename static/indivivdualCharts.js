@@ -1,6 +1,4 @@
-var finaldate = new Date("2022-12-01");
 
-var choosenDate="2022-12-01";
 
 function dashboard() {
   //http://localhost:3000/revenue?store=S486166
@@ -13,53 +11,58 @@ function dashboard() {
 }
 
 function backButton() {
-  document
-    .getElementById("redirectButton")
-    .addEventListener("click", function () {
-      window.location.href = "http://localhost:3000/";
-    });
+  document.getElementById("redirectButton").addEventListener("click", function () {
+    window.location.href = "http://localhost:3000/";
+  });
 }
+
 function timeButtons() {
   document.getElementById("Last-Year").addEventListener("click", function () {
     finaldate.setFullYear(finaldate.getFullYear() - 1);
-    choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+    choosenDate = finaldate.toISOString().split("T")[0];
     console.log(choosenDate);
+    monthlyRevenue(choosenDate); // Call monthlyRevenue after date change
+    gaugeChart(choosenDate);
   });
 
   document.getElementById("Last-Month").addEventListener("click", function () {
-    finaldate = new Date(finaldate); // Convert back to Date object
+    finaldate = new Date(finaldate); 
     finaldate.setMonth(finaldate.getMonth() - 1);
-    choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
+    choosenDate = finaldate.toISOString().split("T")[0]; 
     console.log(choosenDate);
-    
+    monthlyRevenue(choosenDate);// Call monthlyRevenue after date change
+    gaugeChart(choosenDate);
   });
 
-  document
-    .getElementById("Last-Quarter")
-    .addEventListener("click", function () {
-      finaldate = new Date(finaldate); // Convert back to Date object
-      finaldate.setMonth(finaldate.getMonth() - 3);
-      choosenDate = finaldate.toISOString().split("T")[0]; // Convert back to string
-      console.log(choosenDate);
-    });
+  document.getElementById("Last-Quarter").addEventListener("click", function () {
+    finaldate = new Date(finaldate); 
+    finaldate.setMonth(finaldate.getMonth() - 3);
+    choosenDate = finaldate.toISOString().split("T")[0]; 
+    console.log(choosenDate);
+    monthlyRevenue(choosenDate); 
+    gaugeChart(choosenDate);
+  });
 }
-function customDate() {
-  document.getElementById('customDate').addEventListener('click', function() {
-    document.getElementById('customDateForm').style.display = 'block';
-});
 
-const endDate = '2022-12-01';
-document.getElementById('dateForm').addEventListener('submit', function(event) {
+function customDate() {
+  document.getElementById('customDateBtn').addEventListener('click', function() {
+    document.getElementById('customDateForm').style.display = 'block';
+  });
+
+  document.getElementById('dateForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const startDate = document.getElementById('startDate').value;
     choosenDate = startDate;
     console.log(choosenDate);
-});
+    monthlyRevenue(choosenDate); 
+  });
 }
 
-function monthlyRevenue() {
-  var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
-  //localhost:3000/api/revenue?date=2022-05-01&store=S486166
+var finaldate = new Date("2022-12-01");
+var choosenDate = "2022-12-01"; // Default date
+
+function monthlyRevenue(date = "2022-12-01") {
+  var store = JSON.parse(localStorage.getItem("store")); 
   var days = [];
   var revenue = [];
   var dom = document.getElementById("Store-revenue");
@@ -67,7 +70,8 @@ function monthlyRevenue() {
     renderer: "canvas",
     useDirtyRect: false,
   });
-  fetch(`/api/revenue?date=${choosenDate}&store=${store.storeID}`)
+  myChart.clear();
+  fetch(`/api/revenue?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
       revenue = Object.values(data[`${store.storeID}`]);
@@ -79,12 +83,11 @@ function monthlyRevenue() {
 
       console.log("Days:", days);
 
-      option = {
+      var option = {
         xAxis: {
           type: "category",
           data: days,
         },
-
         tooltip: {
           trigger: "axis",
         },
@@ -114,7 +117,7 @@ function monthlyRevenue() {
     });
 }
 
-function gaugeChart() {
+function gaugeChart(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
 
   // Now you can use the store variable to change the text
@@ -128,9 +131,9 @@ function gaugeChart() {
   document.getElementById(
     "Store-quality"
   ).innerHTML = `Store: ${store.storeID} Quality`;
-
+  myChart.clear();
   var option;
-  fetch(`/api/quality?store=${store.storeID}`)
+  fetch(`/api/quality?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
       var storeID = data.storeID;
@@ -256,14 +259,14 @@ function gaugeChart() {
       console.error("Error:", error);
     });
 }
-function heatmap() {
+function heatmap(date = "2022-12-01") {
   var dom = document.getElementById("Heatmap");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
     useDirtyRect: false,
   });
   var app = {};
-
+  //date=${date}&store=${store.storeID}
   var option;
 
   // prettier-ignore
@@ -358,7 +361,7 @@ function heatmap() {
 
   window.addEventListener("resize", myChart.resize);
 }
-function pizzaSize(){
+function pizzaSize(date = "2022-12-01"){
   
   var dom = document.getElementById('PizzaSize');
   var myChart = echarts.init(dom, null, {
