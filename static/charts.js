@@ -440,6 +440,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
         option && myChart.setOption(option);
 
         if (!custom) {
+          myChart.off('click');
           myChart.on('click', (params) => {
             window.location.href = `/individualStore?storeID=${params.name}`;
             localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
