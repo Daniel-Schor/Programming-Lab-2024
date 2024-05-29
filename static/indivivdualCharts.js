@@ -1,16 +1,6 @@
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 
-function dashboard() {
-  //http://localhost:3000/revenue?store=S486166
-  var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
-  fetch(`/api/revenue?store=${store.storeID}`)
-    .then((response) => response.json())
-    .then((data) => {
-      //CODE HERE
-    });
-}
-
 function backButton() {
   document.getElementById("redirectButton").addEventListener("click", function () {
     window.location.href = "http://localhost:3000/";
@@ -18,47 +8,19 @@ function backButton() {
 }
 
 function subtractMonths(date, months) {
-  // Create a copy of the date to avoid mutating the original date
   let newDate = new Date(date);
-
-  // Subtract the months
   newDate.setMonth(newDate.getMonth() - months);
 
-  // Handle the edge case where the subtraction leads to an invalid date
-  // (e.g., subtracting 1 month from March 31 results in February 31, which is invalid)
   if (newDate.getDate() !== new Date(date).getDate()) {
-    // Set the date to the last day of the previous month
     newDate.setDate(0);
-    console.log("Edge case handled.");
   }
-  console.log("Old Date:", new Date(date));
-  console.log("New Date:", newDate);
 
   return newDate.toISOString().split("T")[0];
 }
 
-function yearButton() {
-  document.getElementById("Last-Year").addEventListener("click", function () {
-    let date = subtractMonths(currentDate, 12)
-    monthlyRevenue(date); // Call monthlyRevenue after date change
-    gaugeChart(date);
-  });
-}
-
-function monthButton() {
-  document.getElementById("Last-Month").addEventListener("click", function () {
-    let date = subtractMonths(currentDate, 1)
-    monthlyRevenue(date);// Call monthlyRevenue after date change
-    gaugeChart(date);
-  });
-}
-
-function quarterButton() {
-  document.getElementById("Last-Quarter").addEventListener("click", function () {
-    let date = subtractMonths(currentDate, 3)
-    monthlyRevenue(date);
-    gaugeChart(date);
-  });
+function updateCharts(date) {
+  monthlyRevenue(date);
+  gaugeChart(date);
 }
 
 function customDate() {
@@ -68,236 +30,98 @@ function customDate() {
 
   document.getElementById('dateForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    let startDate = document.getElementById('startDate').value;
-    console.log(startDate);
-    monthlyRevenue(startDate);
+    let date = document.getElementById('startDate').value;
+    updateCharts(date);
   });
+}
+
+function updateChart(chart, option) {
+  if (option && typeof option === "object") {
+    chart.setOption(option, true);
+  }
 }
 
 function monthlyRevenue(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
-  var days = [];
-  var revenue = [];
   var dom = document.getElementById("Store-revenue");
-  var myChart = echarts.init(dom, null, {
-    renderer: "canvas",
-    useDirtyRect: false,
-  });
-  myChart.clear();
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+
   fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      revenue = data[store.storeID];
+      let revenue = data[store.storeID];
       delete revenue.changeValue;
       revenue = Object.values(revenue);
 
-      days = data[store.storeID];
+      let days = data[store.storeID];
       delete days.changeValue;
       days = Object.keys(days);
 
-      console.log("Days:", days);
-
       var option = {
-        xAxis: {
-          type: "category",
-          data: days,
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          data: [store.storeID],
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
-        yAxis: {
-          type: "value",
-        },
-        series: [
-          {
-            data: revenue,
-            type: "line",
-          },
-        ],
+        xAxis: { type: "category", data: days },
+        tooltip: { trigger: "axis" },
+        legend: { data: [store.storeID] },
+        toolbox: { feature: { saveAsImage: {} } },
+        yAxis: { type: "value" },
+        series: [{ data: revenue, type: "line" }],
       };
-      if (option && typeof option === "object") {
-        myChart.setOption(option);
-      }
 
-      window.addEventListener("resize", myChart.resize);
+      updateChart(myChart, option);
     });
 }
 
 function gaugeChart(date = "2022-12-01") {
-  var store = JSON.parse(localStorage.getItem("store")); // Retrieve the store variable
-
-  // Now you can use the store variable to change the text
-
+  var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("container");
-  var myChart = echarts.init(dom, null, {
-    renderer: "canvas",
-    useDirtyRect: false,
-  });
-  var app = {};
-  document.getElementById(
-    "Store-quality"
-  ).innerHTML = `Store: ${store.storeID} Quality`;
-  myChart.clear();
-  var option;
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+
+  document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
+
   fetch(`/api/quality?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      var storeID = data.storeID;
-      var order = Math.round(data[0].order);
-      var single = Math.round(data[0].single);
-      var loyalty = Math.round(data[0].loyalty);
-      var overall = Math.round(data[0].overall);
 
-      console.log("data:", data);
-      console.log("Order:", order);
-      console.log("Single:", single);
-      console.log("Loyalty:", loyalty);
-      console.log("Overall:", overall);
-
-      const gaugeData = [
-        {
-          value: overall,
-          name: "Overall",
-          title: {
-            offsetCenter: ["0%", "-60%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "-50%"],
-          },
-        },
-        {
-          value: loyalty,
-          name: "Loyalty",
-          title: {
-            offsetCenter: ["0%", "-40%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "-30%"],
-          },
-        },
-        {
-          value: order,
-          name: "Orders",
-          title: {
-            offsetCenter: ["0%", "-20%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "-10%"],
-          },
-        },
-        {
-          value: single,
-          name: "Single",
-          title: {
-            offsetCenter: ["0%", "00%"],
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: ["0%", "10%"],
-          },
-        },
+      var gaugeData = [
+        { value: Math.round(data[0].overall), name: "Overall", title: { offsetCenter: ["0%", "-60%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-50%"] } },
+        { value: Math.round(data[0].loyalty), name: "Loyalty", title: { offsetCenter: ["0%", "-40%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] } },
+        { value: Math.round(data[0].order), name: "Orders", title: { offsetCenter: ["0%", "-20%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] } },
+        { value: Math.round(data[0].single), name: "Single", title: { offsetCenter: ["0%", "00%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] } },
       ];
 
-      option = {
-        series: [
-          {
-            type: "gauge",
-            startAngle: 90,
-            endAngle: -270,
-            pointer: {
-              show: false,
-            },
-            progress: {
-              show: true,
-              overlap: false,
-              roundCap: true,
-              clip: false,
-              itemStyle: {
-                borderWidth: 1,
-                borderColor: "#464646",
-              },
-            },
-            axisLine: {
-              lineStyle: {
-                width: 40,
-              },
-            },
-            splitLine: {
-              show: false,
-              distance: 0,
-              length: 10,
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLabel: {
-              show: false,
-              distance: 50,
-            },
-            data: gaugeData,
-            title: {
-              fontSize: 14,
-            },
-            detail: {
-              width: 50,
-              height: 14,
-              fontSize: 14,
-              color: "inherit",
-              borderColor: "inherit",
-              borderRadius: 20,
-              borderWidth: 1,
-              formatter: "{value}",
-            },
-          },
-        ],
+      var option = {
+        series: [{
+          type: "gauge",
+          startAngle: 90,
+          endAngle: -270,
+          pointer: { show: false },
+          progress: { show: true, overlap: false, roundCap: true, clip: false, itemStyle: { borderWidth: 1, borderColor: "#464646" } },
+          axisLine: { lineStyle: { width: 40 } },
+          splitLine: { show: false, distance: 0, length: 10 },
+          axisTick: { show: false },
+          axisLabel: { show: false, distance: 50 },
+          data: gaugeData,
+          title: { fontSize: 14 },
+          detail: { width: 50, height: 14, fontSize: 14, color: "inherit", borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
+        }],
       };
 
-      if (option && typeof option === "object") {
-        myChart.setOption(option);
-      }
-
-      window.addEventListener("resize", myChart.resize);
-    }) // This is where the missing parenthesis should be
+      updateChart(myChart, option);
+    })
     .catch((error) => {
       console.error("Error:", error);
     });
 }
+
 function heatmap(date = "2022-12-01") {
   var dom = document.getElementById("Heatmap");
-  var myChart = echarts.init(dom, null, {
-    renderer: "canvas",
-    useDirtyRect: false,
-  });
-  var app = {};
-  //date=${date}&store=${store.storeID}
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
   var option;
 
-  // prettier-ignore
-
-  // prettier-ignore
   const days = [
-    "Veggie Pizza",
-    "Sicilian Pizza",
-    "Pepperoni Pizza",
-    "Oxtail Pizza",
-    "Meat Lover's Pizza",
-    "Margherita Pizza",
-    "Hawaiian Pizza",
-    "Buffalo Chicken Pizza",
-    "BBQ Chicken Pizza"
+    "Veggie Pizza", "Sicilian Pizza", "Pepperoni Pizza", "Oxtail Pizza", "Meat Lover's Pizza",
+    "Margherita Pizza", "Hawaiian Pizza", "Buffalo Chicken Pizza", "BBQ Chicken Pizza"
   ];
-  // prettier-ignore
+
   const data = [
     [0, 0, 5], [0, 1, 1], [0, 2, 0], [0, 3, 0], [0, 4, 0], [0, 5, 0], [0, 6, 0], [0, 7, 0], [0, 8, 0], [0, 9, 0],
     [0, 10, 0], [0, 11, 2], [0, 12, 4], [0, 13, 1], [0, 14, 1], [0, 15, 3], [0, 16, 4], [0, 17, 6], [0, 18, 4],
@@ -321,52 +145,20 @@ function heatmap(date = "2022-12-01") {
     .map(function (item) {
       return [item[1], item[0], item[2] || '-'];
     });
+
   option = {
-    tooltip: {
-      position: "top",
-    },
-    grid: {
-      height: "50%",
-      top: "10%",
-    },
-    xAxis: {
-      type: "category",
-      data: days,
-      splitArea: {
-        show: true,
-      },
-    },
-    yAxis: {
-      type: "category",
-      data: days,
-      splitArea: {
-        show: true,
-      },
-    },
-    visualMap: {
-      min: 0,
-      max: 10,
-      calculable: true,
-      orient: "horizontal",
-      left: "center",
-      bottom: "15%",
-    },
-    series: [
-      {
-        name: "Combination with",
-        type: "heatmap",
-        data: data,
-        label: {
-          show: true,
-        },
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowColor: "rgba(0, 0, 0, 0.5)",
-          },
-        },
-      },
-    ],
+    tooltip: { position: "top" },
+    grid: { height: "50%", top: "10%" },
+    xAxis: { type: "category", data: days, splitArea: { show: true } },
+    yAxis: { type: "category", data: days, splitArea: { show: true } },
+    visualMap: { min: 0, max: 10, calculable: true, orient: "horizontal", left: "center", bottom: "15%" },
+    series: [{
+      name: "Combination with",
+      type: "heatmap",
+      data: data,
+      label: { show: true },
+      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: "rgba(0, 0, 0, 0.5)" } },
+    }],
   };
 
   if (option && typeof option === "object") {
@@ -375,57 +167,29 @@ function heatmap(date = "2022-12-01") {
 
   window.addEventListener("resize", myChart.resize);
 }
+
 function pizzaSize(date = "2022-12-01") {
-
   var dom = document.getElementById('PizzaSize');
-  var myChart = echarts.init(dom, null, {
-    renderer: 'canvas',
-    useDirtyRect: false
-  });
-  var app = {};
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
-  var option;
-
-  option = {
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      top: '5%',
-      left: 'center'
-    },
-    series: [
-      {
-        name: 'Pizza Size Sales',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: '#fff',
-          borderWidth: 2
-        },
-        label: {
-          show: false,
-          position: 'center'
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 40,
-            fontWeight: 'bold'
-          }
-        },
-        labelLine: {
-          show: false
-        },
-        data: [
-          { value: 1048, name: 'Small' },
-          { value: 735, name: 'Medium' },
-          { value: 580, name: 'Large' }
-        ]
-      }
-    ]
+  var option = {
+    tooltip: { trigger: 'item' },
+    legend: { top: '5%', left: 'center' },
+    series: [{
+      name: 'Pizza Size Sales',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+      label: { show: false, position: 'center' },
+      emphasis: { label: { show: true, fontSize: 40, fontWeight: 'bold' } },
+      labelLine: { show: false },
+      data: [
+        { value: 1048, name: 'Small' },
+        { value: 735, name: 'Medium' },
+        { value: 580, name: 'Large' }
+      ]
+    }]
   };
 
   if (option && typeof option === 'object') {
@@ -433,5 +197,4 @@ function pizzaSize(date = "2022-12-01") {
   }
 
   window.addEventListener('resize', myChart.resize);
-
 }
