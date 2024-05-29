@@ -68,10 +68,9 @@ function customDate() {
 
   document.getElementById('dateForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    const startDate = document.getElementById('startDate').value;
-    defaultDate = startDate;
-    console.log(defaultDate);
-    monthlyRevenue(defaultDate);
+    let startDate = document.getElementById('startDate').value;
+    console.log(startDate);
+    monthlyRevenue(startDate);
   });
 }
 
