@@ -26,6 +26,21 @@
   <button id="bestButton">Best</button>
   <button id="worstButton">Worst</button>
   <button id="customButton">Custom</button>
+  
+  <button id="Last-Year">Last Year</button>
+    <button id="Last-Quarter">Last Quarter</button>
+    <button id="Last-Month">Last Month</button>
+    <div class="customdate" id="customDateForm">
+      <form id="dateForm">
+          <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+          <button id="customDate">"Custom Date"</button>
+      </form>
+      
+  </div>
+  <script>
+    timeButtons();
+    customDate();
+  </script>
 
   <div class="chart-container">
     <div id="revenue" class="chart" style="height: 600px;"></div>
