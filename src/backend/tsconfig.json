@@ -1,14 +1,17 @@
 {
     "compilerOptions": {
-        "module": "commonjs", // Change this to commonjs for Node.js
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "target": "ES2020",
         "sourceMap": true,
-        "outDir": "../../dist/frontend/public",
+        "outDir": "../../dist/backend",
         "resolveJsonModule": true,
         "esModuleInterop": true
     },
     "include": [
-        "public/**/*"
+        "**/*"
+    ],
+    "exclude": [
+        "../../dist"
     ]
 }
