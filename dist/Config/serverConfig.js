@@ -12,4 +12,4 @@ app.use('/', webRoute);
 app.use('/api/', franchiseRoute);
 app.use('/api/', storeRoute);
 export default app;
-//# sourceMappingURL=Server.js.map
+//# sourceMappingURL=serverConfig.js.map
