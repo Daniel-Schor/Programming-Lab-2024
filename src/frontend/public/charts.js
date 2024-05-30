@@ -1,3 +1,9 @@
+// TODO use env variables instead
+/*
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+*/
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 
