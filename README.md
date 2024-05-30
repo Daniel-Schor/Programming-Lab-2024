@@ -6,7 +6,7 @@
 
 ## How to code:
 - **autocompiler:** F1 -> Tasks: Run Build Task -> tsc: watch
-- **auto restart code:** npx nodemon dist/index.js (copy paste in console)
+- **auto restart code:** npx nodemon dist/backend/index.js (copy paste in console)
 
 
 
