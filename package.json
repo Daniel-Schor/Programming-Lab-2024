@@ -1,18 +1,24 @@
 {
   "name": "programming-lab-2024",
   "version": "1.0.0",
-  "description": "start autocompiler: F1 -> Tasks: Run Build Task -> tsc: watch\r start server: npx nodemon dist/index.js    // old: node dist/index.js",
-  "main": "index.js",
+  "description": "start autocompiler: F1 -> Tasks: Run Build Task -> tsc: watch\r start server: npx nodemon dist/backend/index.js    // old: node dist/backend/index.js",
+  "main": "src/backend/index.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "tsc --build src/backend",
+    "build:frontend": "tsc --build src/frontend",
+    "start": "node dist/backend/index.js",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "tsc --watch -p src/backend",
+    "dev:frontend": "tsc --watch -p src/frontend"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "concurrently": "^6.0.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {

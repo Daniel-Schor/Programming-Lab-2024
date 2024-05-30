@@ -9,18 +9,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 router.get('/mapTestCustomers', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../html/mapCustomers.html'));
+    res.sendFile(path.join(__dirname, '../../../src/frontend/views/mapCustomers.html'));
 });
 
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../html/company.html'));
+    res.sendFile(path.join(__dirname, '../../../src/frontend/views/company.html'));
 });
 router.get('/individualStore', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../html/individualStore.html'));
+    res.sendFile(path.join(__dirname, '../../../src/frontend/views/individualStore.html'));
 });
 
 router.get('/mapTest', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../html/mapStores.html'));
+    res.sendFile(path.join(__dirname, '../../../src/frontend/views/mapStores.html'));
 });
 
 export default router;
