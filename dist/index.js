@@ -1,17 +1,15 @@
-import express from 'express';
-import client from './connector.js';
+import client from './Config/DatabaseConfig.js';
+import app from './Config/Server.js';
 import queries from './queries.json' assert { type: 'json' };
-import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import * as dotenv from 'dotenv';
+dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const defaultDate = "2022-12-01";
-const currentDate = "2022-12-31";
-const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const tzDB = "America/Los_Angeles" || tz;
-function getTimeframeInDays(startDate, endDate = currentDate) {
+const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+function getTimeframeInDays(startDate, endDate = process.env.CURRENT_DATE) {
     const start = new Date(startDate);
     const end = new Date(endDate);
     const diffInMilliseconds = end.getTime() - start.getTime();
@@ -19,81 +17,8 @@ function getTimeframeInDays(startDate, endDate = currentDate) {
     return diffInDays;
 }
 // ----------------- Functions -----------------
-function revenueChange(cutOFDate, result, best = true, positveWeight = 1.06, negativeWeight = 1.19) {
-    let newResult = result;
-    let numberChanges = Object.keys(result[Object.keys(result)[0]]).length - 1;
-    Object.keys(newResult).forEach(key => {
-        let oldElement = cutOFDate;
-        Object.keys(newResult[key]).reverse().forEach(element => {
-            if (element === cutOFDate) {
-                newResult[key].changeValue = 0;
-            }
-            else {
-                let currentValue = ((newResult[key][element] - newResult[key][oldElement]) / newResult[key][oldElement]) * 100;
-                let absValue = Math.abs(currentValue);
-                if (absValue !== currentValue) {
-                    currentValue = -Math.pow(absValue, negativeWeight);
-                }
-                else {
-                    currentValue = Math.pow(absValue, positveWeight);
-                }
-                newResult[key].changeValue += currentValue;
-                oldElement = element;
-            }
-        });
-        if (newResult[key].changeValue < 0) {
-            newResult[key].changeValue = -Math.pow(Math.abs(newResult[key].changeValue), negativeWeight);
-        }
-        else {
-            newResult[key].changeValue = Math.pow(newResult[key].changeValue, positveWeight);
-        }
-        newResult[key].changeValue /= numberChanges;
-    });
-    // Extract the percentage increases and sort them
-    let sortedPercentageIncreases = Object.keys(newResult)
-        .map(key => ({
-        storeID: key,
-        changeValue: newResult[key].changeValue
-    }))
-        .sort((a, b) => b.changeValue - a.changeValue);
-    if (!best) {
-        sortedPercentageIncreases = sortedPercentageIncreases.reverse();
-    }
-    let sortedResult = {};
-    sortedPercentageIncreases.forEach(item => {
-        sortedResult[item.storeID] = newResult[item.storeID];
-    });
-    return sortedResult;
-}
-function reformatRevenueQueryResults(result, reverse = false) {
-    function reformatDate(result) {
-        const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': tz, year: 'numeric', month: '2-digit', day: '2-digit' });
-        result.forEach(row => {
-            const formattedDate = formatter.format(new Date(row.day));
-            const [month, day, year] = formattedDate.split('/');
-            row.day = `${year}-${month}-${day}`;
-        });
-    }
-    reformatDate(result);
-    let stores = {};
-    if (reverse) {
-        result.reverse();
-    }
-    result.forEach(element => {
-        if (!stores[element.storeID]) {
-            stores[element.storeID] = {};
-        }
-        stores[element.storeID][element.day] = element.sum;
-    });
-    return stores;
-}
 // ----------------- Functions end --------------
 // ----------------- App init ---------------------
-const app = express();
-app.use("/static", express.static('./static/'));
-app.use(cors({
-    origin: 'http://localhost:3000' // replace with the origin of your client
-}));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../html/company.html'));
 });
@@ -126,7 +51,7 @@ app.get('/api/totalRevenue', async (req, res) => {
         let query = `Select SUM(total) AS total_revenue
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let result = await client.query(query, [date]);
         res.status(200).json(result.rows);
     }
@@ -140,7 +65,7 @@ app.get('/api/totalPizzas', async (req, res) => {
         let query = `Select SUM("nItems") AS total_pizza
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let result = await client.query(query, [date]);
         res.status(200).json(result.rows);
     }
@@ -154,7 +79,7 @@ app.get('/api/totalOrders', async (req, res) => {
         let query = `Select COUNT("purchaseID") AS total_orders
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let result = await client.query(query, [date]);
         res.status(200).json(result.rows);
     }
@@ -168,7 +93,7 @@ app.get('/api/averageOrderValue', async (req, res) => {
         let query = `Select SUM("total") / COUNT(*) AS average_order_value
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let result = await client.query(query, [date]);
         res.status(200).json(result.rows);
     }
@@ -182,7 +107,7 @@ app.get('/api/pizzasPerOrder', async (req, res) => {
         let query = `SELECT SUM("nItems") * 1.0 / COUNT("purchaseID") AS pizzas_order
         FROM "purchase"
         WHERE "purchaseDate" > $1`;
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let result = await client.query(query, [date]);
         console.log(result.rows);
         res.status(200).json(result.rows);
@@ -214,7 +139,7 @@ app.get('/api/customerLocations', async (req, res) => {
  * Example: http://localhost:3000/api/total-store-revenue
  * ----
  * Returns:
- * Total revenue for each store for days between the given date and currentDate.
+ * Total revenue for each store for days between the given date and process.env.CURRENT_DATE.
  * ----
  * Response Format:
  * <pre>
@@ -238,7 +163,7 @@ app.get('/api/total-store-revenue', async (req, res) => {
             });
             return stores;
         }
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let query = queries.totalStoreRevenue;
         let result = await client.query(query, [date]);
         res.status(200).json(reformat(result, JSON.parse(req.query.reverse || true)));
@@ -262,7 +187,7 @@ app.get('/api/total-store-revenue', async (req, res) => {
  * Example: http://localhost:3000/api/revenue?date=2022-12-01&best=true&store=S486166,S263879,S449313,S799887,S147185,S505400&limit=3
  * ----
  * Returns:
- * Revenue for each store for days between the given date and currentDate, and calculates percentage increase in that timeframe.
+ * Revenue for each store for days between the given date and process.env.CURRENT_DATE, and calculates percentage increase in that timeframe.
  * ----
  * Response Format:
  * <pre>
@@ -275,8 +200,76 @@ app.get('/api/total-store-revenue', async (req, res) => {
  * </pre>
  */
 app.get('/api/revenue', async (req, res) => {
+    function revenueChange(cutOFDate, result, best = true, positveWeight = 1.06, negativeWeight = 1.19) {
+        let newResult = result;
+        let numberChanges = Object.keys(result[Object.keys(result)[0]]).length - 1;
+        Object.keys(newResult).forEach(key => {
+            let oldElement = cutOFDate;
+            Object.keys(newResult[key]).reverse().forEach(element => {
+                if (element === cutOFDate) {
+                    newResult[key].changeValue = 0;
+                }
+                else {
+                    let currentValue = ((newResult[key][element] - newResult[key][oldElement]) / newResult[key][oldElement]) * 100;
+                    let absValue = Math.abs(currentValue);
+                    if (absValue !== currentValue) {
+                        currentValue = -Math.pow(absValue, negativeWeight);
+                    }
+                    else {
+                        currentValue = Math.pow(absValue, positveWeight);
+                    }
+                    newResult[key].changeValue += currentValue;
+                    oldElement = element;
+                }
+            });
+            if (newResult[key].changeValue < 0) {
+                newResult[key].changeValue = -Math.pow(Math.abs(newResult[key].changeValue), negativeWeight);
+            }
+            else {
+                newResult[key].changeValue = Math.pow(newResult[key].changeValue, positveWeight);
+            }
+            newResult[key].changeValue /= numberChanges;
+        });
+        // Extract the percentage increases and sort them
+        let sortedPercentageIncreases = Object.keys(newResult)
+            .map(key => ({
+            storeID: key,
+            changeValue: newResult[key].changeValue
+        }))
+            .sort((a, b) => b.changeValue - a.changeValue);
+        if (!best) {
+            sortedPercentageIncreases = sortedPercentageIncreases.reverse();
+        }
+        let sortedResult = {};
+        sortedPercentageIncreases.forEach(item => {
+            sortedResult[item.storeID] = newResult[item.storeID];
+        });
+        return sortedResult;
+    }
+    function reformatRevenueQueryResults(result, reverse = false) {
+        function reformatDate(result) {
+            const formatter = new Intl.DateTimeFormat('en-US', { 'timeZone': TIMEZONE, year: 'numeric', month: '2-digit', day: '2-digit' });
+            result.forEach(row => {
+                const formattedDate = formatter.format(new Date(row.day));
+                const [month, day, year] = formattedDate.split('/');
+                row.day = `${year}-${month}-${day}`;
+            });
+        }
+        reformatDate(result);
+        let stores = {};
+        if (reverse) {
+            result.reverse();
+        }
+        result.forEach(element => {
+            if (!stores[element.storeID]) {
+                stores[element.storeID] = {};
+            }
+            stores[element.storeID][element.day] = element.sum;
+        });
+        return stores;
+    }
     try {
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let query = queries.revenue;
         let result = await client.query(query, [date]);
         result = reformatRevenueQueryResults(result.rows, JSON.parse(req.query.reverse || false));
@@ -382,10 +375,10 @@ app.get('/api/pizzaPair', async (req, res) => {
  */
 app.get('/api/quality', async (req, res) => {
     try {
-        const date = req.query.date || defaultDate;
+        const date = req.query.date || process.env.DEFAULT_DATE;
         const query = queries.quality;
-        const daysPerOrder = 14;
-        const loyalCustomerOrderCount = Math.ceil(getTimeframeInDays(date) / daysPerOrder);
+        const loyalty_frequency = 14;
+        const loyalCustomerOrderCount = Math.ceil(getTimeframeInDays(date) / loyalty_frequency);
         const result = await client.query(query, [date, loyalCustomerOrderCount]);
         let metrics = result.rows;
         const maxOrderPerCustomer = Math.max(...metrics.map(metric => metric.total_orders / metric.total_customers));
@@ -441,7 +434,7 @@ app.get('/api/quality', async (req, res) => {
  * Example: http://localhost:3000/api/daily-orders-analysis?date=2021-01-01&dow=2&store=S486166
  * ----
  * Returns:
- * Orders for each hour for days between the given date and currentDate, and calculates average orders per hour.
+ * Orders for each hour for days between the given date and process.env.CURRENT_DATE, and calculates average orders per hour.
  * ----
  * Response Format:
  * <pre>
@@ -456,12 +449,12 @@ app.get('/api/quality', async (req, res) => {
  */
 app.get('/api/daily-orders-analysis', async (req, res) => {
     try {
-        let date = req.query.date || defaultDate;
+        let date = req.query.date || process.env.DEFAULT_DATE;
         let store = req.query.store || "S302800";
         let dayOfWeek = req.query.dow || 5;
-        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, tzDB]);
-        let resultNumberDays = await client.query(queries.weekdayCount, [store, dayOfWeek, date, tzDB]);
-        let resultBestPizza = await client.query(queries.weekdayBestPizza, [store, dayOfWeek, date, tzDB]);
+        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
+        let resultNumberDays = await client.query(queries.weekdayCount, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
+        let resultBestPizza = await client.query(queries.weekdayBestPizza, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
         let days = resultNumberDays.rows[0].count;
         function reformat(result) {
             function reformatBestPizza(result) {
