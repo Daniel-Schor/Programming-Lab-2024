@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="/static/echarts.js"></script>
-  <script src="static/indivivdualCharts.js" type="text/javascript"></script>
+  <script src="/src/frontend/public/indivivdualCharts.js" type="text/javascript"></script>
   <script type="text/javascript" src="/static/echarts.min.js"></script>
 
 </head>
@@ -21,6 +21,12 @@
     </form>
   </div>
   </div>
+  <div id="statsOverviewContainer">
+    <h2 id="statsOverviewTitle">General Statistics</h2>
+    <div id="statsOverview"></div>
+  </div>
+  <script>statsOverview();</script>
+</div>
   <h1 id="Store-quality">""</h1>
   <div id="container" style="width: 600px; height: 600px"></div>
   <div id="Store-revenue" style="width: 600px; height: 600px"></div>
@@ -41,7 +47,7 @@
   });
 
   customDate();
-
+  
   gaugeChart();
 
   monthlyRevenue();
