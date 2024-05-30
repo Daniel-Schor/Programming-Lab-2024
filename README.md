@@ -8,7 +8,19 @@
 - **autocompiler:** F1 -> Tasks: Run Build Task -> tsc: watch
 - **auto restart code:** npx nodemon dist/backend/index.js (copy paste in console)
 
-
+📂 src
+┣ 📂 backend
+┃ ┗ 📂 Helpers : Helper functions
+┃ ┗ 📂 Queries : SQL Queries
+┃ ┃ ┣ 📜 Franchise.ts
+┃ ┃ ┗ 📜 Store.ts
+┃ ┗ 📂 Routes
+┃ ┃ ┗ 📂 API : Endpoints
+┃ ┃ ┃ ┣ 📜 Franchise.ts
+┃ ┃ ┃ ┗ 📜 Store.ts
+┣ 📂 frontend
+┃ ┗ 📂 public : Charts and frontend logic
+┃ ┗ 📂 views : Html pages
 
 ## Error fixes
 ```
