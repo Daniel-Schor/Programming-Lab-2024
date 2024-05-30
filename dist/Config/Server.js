@@ -9,7 +9,7 @@ app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
 }));
 app.use('/', webRoute);
-app.use('/', franchiseRoute);
-app.use('/', storeRoute);
+app.use('/api/', franchiseRoute);
+app.use('/api/', storeRoute);
 export default app;
 //# sourceMappingURL=Server.js.map

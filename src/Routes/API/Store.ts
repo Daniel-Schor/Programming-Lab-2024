@@ -1,6 +1,6 @@
 import express from 'express';
 import client from '../../Config/DatabaseConfig.js';
-import queries from '../../queries.json' assert { type: 'json' };
+import QUERIES from '../../Queries/Store.js';
 import { getTimeframeInDays } from '../../Helpers/Timeframe.js';
 
 const router = express.Router();
@@ -27,7 +27,7 @@ const router = express.Router();
  * }
  * </pre>
  */
-router.get('/api/pizzaPair', async (req, res) => {
+router.get('/pizzaPair', async (req, res) => {
     try {
         let result;
 
@@ -46,10 +46,10 @@ router.get('/api/pizzaPair', async (req, res) => {
         }
 
         if (req.query.store) {
-            let query: string = queries.pizzaPairStore;
+            let query: string = QUERIES.pizzaPairStore;
             result = await client.query(query, [req.query.store]);
         } else {
-            let query: string = queries.pizzaPair;
+            let query: string = QUERIES.pizzaPair;
             result = await client.query(query);
         }
 
@@ -89,10 +89,10 @@ router.get('/api/pizzaPair', async (req, res) => {
  * </pre>
  */
 
-router.get('/api/quality', async (req, res) => {
+router.get('/quality', async (req, res) => {
     try {
         const date: string = req.query.date || process.env.DEFAULT_DATE;
-        const query: string = queries.quality;
+        const query: string = QUERIES.QUALITY;
 
         const loyalty_frequency: number = 14;
         const loyalCustomerOrderCount: number = Math.ceil(getTimeframeInDays(date) / loyalty_frequency);
@@ -179,15 +179,15 @@ router.get('/api/quality', async (req, res) => {
  * }
  * </pre>
  */
-router.get('/api/daily-orders-analysis', async (req, res) => {
+router.get('/daily-orders-analysis', async (req, res) => {
     try {
         let date: string = req.query.date || process.env.DEFAULT_DATE;
         let store: string = req.query.store || "S302800";
         let dayOfWeek: string = req.query.dow || 5;
 
-        let result = await client.query(queries.weekdayOrders, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
-        let resultNumberDays = await client.query(queries.weekdayCount, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
-        let resultBestPizza = await client.query(queries.weekdayBestPizza, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
+        let result = await client.query(QUERIES.weekdayOrders, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
+        let resultNumberDays = await client.query(QUERIES.weekdayCount, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
+        let resultBestPizza = await client.query(QUERIES.weekdayBestPizza, [store, dayOfWeek, date, process.env.DB_TIMEZONE]);
         let days: number = resultNumberDays.rows[0].count;
 
         function reformat(result) {
@@ -234,9 +234,14 @@ router.get('/api/daily-orders-analysis', async (req, res) => {
     }
 });
 
+
+//TODO check location of endpoint --------------------------------------------------
+
+
+
 //TODO echarts
 //TODO sql in json
-router.get('/api/region-total-product', async (req, res) => {
+router.get('/region-total-product', async (req, res) => {
     try {
         let query: string = `SELECT S."state",S."city",PR."Name" AS PRODUCT_NAME,SUM(P."nItems") AS TOTAL_QUANTITY FROM PURCHASE P JOIN "purchaseItems" PI ON P."purchaseID" = PI."purchaseID" JOIN PRODUCTS PR ON PI."SKU" = PR."SKU" JOIN STORES S ON P."storeID" = S."storeID" GROUP BY S."state",S."city",PR."Name" ORDER BY S."state",S."city",TOTAL_QUANTITY DESC;`;
         let result = await client.query(query);
@@ -251,7 +256,7 @@ router.get('/api/region-total-product', async (req, res) => {
 
 //TODO echarts
 //TODO sql in json
-router.get('/api/pizza-price-popularity', async (req, res) => {
+router.get('/pizza-price-popularity', async (req, res) => {
     try {
         let query: string = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
 
@@ -268,7 +273,7 @@ router.get('/api/pizza-price-popularity', async (req, res) => {
 
 //TODO echarts
 //TODO sql in json
-router.get('/api/Customer-Segmentation-Analysis', async (req, res) => {
+router.get('/Customer-Segmentation-Analysis', async (req, res) => {
     try {
         let query: string = `SELECT C."customerID",AVG(P."total") AS AVG_SPENT_PER_PURCHASE,COUNT(P."purchaseID") AS TOTAL_PURCHASES,MAX(P."purchaseDate") - MIN(P."purchaseDate") AS CUSTOMER_LIFETIME,C."latitude",C."longitude" FROM "customers" C JOIN PURCHASE P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
         let result = await client.query(query);
@@ -283,7 +288,7 @@ router.get('/api/Customer-Segmentation-Analysis', async (req, res) => {
 
 //TODO echarts
 //TODO sql in json
-router.get('/api/Customer-Lifetime-Value', async (req, res) => {
+router.get('/Customer-Lifetime-Value', async (req, res) => {
     try {
         let query: string = `SELECT C."customerID",AVG(P."total") AS avg_spent_per_purchase,COUNT(P."purchaseID") AS total_purchases,SUM(P."total") AS total_spent,(SUM(P."total") / COUNT(P."purchaseID")) * COUNT(P."purchaseID") AS clv FROM customers C JOIN purchase P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
         let result = await client.query(query);

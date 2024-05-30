@@ -1,13 +1,13 @@
 import express from 'express';
 import client from '../../Config/DatabaseConfig.js';
-import queries from '../../queries.json' assert { type: 'json' };
+import QUERIES from '../../Queries/Franchise.js';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 const router = express.Router();
 const TIMEZONE: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-router.get('/api/storeLocations', async (req, res) => {
+router.get('/storeLocations', async (req, res) => {
     try {
         let query: string = `select "storeID", latitude as lat, longitude as lon from stores`;
 
@@ -21,7 +21,7 @@ router.get('/api/storeLocations', async (req, res) => {
     }
 });
 
-router.get('/api/totalRevenue', async (req, res) => {
+router.get('/totalRevenue', async (req, res) => {
     try {
         let query: string = `Select SUM(total) AS total_revenue
         From "purchase"
@@ -37,7 +37,7 @@ router.get('/api/totalRevenue', async (req, res) => {
     }
 });
 
-router.get('/api/totalPizzas', async (req, res) => {
+router.get('/totalPizzas', async (req, res) => {
     try {
         let query: string = `Select SUM("nItems") AS total_pizza
         From "purchase"
@@ -53,7 +53,7 @@ router.get('/api/totalPizzas', async (req, res) => {
     }
 });
 
-router.get('/api/totalOrders', async (req, res) => {
+router.get('/totalOrders', async (req, res) => {
     try {
         let query: string = `Select COUNT("purchaseID") AS total_orders
         From "purchase"
@@ -69,7 +69,7 @@ router.get('/api/totalOrders', async (req, res) => {
     }
 });
 
-router.get('/api/averageOrderValue', async (req, res) => {
+router.get('/averageOrderValue', async (req, res) => {
     try {
         let query: string = `Select SUM("total") / COUNT(*) AS average_order_value
         From "purchase"
@@ -85,7 +85,7 @@ router.get('/api/averageOrderValue', async (req, res) => {
     }
 });
 
-router.get('/api/pizzasPerOrder', async (req, res) => {
+router.get('/pizzasPerOrder', async (req, res) => {
     try {
         let query: string = `SELECT SUM("nItems") * 1.0 / COUNT("purchaseID") AS pizzas_order
         FROM "purchase"
@@ -101,7 +101,7 @@ router.get('/api/pizzasPerOrder', async (req, res) => {
     }
 });
 
-router.get('/api/customerLocations', async (req, res) => {
+router.get('/customerLocations', async (req, res) => {
     try {
         let query: string = `select latitude as lat, longitude as lon from customers`;
 
@@ -138,7 +138,7 @@ router.get('/api/customerLocations', async (req, res) => {
  * }
  * </pre>
  */
-router.get('/api/total-store-revenue', async (req, res) => {
+router.get('/total-store-revenue', async (req, res) => {
     try {
         function reformat(result, reverse) {
             let stores = {};
@@ -150,7 +150,7 @@ router.get('/api/total-store-revenue', async (req, res) => {
         }
 
         let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let query: string = queries.totalStoreRevenue;
+        let query: string = QUERIES.TOTAL_STORE_REVNUE;
 
         let result = await client.query(query, [date]);
 
@@ -188,7 +188,7 @@ router.get('/api/total-store-revenue', async (req, res) => {
  * }
  * </pre>
  */
-router.get('/api/revenue', async (req, res) => {
+router.get('/revenue', async (req, res) => {
     function revenueChange(cutOFDate: string, result: any, best: boolean = true, positveWeight: number = 1.06, negativeWeight: number = 1.19) {
         let newResult = result;
 
@@ -269,7 +269,7 @@ router.get('/api/revenue', async (req, res) => {
     }
     try {
         let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let query: string = queries.revenue;
+        let query: string = QUERIES.REVENUE;
 
         let result = await client.query(query, [date]);
 

@@ -13,7 +13,7 @@ app.use(cors({
 }));
 
 app.use('/', webRoute);
-app.use('/', franchiseRoute);
-app.use('/', storeRoute);
+app.use('/api/', franchiseRoute);
+app.use('/api/', storeRoute);
 
 export default app;

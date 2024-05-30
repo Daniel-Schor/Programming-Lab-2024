@@ -1,11 +1,11 @@
 import express from 'express';
 import client from '../../Config/DatabaseConfig.js';
-import queries from '../../queries.json' assert { type: 'json' };
+import QUERIES from '../../Queries/Franchise.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
 const router = express.Router();
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
-router.get('/api/storeLocations', async (req, res) => {
+router.get('/storeLocations', async (req, res) => {
     try {
         let query = `select "storeID", latitude as lat, longitude as lon from stores`;
         let result = await client.query(query);
@@ -16,7 +16,7 @@ router.get('/api/storeLocations', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/api/totalRevenue', async (req, res) => {
+router.get('/totalRevenue', async (req, res) => {
     try {
         let query = `Select SUM(total) AS total_revenue
         From "purchase"
@@ -30,7 +30,7 @@ router.get('/api/totalRevenue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/api/totalPizzas', async (req, res) => {
+router.get('/totalPizzas', async (req, res) => {
     try {
         let query = `Select SUM("nItems") AS total_pizza
         From "purchase"
@@ -44,7 +44,7 @@ router.get('/api/totalPizzas', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/api/totalOrders', async (req, res) => {
+router.get('/totalOrders', async (req, res) => {
     try {
         let query = `Select COUNT("purchaseID") AS total_orders
         From "purchase"
@@ -58,7 +58,7 @@ router.get('/api/totalOrders', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/api/averageOrderValue', async (req, res) => {
+router.get('/averageOrderValue', async (req, res) => {
     try {
         let query = `Select SUM("total") / COUNT(*) AS average_order_value
         From "purchase"
@@ -72,7 +72,7 @@ router.get('/api/averageOrderValue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/api/pizzasPerOrder', async (req, res) => {
+router.get('/pizzasPerOrder', async (req, res) => {
     try {
         let query = `SELECT SUM("nItems") * 1.0 / COUNT("purchaseID") AS pizzas_order
         FROM "purchase"
@@ -87,7 +87,7 @@ router.get('/api/pizzasPerOrder', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/api/customerLocations', async (req, res) => {
+router.get('/customerLocations', async (req, res) => {
     try {
         let query = `select latitude as lat, longitude as lon from customers`;
         let result = await client.query(query);
@@ -121,7 +121,7 @@ router.get('/api/customerLocations', async (req, res) => {
  * }
  * </pre>
  */
-router.get('/api/total-store-revenue', async (req, res) => {
+router.get('/total-store-revenue', async (req, res) => {
     try {
         function reformat(result, reverse) {
             let stores = {};
@@ -134,7 +134,7 @@ router.get('/api/total-store-revenue', async (req, res) => {
             return stores;
         }
         let date = req.query.date || process.env.DEFAULT_DATE;
-        let query = queries.totalStoreRevenue;
+        let query = QUERIES.TOTAL_STORE_REVNUE;
         let result = await client.query(query, [date]);
         res.status(200).json(reformat(result, JSON.parse(req.query.reverse || true)));
     }
@@ -169,7 +169,7 @@ router.get('/api/total-store-revenue', async (req, res) => {
  * }
  * </pre>
  */
-router.get('/api/revenue', async (req, res) => {
+router.get('/revenue', async (req, res) => {
     function revenueChange(cutOFDate, result, best = true, positveWeight = 1.06, negativeWeight = 1.19) {
         let newResult = result;
         let numberChanges = Object.keys(result[Object.keys(result)[0]]).length - 1;
@@ -240,7 +240,7 @@ router.get('/api/revenue', async (req, res) => {
     }
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
-        let query = queries.revenue;
+        let query = QUERIES.REVENUE;
         let result = await client.query(query, [date]);
         result = reformatRevenueQueryResults(result.rows, JSON.parse(req.query.reverse || false));
         result = revenueChange(date, result, JSON.parse(req.query.best || true));
