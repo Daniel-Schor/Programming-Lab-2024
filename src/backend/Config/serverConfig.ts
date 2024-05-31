@@ -11,10 +11,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app: express.Application = express();
-
+app.use("/static", express.static('./frontend/public'));
 app.use("/static", express.static(path.join(__dirname, '../../../src/frontend/public')));
 // TODO try migrating to dist and typescript in frontend
-//app.use("/static", express.static(path.join(__dirname, '../../../dist/frontend/public')));
+app.use("/static", express.static(path.join(__dirname, '../../../dist/frontend/public')));
 
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client

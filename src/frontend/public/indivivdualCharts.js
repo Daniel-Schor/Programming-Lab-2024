@@ -169,6 +169,8 @@ function heatmap(date = "2022-12-01") {
 }
 
 function pizzaSize(date = "2022-12-01") {
+ //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
+
   var dom = document.getElementById('PizzaSize');
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
