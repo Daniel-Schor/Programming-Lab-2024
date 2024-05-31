@@ -4,8 +4,9 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 */
-const defaultDate = "2022-12-01";
-const currentDate = "2022-12-31";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 var choosenDate;
 
@@ -90,24 +91,16 @@ function statsOverview() {
 
 function timeButtons() {
   document.getElementById("Last-Year").addEventListener("click", function () {
-    defaultDate.setFullYear(defaultDate.getFullYear() - 1);
-    choosenDate = defaultDate.toISOString().split("T")[0]; // Convert back to string
     console.log(choosenDate);
   });
 
   document.getElementById("Last-Month").addEventListener("click", function () {
-    defaultDate = new Date(defaultDate); // Convert back to Date object
-    defaultDate.setMonth(defaultDate.getMonth() - 1);
-    choosenDate = defaultDate.toISOString().split("T")[0]; // Convert back to string
     console.log(choosenDate);
   });
 
   document
     .getElementById("Last-Quarter")
     .addEventListener("click", function () {
-      defaultDate = new Date(defaultDate); // Convert back to Date object
-      defaultDate.setMonth(defaultDate.getMonth() - 3);
-      choosenDate = defaultDate.toISOString().split("T")[0]; // Convert back to string
       console.log(choosenDate);
     });
 }
