@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "module": "commonjs", // Change this to commonjs for Node.js
+        "module": "commonjs",
         "moduleResolution": "node",
         "target": "ES2020",
         "sourceMap": true,
-        "outDir": "../../dist/frontend/public",
+        "outDir": "../../dist/frontend/public/charts",
         "resolveJsonModule": true,
         "esModuleInterop": true
     },
     "include": [
-        "static/**/*"
+        "public/charts/**/*.ts"
     ]
 }
