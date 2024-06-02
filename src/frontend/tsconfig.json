@@ -1,14 +1,33 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "ESNext",
         "moduleResolution": "node",
         "target": "ES2020",
         "sourceMap": true,
         "outDir": "../../dist/frontend/public/charts",
         "resolveJsonModule": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true,
+        "typeRoots": [
+            "../../node_modules/@types"
+        ],
+        "types": [
+            "echarts"
+        ],
+        "lib": [
+            "dom",
+            "ES2020"
+        ]
     },
     "include": [
-        "public/charts/**/*.ts"
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
     ]
 }

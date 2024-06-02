@@ -1,4 +1,10 @@
+"use strict";
 // TODO use env variables instead
+/*
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+*/
 var choosenDate;
 const colorsToExclude = [
     "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
@@ -114,7 +120,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
         fetch(req)
             .then((response) => response.json())
             .then((data) => {
-            orderedStoreIDs = [];
+            let orderedStoreIDs = [];
             days = Object.keys(data[Object.keys(data)[0]]);
             days.pop("changeValue");
             Object.keys(data).forEach((storeID, index) => {

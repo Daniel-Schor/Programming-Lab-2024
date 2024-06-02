@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/echarts": "^4.9.22",
     "@types/node": "^20.12.7",
     "concurrently": "^6.0.0",
     "typescript": "^5.4.5"

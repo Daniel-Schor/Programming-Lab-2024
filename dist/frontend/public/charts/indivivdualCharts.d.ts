@@ -1,0 +1,10 @@
+declare const defaultDate = "2022-12-01";
+declare const currentDate = "2022-12-31";
+declare function backButton(): void;
+declare function subtractMonths(date: any, months: any): string;
+declare function updateCharts(date: any): void;
+declare function updateChart(chart: any, option: any): void;
+declare function monthlyRevenue(date?: string): void;
+declare function gaugeChart(date?: string): void;
+declare function heatmap(date?: string): void;
+declare function pizzaSize(date?: string): void;
