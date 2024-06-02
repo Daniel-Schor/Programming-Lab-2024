@@ -1,5 +1,6 @@
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
+const theme = "dark";
 
 function backButton() {
   document.getElementById("redirectButton").addEventListener("click", function () {
@@ -44,7 +45,7 @@ function updateChart(chart, option) {
 function monthlyRevenue(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("Store-revenue");
-  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -73,7 +74,7 @@ function monthlyRevenue(date = "2022-12-01") {
 function gaugeChart(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("container");
-  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
 
@@ -114,7 +115,7 @@ function gaugeChart(date = "2022-12-01") {
 
 function heatmap(date = "2022-12-01") {
   var dom = document.getElementById("Heatmap");
-  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   var option;
 
   const days = [
@@ -172,7 +173,7 @@ function pizzaSize(date = "2022-12-01") {
  //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
 
   var dom = document.getElementById('PizzaSize');
-  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   var option = {
     tooltip: { trigger: 'item' },

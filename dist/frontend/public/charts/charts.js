@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 */
 var choosenDate;
+const theme = 'dark';
 const colorsToExclude = [
     "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
     "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
@@ -142,7 +143,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
                 });
             });
             var dom = document.getElementById("revenue");
-            var myChart = echarts.init(dom, null, {
+            var myChart = echarts.init(dom, theme, {
                 renderer: "canvas",
                 useDirtyRect: false,
             });
@@ -200,7 +201,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
 function revenueBarChart(storeIDsColors = {}, custom = false) {
     return new Promise((resolve, reject) => {
         var chartDom = document.getElementById('revenueBar');
-        var myChart = echarts.init(chartDom);
+        var myChart = echarts.init(chartDom, theme);
         let req = `/api/total-store-revenue`;
         fetch(req)
             .then((response) => response.json())
