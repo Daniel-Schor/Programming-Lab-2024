@@ -112,13 +112,33 @@ router.get('/pizzasPerOrder', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-router.get('/customerLocations', async (req, res) => {
+router.get('/pizzaSize', async (req, res) => {
     try {
-        let query = `select latitude as lat, longitude as lon from customers`;
-        let result = await client.query(query);
+        // Extract date and storeID from query parameters or set default values
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let storeID = req.query.store;
+        // Initialize parameters array for SQL query
+        let parameters = [date];
+        // Create base query to count entries by size
+        let query = `
+        SELECT pr."Size", COUNT(*) AS size_count
+        FROM "purchaseItems" pi
+        JOIN products pr ON pi."SKU" = pr."SKU"
+        JOIN purchase pk ON pi."purchaseID" = pk."purchaseID"
+        WHERE DATE(pk."purchaseDate") > $1
+        `;
+        // Add storeID condition if it is provided in the query parameters
+        if (storeID) {
+            query += ` AND pk."storeID" = $2`;
+            parameters.push(storeID);
+        }
+        query += ` GROUP BY pr."Size"`;
+        let result = await client.query(query, parameters);
+        console.log(result.rows);
         res.status(200).json(result.rows);
     }
     catch (err) {
+        // Handle any errors that occur during the query execution
         console.error(err);
         res.status(500).send('Sorry, out of order');
     }

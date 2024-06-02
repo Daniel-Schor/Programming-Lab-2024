@@ -19,6 +19,7 @@ function updateCharts(date) {
     monthlyRevenue(date);
     gaugeChart(date);
     statsOverview(date);
+    pizzaSize(date);
 }
 function customDate() {
     document.getElementById('customDate').addEventListener('click', function () {
@@ -147,31 +148,35 @@ function heatmap(date = "2022-12-01") {
 }
 function pizzaSize(date = "2022-12-01") {
     //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
+    var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById('PizzaSize');
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    var option = {
-        tooltip: { trigger: 'item' },
-        legend: { top: '5%', left: 'center' },
-        series: [{
-                name: 'Pizza Size Sales',
-                type: 'pie',
-                radius: ['40%', '70%'],
-                avoidLabelOverlap: false,
-                itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
-                label: { show: false, position: 'center' },
-                emphasis: { label: { show: true, fontSize: 40, fontWeight: 'bold' } },
-                labelLine: { show: false },
-                data: [
-                    { value: 1048, name: 'Small' },
-                    { value: 735, name: 'Medium' },
-                    { value: 580, name: 'Large' }
-                ]
-            }]
-    };
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
-    window.addEventListener('resize', myChart.resize);
+    fetch(`/api/PizzaSize?date=${date}&store=${store.storeID}`)
+        .then((response) => response.json())
+        .then((data) => {
+        let pizzaSize = [];
+        let pizzaCount = [];
+        var option = {
+            tooltip: { trigger: 'item' },
+            legend: { top: '5%', left: 'center' },
+            series: [{
+                    name: data.map((item) => ({ value: item.size_count })),
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+                    label: { show: false, position: 'center' },
+                    emphasis: { label: { show: true, fontSize: 40, fontWeight: 'bold' } },
+                    labelLine: { show: false },
+                    data: data.map((item) => ({ value: item.size_count, name: item.Size }))
+                }]
+        };
+        console.log(data);
+        updateChart(myChart, option);
+    })
+        .catch((error) => {
+        console.error("Error:", error);
+    });
 }
 function statsOverview(date = "2022-12-01") {
     // Abrufen der storeID aus dem localStorage

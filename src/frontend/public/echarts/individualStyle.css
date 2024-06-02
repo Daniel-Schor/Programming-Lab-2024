@@ -1,0 +1,23 @@
+/* styles.css */
+
+body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  #statsOverviewContainer,
+  #Store-quality,
+  #container,
+  #Store-revenue,
+  #Heatmap,
+  #PizzaSize {
+    width: 100%;
+    height: 600px;
+  }
+  
+  #statsOverviewContainer {
+    grid-column: span 3;
+  }
+  
