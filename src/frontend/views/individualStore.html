@@ -25,7 +25,7 @@
     <h2 id="statsOverviewTitle">General Statistics</h2>
     <div id="statsOverview"></div>
   </div>
-  <script>statsOverview();</script>
+  
 </div>
   <h1 id="Store-quality">""</h1>
   <div id="container" style="width: 600px; height: 600px"></div>
@@ -45,7 +45,7 @@
   document.getElementById("Month").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 1));
   });
-
+  statsOverview();
   customDate();
   
   gaugeChart();

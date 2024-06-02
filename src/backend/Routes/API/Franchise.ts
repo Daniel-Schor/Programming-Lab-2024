@@ -23,11 +23,18 @@ router.get('/storeLocations', async (req, res) => {
 
 router.get('/totalRevenue', async (req, res) => {
     try {
+        let date: string = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
         let query: string = `Select SUM(total) AS total_revenue
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let result = await client.query(query, [date]);
+        
+        if (req.query.store) {
+            
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
 
         res.status(200).json(result.rows);
     }
@@ -39,11 +46,18 @@ router.get('/totalRevenue', async (req, res) => {
 
 router.get('/totalPizzas', async (req, res) => {
     try {
+        let date: string = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
         let query: string = `Select SUM("nItems") AS total_pizza
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let result = await client.query(query, [date]);
+        
+        if (req.query.store) {
+            
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
 
         res.status(200).json(result.rows);
     }
@@ -55,11 +69,19 @@ router.get('/totalPizzas', async (req, res) => {
 
 router.get('/totalOrders', async (req, res) => {
     try {
+        
+        let date: string = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
         let query: string = `Select COUNT("purchaseID") AS total_orders
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let result = await client.query(query, [date]);
+        
+        if (req.query.store) {
+            
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
 
         res.status(200).json(result.rows);
     }
@@ -71,11 +93,18 @@ router.get('/totalOrders', async (req, res) => {
 
 router.get('/averageOrderValue', async (req, res) => {
     try {
+        let date: string = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
         let query: string = `Select SUM("total") / COUNT(*) AS average_order_value
         From "purchase"
         WHERE "purchaseDate" > $1`;
-        let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let result = await client.query(query, [date]);
+        if (req.query.store) {
+            console.log(req.query.store);
+            
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
 
         res.status(200).json(result.rows);
     }
@@ -87,12 +116,18 @@ router.get('/averageOrderValue', async (req, res) => {
 
 router.get('/pizzasPerOrder', async (req, res) => {
     try {
+        let date: string = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
         let query: string = `SELECT SUM("nItems") * 1.0 / COUNT("purchaseID") AS pizzas_order
         FROM "purchase"
         WHERE "purchaseDate" > $1`;
-        let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let result = await client.query(query, [date]);
-        console.log(result.rows);
+        if (req.query.store) {
+            
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        
         res.status(200).json(result.rows);
     }
     catch (err) {
@@ -103,6 +138,7 @@ router.get('/pizzasPerOrder', async (req, res) => {
 
 router.get('/customerLocations', async (req, res) => {
     try {
+        
         let query: string = `select latitude as lat, longitude as lon from customers`;
 
         let result = await client.query(query);

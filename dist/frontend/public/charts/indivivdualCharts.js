@@ -18,6 +18,7 @@ function subtractMonths(date, months) {
 function updateCharts(date) {
     monthlyRevenue(date);
     gaugeChart(date);
+    statsOverview(date);
 }
 function customDate() {
     document.getElementById('customDate').addEventListener('click', function () {
