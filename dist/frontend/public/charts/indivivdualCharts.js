@@ -1,7 +1,7 @@
 "use strict";
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
-const theme = "dark";
+const theme = '#ccc';
 function backButton() {
     document.getElementById("redirectButton").addEventListener("click", function () {
         window.location.href = "http://localhost:3000/";
@@ -62,9 +62,9 @@ function monthlyRevenue(date = "2022-12-01") {
 }
 function gaugeChart(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
-    var dom = document.getElementById("container");
+    var dom = document.getElementById("quality");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
+    //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
     fetch(`/api/quality?date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {

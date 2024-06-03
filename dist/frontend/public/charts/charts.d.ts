@@ -1,5 +1,5 @@
 declare var choosenDate: any;
-declare const theme = "dark";
+declare const theme = "#ccc";
 declare const colorsToExclude: string[];
 declare function randomColor(): string;
 declare function timeButtons(): void;

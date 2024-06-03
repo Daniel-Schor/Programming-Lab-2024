@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 */
 var choosenDate;
-const theme = 'dark';
+const theme = '#ccc';
 const colorsToExclude = [
     "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
     "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
