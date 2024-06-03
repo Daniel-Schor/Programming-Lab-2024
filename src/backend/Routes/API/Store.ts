@@ -53,7 +53,7 @@ router.get('/pizzaPair', async (req, res) => {
             result = await client.query(query);
         }
 
-        res.status(200).json(result.rows);
+        res.status(200).json(reformatPizzaPair(result.rows));
     }
     catch (err) {
         console.error(err);
