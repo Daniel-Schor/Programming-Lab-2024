@@ -14,6 +14,8 @@ const app: express.Application = express();
 //app.use("/static", express.static(path.join(__dirname, '../../../src/frontend/public')));
 // TODO try migrating to dist and typescript in frontend
 app.use("/static", express.static(path.join(__dirname, '../../../dist/frontend/public/')));
+app.use("/styles", express.static(path.join(__dirname, '../../../src/frontend/styles')));
+
 
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
