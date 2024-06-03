@@ -315,3 +315,47 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
       });
   });
 }
+
+function addMarkers(stores) {
+  stores.forEach(store => {
+      const marker = L.marker([store.lat, store.lon]).addTo(map);
+      marker.bindPopup(`<b>Store ID:</b> ${store.storeID}<br><b>Latitude:</b> ${store.lat}<br><b>Longitude:</b> ${store.lon}`);
+      
+      // Show popup on hover
+      marker.on('mouseover', function () {
+          this.openPopup();
+      });
+
+      marker.on('mouseout', function () {
+          this.closePopup();
+      });
+
+      // Redirect on click
+      marker.on('click', () => {
+          window.location.href = `/individualStore?storeID=${store.storeID}`;
+          localStorage.setItem('store', JSON.stringify(store)); // Store the store variable
+      });
+  });
+}
+
+function storeLocationMap(){
+
+        const map = L.map('map').setView([37.7749, -122.4194], 5);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Function to add markers to the map
+        
+
+        // Fetch the data and add markers
+        fetch('/api/storeLocations')
+            .then(response => response.json())
+            .then(stores => {
+                console.log(stores); // Log the data for debugging
+                addMarkers(stores); // Add markers to the map
+            })
+            .catch(error => console.error('Error fetching data:', error));
+}
