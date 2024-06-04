@@ -303,7 +303,8 @@ function revenueBarChart(storeIDsColors = {}, custom = false,date = "2022-12-01"
               ]
             };
 
-            updateChart(myChart, option);
+            // TODO: peter check
+            //updateChart(myChart, option);
             resolve(storeIDsColors);
           });
         }
