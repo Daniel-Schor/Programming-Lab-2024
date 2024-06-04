@@ -206,7 +206,7 @@ function pizzaSize(date = "2022-12-01") {
 function statsOverview(date = "2022-12-01") {
   // Abrufen der storeID aus dem localStorage
   var store = JSON.parse(localStorage.getItem("store"));
-  // Beispiel-Datum für die Abfragen
+  
 
   // Definieren der API-Endpunkte
   const apiEndpoints = [

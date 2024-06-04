@@ -12,9 +12,9 @@
 
 <body>
   <button id="redirectButton">MainPage</button>
-  <button id="Year">Year</button>
-  <button id="Quarter">Quarter</button>
-  <button id="Month">Month</button>
+  <button id="Last-Year">Last Year</button>
+  <button id="Last-Quarter">Last Quarter</button>
+  <button id="Last-Month">Last Month</button>
   <div class="customdate" id="customDateForm">
     <form id="dateForm">
       <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
@@ -37,13 +37,13 @@
 <script>
   backButton();
   
-  document.getElementById("Year").addEventListener("click", function () {
+  document.getElementById("Last-Year").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 12));
   });
-  document.getElementById("Quarter").addEventListener("click", function () {
+  document.getElementById("Last-Quarter").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 3));
   });
-  document.getElementById("Month").addEventListener("click", function () {
+  document.getElementById("Last-Month").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 1));
   });
   statsOverview();

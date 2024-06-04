@@ -5,8 +5,9 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 */
-var choosenDate;
 const theme = '#ccc';
+const defaultDate = "2022-12-01";
+const currentDate = "2022-12-31";
 const colorsToExclude = [
     "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
     "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
@@ -70,30 +71,30 @@ function statsOverview(date = "2022-12-01") {
         throw error;
     });
 }
-function timeButtons() {
-    document.getElementById("Last-Year").addEventListener("click", function () {
-        console.log(choosenDate);
-    });
-    document.getElementById("Last-Month").addEventListener("click", function () {
-        console.log(choosenDate);
-    });
-    document
-        .getElementById("Last-Quarter")
-        .addEventListener("click", function () {
-        console.log(choosenDate);
-    });
+function subtractMonths(date, months) {
+    let newDate = new Date(date);
+    newDate.setMonth(newDate.getMonth() - months);
+    if (newDate.getDate() !== new Date(date).getDate()) {
+        newDate.setDate(0);
+    }
+    return newDate.toISOString().split("T")[0];
+}
+function updateCharts(date) {
 }
 function customDate() {
     document.getElementById('customDate').addEventListener('click', function () {
         document.getElementById('customDateForm').style.display = 'block';
     });
-    const endDate = '2022-12-01';
     document.getElementById('dateForm').addEventListener('submit', function (event) {
         event.preventDefault();
-        const startDate = document.getElementById('startDate').value;
-        choosenDate = startDate;
-        console.log(choosenDate);
+        let date = document.getElementById('startDate').value;
+        updateCharts(date);
     });
+}
+function updateChart(chart, option) {
+    if (option && typeof option === "object") {
+        chart.setOption(option, true);
+    }
 }
 function revenueChart(best = true, storeIDs = [], storeColors = {}) {
     return new Promise((resolve, reject) => {
@@ -174,9 +175,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
             if (storeIDs.length != 0 || Object.keys(storeColors).length != 0) {
                 myChart.clear();
             }
-            if (option && typeof option === "object") {
-                myChart.setOption(option);
-            }
+            updateChart(myChart, option);
             myChart.on('click', (params) => {
                 window.location.href = `/individualStore?storeID=${params.seriesName}`;
                 localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
@@ -271,7 +270,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                             }
                         ]
                     };
-                    option && myChart.setOption(option);
+                    updateChart(myChart, option);
                     resolve(storeIDsColors);
                 });
             }
