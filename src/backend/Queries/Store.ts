@@ -31,8 +31,8 @@ const QUERIES = {
                         WHERE p."storeID" = $1  AND EXTRACT(DOW FROM p."purchaseDate" AT TIME ZONE $4) = $2 AND p."purchaseDate" > $3 
                         GROUP BY hour, pr."Name", pr."Size" 
                         ORDER BY hour, total_orders DESC;`,
-    pizzaPair: `WITH PizzaPairs AS 
-                    (SELECT p1."Name" AS Pizza1, p2."Name" AS Pizza2, COUNT(*) AS PairCount 
+        pizzaPair: `WITH PizzaPairs AS 
+                        (SELECT p1."Name" AS Pizza1, p2."Name" AS Pizza2, COUNT(*) AS PairCount 
                     FROM (SELECT pi.*, p."Name" 
                         FROM "purchaseItems" pi 
                         LEFT JOIN "products" p ON pi."SKU" = p."SKU") AS p1 

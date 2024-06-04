@@ -53,6 +53,60 @@ router.get('/pizzaPair', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+router.get('/pizzaPairs', async (req, res) => {
+    try {
+        // Extract date and storeID from query parameters
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let storeID = req.query.store;
+        let parameter = [date, storeID];
+        // Initialize parameters array for SQL query
+        // Create query to count pairs of pizzas purchased together with storeID filter
+        const query = `
+        WITH PizzaPairs AS (
+            SELECT p1."Name" AS Pizza1, p2."Name" AS Pizza2, COUNT(*) AS PairCount
+            FROM (
+                SELECT pi.*, p."Name"
+                FROM "purchaseItems" pi
+                LEFT JOIN "products" p ON pi."SKU" = p."SKU"
+                LEFT JOIN "purchase" pu ON pi."purchaseID" = pu."purchaseID"
+                WHERE DATE(pu."purchaseDate") > $1 AND pu."storeID" = $2
+            ) AS p1
+            JOIN (
+                SELECT pi.*, p."Name"
+                FROM "purchaseItems" pi
+                LEFT JOIN "products" p ON pi."SKU" = p."SKU"
+                LEFT JOIN "purchase" pu ON pi."purchaseID" = pu."purchaseID"
+                WHERE DATE(pu."purchaseDate") > $1 AND pu."storeID" = $2
+            ) AS p2 ON p1."purchaseID" = p2."purchaseID"
+            WHERE p1."Name" != p2."Name"
+            GROUP BY p1."Name", p2."Name"
+        )
+        SELECT Pizza1, Pizza2, PairCount
+        FROM PizzaPairs
+        ORDER BY Pizza1 DESC;
+        `;
+        function reformatPizzaPair(result) {
+            let pairs = {};
+            result.forEach(element => {
+                if (!pairs[element.pizza1]) {
+                    pairs[element.pizza1] = {};
+                }
+                pairs[element.pizza1][element.pizza2] = parseInt(element.paircount);
+            });
+            return pairs;
+        }
+        // Execute the query
+        let result = await client.query(query, parameter);
+        // Log and return the result
+        console.log(result.rows);
+        res.status(200).json(reformatPizzaPair(result.rows));
+    }
+    catch (err) {
+        // Handle any errors that occur during the query execution
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 // ------------------ Store view ------------------
 /**
  * Customer Quality Endpoint

@@ -32,7 +32,7 @@ const QUERIES = {
                         GROUP BY hour, pr."Name", pr."Size" 
                         ORDER BY hour, total_orders DESC;`,
     pizzaPair: `WITH PizzaPairs AS 
-                    (SELECT p1."Name" AS Pizza1, p2."Name" AS Pizza2, COUNT(*) AS PairCount 
+                        (SELECT p1."Name" AS Pizza1, p2."Name" AS Pizza2, COUNT(*) AS PairCount 
                     FROM (SELECT pi.*, p."Name" 
                         FROM "purchaseItems" pi 
                         LEFT JOIN "products" p ON pi."SKU" = p."SKU") AS p1 

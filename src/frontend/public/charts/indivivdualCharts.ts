@@ -24,6 +24,7 @@ function updateCharts(date) {
   gaugeChart(date);
   statsOverview(date);
   pizzaSize(date);
+  heatmap(date);
 }
 
 function customDate() {
@@ -116,13 +117,14 @@ function gaugeChart(date = "2022-12-01") {
 }
 
 function heatmap(date = "2022-12-01") {
+  var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("Heatmap");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   var option;
   let newData: any[] = [];
 
 
-  fetch(`/api/pizzaPair?date=${date}&store=S490972`)
+  fetch(`/api/pizzaPairs?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((querieResult) => {
       const pizzas: string[] = Object.keys(querieResult);
@@ -159,12 +161,11 @@ function heatmap(date = "2022-12-01") {
         }],
       };
 
-      if (option && typeof option === "object") {
-        myChart.setOption(option);
-      }
+      updateChart(myChart, option);
 
-      window.addEventListener("resize", myChart.resize);
+      
     });
+    
 }
 
 function pizzaSize(date = "2022-12-01") {
@@ -198,7 +199,7 @@ function pizzaSize(date = "2022-12-01") {
           data: data.map((item: { Size: string, size_count: string }) => ({ value: item.size_count, name: item.Size }))
         }]
       };
-      console.log(data);
+      
 
       updateChart(myChart, option);
     })
