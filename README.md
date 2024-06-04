@@ -6,7 +6,7 @@
 
 ## How to code:
 - **autocompiler:** F1 -> Tasks: Run Build Task -> tsc: watch - tsconfig.json (only compiles if no errors)
-- if compiling error occurs in frontend: F1 -> Tasks: Run Build Task -> tsc: watch - src/frontend/tsconfig.json 
+- if compiling error occurs in frontend: F1 -> Tasks: Run Build Task -> tsc: watch - src/frontend/public/tsconfig.json 
 - if compiling error occurs in backend: F1 -> Tasks: Run Build Task -> tsc: watch - src/backend/tsconfig.json 
 - **auto restart code:** npx nodemon dist/backend/index.js (copy paste in console)
 
