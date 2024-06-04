@@ -25,6 +25,41 @@ function randomColor() {
   return color;
 }
 
+
+
+function subtractMonths(date, months) {
+  let newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() - months);
+  
+  if (newDate.getDate() !== new Date(date).getDate()) {
+    newDate.setDate(0);
+    
+  }
+  return newDate.toISOString().split("T")[0];
+}
+
+function updateCharts(date) {
+  statsOverview(date);
+}
+
+function customDate() {
+  document.getElementById('customDate').addEventListener('click', function () {
+    document.getElementById('customDateForm').style.display = 'block';
+  });
+
+  document.getElementById('dateForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    let date = document.getElementById('startDate').value;
+    updateCharts(date);
+  });
+}
+
+function updateChart(chart, option) {
+  
+  if (option && typeof option === "object") {
+    chart.setOption(option, true);
+  }
+}
 function statsOverview(date = "2022-12-01") {
   
   // Definieren der API-Endpunkte
@@ -79,46 +114,12 @@ function statsOverview(date = "2022-12-01") {
     });
 }
 
-function subtractMonths(date, months) {
-  let newDate = new Date(date);
-  newDate.setMonth(newDate.getMonth() - months);
-
-  if (newDate.getDate() !== new Date(date).getDate()) {
-    newDate.setDate(0);
-  }
-
-  return newDate.toISOString().split("T")[0];
-}
-
-function updateCharts(date) {
-  
-}
-
-function customDate() {
-  document.getElementById('customDate').addEventListener('click', function () {
-    document.getElementById('customDateForm').style.display = 'block';
-  });
-
-  document.getElementById('dateForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    let date = document.getElementById('startDate').value;
-    updateCharts(date);
-  });
-}
-
-function updateChart(chart, option) {
-  
-  if (option && typeof option === "object") {
-    chart.setOption(option, true);
-  }
-}
-
-function revenueChart(best = true, storeIDs = [], storeColors = {}) {
+function revenueChart(best = true, storeIDs = [], storeColors = {},date = "2022-12-01") {
   return new Promise((resolve, reject) => {
     var days = [];
     let lineInfos = [];
 
-    let req = `/api/revenue?reverse=true&best=${best}`;
+    let req = `/api/revenue?reverse=true&best=${best}&date=${date}`;
     if (Object.keys(storeColors).length != 0) {
       req += "&store=" + Object.keys(storeColors).join(",");
     } else if (storeIDs.length != 0) {
@@ -218,12 +219,12 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
 }
 
 
-function revenueBarChart(storeIDsColors = {}, custom = false) {
+function revenueBarChart(storeIDsColors = {}, custom = false,date = "2022-12-01") {
   return new Promise((resolve, reject) => {
     var chartDom = document.getElementById('revenueBar');
     var myChart = echarts.init(chartDom, theme);
 
-    let req = `/api/total-store-revenue`;
+    let req = `/api/total-store-revenue?date=${date}`;
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
