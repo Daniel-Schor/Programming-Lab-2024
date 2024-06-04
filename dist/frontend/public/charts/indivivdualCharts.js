@@ -41,6 +41,7 @@ function monthlyRevenue(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("Store-revenue");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+    myChart.showLoading();
     fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -58,6 +59,7 @@ function monthlyRevenue(date = "2022-12-01") {
             yAxis: { type: "value" },
             series: [{ data: revenue, type: "line", smooth: true }],
         };
+        myChart.hideLoading();
         updateChart(myChart, option);
     });
 }
@@ -149,8 +151,6 @@ function pizzaSize(date = "2022-12-01") {
     fetch(`/api/PizzaSize?date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-        let pizzaSize = [];
-        let pizzaCount = [];
         var option = {
             tooltip: { trigger: 'item' },
             legend: { top: '5%', left: 'center' },

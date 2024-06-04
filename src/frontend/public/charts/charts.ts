@@ -122,7 +122,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
     } else {
       req += "&limit=5";
     }
-
+    
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
@@ -197,16 +197,17 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
         if (option && typeof option === "object") {
           myChart.setOption(option);
         }
-
+        
         myChart.on('click', (params) => {
           window.location.href = `/individualStore?storeID=${params.seriesName}`;
           localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
         });
-
+        
         window.addEventListener("resize", myChart.resize);
 
         resolve(storeColors);
       })
+      
       .catch((error) => {
         console.error("Error fetching data:", error);
         reject(error);

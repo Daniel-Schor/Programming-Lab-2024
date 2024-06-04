@@ -40,6 +40,7 @@ function customDate() {
 }
 
 function updateChart(chart, option) {
+  
   if (option && typeof option === "object") {
     chart.setOption(option, true);
   }
@@ -49,7 +50,7 @@ function monthlyRevenue(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("Store-revenue");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-
+  myChart.showLoading();
   fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -60,7 +61,7 @@ function monthlyRevenue(date = "2022-12-01") {
       let days = data[store.storeID];
       delete days.changeValue;
       days = Object.keys(days);
-
+      
       var option = {
         xAxis: { type: "category", data: days },
         tooltip: { trigger: "axis" },
@@ -69,7 +70,7 @@ function monthlyRevenue(date = "2022-12-01") {
         yAxis: { type: "value" },
         series: [{ data: revenue, type: "line", smooth: true }],
       };
-
+      myChart.hideLoading();
       updateChart(myChart, option);
     });
 }
@@ -80,7 +81,7 @@ function gaugeChart(date = "2022-12-01") {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
-
+  
   fetch(`/api/quality?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -108,7 +109,7 @@ function gaugeChart(date = "2022-12-01") {
           detail: { width: 50, height: 14, fontSize: 14, color: "inherit", borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
         }],
       };
-
+      
       updateChart(myChart, option);
     })
     .catch((error) => {
@@ -122,7 +123,6 @@ function heatmap(date = "2022-12-01") {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   var option;
   let newData: any[] = [];
-
 
   fetch(`/api/pizzaPairs?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -161,7 +161,7 @@ function heatmap(date = "2022-12-01") {
           emphasis: { itemStyle: { shadowBlur: 10, shadowColor: "rgba(0, 0, 0, 0.5)" } },
         }],
       };
-
+      
       updateChart(myChart, option);
 
       
@@ -179,11 +179,6 @@ function pizzaSize(date = "2022-12-01") {
   fetch(`/api/PizzaSize?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      let pizzaSize = [];
-      let pizzaCount = [];
-
-
-
 
       var option = {
         tooltip: { trigger: 'item' },
@@ -201,7 +196,6 @@ function pizzaSize(date = "2022-12-01") {
         }]
       };
       
-
       updateChart(myChart, option);
     })
     .catch((error) => {
