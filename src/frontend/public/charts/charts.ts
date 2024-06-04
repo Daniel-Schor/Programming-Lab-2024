@@ -351,7 +351,7 @@ function storeLocationMap(){
         fetch('/api/storeLocations')
             .then(response => response.json())
             .then(stores => {
-                console.log(stores); // Log the data for debugging
+                //console.log(stores); // Log the data for debugging
                 addMarkers(stores); // Add markers to the map
             })
             .catch(error => console.error('Error fetching data:', error));
