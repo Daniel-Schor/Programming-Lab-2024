@@ -66,7 +66,7 @@ function monthlyRevenue(date = "2022-12-01") {
         legend: { data: [store.storeID] },
         toolbox: { feature: { saveAsImage: {} } },
         yAxis: { type: "value" },
-        series: [{ data: revenue, type: "line" }],
+        series: [{ data: revenue, type: "line", smooth: true }],
       };
 
       updateChart(myChart, option);

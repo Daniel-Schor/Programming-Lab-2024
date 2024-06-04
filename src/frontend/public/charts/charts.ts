@@ -155,6 +155,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
                 color: storeColors[storeID],
               },
               data: Object.values(data[storeID]),
+              smooth: true
             });
         });
 
