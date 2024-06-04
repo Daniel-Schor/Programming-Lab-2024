@@ -45,12 +45,6 @@ function statsOverview() {
         var order_2 = Math.round(totalOrdersData[0].total_orders);
         var order_3 = Math.round(averageOrderValueData[0].average_order_value);
         var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
-        // Ausgabe der Daten in der Konsole
-        console.log("Total Revenue Data:", order);
-        console.log("Total Pizzas Data:", order_1);
-        console.log("Total Orders Data:", order_2);
-        console.log("Average Order Value Data:", order_3);
-        console.log("Pizzas Per Order Data:", order_4);
         document.getElementById("statsOverview").innerHTML = `
         <div class="stat-item">
           <h3>Total Revenue</h3>

@@ -196,12 +196,6 @@ function statsOverview(date = "2022-12-01") {
         var order_2 = Math.round(totalOrdersData[0].total_orders);
         var order_3 = Math.round(averageOrderValueData[0].average_order_value);
         var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
-        // Ausgabe der Daten in der Konsole
-        console.log("Revenue Data:", order);
-        console.log("Pizzas Data:", order_1);
-        console.log("Orders Data:", order_2);
-        console.log("Order Value Data:", order_3);
-        console.log("Pizzas Per Order Data:", order_4);
         document.getElementById("statsOverview").innerHTML = `
         <div class="stat-item">
           <h3>Revenue</h3>

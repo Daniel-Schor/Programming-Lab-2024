@@ -58,5 +58,34 @@ const QUERIES = {
                     FROM PizzaPairs 
                     ORDER BY pizza1 DESC;`,
 };
+pizzaIngredients: `WITH ingredients_split AS (
+        SELECT
+         purchase."storeID",
+         purchase."purchaseDate",
+            purchase."nItems",
+         unnest(string_to_array(products."Ingredients", ',')) AS ingredient
+        FROM
+            purchase
+        JOIN
+            "purchaseItems" ON purchase."purchaseID" = "purchaseItems"."purchaseID"
+        JOIN
+            products ON "purchaseItems"."SKU" = products."SKU"
+        WHERE
+            purchase."storeID" = $1
+            AND EXTRACT(DOW FROM purchase."purchaseDate" AT TIME ZONE $4) = $2
+            AND purchase."purchaseDate" > $3
+    )
+    SELECT
+        ingredient,
+        EXTRACT(DOW FROM purchaseDate AT TIME ZONE $4) AS day_of_week,
+        AVG("nItems") AS average_quantity
+    FROM
+        ingredients_split
+    GROUP BY
+     ingredient,
+        EXTRACT(DOW FROM purchaseDate AT TIME ZONE $4)
+    ORDER BY
+        ingredient,
+        EXTRACT(DOW FROM purchaseDate AT TIME ZONE $4);`;
 export default QUERIES;
 //# sourceMappingURL=Store.js.map
