@@ -5,15 +5,18 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 */
 
-
+// TODO use .env variables instead
 const theme = '#ccc'; 
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 
+// TODO move to Helper dir
 const colorsToExclude = [
   "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
   "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
 ];
+
+// TODO move to Helper dir
 function randomColor() {
   let color;
   do {
@@ -26,7 +29,7 @@ function randomColor() {
 }
 
 
-
+// TODO move to Helper dir
 function subtractMonths(date, months) {
   let newDate = new Date(date);
   newDate.setMonth(newDate.getMonth() - months);
@@ -38,10 +41,12 @@ function subtractMonths(date, months) {
   return newDate.toISOString().split("T")[0];
 }
 
+// TODO move to Helper dir
 function updateCharts(date) {
   statsOverview(date);
 }
 
+// TODO move to generalCharts.ts
 function customDate() {
   document.getElementById('customDate').addEventListener('click', function () {
     document.getElementById('customDateForm').style.display = 'block';
@@ -54,12 +59,16 @@ function customDate() {
   });
 }
 
+// TODO move to generalCharts.ts
 function updateChart(chart, option) {
   
   if (option && typeof option === "object") {
     chart.setOption(option, true);
   }
 }
+
+// TODO move to generalCharts.ts
+// TODO split
 function statsOverview(date = "2022-12-01") {
   
   // Definieren der API-Endpunkte
@@ -114,6 +123,7 @@ function statsOverview(date = "2022-12-01") {
     });
 }
 
+// TODO move to generalCharts.ts
 function revenueChart(best = true, storeIDs = [], storeColors = {},date = "2022-12-01") {
   return new Promise((resolve, reject) => {
     var days = [];
