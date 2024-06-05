@@ -13,21 +13,18 @@ body {
 #Heatmap,
 #PizzaSize {
   width: 100%;
-  height: 600px;
+  height: 100%;
   outline: 4px solid rgb(116, 116, 116);
 }
 
 #statsOverviewContainer {
-  grid-column: span 2;
+  grid-column: span 1;
 }
 .active {
   background-color: #c0c0c0;
 }
 
-.chart-container {
-  display: flex;
-  justify-content: space-between;
-}
+
 
 .chart {
   width: 48%;
