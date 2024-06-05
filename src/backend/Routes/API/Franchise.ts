@@ -7,6 +7,7 @@ dotenv.config();
 const router = express.Router();
 const TIMEZONE: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+// TODO move to General.ts
 router.get('/storeLocations', async (req, res) => {
     try {
         let query: string = `select "storeID", latitude as lat, longitude as lon from stores`;
@@ -21,6 +22,7 @@ router.get('/storeLocations', async (req, res) => {
     }
 });
 
+// TODO move to General.ts
 router.get('/totalRevenue', async (req, res) => {
     try {
         let date: string = req.query.date || process.env.DEFAULT_DATE;
@@ -44,6 +46,7 @@ router.get('/totalRevenue', async (req, res) => {
     }
 });
 
+// TODO move to General.ts
 router.get('/totalPizzas', async (req, res) => {
     try {
         let date: string = req.query.date || process.env.DEFAULT_DATE;
@@ -67,6 +70,7 @@ router.get('/totalPizzas', async (req, res) => {
     }
 });
 
+// TODO move to General.ts
 router.get('/totalOrders', async (req, res) => {
     try {
         
@@ -91,6 +95,7 @@ router.get('/totalOrders', async (req, res) => {
     }
 });
 
+// TODO move to General.ts
 router.get('/averageOrderValue', async (req, res) => {
     try {
         let date: string = req.query.date || process.env.DEFAULT_DATE;
@@ -114,6 +119,7 @@ router.get('/averageOrderValue', async (req, res) => {
     }
 });
 
+// TODO move to General.ts
 router.get('/pizzasPerOrder', async (req, res) => {
     try {
         let date: string = req.query.date || process.env.DEFAULT_DATE;
