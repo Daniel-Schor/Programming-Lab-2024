@@ -25,6 +25,7 @@ const router = express.Router();
  * }
  * </pre>
  */
+// TODO check duplicate endpoint 
 router.get('/pizzaPair', async (req, res) => {
     try {
         let result;
@@ -53,6 +54,7 @@ router.get('/pizzaPair', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// TODO check duplicate endpoint 
 router.get('/pizzaPairs', async (req, res) => {
     try {
         // Extract date and storeID from query parameters
@@ -107,7 +109,6 @@ router.get('/pizzaPairs', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-// ------------------ Store view ------------------
 /**
  * Customer Quality Endpoint
  * ----
@@ -252,9 +253,7 @@ router.get('/daily-orders-analysis', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO check location of endpoint --------------------------------------------------
-//TODO echarts
-//TODO sql in json
+//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
 router.get('/region-total-product', async (req, res) => {
     try {
         let query = `SELECT S."state",S."city",PR."Name" AS PRODUCT_NAME,SUM(P."nItems") AS TOTAL_QUANTITY FROM PURCHASE P JOIN "purchaseItems" PI ON P."purchaseID" = PI."purchaseID" JOIN PRODUCTS PR ON PI."SKU" = PR."SKU" JOIN STORES S ON P."storeID" = S."storeID" GROUP BY S."state",S."city",PR."Name" ORDER BY S."state",S."city",TOTAL_QUANTITY DESC;`;
@@ -266,8 +265,7 @@ router.get('/region-total-product', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts
-//TODO sql in json
+//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
         let query = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
@@ -279,8 +277,7 @@ router.get('/pizza-price-popularity', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts
-//TODO sql in json
+//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
 router.get('/Customer-Segmentation-Analysis', async (req, res) => {
     try {
         let query = `SELECT C."customerID",AVG(P."total") AS AVG_SPENT_PER_PURCHASE,COUNT(P."purchaseID") AS TOTAL_PURCHASES,MAX(P."purchaseDate") - MIN(P."purchaseDate") AS CUSTOMER_LIFETIME,C."latitude",C."longitude" FROM "customers" C JOIN PURCHASE P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
@@ -292,8 +289,7 @@ router.get('/Customer-Segmentation-Analysis', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts
-//TODO sql in json
+//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
 router.get('/Customer-Lifetime-Value', async (req, res) => {
     try {
         let query = `SELECT C."customerID",AVG(P."total") AS avg_spent_per_purchase,COUNT(P."purchaseID") AS total_purchases,SUM(P."total") AS total_spent,(SUM(P."total") / COUNT(P."purchaseID")) * COUNT(P."purchaseID") AS clv FROM customers C JOIN purchase P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;

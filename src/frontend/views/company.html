@@ -1,84 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-//hauptseite mit top 5//
-//css muss in eine extra datei//
+<!-- //hauptseite mit top 5//
+//css muss in eine extra datei//-->
 <head>
   <meta charset="UTF-8" />
-  <style>
-    .active {
-      background-color: #c0c0c0;
-    }
-
-    .chart-container {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .chart {
-      width: 48%;
-    }
-
-    #statsOverviewContainer {
-      margin-top: 20px;
-      border: 2px solid #c0c0c0;
-      border-radius: 10px;
-      padding: 10px;
-      background-color: #f9f9f9;
-    }
-
-    #statsOverview {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      background-color: #f0f0f0;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      flex: 1;
-      min-width: 150px;
-      text-align: center;
-    }
-
-    .stat-item h3 {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    .stat-item p {
-      margin: 5px 0 0;
-      font-size: 14px;
-    }
-
-    .customdate {
-      margin-top: 20px;
-    }
-
-    #statsOverviewTitle {
-      text-align: center;
-      font-size: 24px;
-      margin: 0 0 10px;
-      border-bottom: 2px solid #c0c0c0;
-      padding-bottom: 5px;
-    }
-
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .button-group {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-  </style>
+  
+  <link rel="stylesheet" type="text/css" href="/style/ui.css">
+  <link rel="stylesheet" type="text/css" href="/style/companyStyle.css">
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/charts.js" type="text/javascript"></script>
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
@@ -94,6 +22,23 @@
       <button id="Last-Quarter">Last Quarter</button>
       <button id="Last-Month">Last Month</button>
     </div>
+
+    <header>
+        
+      <input type="checkbox" id="nav_check" hidden>
+      <nav>
+          <ul>
+              <li>
+                  
+              </li>
+          </ul>
+      </nav>
+      <label for="nav_check" class="hamburger">
+          <div></div>
+          <div></div>
+          <div></div>
+      </label>
+  </header>
 
     <div class="customdate" id="customDateForm">
       <form id="dateForm">

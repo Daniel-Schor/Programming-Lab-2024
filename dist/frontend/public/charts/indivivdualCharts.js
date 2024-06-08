@@ -1,12 +1,15 @@
 "use strict";
+// TODO use .env variables instead
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 const theme = '#ccc';
+// TODO move to generalCharts.ts
 function backButton() {
     document.getElementById("redirectButton").addEventListener("click", function () {
         window.location.href = "http://localhost:3000/";
     });
 }
+// TODO move to Helpers dir
 function subtractMonths(date, months) {
     let newDate = new Date(date);
     newDate.setMonth(newDate.getMonth() - months);
@@ -22,6 +25,7 @@ function updateCharts(date) {
     pizzaSize(date);
     heatmap(date);
 }
+// TODO move to generalCharts.ts
 function customDate() {
     document.getElementById('customDate').addEventListener('click', function () {
         document.getElementById('customDateForm').style.display = 'block';
@@ -32,11 +36,13 @@ function customDate() {
         updateCharts(date);
     });
 }
+// TODO move to generalCharts.ts
 function updateChart(chart, option) {
     if (option && typeof option === "object") {
         chart.setOption(option, true);
     }
 }
+// TODO move to generalCharts.ts
 function monthlyRevenue(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("Store-revenue");
@@ -172,6 +178,8 @@ function pizzaSize(date = "2022-12-01") {
         console.error("Error:", error);
     });
 }
+// TODO move to generalCharts.ts
+// TODO split
 function statsOverview(date = "2022-12-01") {
     // Abrufen der storeID aus dem localStorage
     var store = JSON.parse(localStorage.getItem("store"));
