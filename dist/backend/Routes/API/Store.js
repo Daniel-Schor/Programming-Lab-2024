@@ -301,5 +301,16 @@ router.get('/Customer-Lifetime-Value', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+router.get('/Stores', async (req, res) => {
+    try {
+        let query = `SELECT "storeID" FROM stores`;
+        let result = await client.query(query);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 export default router;
 //# sourceMappingURL=Store.js.map
