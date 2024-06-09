@@ -7,10 +7,15 @@
   
   <link rel="stylesheet" type="text/css" href="/style/ui.css">
   <link rel="stylesheet" type="text/css" href="/style/companyStyle.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/charts.js" type="text/javascript"></script>
   <script src="/static/UI/buttons.js" type="text/javascript"></script>
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <style>
+    #map { height: 600px; width: 50%; }
+</style>
 </head>
 
 <body>
@@ -58,7 +63,7 @@
     <div id="revenueBar" class="chart" style="height: 600px;"></div>
   </div>
 
-  <div id="map"></div>
+  <div id="map" style="height: 600; width: 600;"></div>
   <script>
     document.getElementById("Last-Year").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 12));
@@ -135,6 +140,7 @@
     // -------------
     statsOverview();
     sideBar();
+    storeLocationMap();
 
     // Function to display the data in organized boxes
     

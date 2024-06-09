@@ -348,7 +348,8 @@ function addMarkers(stores) {
 }
 
 function storeLocationMap(){
-
+  // Create the map
+      
         const map = L.map('map').setView([37.7749, -122.4194], 5);
 
         // Add OpenStreetMap tile layer
