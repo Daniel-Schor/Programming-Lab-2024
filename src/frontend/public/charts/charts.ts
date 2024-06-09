@@ -327,6 +327,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false,date = "2022-12-01"
 
 function addMarkers(stores) {
   stores.forEach(store => {
+      
       const marker = L.marker([store.lat, store.lon]).addTo(map);
       marker.bindPopup(`<b>Store ID:</b> ${store.storeID}<br><b>Latitude:</b> ${store.lat}<br><b>Longitude:</b> ${store.lon}`);
       
@@ -348,9 +349,6 @@ function addMarkers(stores) {
 }
 
 function storeLocationMap(){
-  // Create the map
-      
-        const map = L.map('map').setView([37.7749, -122.4194], 5);
 
         // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

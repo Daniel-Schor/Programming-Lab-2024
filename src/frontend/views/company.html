@@ -65,6 +65,7 @@
 
   <div id="map" style="height: 600; width: 600;"></div>
   <script>
+    const map = L.map('map').setView([37.7749, -122.4194], 5);
     document.getElementById("Last-Year").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 12));
     });
