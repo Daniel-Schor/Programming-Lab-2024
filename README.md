@@ -66,7 +66,7 @@ Then click on until you reach the "Locale" setting. There you select "English, U
 Then click further.
 
 ## Load Database
-download database file : https://mega.nz/file/tN8GzaCZ#K1GlpgOKlsHDx8J_3XowRR2DTZFKJOXlJXFbXKXp3Yo
+download database file : https://studfrauasde-my.sharepoint.com/:u:/g/personal/yannis_koerner_stud_fra-uas_de/EZvGVpPy49pIoH4PIbFGx2ABaNo38A277FUR4gqsklbdQA?e=dA7DX2
 - open pgAdmin4
 - create a database named "pizza"
 - right click on pizza and choose "restore"

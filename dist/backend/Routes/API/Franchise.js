@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 const router = express.Router();
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// TODO move to General.ts
 router.get('/storeLocations', async (req, res) => {
     try {
         let query = `select "storeID", latitude as lat, longitude as lon from stores`;
@@ -16,6 +17,7 @@ router.get('/storeLocations', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// TODO move to General.ts
 router.get('/totalRevenue', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
@@ -35,6 +37,7 @@ router.get('/totalRevenue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// TODO move to General.ts
 router.get('/totalPizzas', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
@@ -54,6 +57,7 @@ router.get('/totalPizzas', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// TODO move to General.ts
 router.get('/totalOrders', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
@@ -73,6 +77,7 @@ router.get('/totalOrders', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// TODO move to General.ts
 router.get('/averageOrderValue', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
@@ -93,6 +98,7 @@ router.get('/averageOrderValue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+// TODO move to General.ts
 router.get('/pizzasPerOrder', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;

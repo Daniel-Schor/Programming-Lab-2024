@@ -5,13 +5,16 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 */
+// TODO use .env variables instead
 const theme = '#ccc';
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
+// TODO move to Helper dir
 const colorsToExclude = [
     "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
     "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
 ];
+// TODO move to Helper dir
 function randomColor() {
     let color;
     do {
@@ -22,6 +25,38 @@ function randomColor() {
     colorsToExclude.push(color);
     return color;
 }
+// TODO move to Helper dir
+function subtractMonths(date, months) {
+    let newDate = new Date(date);
+    newDate.setMonth(newDate.getMonth() - months);
+    if (newDate.getDate() !== new Date(date).getDate()) {
+        newDate.setDate(0);
+    }
+    return newDate.toISOString().split("T")[0];
+}
+// TODO move to Helper dir
+function updateCharts(date) {
+    statsOverview(date);
+}
+// TODO move to generalCharts.ts
+function customDate() {
+    document.getElementById('customDate').addEventListener('click', function () {
+        document.getElementById('customDateForm').style.display = 'block';
+    });
+    document.getElementById('dateForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        let date = document.getElementById('startDate').value;
+        updateCharts(date);
+    });
+}
+// TODO move to generalCharts.ts
+function updateChart(chart, option) {
+    if (option && typeof option === "object") {
+        chart.setOption(option, true);
+    }
+}
+// TODO move to generalCharts.ts
+// TODO split
 function statsOverview(date = "2022-12-01") {
     // Definieren der API-Endpunkte
     const apiEndpoints = [
@@ -71,36 +106,12 @@ function statsOverview(date = "2022-12-01") {
         throw error;
     });
 }
-function subtractMonths(date, months) {
-    let newDate = new Date(date);
-    newDate.setMonth(newDate.getMonth() - months);
-    if (newDate.getDate() !== new Date(date).getDate()) {
-        newDate.setDate(0);
-    }
-    return newDate.toISOString().split("T")[0];
-}
-function updateCharts(date) {
-}
-function customDate() {
-    document.getElementById('customDate').addEventListener('click', function () {
-        document.getElementById('customDateForm').style.display = 'block';
-    });
-    document.getElementById('dateForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        let date = document.getElementById('startDate').value;
-        updateCharts(date);
-    });
-}
-function updateChart(chart, option) {
-    if (option && typeof option === "object") {
-        chart.setOption(option, true);
-    }
-}
-function revenueChart(best = true, storeIDs = [], storeColors = {}) {
+// TODO move to generalCharts.ts
+function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022-12-01") {
     return new Promise((resolve, reject) => {
         var days = [];
         let lineInfos = [];
-        let req = `/api/revenue?reverse=true&best=${best}`;
+        let req = `/api/revenue?reverse=true&best=${best}&date=${date}`;
         if (Object.keys(storeColors).length != 0) {
             req += "&store=" + Object.keys(storeColors).join(",");
         }
@@ -189,11 +200,11 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}) {
         });
     });
 }
-function revenueBarChart(storeIDsColors = {}, custom = false) {
+function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01") {
     return new Promise((resolve, reject) => {
         var chartDom = document.getElementById('revenueBar');
         var myChart = echarts.init(chartDom, theme);
-        let req = `/api/total-store-revenue`;
+        let req = `/api/total-store-revenue?date=${date}`;
         fetch(req)
             .then((response) => response.json())
             .then((data) => {
@@ -270,7 +281,8 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                             }
                         ]
                     };
-                    updateChart(myChart, option);
+                    // TODO: peter check
+                    //updateChart(myChart, option);
                     resolve(storeIDsColors);
                 });
             }
@@ -299,7 +311,6 @@ function addMarkers(stores) {
     });
 }
 function storeLocationMap() {
-    const map = L.map('map').setView([37.7749, -122.4194], 5);
     // Add OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
