@@ -3,15 +3,6 @@
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 const theme = '#ccc';
-// TODO move to Helpers dir
-function subtractMonths(date, months) {
-    let newDate = new Date(date);
-    newDate.setMonth(newDate.getMonth() - months);
-    if (newDate.getDate() !== new Date(date).getDate()) {
-        newDate.setDate(0);
-    }
-    return newDate.toISOString().split("T")[0];
-}
 function updateCharts(date) {
     monthlyRevenue(date);
     gaugeChart(date);
@@ -20,16 +11,6 @@ function updateCharts(date) {
     heatmap(date);
 }
 // TODO move to generalCharts.ts
-function customDate() {
-    document.getElementById('customDate').addEventListener('click', function () {
-        document.getElementById('customDateForm').style.display = 'block';
-    });
-    document.getElementById('dateForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        let date = document.getElementById('startDate').value;
-        updateCharts(date);
-    });
-}
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
     if (option && typeof option === "object") {

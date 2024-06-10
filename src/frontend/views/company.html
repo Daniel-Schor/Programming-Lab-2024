@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <!-- //hauptseite mit top 5//
 //css muss in eine extra datei//-->
@@ -18,19 +17,7 @@
   <style>
     #map { height: 600px; width: 50%; }
 </style>
-<script> 
-   
-  function clearStorage() {
-           localStorage.clear();
-           console.log('Local storage cleared.');
-       }
 
-       // Optionally, clear storage when the page loads
-       window.onload = function() {
-         console.log("test")
-           clearStorage();
-       };
-</script>
 </head>
 
 <body>
@@ -42,10 +29,15 @@
       <button id="Last-Year">Last Year</button>
       <button id="Last-Quarter">Last Quarter</button>
       <button id="Last-Month">Last Month</button>
+      <div class="customdate" id="customDateForm">
+      <form id="dateForm">
+        <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+        <button id="customDate">Custom Date</button>
+      </form>
     </div>
-
+    </div>
+  </div>
     <header>
-        
       <input type="checkbox" id="nav_check" hidden>
       <nav>
           <ul>
@@ -58,29 +50,17 @@
           <div></div>
       </label>
   </header>
-
-    <div class="customdate" id="customDateForm">
-      <form id="dateForm">
-        <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
-        <button id="customDate">"Custom Date"</button>
-      </form>
-    </div>
     
-
     <div id="statsOverviewContainer">
       <h2 id="statsOverviewTitle">General Statistics</h2>
       <div id="statsOverview"></div>
     </div>
-  </div>
-
   <div class="chart-container">
     <div id="revenue" class="chart" style="height: 600px;"></div>
     <div id="revenueBar" class="chart" style="height: 600px;"></div>
   </div>
-
   <div id="map" style="height: 600; width: 600;"></div>
   <script>
-   
     const map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();
     </script>

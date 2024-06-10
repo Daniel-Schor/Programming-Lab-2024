@@ -36,18 +36,6 @@ function backButton() {
         window.location.href = "http://localhost:3000/";
     });
 }
-function customDate() {
-    document.getElementById("customDate").addEventListener("click", function () {
-        document.getElementById("customDateForm").style.display = "block";
-    });
-    document
-        .getElementById("dateForm")
-        .addEventListener("submit", function (event) {
-        event.preventDefault();
-        let date = document.getElementById("startDate").value;
-        updateCharts(date);
-    });
-}
 function timeButtons() {
     document.getElementById("Last-Year").addEventListener("click", function () {
         updateCharts(subtractMonths(currentDate, 12));
@@ -59,6 +47,19 @@ function timeButtons() {
     });
     document.getElementById("Last-Month").addEventListener("click", function () {
         updateCharts(subtractMonths(currentDate, 1));
+    });
+}
+function customDate() {
+    document.getElementById("customDate").addEventListener("click", function () {
+        document.getElementById("customDateForm").style.display = "block";
+    });
+    document
+        .getElementById("dateForm")
+        .addEventListener("submit", function (event) {
+        console.log("submit");
+        event.preventDefault();
+        let date = document.getElementById("startDate").value;
+        updateCharts(date);
     });
 }
 function statOverview(date = "2022-12-01") {

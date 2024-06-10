@@ -41,15 +41,7 @@
 <script>
   backButton();
   
-  document.getElementById("Last-Year").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 12));
-  });
-  document.getElementById("Last-Quarter").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 3));
-  });
-  document.getElementById("Last-Month").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 1));
-  });
+  timeButtons();
   statOverview();
   customDate();
   
