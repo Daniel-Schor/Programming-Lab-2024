@@ -277,7 +277,7 @@ router.get('/pizza-price-popularity', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
+//obsolete is now abc-analysis costumers
 router.get('/Customer-Segmentation-Analysis', async (req, res) => {
     try {
         let query = `SELECT C."customerID",AVG(P."total") AS AVG_SPENT_PER_PURCHASE,COUNT(P."purchaseID") AS TOTAL_PURCHASES,MAX(P."purchaseDate") - MIN(P."purchaseDate") AS CUSTOMER_LIFETIME,C."latitude",C."longitude" FROM "customers" C JOIN PURCHASE P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
@@ -289,7 +289,7 @@ router.get('/Customer-Segmentation-Analysis', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
+//obsolete is now abc-analysis costumers
 router.get('/Customer-Lifetime-Value', async (req, res) => {
     try {
         let query = `SELECT C."customerID",AVG(P."total") AS avg_spent_per_purchase,COUNT(P."purchaseID") AS total_purchases,SUM(P."total") AS total_spent,(SUM(P."total") / COUNT(P."purchaseID")) * COUNT(P."purchaseID") AS clv FROM customers C JOIN purchase P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
