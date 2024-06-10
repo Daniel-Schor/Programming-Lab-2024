@@ -3,12 +3,6 @@
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 const theme = '#ccc';
-// TODO move to generalCharts.ts
-function backButton() {
-    document.getElementById("redirectButton").addEventListener("click", function () {
-        window.location.href = "http://localhost:3000/";
-    });
-}
 // TODO move to Helpers dir
 function subtractMonths(date, months) {
     let newDate = new Date(date);
@@ -21,7 +15,7 @@ function subtractMonths(date, months) {
 function updateCharts(date) {
     monthlyRevenue(date);
     gaugeChart(date);
-    statsOverview(date);
+    statOverview(date);
     pizzaSize(date);
     heatmap(date);
 }

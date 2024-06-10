@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <!-- //hauptseite mit top 5//
 //css muss in eine extra datei//-->
 <head>
   <meta charset="UTF-8" />
-  
+ 
   <link rel="stylesheet" type="text/css" href="/style/ui.css">
   <link rel="stylesheet" type="text/css" href="/style/companyStyle.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -17,6 +18,19 @@
   <style>
     #map { height: 600px; width: 50%; }
 </style>
+<script> 
+   
+  function clearStorage() {
+           localStorage.clear();
+           console.log('Local storage cleared.');
+       }
+
+       // Optionally, clear storage when the page loads
+       window.onload = function() {
+         console.log("test")
+           clearStorage();
+       };
+</script>
 </head>
 
 <body>
@@ -66,16 +80,9 @@
 
   <div id="map" style="height: 600; width: 600;"></div>
   <script>
+   
     const map = L.map('map').setView([37.7749, -122.4194], 5);
-    document.getElementById("Last-Year").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 12));
-    });
-    document.getElementById("Last-Quarter").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 3));
-    });
-    document.getElementById("Last-Month").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 1));
-    });
+    timeButtons();
     </script>
   <script>
     function setActiveButton(buttonId) {
