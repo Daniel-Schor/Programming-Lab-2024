@@ -8,10 +8,13 @@
   <script src="/static/charts/indivivdualCharts.js" type="text/javascript"></script>
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
   <script type="text/javascript" src="/static/UI/buttons.js"></script>
-
+  <script src="/style/individualStyle.css"></script>
 </head>
 
 <body>
+  <!--Add StoreId from database--> 
+  <h1>Pizza Franchise - Store </h1>
+
   <div id="UI">
   <button id="redirectButton">MainPage</button>
   <button id="Last-Year">Last Year</button>
@@ -24,7 +27,7 @@
     </form>
   </div>
   </div>
-  </div>
+  
   <div id="statsOverviewContainer"style="width: 1000px; height: 150px">
     <h2 id="statsOverviewTitle">General Statistics</h2>
     <div id="statsOverview"></div>
@@ -32,7 +35,9 @@
   
 </div>
   
-  <div id="quality" style="width: 600px; height: 600px"></div>
+  <div id="quality" style="width: 600px; height: 600px">
+    <h1>Quality</h1>
+  </div>
   <div id="Store-revenue" style="width: 600px; height: 600px"></div>
   <div id="Heatmap" style="width: 900px; height: 600px"></div>
   <div id="PizzaSize" style="width: 400px; height: 400px"></div>
@@ -41,8 +46,16 @@
 <script>
   backButton();
   
-  timeButtons();
-  statOverview();
+  document.getElementById("Last-Year").addEventListener("click", function () {
+    updateCharts(subtractMonths(currentDate, 12));
+  });
+  document.getElementById("Last-Quarter").addEventListener("click", function () {
+    updateCharts(subtractMonths(currentDate, 3));
+  });
+  document.getElementById("Last-Month").addEventListener("click", function () {
+    updateCharts(subtractMonths(currentDate, 1));
+  });
+  statsOverview();
   customDate();
   
   gaugeChart();
@@ -54,7 +67,7 @@
   pizzaSize();
 
   abc();
-  
+
 </script>
 
 </html>

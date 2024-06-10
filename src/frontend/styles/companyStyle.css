@@ -11,12 +11,12 @@
     width: 48%;
   }
 
-  #statsOverviewContainer {
+ #statsOverviewContainer {
     margin-top: 20px;
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
   }
 
   #statsOverview {
@@ -24,7 +24,7 @@
     justify-content: space-between;
     gap: 10px;
     flex-wrap: wrap;
-  }
+  } 
 
   .stat-item {
     background-color: #f0f0f0;
@@ -56,6 +56,40 @@
     margin: 0 0 10px;
     border-bottom: 2px solid #c0c0c0;
     padding-bottom: 5px;
+  }
+
+  #avCustomerContainer {
+    margin-top: 20px;
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: blue;
+  }
+
+  #avCustomer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  } 
+  .avCustomer-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+  }
+
+  .avCustomer-item h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  .avCustomer-item p {
+    margin: 5px 0 0;
+    font-size: 14px;
   }
 
   .button-container {

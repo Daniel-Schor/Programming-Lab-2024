@@ -16,7 +16,8 @@
   <script type="text/javascript" src="/static/UI/buttons.js"></script>
   <style>
     #map { height: 600px; width: 50%; }
-</style>
+    #statsOverviewContainer { width : 50%; height: 150px; }
+    </style>
 
 </head>
 
@@ -50,12 +51,21 @@
           <div></div>
       </label>
   </header>
-    
-    <div id="statsOverviewContainer">
-      <h2 id="statsOverviewTitle">General Statistics</h2>
+
+     <h2 id="statsOverviewTitle">General Statistics</h2> 
+
+    <div id="statsOverviewContainer">  
+      <!--TODO add chosen date or (last week, month, year)-->
+      <h3>Statistics for "customDate" </time></h3>
       <div id="statsOverview"></div>
     </div>
-  <div class="chart-container">
+    <div id="avCustomer-container">
+      <h3>Average Customer Data</h3>
+      <!-- Statistiken für das gewählte Datum hier einfügen -->
+       KUNDEN
+       Quality
+    </div>
+   
     <div id="revenue" class="chart" style="height: 600px;"></div>
     <div id="revenueBar" class="chart" style="height: 600px;"></div>
   </div>
