@@ -366,13 +366,21 @@ router.get('/Stores', async (req, res) => {
 
 router.get('/ingredientUsage', async (req, res) => {
     try {
-        const { store, dow, since, timezone } = req.query;
+        // Extract storeID and date from query parameters
+        const storeID = req.query.storeID;
+        const date = req.query.date;
 
+        // Validate the presence of storeID and date
+        if (!storeID || !date) {
+            return res.status(400).send('storeID and date parameters are required');
+        }
+
+        // SQL query with the provided logic
         const query = `
             WITH ingredients_split AS (
                 SELECT
                     purchase."storeID",
-                    purchase."purchaseDate" AT TIME ZONE $4 AS purchaseDate,
+                    purchase."purchaseDate",
                     purchase."nItems",
                     unnest(string_to_array(products."Ingredients", ',')) AS ingredient
                 FROM
@@ -383,30 +391,33 @@ router.get('/ingredientUsage', async (req, res) => {
                     products ON "purchaseItems"."SKU" = products."SKU"
                 WHERE
                     purchase."storeID" = $1
-                    AND EXTRACT(DOW FROM purchase."purchaseDate" AT TIME ZONE $4) = $2
-                    AND purchase."purchaseDate"::DATE = $3
+                    AND purchase."purchaseDate" > $2
             )
             SELECT
                 ingredient,
-                EXTRACT(DOW FROM purchaseDate) AS day_of_week,
+                EXTRACT(DOW FROM "purchaseDate") AS day_of_week,
                 AVG("nItems") AS average_quantity
             FROM
                 ingredients_split
             GROUP BY
                 ingredient,
-                EXTRACT(DOW FROM purchaseDate)
+                EXTRACT(DOW FROM "purchaseDate")
             ORDER BY
                 ingredient,
-                EXTRACT(DOW FROM purchaseDate);
+                EXTRACT(DOW FROM "purchaseDate");
         `;
 
-        const result = await client.query(query, [store, dow, since, timezone]);
-        const formattedResult = reformatIngredientUsage(result.rows);
+        // Parameters for the query
+        const parameters = [storeID, date];
 
-        res.status(200).json(formattedResult);
+        // Execute the query
+        const result = await client.query(query, parameters);
+
+        // Send the result as JSON
+        res.status(200).json(result.rows);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, something went wrong');
+        res.status(500).send('Sorry, out of order');
     }
 });
 
