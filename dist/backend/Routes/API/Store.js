@@ -312,5 +312,71 @@ router.get('/Stores', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+router.get('/ingredientUsage', async (req, res) => {
+    try {
+        // Extract storeID and date from query parameters
+        const storeID = req.query.storeID;
+        const date = req.query.date;
+        // Validate the presence of storeID and date
+        if (!storeID || !date) {
+            return res.status(400).send('storeID and date parameters are required');
+        }
+        // SQL query with the provided logic
+        const query = `
+            WITH ingredients_split AS (
+                SELECT
+                    purchase."storeID",
+                    purchase."purchaseDate",
+                    purchase."nItems",
+                    unnest(string_to_array(products."Ingredients", ',')) AS ingredient
+                FROM
+                    purchase
+                JOIN
+                    "purchaseItems" ON purchase."purchaseID" = "purchaseItems"."purchaseID"
+                JOIN
+                    products ON "purchaseItems"."SKU" = products."SKU"
+                WHERE
+                    purchase."storeID" = $1
+                    AND purchase."purchaseDate" > $2
+            )
+            SELECT
+                ingredient,
+                EXTRACT(DOW FROM "purchaseDate") AS day_of_week,
+                AVG("nItems") AS average_quantity
+            FROM
+                ingredients_split
+            GROUP BY
+                ingredient,
+                EXTRACT(DOW FROM "purchaseDate")
+            ORDER BY
+                ingredient,
+                EXTRACT(DOW FROM "purchaseDate");
+        `;
+        // Parameters for the query
+        const parameters = [storeID, date];
+        // Execute the query
+        const result = await client.query(query, parameters);
+        // Send the result as JSON
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+// Helper function to reformat ingredient usage data
+function reformatIngredientUsage(data) {
+    const formattedData = {};
+    data.forEach(entry => {
+        const ingredient = entry.ingredient;
+        const dayOfWeek = entry.day_of_week;
+        const averageQuantity = parseFloat(entry.average_quantity);
+        if (!formattedData[ingredient]) {
+            formattedData[ingredient] = new Array(7).fill(0);
+        }
+        formattedData[ingredient][dayOfWeek] = averageQuantity;
+    });
+    return formattedData;
+}
 export default router;
 //# sourceMappingURL=Store.js.map
