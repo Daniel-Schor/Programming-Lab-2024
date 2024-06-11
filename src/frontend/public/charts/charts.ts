@@ -41,6 +41,56 @@ function updateChart(chart, option) {
   }
 }
 
+function setActiveButton(buttonId) {
+  document.getElementById("bestButton").classList.remove("active");
+  document.getElementById("worstButton").classList.remove("active");
+  document.getElementById("customButton").classList.remove("active");
+  document.getElementById(buttonId).classList.add("active");
+}
+let best;
+let custom;
+let curColors;
+let firstClick = true;
+
+function bestButton() {
+  best = true;
+  custom = false;
+  firstClick = false;
+  revenueChart(best).then(colors => {
+    curColors = colors;
+    revenueBarChart(curColors);
+  });
+  setActiveButton("bestButton");
+}
+
+function worstButton() {
+  best = false;
+  custom = false;
+  firstClick = false;
+  revenueChart(best).then(colors => {
+    curColors = colors;
+    revenueBarChart(curColors);
+  });
+  setActiveButton("worstButton");
+}
+
+async function customButton() {
+  custom = true;
+  firstClick = false;
+  setActiveButton("customButton");
+
+  while (custom) {
+    try {
+      const colors = await revenueBarChart(curColors, custom);
+      const filteredColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
+      await revenueChart(best, [], filteredColors);
+    } catch (error) {
+      console.error("Error in customButton loop:", error);
+      custom = false;
+    }
+  }
+}
+
 
 
 // TODO move to generalCharts.ts
