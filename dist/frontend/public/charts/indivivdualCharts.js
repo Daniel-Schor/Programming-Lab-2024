@@ -328,7 +328,7 @@ function abc() {
                 emphasis: {
                     focus: 'series'
                 },
-                data: ['A', 'B', 'C'].map(category => category === 'A' ? 40 : null)
+                data: ['A', 'B', 'C'].map(category => category === 'C' ? 40 : null)
             }
         ]
     };
