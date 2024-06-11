@@ -9,6 +9,7 @@ function updateCharts(date) {
     statOverview(date);
     pizzaSize(date);
     heatmap(date);
+    pizzaIngredients(date);
 }
 // TODO move to generalCharts.ts
 // TODO move to generalCharts.ts
