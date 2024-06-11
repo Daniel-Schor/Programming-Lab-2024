@@ -11,12 +11,12 @@
     width: 48%;
   }
 
- #statsOverviewContainer {
+#statsOverviewContainer {
     margin-top: 20px;
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: #f0f0f0;
+    background-color: violet /*#f0f0f0*/;
   }
 
   #statsOverview {
@@ -27,7 +27,7 @@
   } 
 
   .stat-item {
-    background-color: #f0f0f0;
+    background-color: blue/*#f0f0f0*/;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -54,16 +54,16 @@
     text-align: center;
     font-size: 24px;
     margin: 0 0 10px;
-    border-bottom: 2px solid #c0c0c0;
+    border-bottom: 2px solid /*#c0c0c0*/;
     padding-bottom: 5px;
   }
 
-  #avCustomerContainer {
+#avCustomerContainer {
     margin-top: 20px;
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: blue;
+    background-color: red/*#f0f0f0*/;
   }
 
   #avCustomer {
@@ -73,12 +73,14 @@
     flex-wrap: wrap;
   } 
   .avCustomer-item {
-    background-color: #f0f0f0;
+    background-color: pink/*#f0f0f0*/;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     flex: 1;
-    min-width: 150px;
+    width: 150px;
+    height: 50px;
+    /*min-width: 150px;*/
     text-align: center;
   }
 
@@ -105,3 +107,84 @@
     flex-wrap: wrap;
     margin-bottom: 20px;
   }
+
+/*General Revenue Container*/
+#generalRevenueContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: yellowgreen /*#f0f0f0*/;
+}
+
+#generalRevenue {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+} 
+#generalRevenueTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid /*#c0c0c0*/;
+  padding-bottom: 5px;
+  ;
+}
+
+
+/*Revenue Container*/
+  #revenueContainer {
+    margin-top: 20px;
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgb(227, 243, 195) /*#f0f0f0*/;
+  }
+
+  #revenue {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  } 
+
+/*Revenue Barchart of all Stores*/
+#revenueBarContainer {
+    margin-top: 20px;
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgb(246, 202, 230) /*#f0f0f0*/;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #revenueBar {
+    width: 100%;
+    height: 4000px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  } 
+
+  /*Map view of all Stores*/
+#mapContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: aqua /*#f0f0f0*/;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#map {
+  width: 100%;
+  height: 4000px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+} 

@@ -17,6 +17,10 @@
   <style>
     #map { height: 600px; width: 50%; }
     #statsOverviewContainer { width : 50%; height: 150px; }
+    #avCustomerContainer { width: 50%; height: 150px; }
+    #revenueContainer { width: 50%; height: 600px; }
+    #revenueBarContainer { width: 50%; height: 600px; }
+
     </style>
 
 </head>
@@ -52,24 +56,44 @@
       </label>
   </header>
 
-     <h2 id="statsOverviewTitle">General Statistics</h2> 
+
+       <h2 id="statsOverviewTitle">General Statistics</h2> 
 
     <div id="statsOverviewContainer">  
       <!--TODO add chosen date or (last week, month, year)-->
       <h3>Statistics for "customDate" </time></h3>
       <div id="statsOverview"></div>
     </div>
-    <div id="avCustomer-container">
+    <div id="avCustomerContainer">
       <h3>Average Customer Data</h3>
       <!-- Statistiken für das gewählte Datum hier einfügen -->
-       KUNDEN
-       Quality
+       <div class="avCustomer-item">number of orders</div>
+       <div class="avCustomer-item">spending amount</div>
+       <div class="avCustomer-item">beispiele</div>
     </div>
-   
+
+  
+  <div id="generalRevenueContainer">
+    <h2 id="generalRevenueTitle">Revenue</h2>
+<!--TODO ADD DATE AND SORTING FILTER DEPENDENCY-->
+    <div id="revenueContainer">
+    <h2 id="revenueTitleDaily" >Revenue</h2>
     <div id="revenue" class="chart" style="height: 600px;"></div>
-    <div id="revenueBar" class="chart" style="height: 600px;"></div>
+    </div>
+
+    <div id="revenueBarContainer">
+    <h2>Total Revenue</h2>
+    <div id="revenueBar" class="chart" style="height: 600px; width: 1000px;" >  
+    </div>
+    </div>
   </div>
+
+  
+  <div id="mapContainer">
+  <h2 id="mapTitle">All Stores in the US</h2>
   <div id="map" style="height: 600; width: 600;"></div>
+  </div>
+  
   <script>
     const map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();
