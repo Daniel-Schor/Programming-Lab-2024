@@ -22,7 +22,7 @@ function updateCharts(date) {
 
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
-  
+
   if (option && typeof option === "object") {
     chart.setOption(option, true);
   }
@@ -44,7 +44,7 @@ function monthlyRevenue(date = "2022-12-01") {
       let days = data[store.storeID];
       delete days.changeValue;
       days = Object.keys(days);
-      
+
       var option = {
         xAxis: { type: "category", data: days },
         tooltip: { trigger: "axis" },
@@ -64,7 +64,7 @@ function gaugeChart(date = "2022-12-01") {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
-  
+
   fetch(`/api/quality?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -92,7 +92,7 @@ function gaugeChart(date = "2022-12-01") {
           detail: { width: 50, height: 14, fontSize: 14, color: "inherit", borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
         }],
       };
-      
+
       updateChart(myChart, option);
     })
     .catch((error) => {
@@ -128,7 +128,7 @@ function heatmap(date = "2022-12-01") {
         });
       });
       //----
-      
+
 
       option = {
         tooltip: { position: "top" },
@@ -144,12 +144,12 @@ function heatmap(date = "2022-12-01") {
           emphasis: { itemStyle: { shadowBlur: 10, shadowColor: "rgba(0, 0, 0, 0.5)" } },
         }],
       };
-      
+
       updateChart(myChart, option);
 
-      
+
     });
-    
+
 }
 
 function pizzaSize(date = "2022-12-01") {
@@ -178,7 +178,7 @@ function pizzaSize(date = "2022-12-01") {
           data: data.map((item: { Size: string, size_count: string }) => ({ value: item.size_count, name: item.Size }))
         }]
       };
-      
+
       updateChart(myChart, option);
     })
     .catch((error) => {
@@ -189,370 +189,376 @@ function pizzaSize(date = "2022-12-01") {
 // TODO move to generalCharts.ts
 // TODO split
 
-  function abc() {
-    var app: any = {};
-type EChartsOption = echarts.EChartsOption;
+function abc() {
+  var app: any = {};
+  type EChartsOption = echarts.EChartsOption;
 
-var chartDom = document.getElementById('abc')!;
-var myChart = echarts.init(chartDom);
-var option: EChartsOption;
+  var chartDom = document.getElementById('abc')!;
+  var myChart = echarts.init(chartDom);
+  var option: EChartsOption;
 
-const posList = [
-  'left',
-  'right',
-  'top',
-  'bottom',
-  'inside',
-  'insideTop',
-  'insideLeft',
-  'insideRight',
-  'insideBottom',
-  'insideTopLeft',
-  'insideTopRight',
-  'insideBottomLeft',
-  'insideBottomRight'
-] as const;
+  const posList = [
+    'left',
+    'right',
+    'top',
+    'bottom',
+    'inside',
+    'insideTop',
+    'insideLeft',
+    'insideRight',
+    'insideBottom',
+    'insideTopLeft',
+    'insideTopRight',
+    'insideBottomLeft',
+    'insideBottomRight'
+  ] as const;
 
-app.configParameters = {
-  rotate: {
-    min: -90,
-    max: 90
-  },
-  align: {
-    options: {
-      left: 'left',
-      center: 'center',
-      right: 'right'
+  app.configParameters = {
+    rotate: {
+      min: -90,
+      max: 90
+    },
+    align: {
+      options: {
+        left: 'left',
+        center: 'center',
+        right: 'right'
+      }
+    },
+    verticalAlign: {
+      options: {
+        top: 'top',
+        middle: 'middle',
+        bottom: 'bottom'
+      }
+    },
+    position: {
+      options: posList.reduce(function (map, pos) {
+        map[pos] = pos;
+        return map;
+      }, {} as Record<string, string>)
+    },
+    distance: {
+      min: 0,
+      max: 100
     }
-  },
-  verticalAlign: {
-    options: {
-      top: 'top',
-      middle: 'middle',
-      bottom: 'bottom'
+  };
+
+  app.config = {
+    rotate: 90,
+    align: 'left',
+    verticalAlign: 'middle',
+    position: 'insideBottom',
+    distance: 15,
+    onChange: function () {
+      const labelOption: BarLabelOption = {
+        rotate: app.config.rotate as BarLabelOption['rotate'],
+        align: app.config.align as BarLabelOption['align'],
+        verticalAlign: app.config
+          .verticalAlign as BarLabelOption['verticalAlign'],
+        position: app.config.position as BarLabelOption['position'],
+        distance: app.config.distance as BarLabelOption['distance']
+      };
+      myChart.setOption<echarts.EChartsOption>({
+        series: [
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          }
+        ]
+      });
     }
-  },
-  position: {
-    options: posList.reduce(function (map, pos) {
-      map[pos] = pos;
-      return map;
-    }, {} as Record<string, string>)
-  },
-  distance: {
-    min: 0,
-    max: 100
-  }
-};
+  };
 
-app.config = {
-  rotate: 90,
-  align: 'left',
-  verticalAlign: 'middle',
-  position: 'insideBottom',
-  distance: 15,
-  onChange: function () {
-    const labelOption: BarLabelOption = {
-      rotate: app.config.rotate as BarLabelOption['rotate'],
-      align: app.config.align as BarLabelOption['align'],
-      verticalAlign: app.config
-        .verticalAlign as BarLabelOption['verticalAlign'],
-      position: app.config.position as BarLabelOption['position'],
-      distance: app.config.distance as BarLabelOption['distance']
-    };
-    myChart.setOption<echarts.EChartsOption>({
-      series: [
-        {
-          label: labelOption
-        },
-        {
-          label: labelOption
-        },
-        {
-          label: labelOption
-        },
-        {
-          label: labelOption
-        }
-      ]
-    });
-  }
-};
+  type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
 
-type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
-
-const labelOption: BarLabelOption = {
-  show: true,
-  position: app.config.position as BarLabelOption['position'],
-  distance: app.config.distance as BarLabelOption['distance'],
-  align: app.config.align as BarLabelOption['align'],
-  verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
-  rotate: app.config.rotate as BarLabelOption['rotate'],
-  formatter: '{c}  {name|{a}}',
-  fontSize: 16,
-  rich: {
-    name: {}
-  }
-};
-
-option = {
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'shadow'
-    }
-  },
-  legend: {
-    data: ['Forest', 'Steppe', 'Desert', 'Wetland']
-  },
-  toolbox: {
+  const labelOption: BarLabelOption = {
     show: true,
-    orient: 'vertical',
-    left: 'right',
-    top: 'center',
-    feature: {
-      mark: { show: true },
-      dataView: { show: true, readOnly: false },
-      magicType: { show: true, type: ['line', 'bar', 'stack'] },
-      restore: { show: true },
-      saveAsImage: { show: true }
+    position: app.config.position as BarLabelOption['position'],
+    distance: app.config.distance as BarLabelOption['distance'],
+    align: app.config.align as BarLabelOption['align'],
+    verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
+    rotate: app.config.rotate as BarLabelOption['rotate'],
+    formatter: '{c}  {name|{a}}',
+    fontSize: 16,
+    rich: {
+      name: {}
     }
-  },
-  xAxis: [
-    {
-      type: 'category',
-      axisTick: { show: false },
-      data: ['A', 'B', 'X', '2015', '2016']
-    }
-  ],
-  yAxis: [
-    {
-      type: 'value'
-    }
-  ],
-  series: [
-    {
-      name: 'Forest',
-      type: 'bar',
-      barGap: 0,
-      label: labelOption,
-      emphasis: {
-        focus: 'series'
-      },
-      data: [0, 332, 301, 334, 390]
-    },
-    {
-      name: 'Steppe',
-      type: 'bar',
-      label: labelOption,
-      emphasis: {
-        focus: 'series'
-      },
-      data: [220, 182, 191, 234, 290]
-    },
-    {
-      name: 'Desert',
-      type: 'bar',
-      label: labelOption,
-      emphasis: {
-        focus: 'series'
-      },
-      data: [150, 232, 201, 154, 190]
-    },
-    {
-      name: 'Wetland',
-      type: 'bar',
-      label: labelOption,
-      emphasis: {
-        focus: 'series'
-      },
-      data: [98, 77, 101, 99, 40]
-    }
-  ]
-};
+  };
 
-option && myChart.setOption(option);
+  option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+
+    //kann anscheinend leer bleiben
+    legend: {
+      data: []
+    },
+    toolbox: {
+      show: true,
+      orient: 'vertical',
+      left: 'right',
+      top: 'center',
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        magicType: { show: true, type: ['line', 'bar', 'stack'] },
+        restore: { show: true },
+        saveAsImage: { show: true }
+      }
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: ['A', 'B', 'C'],
+        axisLabel: {
+          formatter: function (value, index) {
+            return ['A', 'B', 'C'][index];
+          }
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: 'C000015',
+        type: 'bar',
+        barGap: 0,
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: ['A', 'B', 'C'].map(category => category === 'A' ? 390 : null)
+      },
+      {
+        name: 'C000125',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: ['A', 'B', 'C'].map(category => category === 'B' ? 290 : null)
+      },
+      {
+        name: 'C000172',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: ['A', 'B', 'C'].map(category => category === 'C' ? 190 : null)
+      },
+      {
+        name: 'C000179',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: ['A', 'B', 'C'].map(category => category === 'A' ? 40 : null)
+      }
+    ]
+  };
+
+  option && myChart.setOption(option);
 }
 
 function pizzaIngredients() {
   var app: any = {};
-type EChartsOption = echarts.EChartsOption;
+  type EChartsOption = echarts.EChartsOption;
 
-var chartDom = document.getElementById('pizzaIngredients')!;
-var myChart = echarts.init(chartDom);
-var option: EChartsOption;
+  var chartDom = document.getElementById('pizzaIngredients')!;
+  var myChart = echarts.init(chartDom);
+  var option: EChartsOption;
 
-const posList = [
-'left',
-'right',
-'top',
-'bottom',
-'inside',
-'insideTop',
-'insideLeft',
-'insideRight',
-'insideBottom',
-'insideTopLeft',
-'insideTopRight',
-'insideBottomLeft',
-'insideBottomRight'
-] as const;
+  const posList = [
+    'left',
+    'right',
+    'top',
+    'bottom',
+    'inside',
+    'insideTop',
+    'insideLeft',
+    'insideRight',
+    'insideBottom',
+    'insideTopLeft',
+    'insideTopRight',
+    'insideBottomLeft',
+    'insideBottomRight'
+  ] as const;
 
-app.configParameters = {
-rotate: {
-  min: -90,
-  max: 90
-},
-align: {
-  options: {
-    left: 'left',
-    center: 'center',
-    right: 'right'
-  }
-},
-verticalAlign: {
-  options: {
-    top: 'top',
-    middle: 'middle',
-    bottom: 'bottom'
-  }
-},
-position: {
-  options: posList.reduce(function (map, pos) {
-    map[pos] = pos;
-    return map;
-  }, {} as Record<string, string>)
-},
-distance: {
-  min: 0,
-  max: 100
-}
-};
-
-app.config = {
-rotate: 90,
-align: 'left',
-verticalAlign: 'middle',
-position: 'insideBottom',
-distance: 15,
-onChange: function () {
-  const labelOption: BarLabelOption = {
-    rotate: app.config.rotate as BarLabelOption['rotate'],
-    align: app.config.align as BarLabelOption['align'],
-    verticalAlign: app.config
-      .verticalAlign as BarLabelOption['verticalAlign'],
-    position: app.config.position as BarLabelOption['position'],
-    distance: app.config.distance as BarLabelOption['distance']
+  app.configParameters = {
+    rotate: {
+      min: -90,
+      max: 90
+    },
+    align: {
+      options: {
+        left: 'left',
+        center: 'center',
+        right: 'right'
+      }
+    },
+    verticalAlign: {
+      options: {
+        top: 'top',
+        middle: 'middle',
+        bottom: 'bottom'
+      }
+    },
+    position: {
+      options: posList.reduce(function (map, pos) {
+        map[pos] = pos;
+        return map;
+      }, {} as Record<string, string>)
+    },
+    distance: {
+      min: 0,
+      max: 100
+    }
   };
-  myChart.setOption<echarts.EChartsOption>({
+
+  app.config = {
+    rotate: 90,
+    align: 'left',
+    verticalAlign: 'middle',
+    position: 'insideBottom',
+    distance: 15,
+    onChange: function () {
+      const labelOption: BarLabelOption = {
+        rotate: app.config.rotate as BarLabelOption['rotate'],
+        align: app.config.align as BarLabelOption['align'],
+        verticalAlign: app.config
+          .verticalAlign as BarLabelOption['verticalAlign'],
+        position: app.config.position as BarLabelOption['position'],
+        distance: app.config.distance as BarLabelOption['distance']
+      };
+      myChart.setOption<echarts.EChartsOption>({
+        series: [
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          }
+        ]
+      });
+    }
+  };
+
+  type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
+
+  const labelOption: BarLabelOption = {
+    show: true,
+    position: app.config.position as BarLabelOption['position'],
+    distance: app.config.distance as BarLabelOption['distance'],
+    align: app.config.align as BarLabelOption['align'],
+    verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
+    rotate: app.config.rotate as BarLabelOption['rotate'],
+    formatter: '{c}  {name|{a}}',
+    fontSize: 16,
+    rich: {
+      name: {}
+    }
+  };
+
+  option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {
+      data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+    },
+    toolbox: {
+      show: true,
+      orient: 'vertical',
+      left: 'right',
+      top: 'center',
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        magicType: { show: true, type: ['line', 'bar', 'stack'] },
+        restore: { show: true },
+        saveAsImage: { show: true }
+      }
+    },
+    xAxis: [
+      {
+        type: 'category',
+        axisTick: { show: false },
+        data: ['A', 'B', 'X', '2015', '2016']
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
     series: [
       {
-        label: labelOption
+        name: 'Forest',
+        type: 'bar',
+        barGap: 0,
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: [0, 332, 301, 334, 390]
       },
       {
-        label: labelOption
+        name: 'Steppe',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: [220, 182, 191, 234, 290]
       },
       {
-        label: labelOption
+        name: 'Desert',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: [150, 232, 201, 154, 190]
       },
       {
-        label: labelOption
+        name: 'Wetland',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: [98, 77, 101, 99, 40]
       }
     ]
-  });
-}
-};
+  };
 
-type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
-
-const labelOption: BarLabelOption = {
-show: true,
-position: app.config.position as BarLabelOption['position'],
-distance: app.config.distance as BarLabelOption['distance'],
-align: app.config.align as BarLabelOption['align'],
-verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
-rotate: app.config.rotate as BarLabelOption['rotate'],
-formatter: '{c}  {name|{a}}',
-fontSize: 16,
-rich: {
-  name: {}
-}
-};
-
-option = {
-tooltip: {
-  trigger: 'axis',
-  axisPointer: {
-    type: 'shadow'
-  }
-},
-legend: {
-  data: ['Forest', 'Steppe', 'Desert', 'Wetland']
-},
-toolbox: {
-  show: true,
-  orient: 'vertical',
-  left: 'right',
-  top: 'center',
-  feature: {
-    mark: { show: true },
-    dataView: { show: true, readOnly: false },
-    magicType: { show: true, type: ['line', 'bar', 'stack'] },
-    restore: { show: true },
-    saveAsImage: { show: true }
-  }
-},
-xAxis: [
-  {
-    type: 'category',
-    axisTick: { show: false },
-    data: ['A', 'B', 'X', '2015', '2016']
-  }
-],
-yAxis: [
-  {
-    type: 'value'
-  }
-],
-series: [
-  {
-    name: 'Forest',
-    type: 'bar',
-    barGap: 0,
-    label: labelOption,
-    emphasis: {
-      focus: 'series'
-    },
-    data: [0, 332, 301, 334, 390]
-  },
-  {
-    name: 'Steppe',
-    type: 'bar',
-    label: labelOption,
-    emphasis: {
-      focus: 'series'
-    },
-    data: [220, 182, 191, 234, 290]
-  },
-  {
-    name: 'Desert',
-    type: 'bar',
-    label: labelOption,
-    emphasis: {
-      focus: 'series'
-    },
-    data: [150, 232, 201, 154, 190]
-  },
-  {
-    name: 'Wetland',
-    type: 'bar',
-    label: labelOption,
-    emphasis: {
-      focus: 'series'
-    },
-    data: [98, 77, 101, 99, 40]
-  }
-]
-};
-
-option && myChart.setOption(option);
+  option && myChart.setOption(option);
 }

@@ -259,8 +259,9 @@ function abc() {
                 type: 'shadow'
             }
         },
+        //kann anscheinend leer bleiben
         legend: {
-            data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+            data: []
         },
         toolbox: {
             show: true,
@@ -278,8 +279,12 @@ function abc() {
         xAxis: [
             {
                 type: 'category',
-                axisTick: { show: false },
-                data: ['A', 'B', 'X', '2015', '2016']
+                data: ['A', 'B', 'C'],
+                axisLabel: {
+                    formatter: function (value, index) {
+                        return ['A', 'B', 'C'][index];
+                    }
+                }
             }
         ],
         yAxis: [
@@ -289,41 +294,41 @@ function abc() {
         ],
         series: [
             {
-                name: 'Forest',
+                name: 'C000015',
                 type: 'bar',
                 barGap: 0,
                 label: labelOption,
                 emphasis: {
                     focus: 'series'
                 },
-                data: [0, 332, 301, 334, 390]
+                data: ['A', 'B', 'C'].map(category => category === 'A' ? 390 : null)
             },
             {
-                name: 'Steppe',
+                name: 'C000125',
                 type: 'bar',
                 label: labelOption,
                 emphasis: {
                     focus: 'series'
                 },
-                data: [220, 182, 191, 234, 290]
+                data: ['A', 'B', 'C'].map(category => category === 'B' ? 290 : null)
             },
             {
-                name: 'Desert',
+                name: 'C000172',
                 type: 'bar',
                 label: labelOption,
                 emphasis: {
                     focus: 'series'
                 },
-                data: [150, 232, 201, 154, 190]
+                data: ['A', 'B', 'C'].map(category => category === 'C' ? 190 : null)
             },
             {
-                name: 'Wetland',
+                name: 'C000179',
                 type: 'bar',
                 label: labelOption,
                 emphasis: {
                     focus: 'series'
                 },
-                data: [98, 77, 101, 99, 40]
+                data: ['A', 'B', 'C'].map(category => category === 'A' ? 40 : null)
             }
         ]
     };
