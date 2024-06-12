@@ -14,7 +14,19 @@ body {
   .chart {
     width: 48%;
   }
-
+  #dashboardContainer {
+    margin-top: 20px;
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #ffffff /*#f0f0f0*/;
+  }
+  #dashboard {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
   /*Pizza Franchise Title*/
   #pizzaFranchiseTitle {
     text-align: center;
