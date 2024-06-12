@@ -381,189 +381,74 @@ function abc(date = "2022-12-01") {
 
 function pizzaIngredients(date = "2022-12-01") {
   var app = {};
-  type EChartsOption = echarts.EChartsOption;
   var store = JSON.parse(localStorage.getItem("store"));
-  var chartDom = document.getElementById('pizzaIngredients');
+  var chartDom = document.getElementById("pizzaIngredients");
   var myChart = echarts.init(chartDom);
-  var option: EChartsOption;
+  var option;
 
-fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
-  .then((response) => response.json())
-  .then((data) => {
+  fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
 
-
-  const posList = [
-    'left',
-    'right',
-    'top',
-    'bottom',
-    'inside',
-    'insideTop',
-    'insideLeft',
-    'insideRight',
-    'insideBottom',
-    'insideTopLeft',
-    'insideTopRight',
-    'insideBottomLeft',
-    'insideBottomRight'
-  ] as const;
-
-  app.configParameters = {
-    rotate: {
-      min: -90,
-      max: 90
-    },
-    align: {
-      options: {
-        left: 'left',
-        center: 'center',
-        right: 'right'
-      }
-    },
-    verticalAlign: {
-      options: {
-        top: 'top',
-        middle: 'middle',
-        bottom: 'bottom'
-      }
-    },
-    position: {
-      options: posList.reduce(function (map, pos) {
-        map[pos] = pos;
-        return map;
-      }, {} as Record<string, string>)
-    },
-    distance: {
-      min: 0,
-      max: 2
-    }
-  };
-
-  app.config = {
-    rotate: 90,
-    align: 'left',
-    verticalAlign: 'middle',
-    position: 'insideBottom',
-    distance: 15,
-    onChange: function () {
-      const labelOption: BarLabelOption = {
-        rotate: app.config.rotate as BarLabelOption['rotate'],
-        align: app.config.align as BarLabelOption['align'],
-        verticalAlign: app.config
-          .verticalAlign as BarLabelOption['verticalAlign'],
-        position: app.config.position as BarLabelOption['position'],
-        distance: app.config.distance as BarLabelOption['distance']
-      };
-      myChart.setOption<echarts.EChartsOption>({
-        series: [
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          }
-        ]
+      // Parse the fetched data to create series data
+      const ingredients = {};
+      data.forEach((item) => {
+        const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+          item.day_of_week
+        ];
+        if (!ingredients[item.ingredient.trim()]) {
+          ingredients[item.ingredient.trim()] = {
+            name: item.ingredient.trim(),
+            type: "bar",
+            emphasis: { focus: "series" },
+            data: [],
+          };
+        }
+        ingredients[item.ingredient.trim()].data.push(item.average_quantity);
       });
-    }
-  };
 
-  type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
+      const seriesData = Object.values(ingredients);
 
-  const labelOption: BarLabelOption = {
-    show: true,
-    position: app.config.position as BarLabelOption['position'],
-    distance: app.config.distance as BarLabelOption['distance'],
-    align: app.config.align as BarLabelOption['align'],
-    verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
-    rotate: app.config.rotate as BarLabelOption['rotate'],
-    formatter: '{c}  {name|{a}}',
-    fontSize: 16,
-    rich: {
-      name: {}
-    }
-  };
+      option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {
+          data: seriesData.map((ingredient) => ingredient.name),
+        },
+        toolbox: {
+          show: true,
+          orient: "vertical",
+          left: "right",
+          top: "center",
+          feature: {
+            mark: { show: true },
+            dataView: { show: false, readOnly: false },
+            magicType: { show: false, type: ["line", "bar", "stack"] },
+            restore: { show: false },
+            saveAsImage: { show: false },
+          },
+        },
+        xAxis: [
+          {
+            type: "category",
+            axisTick: { show: false },
+            data: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
+        series: seriesData,
+      };
 
-  option = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow'
-      }
-    },
-    legend: {
-      data: ['Ham', 'Bacon', 'Basil', 'Cheese']
-    },
-    toolbox: {
-      show: true,
-      orient: 'vertical',
-      left: 'right',
-      top: 'center',
-      feature: {
-        mark: { show: true },
-        dataView: { show: true, readOnly: false },
-        magicType: { show: true, type: ['line', 'bar', 'stack'] },
-        restore: { show: true },
-        saveAsImage: { show: true }
-      }
-    },
-    xAxis: [
-      {
-        type: 'category',
-        axisTick: { show: false },
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' , `Sun`]
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value'
-      }
-    ],
-    series: [
-      {
-        name: 'Ham',
-        type: 'bar',
-        barGap: 0,
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [1.67 , 1.53 , 1.89 , 1.62 , 1.92 , 1.63 , 1.97]
-      },
-      {
-        name: 'Bacon',
-        type: 'bar',
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43 , 0.89]
-      },
-      {
-        name: 'Basil',
-        type: 'bar',
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43  , 1.37]
-      },
-      {
-        name: 'Cheese',
-        type: 'bar',
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43 , 1.05]
-      }
-    ]
-  };
-
-  option && myChart.setOption(option);
+      myChart.setOption(option);
+    })
+    .catch((error) => console.error("Error fetching ingredient data:", error));
 }
