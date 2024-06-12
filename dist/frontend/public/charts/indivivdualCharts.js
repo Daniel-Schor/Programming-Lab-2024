@@ -343,21 +343,7 @@ function pizzaIngredients(date = "2022-12-01") {
     fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-        const posList = [
-            'left',
-            'right',
-            'top',
-            'bottom',
-            'inside',
-            'insideTop',
-            'insideLeft',
-            'insideRight',
-            'insideBottom',
-            'insideTopLeft',
-            'insideTopRight',
-            'insideBottomLeft',
-            'insideBottomRight'
-        ];
+        console.log(data);
         app.configParameters = {
             rotate: {
                 min: -90,
@@ -377,61 +363,9 @@ function pizzaIngredients(date = "2022-12-01") {
                     bottom: 'bottom'
                 }
             },
-            position: {
-                options: posList.reduce(function (map, pos) {
-                    map[pos] = pos;
-                    return map;
-                }, {})
-            },
             distance: {
                 min: 0,
                 max: 2
-            }
-        };
-        app.config = {
-            rotate: 90,
-            align: 'left',
-            verticalAlign: 'middle',
-            position: 'insideBottom',
-            distance: 15,
-            onChange: function () {
-                const labelOption = {
-                    rotate: app.config.rotate,
-                    align: app.config.align,
-                    verticalAlign: app.config
-                        .verticalAlign,
-                    position: app.config.position,
-                    distance: app.config.distance
-                };
-                myChart.setOption({
-                    series: [
-                        {
-                            label: labelOption
-                        },
-                        {
-                            label: labelOption
-                        },
-                        {
-                            label: labelOption
-                        },
-                        {
-                            label: labelOption
-                        }
-                    ]
-                });
-            }
-        };
-        const labelOption = {
-            show: true,
-            position: app.config.position,
-            distance: app.config.distance,
-            align: app.config.align,
-            verticalAlign: app.config.verticalAlign,
-            rotate: app.config.rotate,
-            formatter: '{c}  {name|{a}}',
-            fontSize: 16,
-            rich: {
-                name: {}
             }
         };
         option = {
@@ -451,10 +385,10 @@ function pizzaIngredients(date = "2022-12-01") {
                 top: 'center',
                 feature: {
                     mark: { show: true },
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line', 'bar', 'stack'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
+                    dataView: { show: false, readOnly: false },
+                    magicType: { show: false, type: ['line', 'bar', 'stack'] },
+                    restore: { show: false },
+                    saveAsImage: { show: false }
                 }
             },
             xAxis: [
@@ -474,7 +408,6 @@ function pizzaIngredients(date = "2022-12-01") {
                     name: 'Ham',
                     type: 'bar',
                     barGap: 0,
-                    label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
@@ -483,7 +416,6 @@ function pizzaIngredients(date = "2022-12-01") {
                 {
                     name: 'Bacon',
                     type: 'bar',
-                    label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
@@ -492,7 +424,6 @@ function pizzaIngredients(date = "2022-12-01") {
                 {
                     name: 'Basil',
                     type: 'bar',
-                    label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
@@ -501,7 +432,6 @@ function pizzaIngredients(date = "2022-12-01") {
                 {
                     name: 'Cheese',
                     type: 'bar',
-                    label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
@@ -509,7 +439,7 @@ function pizzaIngredients(date = "2022-12-01") {
                 }
             ]
         };
-        option && myChart.setOption(option);
+        updateChart(myChart, option);
     });
 }
 //# sourceMappingURL=indivivdualCharts.js.map

@@ -390,23 +390,9 @@ function pizzaIngredients(date = "2022-12-01") {
 fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
   .then((response) => response.json())
   .then((data) => {
+    console.log(data);
 
 
-  const posList = [
-    'left',
-    'right',
-    'top',
-    'bottom',
-    'inside',
-    'insideTop',
-    'insideLeft',
-    'insideRight',
-    'insideBottom',
-    'insideTopLeft',
-    'insideTopRight',
-    'insideBottomLeft',
-    'insideBottomRight'
-  ] as const;
 
   app.configParameters = {
     rotate: {
@@ -427,68 +413,12 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         bottom: 'bottom'
       }
     },
-    position: {
-      options: posList.reduce(function (map, pos) {
-        map[pos] = pos;
-        return map;
-      }, {} as Record<string, string>)
-    },
+    
     distance: {
       min: 0,
       max: 2
     }
   };
-
-  app.config = {
-    rotate: 90,
-    align: 'left',
-    verticalAlign: 'middle',
-    position: 'insideBottom',
-    distance: 15,
-    onChange: function () {
-      const labelOption: BarLabelOption = {
-        rotate: app.config.rotate as BarLabelOption['rotate'],
-        align: app.config.align as BarLabelOption['align'],
-        verticalAlign: app.config
-          .verticalAlign as BarLabelOption['verticalAlign'],
-        position: app.config.position as BarLabelOption['position'],
-        distance: app.config.distance as BarLabelOption['distance']
-      };
-      myChart.setOption<echarts.EChartsOption>({
-        series: [
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          }
-        ]
-      });
-    }
-  };
-
-  type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
-
-  const labelOption: BarLabelOption = {
-    show: true,
-    position: app.config.position as BarLabelOption['position'],
-    distance: app.config.distance as BarLabelOption['distance'],
-    align: app.config.align as BarLabelOption['align'],
-    verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
-    rotate: app.config.rotate as BarLabelOption['rotate'],
-    formatter: '{c}  {name|{a}}',
-    fontSize: 16,
-    rich: {
-      name: {}
-    }
-  };
-
   option = {
     tooltip: {
       trigger: 'axis',
@@ -506,10 +436,10 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
       top: 'center',
       feature: {
         mark: { show: true },
-        dataView: { show: true, readOnly: false },
-        magicType: { show: true, type: ['line', 'bar', 'stack'] },
-        restore: { show: true },
-        saveAsImage: { show: true }
+        dataView: { show: false, readOnly: false },
+        magicType: { show: false, type: ['line', 'bar', 'stack'] },
+        restore: { show: false },
+        saveAsImage: { show: false }
       }
     },
     xAxis: [
@@ -529,7 +459,7 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         name: 'Ham',
         type: 'bar',
         barGap: 0,
-        label: labelOption,
+        
         emphasis: {
           focus: 'series'
         },
@@ -538,7 +468,7 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
       {
         name: 'Bacon',
         type: 'bar',
-        label: labelOption,
+        
         emphasis: {
           focus: 'series'
         },
@@ -547,7 +477,7 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
       {
         name: 'Basil',
         type: 'bar',
-        label: labelOption,
+        
         emphasis: {
           focus: 'series'
         },
@@ -556,7 +486,7 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
       {
         name: 'Cheese',
         type: 'bar',
-        label: labelOption,
+       
         emphasis: {
           focus: 'series'
         },
@@ -565,5 +495,5 @@ fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     ]
   };
 
-  option && myChart.setOption(option);
+  updateChart(myChart, option);
 }
