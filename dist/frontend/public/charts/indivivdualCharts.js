@@ -343,7 +343,6 @@ function pizzaIngredients(date = "2022-12-01") {
     fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-        console.log(data);
         // Parse the fetched data to create series data
         const ingredients = {};
         data.forEach((item) => {
