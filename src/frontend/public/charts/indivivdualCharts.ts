@@ -537,7 +537,7 @@ function pizzaIngredients() {
         emphasis: {
           focus: 'series'
         },
-        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43]
+        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43 , 0.89]
       },
       {
         name: 'Basil',
@@ -546,7 +546,7 @@ function pizzaIngredients() {
         emphasis: {
           focus: 'series'
         },
-        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43]
+        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43  , 1.37]
       },
       {
         name: 'Cheese',
@@ -555,7 +555,7 @@ function pizzaIngredients() {
         emphasis: {
           focus: 'series'
         },
-        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43]
+        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43 , 1.05]
       }
     ]
   };
