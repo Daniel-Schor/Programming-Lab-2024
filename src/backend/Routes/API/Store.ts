@@ -421,23 +421,4 @@ router.get('/ingredientUsage', async (req, res) => {
     }
 });
 
-// Helper function to reformat ingredient usage data
-function reformatIngredientUsage(data) {
-    const formattedData = {};
-
-    data.forEach(entry => {
-        const ingredient = entry.ingredient;
-        const dayOfWeek = entry.day_of_week;
-        const averageQuantity = parseFloat(entry.average_quantity);
-
-        if (!formattedData[ingredient]) {
-            formattedData[ingredient] = new Array(7).fill(0);
-        }
-
-        formattedData[ingredient][dayOfWeek] = averageQuantity;
-    });
-
-    return formattedData;
-}
-
 export default router;

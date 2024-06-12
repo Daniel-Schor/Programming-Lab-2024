@@ -339,172 +339,176 @@ function pizzaIngredients() {
     var chartDom = document.getElementById('pizzaIngredients');
     var myChart = echarts.init(chartDom);
     var option;
-    const posList = [
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'inside',
-        'insideTop',
-        'insideLeft',
-        'insideRight',
-        'insideBottom',
-        'insideTopLeft',
-        'insideTopRight',
-        'insideBottomLeft',
-        'insideBottomRight'
-    ];
-    app.configParameters = {
-        rotate: {
-            min: -90,
-            max: 90
-        },
-        align: {
-            options: {
-                left: 'left',
-                center: 'center',
-                right: 'right'
+    fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
+        .then((response) => response.json())
+        .then((data) => {
+        const posList = [
+            'left',
+            'right',
+            'top',
+            'bottom',
+            'inside',
+            'insideTop',
+            'insideLeft',
+            'insideRight',
+            'insideBottom',
+            'insideTopLeft',
+            'insideTopRight',
+            'insideBottomLeft',
+            'insideBottomRight'
+        ];
+        app.configParameters = {
+            rotate: {
+                min: -90,
+                max: 90
+            },
+            align: {
+                options: {
+                    left: 'left',
+                    center: 'center',
+                    right: 'right'
+                }
+            },
+            verticalAlign: {
+                options: {
+                    top: 'top',
+                    middle: 'middle',
+                    bottom: 'bottom'
+                }
+            },
+            position: {
+                options: posList.reduce(function (map, pos) {
+                    map[pos] = pos;
+                    return map;
+                }, {})
+            },
+            distance: {
+                min: 0,
+                max: 2
             }
-        },
-        verticalAlign: {
-            options: {
-                top: 'top',
-                middle: 'middle',
-                bottom: 'bottom'
+        };
+        app.config = {
+            rotate: 90,
+            align: 'left',
+            verticalAlign: 'middle',
+            position: 'insideBottom',
+            distance: 15,
+            onChange: function () {
+                const labelOption = {
+                    rotate: app.config.rotate,
+                    align: app.config.align,
+                    verticalAlign: app.config
+                        .verticalAlign,
+                    position: app.config.position,
+                    distance: app.config.distance
+                };
+                myChart.setOption({
+                    series: [
+                        {
+                            label: labelOption
+                        },
+                        {
+                            label: labelOption
+                        },
+                        {
+                            label: labelOption
+                        },
+                        {
+                            label: labelOption
+                        }
+                    ]
+                });
             }
-        },
-        position: {
-            options: posList.reduce(function (map, pos) {
-                map[pos] = pos;
-                return map;
-            }, {})
-        },
-        distance: {
-            min: 0,
-            max: 2
-        }
-    };
-    app.config = {
-        rotate: 90,
-        align: 'left',
-        verticalAlign: 'middle',
-        position: 'insideBottom',
-        distance: 15,
-        onChange: function () {
-            const labelOption = {
-                rotate: app.config.rotate,
-                align: app.config.align,
-                verticalAlign: app.config
-                    .verticalAlign,
-                position: app.config.position,
-                distance: app.config.distance
-            };
-            myChart.setOption({
-                series: [
-                    {
-                        label: labelOption
-                    },
-                    {
-                        label: labelOption
-                    },
-                    {
-                        label: labelOption
-                    },
-                    {
-                        label: labelOption
-                    }
-                ]
-            });
-        }
-    };
-    const labelOption = {
-        show: true,
-        position: app.config.position,
-        distance: app.config.distance,
-        align: app.config.align,
-        verticalAlign: app.config.verticalAlign,
-        rotate: app.config.rotate,
-        formatter: '{c}  {name|{a}}',
-        fontSize: 16,
-        rich: {
-            name: {}
-        }
-    };
-    option = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            }
-        },
-        legend: {
-            data: ['Ham', 'Bacon', 'Basil', 'Cheese']
-        },
-        toolbox: {
+        };
+        const labelOption = {
             show: true,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center',
-            feature: {
-                mark: { show: true },
-                dataView: { show: true, readOnly: false },
-                magicType: { show: true, type: ['line', 'bar', 'stack'] },
-                restore: { show: true },
-                saveAsImage: { show: true }
+            position: app.config.position,
+            distance: app.config.distance,
+            align: app.config.align,
+            verticalAlign: app.config.verticalAlign,
+            rotate: app.config.rotate,
+            formatter: '{c}  {name|{a}}',
+            fontSize: 16,
+            rich: {
+                name: {}
             }
-        },
-        xAxis: [
-            {
-                type: 'category',
-                axisTick: { show: false },
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', `Sun`]
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-                name: 'Ham',
-                type: 'bar',
-                barGap: 0,
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [1.67, 1.53, 1.89, 1.62, 1.92, 1.63, 1.97]
+        };
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
             },
-            {
-                name: 'Bacon',
-                type: 'bar',
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 0.89]
+            legend: {
+                data: ['Ham', 'Bacon', 'Basil', 'Cheese']
             },
-            {
-                name: 'Basil',
-                type: 'bar',
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 1.37]
+            toolbox: {
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar', 'stack'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
             },
-            {
-                name: 'Cheese',
-                type: 'bar',
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: { show: false },
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', `Sun`]
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: 'Ham',
+                    type: 'bar',
+                    barGap: 0,
+                    label: labelOption,
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [1.67, 1.53, 1.89, 1.62, 1.92, 1.63, 1.97]
                 },
-                data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 1.05]
-            }
-        ]
-    };
-    option && myChart.setOption(option);
+                {
+                    name: 'Bacon',
+                    type: 'bar',
+                    label: labelOption,
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 0.89]
+                },
+                {
+                    name: 'Basil',
+                    type: 'bar',
+                    label: labelOption,
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 1.37]
+                },
+                {
+                    name: 'Cheese',
+                    type: 'bar',
+                    label: labelOption,
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 1.05]
+                }
+            ]
+        };
+        option && myChart.setOption(option);
+    });
 }
 //# sourceMappingURL=indivivdualCharts.js.map

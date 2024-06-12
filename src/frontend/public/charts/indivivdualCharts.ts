@@ -380,12 +380,17 @@ function abc() {
 }
 
 function pizzaIngredients() {
-  var app: any = {};
+  var app = {};
   type EChartsOption = echarts.EChartsOption;
 
-  var chartDom = document.getElementById('pizzaIngredients')!;
+  var chartDom = document.getElementById('pizzaIngredients');
   var myChart = echarts.init(chartDom);
   var option: EChartsOption;
+
+fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
+  .then((response) => response.json())
+  .then((data) => {
+
 
   const posList = [
     'left',
