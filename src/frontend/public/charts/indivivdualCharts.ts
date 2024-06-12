@@ -430,7 +430,7 @@ function pizzaIngredients() {
     },
     distance: {
       min: 0,
-      max: 100
+      max: 2
     }
   };
 
@@ -492,7 +492,7 @@ function pizzaIngredients() {
       }
     },
     legend: {
-      data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+      data: ['Ham', 'Bacon', 'Basil', 'Cheese']
     },
     toolbox: {
       show: true,
@@ -511,7 +511,7 @@ function pizzaIngredients() {
       {
         type: 'category',
         axisTick: { show: false },
-        data: ['A', 'B', 'X', '2015', '2016']
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' , `Sun`]
       }
     ],
     yAxis: [
@@ -521,41 +521,41 @@ function pizzaIngredients() {
     ],
     series: [
       {
-        name: 'Forest',
+        name: 'Ham',
         type: 'bar',
         barGap: 0,
         label: labelOption,
         emphasis: {
           focus: 'series'
         },
-        data: [0, 332, 301, 334, 390]
+        data: [1.67 , 1.53 , 1.89 , 1.62 , 1.92 , 1.63 , 1.97]
       },
       {
-        name: 'Steppe',
+        name: 'Bacon',
         type: 'bar',
         label: labelOption,
         emphasis: {
           focus: 'series'
         },
-        data: [220, 182, 191, 234, 290]
+        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43 , 0.89]
       },
       {
-        name: 'Desert',
+        name: 'Basil',
         type: 'bar',
         label: labelOption,
         emphasis: {
           focus: 'series'
         },
-        data: [150, 232, 201, 154, 190]
+        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43  , 1.37]
       },
       {
-        name: 'Wetland',
+        name: 'Cheese',
         type: 'bar',
         label: labelOption,
         emphasis: {
           focus: 'series'
         },
-        data: [98, 77, 101, 99, 40]
+        data: [1.3 , 1.56 , 1.78 , 1.45 , 1.10 , 1.43 , 1.05]
       }
     ]
   };

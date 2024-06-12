@@ -30,7 +30,8 @@ header nav ul li a.active {
 .menu_button div {
     width: 30px;
     height: 4px;
-    margin: 5px 0;
+    margin: -4px 0;
+    margin-top: -10px;
     background: #000;
 }
 @media only screen  {
@@ -46,7 +47,7 @@ header nav ul li a.active {
         position: absolute;
         width: 10%;
         left: -100%;
-        
+        background-color: #b3b3b3;
         transition: 0.3s;
     }
     header #nav_check:checked ~ nav {
