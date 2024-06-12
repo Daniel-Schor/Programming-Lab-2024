@@ -346,6 +346,7 @@ function pizzaIngredients(date = "2022-12-01") {
     fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
+        console.log(data);
         // Parse the fetched data to create series data
         const ingredients = {};
         data.forEach((item) => {
@@ -370,6 +371,10 @@ function pizzaIngredients(date = "2022-12-01") {
             },
             legend: {
                 data: seriesData.map((ingredient) => ingredient.name),
+                selected: seriesData.reduce((acc, ingredient) => {
+                    acc[ingredient.name] = false; // Start with all series deselected
+                    return acc;
+                }, {}),
             },
             toolbox: {
                 show: true,
