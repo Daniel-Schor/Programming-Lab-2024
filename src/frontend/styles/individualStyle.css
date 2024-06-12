@@ -8,8 +8,8 @@ body {
 
 
 
-#quality,
-#Store-revenue,
+#qualityC,
+#Store-revenueC,
 #Heatmap,
 #PizzaSize {
   width: 100%;
@@ -24,7 +24,11 @@ body {
   background-color: #c0c0c0;
 }
 
-
+.QualtiyT {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+}
 
 .chart {
   width: 48%;

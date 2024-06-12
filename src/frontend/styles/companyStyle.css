@@ -2,6 +2,49 @@ body {
   background-color: #b3b3b3;
 }
 
+#tooltip{
+  position: relative;
+  cursor: pointer;
+  border-bottom: 2x dotted;
+  padding: 7px;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: sans-serif;
+
+}
+
+#tooltipText{ 
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #fff;
+  white-space: nowrap;
+  padding: 10px 15px;
+  border-radius: 7px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+#tooltipText::before{ 
+  content: "";
+  position: absolute;
+  left : 50%;
+  top : 100%;
+  transform: translateX(-50%);
+  border : 15px solid;
+  border-color: #000 #0000 #0000 #0000;
+}
+
+#tooltip:hover #tooltipText{
+  top : 130%;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
 .active {
     background-color: #c0c0c0;
   }

@@ -46,6 +46,9 @@ function monthlyRevenue(date = "2022-12-01") {
       days = Object.keys(days);
 
       var option = {
+        title: {
+          text: 'Revenue'
+        },
         xAxis: { type: "category", data: days },
         tooltip: { trigger: "axis" },
         legend: { data: [store.storeID] },
@@ -77,6 +80,7 @@ function gaugeChart(date = "2022-12-01") {
       ];
 
       var option = {
+        
         series: [{
           type: "gauge",
           startAngle: 90,

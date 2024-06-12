@@ -34,6 +34,9 @@ function monthlyRevenue(date = "2022-12-01") {
         delete days.changeValue;
         days = Object.keys(days);
         var option = {
+            title: {
+                text: 'Revenue'
+            },
             xAxis: { type: "category", data: days },
             tooltip: { trigger: "axis" },
             legend: { data: [store.storeID] },
