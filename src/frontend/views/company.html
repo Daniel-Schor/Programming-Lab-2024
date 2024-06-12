@@ -18,9 +18,9 @@
     #map { height: 600px; width: 50%; }
     #statsOverviewContainer { width : 50%; height: 150px; }
     #avCustomerContainer { width: 50%; height: 150px; }
-    
     #revenueBarContainer { width: 50%; height: 600px; }
-
+    #placeholderContainer { width: 30%; height: 600px; }
+    #placeholderContainer2 { width: 30%; height: 600px; }
     </style>
 
 </head>
@@ -59,7 +59,7 @@
 
 
   <div id="dashboardContainer">
-    <h1 id="dashboardTitle">Pizza Franchise</h1>  
+    <h1 id="dashboardTitle">@Pizza Hub</h1>  
   </div>
   <div id="generalStatsContainer">  
     <h2 id="generalStatsTitle">General Statistics</h2>  
@@ -95,10 +95,21 @@
   </div>
 
   
-  <div id="mapContainer">
-  <h2 id="mapTitle">All Stores in the US</h2>
-  <div id="map" style="height: 600; width: 600;"></div>
-  </div>
+    <div id="placeholderContainer">
+    <h2 id="placeholderTitle">Placeholder</h2>
+    </div>
+
+    <div id="placeholderContainer2">
+    <h2 id="placeholderTitle2">Placeholder2</h2>
+    </div>
+
+    <div id="mapContainer">
+      <h2>All Stores in the US</h2>
+    <div id="map" style="height: 600; width: 600;">
+      
+    </div>  
+    </div>
+    </div>
 
   <script>
     const map = L.map('map').setView([37.7749, -122.4194], 5);
