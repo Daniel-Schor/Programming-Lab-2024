@@ -337,179 +337,67 @@ function abc(date = "2022-12-01") {
 function pizzaIngredients(date = "2022-12-01") {
     var app = {};
     var store = JSON.parse(localStorage.getItem("store"));
-    var chartDom = document.getElementById('pizzaIngredients');
+    var chartDom = document.getElementById("pizzaIngredients");
     var myChart = echarts.init(chartDom);
     var option;
     fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-        const posList = [
-            'left',
-            'right',
-            'top',
-            'bottom',
-            'inside',
-            'insideTop',
-            'insideLeft',
-            'insideRight',
-            'insideBottom',
-            'insideTopLeft',
-            'insideTopRight',
-            'insideBottomLeft',
-            'insideBottomRight'
-        ];
-        app.configParameters = {
-            rotate: {
-                min: -90,
-                max: 90
-            },
-            align: {
-                options: {
-                    left: 'left',
-                    center: 'center',
-                    right: 'right'
-                }
-            },
-            verticalAlign: {
-                options: {
-                    top: 'top',
-                    middle: 'middle',
-                    bottom: 'bottom'
-                }
-            },
-            position: {
-                options: posList.reduce(function (map, pos) {
-                    map[pos] = pos;
-                    return map;
-                }, {})
-            },
-            distance: {
-                min: 0,
-                max: 2
-            }
-        };
-        app.config = {
-            rotate: 90,
-            align: 'left',
-            verticalAlign: 'middle',
-            position: 'insideBottom',
-            distance: 15,
-            onChange: function () {
-                const labelOption = {
-                    rotate: app.config.rotate,
-                    align: app.config.align,
-                    verticalAlign: app.config
-                        .verticalAlign,
-                    position: app.config.position,
-                    distance: app.config.distance
+        console.log(data);
+        // Parse the fetched data to create series data
+        const ingredients = {};
+        data.forEach((item) => {
+            const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][item.day_of_week];
+            if (!ingredients[item.ingredient.trim()]) {
+                ingredients[item.ingredient.trim()] = {
+                    name: item.ingredient.trim(),
+                    type: "bar",
+                    emphasis: { focus: "series" },
+                    data: [],
                 };
-                myChart.setOption({
-                    series: [
-                        {
-                            label: labelOption
-                        },
-                        {
-                            label: labelOption
-                        },
-                        {
-                            label: labelOption
-                        },
-                        {
-                            label: labelOption
-                        }
-                    ]
-                });
             }
-        };
-        const labelOption = {
-            show: true,
-            position: app.config.position,
-            distance: app.config.distance,
-            align: app.config.align,
-            verticalAlign: app.config.verticalAlign,
-            rotate: app.config.rotate,
-            formatter: '{c}  {name|{a}}',
-            fontSize: 16,
-            rich: {
-                name: {}
-            }
-        };
+            ingredients[item.ingredient.trim()].data.push(item.average_quantity);
+        });
+        const seriesData = Object.values(ingredients);
         option = {
             tooltip: {
-                trigger: 'axis',
+                trigger: "axis",
                 axisPointer: {
-                    type: 'shadow'
-                }
+                    type: "shadow",
+                },
             },
             legend: {
-                data: ['Ham', 'Bacon', 'Basil', 'Cheese']
+                data: seriesData.map((ingredient) => ingredient.name),
             },
             toolbox: {
                 show: true,
-                orient: 'vertical',
-                left: 'right',
-                top: 'center',
+                orient: "vertical",
+                left: "right",
+                top: "center",
                 feature: {
                     mark: { show: true },
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line', 'bar', 'stack'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
-                }
+                    dataView: { show: false, readOnly: false },
+                    magicType: { show: false, type: ["line", "bar", "stack"] },
+                    restore: { show: false },
+                    saveAsImage: { show: false },
+                },
             },
             xAxis: [
                 {
-                    type: 'category',
+                    type: "category",
                     axisTick: { show: false },
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', `Sun`]
-                }
+                    data: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                },
             ],
             yAxis: [
                 {
-                    type: 'value'
-                }
+                    type: "value",
+                },
             ],
-            series: [
-                {
-                    name: 'Ham',
-                    type: 'bar',
-                    barGap: 0,
-                    label: labelOption,
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [1.67, 1.53, 1.89, 1.62, 1.92, 1.63, 1.97]
-                },
-                {
-                    name: 'Bacon',
-                    type: 'bar',
-                    label: labelOption,
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 0.89]
-                },
-                {
-                    name: 'Basil',
-                    type: 'bar',
-                    label: labelOption,
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 1.37]
-                },
-                {
-                    name: 'Cheese',
-                    type: 'bar',
-                    label: labelOption,
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [1.3, 1.56, 1.78, 1.45, 1.10, 1.43, 1.05]
-                }
-            ]
+            series: seriesData,
         };
-        option && myChart.setOption(option);
-    });
+        myChart.setOption(option);
+    })
+        .catch((error) => console.error("Error fetching ingredient data:", error));
 }
 //# sourceMappingURL=indivivdualCharts.js.map
