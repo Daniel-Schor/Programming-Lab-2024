@@ -11,6 +11,22 @@
     width: 48%;
   }
 
+  /*Pizza Franchise Title*/
+  #pizzaFranchiseTitle {
+    text-align: center;
+    font-size: 24px;
+    font-family: copperplate, sans-serif;
+    margin: 0 0 10px;
+    border-bottom: 2px solid /*#c0c0c0*/;
+    padding-bottom: 5px;
+  }
+  .h1{
+    font-size: 24px;
+    font-family: 
+    margin: 0 0 10px;
+    border-bottom: 2px solid /*#c0c0c0*/;
+    padding-bottom: 5px;
+  }
   /*generalStatsContainer*/
   #generalStatsContainer {
     margin-top: 20px;
@@ -154,9 +170,8 @@
   ;
 }
 
-
 /*Revenue Container*/
-  #revenueContainer {
+#revenueContainer {
     margin-top: 20px;
     border: 2px solid #c0c0c0;
     border-radius: 10px;
@@ -165,6 +180,7 @@
   }
 
   #revenue {
+    width: 50%;
     display: flex;
     justify-content: space-between;
     gap: 10px;
@@ -202,8 +218,15 @@
   box-sizing: border-box;
 }
 
+#mapContainerTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid /*#c0c0c0*/;
+  padding-bottom: 5px;
+}
 #map {
-  width: 100%;
+  width: mapContainer width;
   height: 4000px;
   display: flex;
   justify-content: space-between;
