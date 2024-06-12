@@ -57,11 +57,14 @@
   </header>
 
 
-       <h2 id="statsOverviewTitle">General Statistics</h2> 
+       
 
-    <div id="statsOverviewContainer">  
+  <div id="generalStatsContainer">  
+    <h2 id="generalStatsTitle">General Statistics</h2>  
+    <div id="statsOverviewContainer"> 
+        
       <!--TODO add chosen date or (last week, month, year)-->
-      <h3>Statistics for "customDate" </time></h3>
+      <h3>Statistics <!--for "customDate" </time>--></h3>
       <div id="statsOverview"></div>
     </div>
     <div id="avCustomerContainer">
@@ -70,7 +73,8 @@
        <div class="avCustomer-item">number of orders</div>
        <div class="avCustomer-item">spending amount</div>
        <div class="avCustomer-item">beispiele</div>
-    </div>
+    </div> 
+  </div>
 
   
   <div id="generalRevenueContainer">
@@ -93,7 +97,7 @@
   <h2 id="mapTitle">All Stores in the US</h2>
   <div id="map" style="height: 600; width: 600;"></div>
   </div>
-  
+
   <script>
     const map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();

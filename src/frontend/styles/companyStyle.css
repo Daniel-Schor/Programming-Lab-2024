@@ -11,12 +11,34 @@
     width: 48%;
   }
 
+  /*generalStatsContainer*/
+  #generalStatsContainer {
+    margin-top: 20px;
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #ffffff /*#f0f0f0*/;
+  }
+  #generalStats {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  #generalStatsTitle {
+    text-align: center;
+    font-size: 24px;
+    margin: 0 0 10px;
+    border-bottom: 2px solid /*#c0c0c0*/;
+    padding-bottom: 5px;
+  }
+
 #statsOverviewContainer {
     margin-top: 20px;
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: violet /*#f0f0f0*/;
+    background-color: #b3b3b3 /*#f0f0f0*/;
   }
 
   #statsOverview {
@@ -27,7 +49,7 @@
   } 
 
   .stat-item {
-    background-color: blue/*#f0f0f0*/;
+    background-color: #ffffff/*#f0f0f0*/;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -63,7 +85,7 @@
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: red/*#f0f0f0*/;
+    background-color: #b3b3b3 /*#f0f0f0*/;
   }
 
   #avCustomer {
@@ -73,7 +95,7 @@
     flex-wrap: wrap;
   } 
   .avCustomer-item {
-    background-color: pink/*#f0f0f0*/;
+    background-color: #ffffff/*#f0f0f0*/;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -114,7 +136,7 @@
   border: 2px solid #c0c0c0;
   border-radius: 10px;
   padding: 10px;
-  background-color: yellowgreen /*#f0f0f0*/;
+  background-color: #b3b3b3 /*#f0f0f0*/;
 }
 
 #generalRevenue {
@@ -139,7 +161,7 @@
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: rgb(227, 243, 195) /*#f0f0f0*/;
+    background-color: #ffffff /*#f0f0f0*/;
   }
 
   #revenue {
@@ -155,7 +177,7 @@
     border: 2px solid #c0c0c0;
     border-radius: 10px;
     padding: 10px;
-    background-color: rgb(246, 202, 230) /*#f0f0f0*/;
+    background-color: #ffffff /*#f0f0f0*/;
     width: 100%;
     box-sizing: border-box;
   }
@@ -175,7 +197,7 @@
   border: 2px solid #c0c0c0;
   border-radius: 10px;
   padding: 10px;
-  background-color: aqua /*#f0f0f0*/;
+  background-color: #b3b3b3 /*#f0f0f0*/;
   width: 100%;
   box-sizing: border-box;
 }
