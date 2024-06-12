@@ -189,7 +189,7 @@ function pizzaSize(date = "2022-12-01") {
 // TODO move to generalCharts.ts
 // TODO split
 
-function abc() {
+function abc(date = "2022-12-01") {
   var app: any = {};
   type EChartsOption = echarts.EChartsOption;
 
@@ -379,10 +379,10 @@ function abc() {
   option && myChart.setOption(option);
 }
 
-function pizzaIngredients() {
+function pizzaIngredients(date = "2022-12-01") {
   var app = {};
   type EChartsOption = echarts.EChartsOption;
-
+  var store = JSON.parse(localStorage.getItem("store"));
   var chartDom = document.getElementById('pizzaIngredients');
   var myChart = echarts.init(chartDom);
   var option: EChartsOption;
