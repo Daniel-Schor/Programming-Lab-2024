@@ -1,6 +1,10 @@
 <!DOCTYPE hmtl>
 <html lang="en">
-
+<!--TODOS
+1. add store id in dashboardTitle
+2. resize dashboardContainer and gerneralsStatsContainer to take full device length (bars at the top)
+3. remove grey borderlines in "orderedPizzaSizes", "ABC Analaysis" and "ingridientConsumptionPerWeek"
+4. Container Placement to be asymmetric (two boxes in one row, three in the next)-->
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="/style/individualStyle.css">
@@ -8,13 +12,20 @@
   <script src="/static/charts/indivivdualCharts.js" type="text/javascript"></script>
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
   <script type="text/javascript" src="/static/UI/buttons.js"></script>
-  
+ <style>
+  #dashboardContainer {width: 1000px;height: 150px;}
+  #statsOverviewContainer {width: 1000px; height: 150px;}
+  #qualityContainer {width: 600px; height: 500px;}
+  #pizzaSizeContainer {width: 400px; height: 500px;}
+  #abcContainer {width: 600px; height: 700px;}
+  #pizzaIngredientsContainer {width: 600px; height: 700px;}
+  </style>
 </head>
 
 <body>
-  <!--Add StoreId from database--> 
-  <h1>Pizza Franchise - Store </h1>
-
+<!--TODO add store ID-->
+<div id="dashboardContainer">
+  <h3 id="dashboardTitle">@Pizza Hub - Store</h3>
   <div id="UI">
   <button id="redirectButton">MainPage</button>
   <button id="Last-Year">Last Year</button>
@@ -27,23 +38,53 @@
     </form>
   </div>
   </div>
-  
-  <div id="statsOverviewContainer"style="width: 1000px; height: 150px">
+</div>
+
+
+  <div id="statsOverviewContainer">
     <h2 id="statsOverviewTitle">General Statistics</h2>
     <div id="statsOverview"></div>
   </div>
-  
-</div>
-  
-  <div id="quality" style="width: 600px; height: 600px">
+
+
+<!--TODO Diagramm in Box schieben-->
+ <div id="qualityContainer">
     <h1>Quality</h1>
+   <div id="quality" style="width: 600px; height: 600px"> 
   </div>
+ </div>
   
-  <div id="Store-revenue" style="width: 600px; height: 600px">
+  <div id="Store-revenueContainer">
     <h1>Store Revenue</h1>
+    <div id="Store-revenue" style="height: 600px">
+    </div>
   </div>
+
+  <div id="heatmapContainer">
+    <h1>Pizzas sold together</h1>
+    <div id="Heatmap" style="width: 1300px; height: 600px">
+    </div>
+  </div>
+
+  <div id="PizzaSizeContainer">
+    <h1>Ordered Pizza Sizes</h1>
+    <div id="PizzaSize" style="width: 400px; height: 400px">
+    </div>
+  </div>
+
+  <div id="abcContainer">
+    <h1>ABC Analysis</h1>
+    <div id="abc" style="width: 600px; height: 600px">
+    </div>
+  </div>
+
+  <div id="pizzaIngredientsContainer">
+    <h1>Ingredient Consumption in kg per Week</h1>
+    <div id="pizzaIngredients" style="width: 600px; height: 600px">
+    </div>
+ <!--
   <div id="Heatmap" style="width: 900px; height: 600px">
-    <h1>Piizas sold together</h1>
+    <h1>Pizzas sold together</h1>
   </div>
   <div id="PizzaSize" style="width: 400px; height: 400px">
     <h1>Ordered Pizza Sizes</h1>
@@ -53,7 +94,7 @@
   </div>
   <div id="pizzaIngredients" style="width: 600px; height: 600px">
     <h1>Ingredient Consumption in kg per Week</h1>
-  </div>
+  </div>-->
 </body>
 <script>
   backButton();

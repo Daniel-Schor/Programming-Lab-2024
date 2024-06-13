@@ -3,31 +3,37 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding: 20px;
-  background-color: rgb(249, 247, 247);
+  background-color: #949494
 }
 
-
-
-#quality,
-#Store-revenue,
-#Heatmap,
-#PizzaSize {
-  width: 100%;
-  height: 100%;
-  outline: 4px solid rgb(116, 116, 116);
-}
-
-#statsOverviewContainer {
-  grid-column: span 1;
-}
 .active {
   background-color: #c0c0c0;
 }
 
-
-
 .chart {
   width: 48%;
+}
+
+#dashboardContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #ffffff /*#f0f0f0*/;
+}
+#dashboard {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#dashboardTitle {
+  text-align: center;
+  font-size: 30px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #c0c0c0;
+  padding-bottom: 5px;
 }
 
 #statsOverviewContainer {
@@ -43,6 +49,14 @@ body {
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+#statsOverviewTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #c0c0c0;
+  padding-bottom: 5px;
 }
 
 .stat-item {
@@ -65,16 +79,143 @@ body {
   font-size: 14px;
 }
 
-.customdate {
+#qualityContainer{
   margin-top: 20px;
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #ffffff /*#f0f0f0*/;
 }
 
-#statsOverviewTitle {
+#quality {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#qualityTitle {
   text-align: center;
   font-size: 24px;
   margin: 0 0 10px;
-  border-bottom: 2px solid #c0c0c0;
+  border-bottom: 2px solid #ffffff;
   padding-bottom: 5px;
+}
+
+#Store-revenueContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #ffffff /*#f0f0f0*/;
+}
+
+#Store-revenue {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#Store-revenueTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 5px;
+}
+
+#heatmapContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #ffffff /*#f0f0f0*/;
+}
+
+#heatmap {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#heatmapTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 5px;
+}
+
+#pizzaSizeContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #ffffff /*#f0f0f0*/;
+}
+
+#PizzaSize {
+  width: 100%;
+  height: 100%;
+  outline: 4px solid rgb(116, 116, 116);
+}
+
+#pizzaSizeTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 5px;
+}
+
+#abcContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #ffffff /*#f0f0f0*/;
+}
+
+#abc {
+  width: 100%;
+  height: 100%;
+  outline: 4px solid rgb(116, 116, 116);
+}
+
+#abcTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 5px;
+}
+
+#pizzaIngredientsContainer {
+  margin-top: 20px;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #ffffff /*#f0f0f0*/;
+}
+
+#PizzaIngredients {
+  width: 100%;
+  height: 100%;
+  outline: 4px solid rgb(116, 116, 116);
+}
+
+#pizzaIngredientsTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 5px;
+}
+
+.customdate {
+  margin-top: 20px;
 }
 
 .button-container {
