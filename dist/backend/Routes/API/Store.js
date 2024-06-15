@@ -364,5 +364,71 @@ router.get('/ingredientUsage', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+router.get('/abc-analysis-customers', async (req, res) => {
+    try {
+        const query = `
+        WITH total_sales_per_customer AS (
+            SELECT
+                c."customerID",
+                SUM(p.total) AS total_sales
+            FROM
+                public.customers c
+            JOIN
+                public.purchase p ON c."customerID" = p."customerID"
+            GROUP BY
+                c."customerID"
+        ),
+        cumulative_sales_customer AS (
+            SELECT
+                "customerID",
+                total_sales,
+                SUM(total_sales) OVER (ORDER BY total_sales DESC) AS cumulative_sales
+            FROM
+                total_sales_per_customer
+        ),
+        total_sum_sales_all_customer AS (
+            SELECT
+                "customerID",
+                total_sales,
+                cumulative_sales,
+                SUM(total_sales) OVER () AS total_sum_sales
+            FROM
+                cumulative_sales_customer
+        ),
+        abc_analysis AS (
+            SELECT
+                "customerID",
+                total_sales,
+                cumulative_sales,
+                total_sum_sales,
+                cumulative_sales / total_sum_sales AS cumulative_percentage,
+                CASE
+                    WHEN cumulative_sales / total_sum_sales <= 0.8 THEN 'A'
+                    WHEN cumulative_sales / total_sum_sales <= 0.95 THEN 'B'
+                    ELSE 'C'
+                END AS abc_category
+            FROM
+                total_sum_sales_all_customer
+        )
+        SELECT
+            "customerID",
+            total_sales,
+            cumulative_sales,
+            total_sum_sales,
+            cumulative_percentage,
+            abc_category
+        FROM
+            abc_analysis
+        ORDER BY
+            total_sales DESC;
+      `;
+        let result = await client.query(query);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
 export default router;
 //# sourceMappingURL=Store.js.map
