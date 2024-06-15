@@ -295,7 +295,8 @@ router.get('/daily-orders-analysis', async (req, res) => {
     }
 });
 
-//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
+//TODO echarts yannis
+//TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/region-total-product', async (req, res) => {
     try {
         let query: string = `SELECT S."state",S."city",PR."Name" AS PRODUCT_NAME,SUM(P."nItems") AS TOTAL_QUANTITY FROM PURCHASE P JOIN "purchaseItems" PI ON P."purchaseID" = PI."purchaseID" JOIN PRODUCTS PR ON PI."SKU" = PR."SKU" JOIN STORES S ON P."storeID" = S."storeID" GROUP BY S."state",S."city",PR."Name" ORDER BY S."state",S."city",TOTAL_QUANTITY DESC;`;
@@ -309,7 +310,8 @@ router.get('/region-total-product', async (req, res) => {
     }
 });
 
-//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
+//TODO echarts Yannis
+//TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
         let query: string = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
@@ -421,6 +423,7 @@ router.get('/ingredientUsage', async (req, res) => {
     }
 });
 
+//TODO echarts yannis
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
   
