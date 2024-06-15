@@ -67,11 +67,11 @@ router.get('/pizzaPairs', async (req, res) => {
     try {
         // Extract date and storeID from query parameters
         let date: string = req.query.date || process.env.DEFAULT_DATE;
-        let storeID: string = req.query.store ;
+        let storeID: string = req.query.store;
         let parameter = [date, storeID];
 
         // Initialize parameters array for SQL query
-        
+
 
         // Create query to count pairs of pizzas purchased together with storeID filter
         const query = `
@@ -295,7 +295,9 @@ router.get('/daily-orders-analysis', async (req, res) => {
     }
 });
 
-//TODO echarts yannis
+//TODO integration in maps yannis
+//TODO das ist franchise view. yannis
+//TODO parse sql statement into queries file yannis
 //TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/region-total-product', async (req, res) => {
     try {
@@ -311,6 +313,8 @@ router.get('/region-total-product', async (req, res) => {
 });
 
 //TODO echarts Yannis
+//TODO das ist franchise view, nun für jeden store. yannis
+//TODO parse sql statement into queries file yannis
 //TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
@@ -397,10 +401,12 @@ router.get('/ingredientUsage', async (req, res) => {
 });
 
 //TODO echarts yannis
+//TODO das ist franchise view, nun für jeden store. yannis
+//TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
-  
-      const query = `
+
+        const query = `
         WITH total_sales_per_customer AS (
             SELECT
                 c."customerID",
@@ -456,7 +462,81 @@ router.get('/abc-analysis-customers', async (req, res) => {
         ORDER BY
             total_sales DESC;
       `;
-  
+
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+//TODO echarts yannis
+//TODO das ist franchise view, nun für jeden store. yannis
+//TODO parse sql statement into queries file yannis
+router.get('/abc-analysis-pizza', async (req, res) => {
+    try {
+
+      const query = `
+        WITH total_sales_per_product AS (
+            SELECT
+                p."SKU",
+                SUM(pch.total) AS total_sales
+            FROM
+                public.products p
+            JOIN
+                public."purchaseItems" pi ON p."SKU" = pi."SKU"
+            JOIN
+                public.purchase pch ON pi."purchaseID" = pch."purchaseID"
+            GROUP BY
+                p."SKU"
+        ),
+        cumulative_sales_product AS (
+            SELECT
+                "SKU",
+                total_sales,
+                SUM(total_sales) OVER (ORDER BY total_sales DESC) AS cumulative_sales
+            FROM
+                total_sales_per_product
+        ),
+        total_sum_sales_all_product AS (
+            SELECT
+                "SKU",
+                total_sales,
+                cumulative_sales,
+                SUM(total_sales) OVER () AS total_sum_sales
+            FROM
+                cumulative_sales_product
+        ),
+        abc_analysis AS (
+            SELECT
+                "SKU",
+                total_sales,
+                cumulative_sales,
+                total_sum_sales,
+                cumulative_sales / total_sum_sales AS cumulative_percentage,
+                CASE
+                    WHEN cumulative_sales / total_sum_sales <= 0.8 THEN 'A'
+                    WHEN cumulative_sales / total_sum_sales <= 0.95 THEN 'B'
+                    ELSE 'C'
+                END AS abc_category
+            FROM
+                total_sum_sales_all_product
+        )
+        SELECT
+            "SKU",
+            total_sales,
+            cumulative_sales,
+            total_sum_sales,
+            cumulative_percentage,
+            abc_category
+        FROM
+            abc_analysis
+        ORDER BY
+            total_sales DESC;
+      `;
+
       let result = await client.query(query);
   
       res.status(200).json(result.rows);

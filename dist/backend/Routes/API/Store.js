@@ -253,7 +253,10 @@ router.get('/daily-orders-analysis', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
+//TODO integration in maps yannis
+//TODO das ist franchise view. yannis
+//TODO parse sql statement into queries file yannis
+//TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/region-total-product', async (req, res) => {
     try {
         let query = `SELECT S."state",S."city",PR."Name" AS PRODUCT_NAME,SUM(P."nItems") AS TOTAL_QUANTITY FROM PURCHASE P JOIN "purchaseItems" PI ON P."purchaseID" = PI."purchaseID" JOIN PRODUCTS PR ON PI."SKU" = PR."SKU" JOIN STORES S ON P."storeID" = S."storeID" GROUP BY S."state",S."city",PR."Name" ORDER BY S."state",S."city",TOTAL_QUANTITY DESC;`;
@@ -265,34 +268,13 @@ router.get('/region-total-product', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts ; outsource sql ; check location (is Store.ts right place?)
+//TODO echarts Yannis
+//TODO das ist franchise view, nun für jeden store. yannis
+//TODO parse sql statement into queries file yannis
+//TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
         let query = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
-        let result = await client.query(query);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-//obsolete is now abc-analysis costumers
-router.get('/Customer-Segmentation-Analysis', async (req, res) => {
-    try {
-        let query = `SELECT C."customerID",AVG(P."total") AS AVG_SPENT_PER_PURCHASE,COUNT(P."purchaseID") AS TOTAL_PURCHASES,MAX(P."purchaseDate") - MIN(P."purchaseDate") AS CUSTOMER_LIFETIME,C."latitude",C."longitude" FROM "customers" C JOIN PURCHASE P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
-        let result = await client.query(query);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-//obsolete is now abc-analysis costumers
-router.get('/Customer-Lifetime-Value', async (req, res) => {
-    try {
-        let query = `SELECT C."customerID",AVG(P."total") AS avg_spent_per_purchase,COUNT(P."purchaseID") AS total_purchases,SUM(P."total") AS total_spent,(SUM(P."total") / COUNT(P."purchaseID")) * COUNT(P."purchaseID") AS clv FROM customers C JOIN purchase P ON C."customerID" = P."customerID" GROUP BY C."customerID";`;
         let result = await client.query(query);
         res.status(200).json(result.rows);
     }
@@ -364,6 +346,9 @@ router.get('/ingredientUsage', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+//TODO echarts yannis
+//TODO das ist franchise view, nun für jeden store. yannis
+//TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
         const query = `
@@ -412,6 +397,77 @@ router.get('/abc-analysis-customers', async (req, res) => {
         )
         SELECT
             "customerID",
+            total_sales,
+            cumulative_sales,
+            total_sum_sales,
+            cumulative_percentage,
+            abc_category
+        FROM
+            abc_analysis
+        ORDER BY
+            total_sales DESC;
+      `;
+        let result = await client.query(query);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+//TODO echarts yannis
+//TODO das ist franchise view, nun für jeden store. yannis
+//TODO parse sql statement into queries file yannis
+router.get('/abc-analysis-pizza', async (req, res) => {
+    try {
+        const query = `
+        WITH total_sales_per_product AS (
+            SELECT
+                p."SKU",
+                SUM(pch.total) AS total_sales
+            FROM
+                public.products p
+            JOIN
+                public."purchaseItems" pi ON p."SKU" = pi."SKU"
+            JOIN
+                public.purchase pch ON pi."purchaseID" = pch."purchaseID"
+            GROUP BY
+                p."SKU"
+        ),
+        cumulative_sales_product AS (
+            SELECT
+                "SKU",
+                total_sales,
+                SUM(total_sales) OVER (ORDER BY total_sales DESC) AS cumulative_sales
+            FROM
+                total_sales_per_product
+        ),
+        total_sum_sales_all_product AS (
+            SELECT
+                "SKU",
+                total_sales,
+                cumulative_sales,
+                SUM(total_sales) OVER () AS total_sum_sales
+            FROM
+                cumulative_sales_product
+        ),
+        abc_analysis AS (
+            SELECT
+                "SKU",
+                total_sales,
+                cumulative_sales,
+                total_sum_sales,
+                cumulative_sales / total_sum_sales AS cumulative_percentage,
+                CASE
+                    WHEN cumulative_sales / total_sum_sales <= 0.8 THEN 'A'
+                    WHEN cumulative_sales / total_sum_sales <= 0.95 THEN 'B'
+                    ELSE 'C'
+                END AS abc_category
+            FROM
+                total_sum_sales_all_product
+        )
+        SELECT
+            "SKU",
             total_sales,
             cumulative_sales,
             total_sum_sales,
