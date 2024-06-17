@@ -50,12 +50,17 @@
               
           </ul>
       </nav>
+      <div id="mapS"></div>
       <label for="nav_check" class="menu_button">
           <div></div>
           <div></div>
           <div></div>
       </label>
   </header>
+  <script>
+    var map = L.map('mapS').setView([37.7749, -122.4194], 5);
+    storeLocationMap();
+  </script>
 
 <!--TODO add menu button-->
   <div id="dashboardContainer">
@@ -112,7 +117,7 @@
     </div>
 
   <script>
-    const map = L.map('map').setView([37.7749, -122.4194], 5);
+    var map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();
     </script>
   <script>
