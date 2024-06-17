@@ -231,6 +231,8 @@ body {
 
 /*Revenue Container*/
 #revenueContainer {
+  width:50%;
+  height: 650px;
     margin-top: 20px;
     border: 2px solid #c0c0c0;
     border-radius: 10px;
@@ -239,7 +241,7 @@ body {
   }
 
   #revenue {
-    width: 50%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 10px;
