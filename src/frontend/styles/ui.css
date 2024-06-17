@@ -60,3 +60,33 @@ header nav ul li a.active {
         margin: 2px 0;
     }
 }
+.store-list {
+    display: none;
+    list-style-type: none; /* Optional: removes bullet points from nested lists */
+    padding-left: 20px; /* Optional: indents the nested list */
+  }
+  
+  /* Show the store list when the show class is added */
+  .store-list.show {
+    display: block;
+  }
+  
+  /* Optional: Styling for the city buttons */
+  .city-button {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  
+  /* Ensure the button is above any underlying elements */
+  .city-button {
+    position: relative;
+    z-index: 10;
+  }

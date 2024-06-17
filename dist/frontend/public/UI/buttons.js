@@ -4,20 +4,48 @@ function sideBar() {
     fetch("/api/Stores")
         .then((response) => response.json())
         .then((data) => {
-        stores = data;
+        // Group stores by city
+        var groupedStores = data.reduce((acc, store) => {
+            if (!acc[store.city]) {
+                acc[store.city] = [];
+            }
+            acc[store.city].push(store);
+            return acc;
+        }, {});
+        return groupedStores;
     })
-        .then(() => {
+        .then((groupedStores) => {
         var ul = document.querySelector("header nav ul");
-        stores.forEach(function (store) {
-            // Create a new <li> element
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            a.href = `/individualStore?store=${store.storeID}`;
-            localStorage.setItem("store", JSON.stringify({ storeID: store.storeID }));
-            a.textContent = store.storeID;
-            li.appendChild(a);
-            ul.appendChild(li);
-        });
+        // Loop through each city in groupedStores
+        for (var city in groupedStores) {
+            if (groupedStores.hasOwnProperty(city)) {
+                // Create a city <li> element with a button to toggle the dropdown
+                var cityLi = document.createElement("li");
+                var cityButton = document.createElement("button");
+                cityButton.textContent = city;
+                cityButton.classList.add("city-button");
+                cityButton.onclick = function () {
+                    this.nextElementSibling.classList.toggle("show");
+                };
+                cityLi.appendChild(cityButton);
+                ul.appendChild(cityLi);
+                // Create a nested <ul> for the stores in this city, initially hidden
+                var cityUl = document.createElement("ul");
+                cityUl.classList.add("store-list");
+                // Loop through the stores in the current city
+                groupedStores[city].forEach(function (store) {
+                    // Create a new <li> element for each store
+                    var storeLi = document.createElement("li");
+                    var a = document.createElement("a");
+                    a.href = `/individualStore?store=${store.storeID}`;
+                    localStorage.setItem("store", JSON.stringify({ storeID: store.storeID }));
+                    a.textContent = store.storeID;
+                    storeLi.appendChild(a);
+                    cityUl.appendChild(storeLi);
+                });
+                cityLi.appendChild(cityUl);
+            }
+        }
     });
 }
 function subtractMonths(date, months) {

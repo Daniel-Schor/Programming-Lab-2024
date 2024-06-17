@@ -285,7 +285,7 @@ router.get('/pizza-price-popularity', async (req, res) => {
 });
 router.get('/Stores', async (req, res) => {
     try {
-        let query = `SELECT "storeID" FROM stores`;
+        let query = `SELECT "storeID", "city" FROM stores`;
         let result = await client.query(query);
         res.status(200).json(result.rows);
     }
