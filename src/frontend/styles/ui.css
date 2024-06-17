@@ -25,13 +25,16 @@ header nav ul li a.active {
 }
 .menu_button {
     cursor: pointer;
-    display: none;
+    display: block; 
+    position: absolute;
+    top: 0;
+    left: 5; 
 }
+
 .menu_button div {
     width: 30px;
     height: 4px;
-    margin: -4px 0;
-    margin-top: -10px;
+    margin: 6px 0;
     background: #000;
 }
 @media only screen  {
@@ -62,16 +65,16 @@ header nav ul li a.active {
 }
 .store-list {
     display: none;
-    list-style-type: none; /* Optional: removes bullet points from nested lists */
-    padding-left: 20px; /* Optional: indents the nested list */
+    list-style-type: none; 
+    padding-left: 20px; 
   }
   
-  /* Show the store list when the show class is added */
+  
   .store-list.show {
     display: block;
   }
   
-  /* Optional: Styling for the city buttons */
+ 
   .city-button {
     background: none;
     border: none;
@@ -85,7 +88,7 @@ header nav ul li a.active {
     text-align: left;
   }
   
-  /* Ensure the button is above any underlying elements */
+  
   .city-button {
     position: relative;
     z-index: 10;

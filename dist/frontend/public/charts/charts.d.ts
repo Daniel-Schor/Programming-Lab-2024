@@ -14,4 +14,4 @@ declare function customButton(): Promise<void>;
 declare function revenueChart(best?: boolean, storeIDs?: never[], storeColors?: {}, date?: string): Promise<unknown>;
 declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean, date?: string): Promise<unknown>;
 declare function addMarkers(stores: any): void;
-declare function storeLocationMap(): void;
+declare function storeLocationMap(map: any): void;

@@ -19,7 +19,7 @@ function sideBar() {
       // Loop through each city in groupedStores
       for (var city in groupedStores) {
         if (groupedStores.hasOwnProperty(city)) {
-          // Create a city <li> element with a button to toggle the dropdown
+          
           var cityLi = document.createElement("li");
           var cityButton = document.createElement("button");
           cityButton.textContent = city;
@@ -30,13 +30,13 @@ function sideBar() {
           cityLi.appendChild(cityButton);
           ul.appendChild(cityLi);
 
-          // Create a nested <ul> for the stores in this city, initially hidden
+          
           var cityUl = document.createElement("ul");
           cityUl.classList.add("store-list");
 
-          // Loop through the stores in the current city
+          
           groupedStores[city].forEach(function (store) {
-            // Create a new <li> element for each store
+            
             var storeLi = document.createElement("li");
             var a = document.createElement("a");
             a.href = `/individualStore?store=${store.storeID}`;

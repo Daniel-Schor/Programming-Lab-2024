@@ -318,7 +318,7 @@ function addMarkers(stores) {
   });
 }
 
-function storeLocationMap(){
+function storeLocationMap(map){
 
         // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
