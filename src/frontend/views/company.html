@@ -18,7 +18,7 @@
     #map { height: 600px; width: 50%; }
     #statsOverviewContainer { width : 50%; height: 150px; }
     #avCustomerContainer { width: 50%; height: 150px; }
-    #revenueBarContainer { width: 50%; height: 650px; }
+    #revenueBarContainer { width: 50%; height: 600px; }
     #placeholderContainer { width: 30%; height: 600px; }
     #placeholderContainer2 { width: 30%; height: 600px; }
     </style>
@@ -57,11 +57,6 @@
           <div></div>
       </label>
   </header>
-  <script>
-    var map = L.map('mapS').setView([37.7749, -122.4194], 5);
-    storeLocationMap();
-  </script>
-
 <!--TODO add menu button-->
   <div id="dashboardContainer">
     <h1 id="dashboardTitle">@Pizza Hub</h1>  
@@ -69,7 +64,6 @@
   <div id="generalStatsContainer">  
     <h2 id="generalStatsTitle">General Statistics</h2>  
     <div id="statsOverviewContainer"> 
-        
       <!--TODO add chosen date or (last week, month, year)-->
       <h3>Statistics <!--for "customDate" </time>--></h3>
       <div id="statsOverview"></div>
@@ -110,14 +104,14 @@
 
     <div id="mapContainer">
       <h2>All Stores in the US</h2>
-    <div id="map">
+    <div id="map" style="height: 600; width: 600;">
       
     </div>  
     </div>
     </div>
 
   <script>
-    var map = L.map('map').setView([37.7749, -122.4194], 5);
+    const map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();
     </script>
   <script>
