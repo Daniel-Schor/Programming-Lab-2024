@@ -489,6 +489,12 @@ router.get('/abc-analysis-customers', async (req, res) => {
 //TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
+        const storeID = req.query.storeID;
+        const date = req.query.date;
+
+        if (!storeID || !date) {
+            return res.status(400).send('StoreID is required');
+        }
 
         const query = `
         WITH total_sales_per_product AS (
@@ -501,6 +507,10 @@ router.get('/abc-analysis-pizza', async (req, res) => {
                 public."purchaseItems" pi ON p."SKU" = pi."SKU"
             JOIN
                 public.purchase pch ON pi."purchaseID" = pch."purchaseID"
+            JOIN
+                public.stores s ON pch."storeID" = s."storeID"
+            WHERE
+                pch."storeID" = $1 AND pch."purchaseDate" > $2
             GROUP BY
                 p."SKU"
         ),
@@ -549,7 +559,9 @@ router.get('/abc-analysis-pizza', async (req, res) => {
             total_sales DESC;
       `;
 
-        let result = await client.query(query);
+        const parameters = [storeID, date];
+
+        const result = await client.query(query, parameters);
 
         res.status(200).json(result.rows);
     } catch (err) {
