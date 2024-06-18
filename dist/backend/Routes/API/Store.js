@@ -351,10 +351,12 @@ router.get('/ingredientUsage', async (req, res) => {
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
         const storeID = req.query.storeID;
-        if (!storeID) {
+        const date = req.query.date;
+        if (!storeID || !date) {
             return res.status(400).send('StoreID is required');
         }
         console.log(`Received storeID: ${storeID}`);
+        console.log(`Received date: ${date}`);
         const query = `
         WITH total_sales_per_customer AS (
             SELECT
@@ -365,7 +367,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
             JOIN
                 public.purchase p ON c."customerID" = p."customerID"
             JOIN public.stores s ON p."storeID" = s."storeID"
-            WHERE p."storeID" = $1
+            WHERE p."storeID" = $1 AND p."purchaseDate" > $2
             GROUP BY
                 c."customerID"
         ),
@@ -413,7 +415,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
         ORDER BY
             total_sales DESC;
       `;
-        const parameters = [storeID];
+        const parameters = [storeID, date];
         const result = await client.query(query, parameters);
         res.status(200).json(result.rows);
     }
