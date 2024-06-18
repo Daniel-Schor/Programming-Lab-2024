@@ -318,5 +318,33 @@ router.get('/revenue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+//TODO integration in maps yannis
+//TODO parse sql statement into queries file yannis
+//TODO outsource sql ; check location (is Store.ts right place?)
+router.get('/region-total-product', async (req, res) => {
+    try {
+        let query = `
+        SELECT 
+            S."state",S."city",PR."Name" AS PRODUCT_NAME,SUM(P."nItems") AS TOTAL_QUANTITY 
+        FROM 
+            PURCHASE P 
+        JOIN 
+            "purchaseItems" PI ON P."purchaseID" = PI."purchaseID" 
+        JOIN 
+            PRODUCTS PR ON PI."SKU" = PR."SKU" 
+        JOIN 
+            STORES S ON P."storeID" = S."storeID" 
+        GROUP BY 
+            S."state",S."city",PR."Name" 
+        ORDER BY 
+            S."state",S."city",TOTAL_QUANTITY DESC;`;
+        let result = await client.query(query);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 export default router;
 //# sourceMappingURL=Franchise.js.map
