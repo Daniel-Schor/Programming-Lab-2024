@@ -1,5 +1,6 @@
 body {
-  background-color: #b3b3b3;
+  background-color: black;
+  color: white;
 }
 
 #tooltip{
@@ -44,9 +45,9 @@ body {
 }
 
 
-
+/*sorgt dafür, dass der angeklickte Button rot ist*/
 .active {
-    background-color: #c0c0c0;
+    background-color: red;
   }
 
   .chart-container {
@@ -59,10 +60,10 @@ body {
   }
   #dashboardContainer {
     margin-top: 20px;
-    border: 2px solid #c0c0c0;
+    border: 2px solid #3a3a3a;
     border-radius: 10px;
     padding: 10px;
-    background-color: #ffffff /*#f0f0f0*/;
+    background-color: black /*#f0f0f0*/;
   }
   #dashboard {
     display: flex;
@@ -89,10 +90,10 @@ body {
   /*generalStatsContainer*/
   #generalStatsContainer {
     margin-top: 20px;
-    border: 2px solid #c0c0c0;
+    border: 2px solid #3a3a3a;
     border-radius: 10px;
     padding: 10px;
-    background-color: #ffffff /*#f0f0f0*/;
+    background-color: black /*#f0f0f0*/;
   }
   #generalStats {
     display: flex;
@@ -110,10 +111,10 @@ body {
 
 #statsOverviewContainer {
     margin-top: 20px;
-    border: 2px solid #c0c0c0;
+    border: 2px solid #3a3a3a;
     border-radius: 10px;
     padding: 10px;
-    background-color: #b3b3b3 /*#f0f0f0*/;
+    background-color: black /*#f0f0f0*/;
   }
 
   #statsOverview {
@@ -124,7 +125,7 @@ body {
   } 
 
   .stat-item {
-    background-color: #ffffff/*#f0f0f0*/;
+    background-color: black/*#f0f0f0*/;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -155,42 +156,6 @@ body {
     padding-bottom: 5px;
   }
 
-#avCustomerContainer {
-    margin-top: 20px;
-    border: 2px solid #c0c0c0;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #b3b3b3 /*#f0f0f0*/;
-  }
-
-  #avCustomer {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-  } 
-  .avCustomer-item {
-    background-color: #ffffff/*#f0f0f0*/;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    width: 150px;
-    height: 50px;
-    /*min-width: 150px;*/
-    text-align: center;
-  }
-
-  .avCustomer-item h3 {
-    margin: 0;
-    font-size: 18px;
-  }
-
-  .avCustomer-item p {
-    margin: 5px 0 0;
-    font-size: 14px;
-  }
-
   .button-container {
     display: flex;
     flex-direction: column;
@@ -208,10 +173,10 @@ body {
 /*General Revenue Container*/
 #generalRevenueContainer {
   margin-top: 20px;
-  border: 2px solid #c0c0c0;
+  border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: #b3b3b3 /*#f0f0f0*/;
+  background-color: black /*#f0f0f0*/;
 }
 
 #generalRevenue {
@@ -230,43 +195,35 @@ body {
 }
 
 /*Revenue Container*/
-#revenueContainer {
-  width:50%;
-  height: 650px;
-    margin-top: 20px;
-    border: 2px solid #c0c0c0;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #ffffff /*#f0f0f0*/;
-  }
+#revenueWrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  #revenue {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-  } 
+#revenueContainer, #revenueBarContainer {
+  flex: 1;
+  margin-top: 20px;
+  border: 2px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: black; /* #f0f0f0 for a light grey background */
+  box-sizing: border-box;
+}
 
-/*Revenue Barchart of all Stores*/
-#revenueBarContainer {
-    margin-top: 20px;
-    border: 2px solid #c0c0c0;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #ffffff /*#f0f0f0*/;
-    width: 100%;
-    box-sizing: border-box;
-  }
+#revenue {
+  width: 100%;
+  height: 600px;
+}
 
-  #revenueBar {
-    width: 100%;
-    height: 4000px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-  } 
+#revenueBar {
+  width: 100%;
+  height: 600px;
+}
+
+
 
   /*Map view of all Stores*/
 #sector3Container {
@@ -287,58 +244,41 @@ body {
   padding-bottom: 5px;
 }
 
-#placeholderContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-  background-color: #ffffff /*#f0f0f0*/;
+#placeholder {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap; /* This will allow the containers to wrap to the next line if they overflow */
   width: 100%;
   box-sizing: border-box;
 }
 
-#placeholder {
-  width: 100%;
-  height: 4000px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
+.placeholderContainer {
+  margin-top: 20px;
+  border: 2px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: black; /* #f0f0f0 for a light grey background */
+  flex: 1; /* This will make the containers flexible and take equal space */
+  box-sizing: border-box;
 }
 
-#placeholderTitle {
+.placeholderTitle {
   text-align: center;
   font-size: 24px;
   margin: 0 0 10px;
-  border-bottom: 2px solid /*#c0c0c0*/;
+  border-bottom: 2px solid #c0c0c0; /* Uncomment if you want a border */
   padding-bottom: 5px;
 }
 
-#placeholderContainer2 {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-  background-color: #b3b3b3 /*#f0f0f0*/;
-  width: 100%;
-  box-sizing: border-box;
-}
 
-#placeholder2 {
-  width: 100%;
-  height: 4000px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
 
 #mapContainer {
   margin-top: 20px;
-  border: 2px solid #c0c0c0;
+  border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: #ffffff /*#f0f0f0*/;
+  background-color: black;
   width: 100%;
   box-sizing: border-box;
 }
@@ -349,4 +289,4 @@ body {
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
-} 
+}

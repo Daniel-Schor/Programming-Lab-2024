@@ -23,6 +23,12 @@ header nav ul li a:hover,
 header nav ul li a.active {
     border-bottom-color: dodgerblue;
 }
+.menu-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+}
 .menu_button {
     cursor: pointer;
     display: block; 
@@ -35,8 +41,9 @@ header nav ul li a.active {
     width: 30px;
     height: 4px;
     margin: 6px 0;
-    background: #000;
+    background: #f80101;
 }
+
 @media only screen  {
     header {
         padding: 0 30px;

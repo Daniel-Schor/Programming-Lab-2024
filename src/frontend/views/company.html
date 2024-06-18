@@ -2,6 +2,8 @@
 <html lang="en">
 <!-- //hauptseite mit top 5//
 //css muss in eine extra datei//-->
+<!--TODO Menu Button in eigenen Container packen-->
+<!--TODO Neon farben für Container festlegen-->
 <head>
   <meta charset="UTF-8" />
  
@@ -81,34 +83,38 @@
   <div id="generalRevenueContainer">
     <h2 id="generalRevenueTitle">Revenue</h2>
 <!--TODO ADD DATE AND SORTING FILTER DEPENDENCY-->
-    <div id="revenueContainer">
-    <h2 id="revenueTitleDaily" >Revenue</h2>
-    <div id="revenue" class="chart" style="height: 600px;"></div>
-    </div>
-
-    <div id="revenueBarContainer">
-    <h2>Total Revenue</h2>
-    <div id="revenueBar" class="chart" style="height: 600px; width: 1000px;" >  
-    </div>
-    </div>
+<div id="revenueWrapper">
+  <div id="revenueContainer">
+      <h2 id="revenueTitleDaily">Revenue</h2>
+      <div id="revenue" class="chart" style="height: 600px;"></div>
   </div>
 
-  
-    <div id="placeholderContainer">
-    <h2 id="placeholderTitle">Placeholder</h2>
-    </div>
+  <div id="revenueBarContainer" style="height: 650px;">
+      <h2>Total Revenue</h2>
+      <div id="revenueBar" class="chart" style="height: 600px; width: 1000px;"></div>
+  </div>
+</div>
 
-    <div id="placeholderContainer2">
-    <h2 id="placeholderTitle2">Placeholder2</h2>
-    </div>
+<div id="placeholder">
+  <div class="placeholderContainer">
+      <h2 class="placeholderTitle">Placeholder</h2>
+  </div>
 
-    <div id="mapContainer">
+  <div class="placeholderContainer">
+      <h2 class="placeholderTitle">Placeholder 2</h2>
+  </div>
+</div>
+
+
+      
+  </div>
+    <div id="mapContainer" style="width: 50%;">
       <h2>All Stores in the US</h2>
-    <div id="map" style="height: 600; width: 600;">
+    <div id="map" style="height: 600; width: 100%;">
       
     </div>  
     </div>
-    </div>
+  </div>
 
   <script>
     const map = L.map('map').setView([37.7749, -122.4194], 5);
