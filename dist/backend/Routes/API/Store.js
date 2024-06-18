@@ -274,8 +274,29 @@ router.get('/region-total-product', async (req, res) => {
 //TODO outsource sql ; check location (is Store.ts right place?)
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
-        let query = `SELECT pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, COUNT(pi."purchaseID") AS total_sales FROM products pr JOIN "purchaseItems" pi ON pr."SKU" = pi."SKU" JOIN purchase p ON pi."purchaseID" = p."purchaseID" GROUP BY pr."Name", pr."Size", pr."Price" ORDER BY total_sales DESC;`;
-        let result = await client.query(query);
+        const storeID = req.query.storeID;
+        const date = req.query.date;
+        if (!storeID || !date) {
+            return res.status(400).send('StoreID is required');
+        }
+        console.log(`Received storeID: ${storeID}`);
+        console.log(`Received date: ${date}`);
+        let query = `
+        SELECT 
+            pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, 
+            COUNT(pi."purchaseID") AS total_sales 
+        FROM
+            products pr 
+        JOIN 
+            "purchaseItems" pi ON pr."SKU" = pi."SKU" 
+        JOIN 
+            purchase p ON pi."purchaseID" = p."purchaseID"
+        WHERE
+            p."storeID" = $1 AND p."purchaseDate" > $2
+        GROUP BY pr."Name", pr."Size", pr."Price" 
+        ORDER BY total_sales DESC;`;
+        const parameters = [storeID, date];
+        const result = await client.query(query, parameters);
         res.status(200).json(result.rows);
     }
     catch (err) {
@@ -366,8 +387,10 @@ router.get('/abc-analysis-customers', async (req, res) => {
                 public.customers c
             JOIN
                 public.purchase p ON c."customerID" = p."customerID"
-            JOIN public.stores s ON p."storeID" = s."storeID"
-            WHERE p."storeID" = $1 AND p."purchaseDate" > $2
+            JOIN 
+                public.stores s ON p."storeID" = s."storeID"
+            WHERE
+                p."storeID" = $1 AND p."purchaseDate" > $2
             GROUP BY
                 c."customerID"
         ),
@@ -425,7 +448,6 @@ router.get('/abc-analysis-customers', async (req, res) => {
     }
 });
 //TODO echarts yannis
-//TODO das ist franchise view, nun für jeden store. yannis
 //TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
