@@ -401,10 +401,16 @@ router.get('/ingredientUsage', async (req, res) => {
 });
 
 //TODO echarts yannis
-//TODO das ist franchise view, nun für jeden store. yannis
 //TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
+        const storeID = req.query.storeID;
+
+        if (!storeID) {
+            return res.status(400).send('StoreID is required');
+        }
+
+        console.log(`Received storeID: ${storeID}`);
 
         const query = `
         WITH total_sales_per_customer AS (
@@ -415,6 +421,8 @@ router.get('/abc-analysis-customers', async (req, res) => {
                 public.customers c
             JOIN
                 public.purchase p ON c."customerID" = p."customerID"
+            JOIN public.stores s ON p."storeID" = s."storeID"
+            WHERE p."storeID" = $1
             GROUP BY
                 c."customerID"
         ),
@@ -463,7 +471,9 @@ router.get('/abc-analysis-customers', async (req, res) => {
             total_sales DESC;
       `;
 
-        let result = await client.query(query);
+        const parameters = [storeID];
+
+        const result = await client.query(query, parameters);
 
         res.status(200).json(result.rows);
     } catch (err) {
@@ -478,7 +488,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
 
-      const query = `
+        const query = `
         WITH total_sales_per_product AS (
             SELECT
                 p."SKU",
@@ -537,13 +547,13 @@ router.get('/abc-analysis-pizza', async (req, res) => {
             total_sales DESC;
       `;
 
-      let result = await client.query(query);
-  
-      res.status(200).json(result.rows);
+        let result = await client.query(query);
+
+        res.status(200).json(result.rows);
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+        console.error(err);
+        res.status(500).send('Internal Server Error');
     }
-  });
+});
 
 export default router;
