@@ -349,18 +349,29 @@ function pizzaIngredients(date = "2022-12-01") {
         console.log(data);
         // Parse the fetched data to create series data
         const ingredients = {};
+        let minQuantity = Number.MAX_VALUE;
+        let maxQuantity = Number.MIN_VALUE;
         data.forEach((item) => {
-            if (!ingredients[item.ingredient.trim()]) {
-                ingredients[item.ingredient.trim()] = 0;
+            const ingredient = item.ingredient.trim();
+            const averageQuantity = parseFloat(item.average_quantity);
+            // Update min and max values
+            if (averageQuantity < minQuantity)
+                minQuantity = averageQuantity;
+            if (averageQuantity > maxQuantity)
+                maxQuantity = averageQuantity;
+            if (!ingredients[ingredient]) {
+                ingredients[ingredient] = 0;
             }
-            ingredients[item.ingredient.trim()] += item.average_quantity;
+            ingredients[ingredient] += averageQuantity;
         });
+        // Normalize the values
+        const normalize = (value) => (value - minQuantity) / (maxQuantity - minQuantity) * 100;
         const xAxisData = Object.keys(ingredients);
         const seriesData = xAxisData.map(ingredient => ({
             name: ingredient,
             type: 'bar',
             emphasis: { focus: 'series' },
-            data: [ingredients[ingredient]]
+            data: [normalize(ingredients[ingredient]).toFixed(2)] // Normalize and round to 2 decimal places
         }));
         option = {
             tooltip: {
@@ -375,6 +386,14 @@ function pizzaIngredients(date = "2022-12-01") {
                     acc[ingredient] = false; // Start with all series deselected
                     return acc;
                 }, {}),
+                bottom: 10, // Position the legend at the bottom
+                left: 'center', // Center the legend
+            },
+            grid: {
+                top: '10%', // Adjust the top margin
+                bottom: '20%', // Adjust the bottom margin for legend
+                left: '10%', // Adjust the left margin
+                right: '10%', // Adjust the right margin
             },
             toolbox: {
                 show: true,
@@ -399,6 +418,12 @@ function pizzaIngredients(date = "2022-12-01") {
             yAxis: [
                 {
                     type: "value",
+                    min: 0, // Ensure the Y-axis starts at 0
+                    max: 100, // Normalized max value
+                    interval: 10, // Set a suitable interval for the values
+                    axisLabel: {
+                        formatter: '{value}', // Add a unit if necessary, e.g., '{value} units'
+                    }
                 },
             ],
             series: seriesData,
