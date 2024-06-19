@@ -12,7 +12,7 @@ header nav ul {
 }
 header nav ul li a {
     display: inline-block;
-    color: #000;
+    color: white;
     padding: 5px 0;
     margin: 0 10px;
     border: 3px solid transparent;
@@ -41,7 +41,7 @@ header nav ul li a.active {
     width: 30px;
     height: 4px;
     margin: 6px 0;
-    background: #f80101;
+    background: #FF4500;
 }
 
 @media only screen  {
@@ -73,12 +73,13 @@ header nav ul li a.active {
 .store-list {
     display: none;
     list-style-type: none; /* Optional: removes bullet points from nested lists */
-    padding-left: 20px; /* Optional: indents the nested list */
+    padding-left: 20px;/* Optional: indents the nested list */
   }
   
   /* Show the store list when the show class is added */
   .store-list.show {
     display: block;
+    color: white;
   }
   
   /* Styling for the city buttons */
