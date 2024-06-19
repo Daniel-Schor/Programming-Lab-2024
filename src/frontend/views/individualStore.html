@@ -7,7 +7,9 @@
 4. Container Placement to be asymmetric (two boxes in one row, three in the next)-->
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="/style/ui.css">
   <link rel="stylesheet" type="text/css" href="/style/individualStyle.css">
+  
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/indivivdualCharts.js" type="text/javascript"></script>
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
@@ -19,26 +21,41 @@
   #pizzaSizeContainer {width: 400px; height: 500px;}
   #abcContainer {width: 600px; height: 700px;}
   #pizzaIngredientsContainer {width: 600px; height: 700px;}
+  
   </style>
 </head>
 
 <body>
-<!--TODO add store ID-->
-<div id="dashboardContainer">
-  <h3 id="dashboardTitle">@Pizza Hub - Store</h3>
-  <div id="UI">
-  <button id="redirectButton">MainPage</button>
-  <button id="Last-Year">Last Year</button>
-  <button id="Last-Quarter">Last Quarter</button>
-  <button id="Last-Month">Last Month</button>
-  <div class="customdate" id="customDateForm">
-    <form id="dateForm">
-      <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
-      <button id="customDate">"Custom Date"</button>
-    </form>
+  <header>
+    <h1 id="dashboardTitle">@Pizza Hub - Store ID: </h1>
+    <input type="checkbox" id="nav_check" hidden>
+    <nav>
+      <ul>
+        <!-- Store items will be populated here -->
+      </ul>
+    </nav>
+    <label for="nav_check" class="menu_button">
+      <div></div>
+      <div></div>
+      <div></div>
+    </label>
+  </header>
+
+  <!-- Dashboard Container -->
+  <div id="dashboardContainer">
+    <div id="UI">
+      <button id="redirectButton">MainPage</button>
+      <button id="Last-Year">Last Year</button>
+      <button id="Last-Quarter">Last Quarter</button>
+      <button id="Last-Month">Last Month</button>
+      <div class="customdate" id="customDateForm">
+        <form id="dateForm">
+          <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+          <button id="customDate">Custom Date</button>
+        </form>
+      </div>
+    </div>
   </div>
-  </div>
-</div>
 
 
   <div id="statsOverviewContainer">
@@ -96,9 +113,10 @@
     <h1>Ingredient Consumption in kg per Week</h1>
   </div>-->
 </body>
-<script>
+<script>sideBar();
   backButton();
   timeButtons();
+  
   
   statOverview();
   customDate();

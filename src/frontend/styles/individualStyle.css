@@ -1,9 +1,6 @@
 body {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 20px;
-  background-color: #b3b3b3;
+  background-color: black;
+  color: white;
 }
 
 
