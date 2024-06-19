@@ -1,6 +1,6 @@
 /* General body styling */
 body {
-  background-color: black;
+  background-color: #1B1B1B;
   color: white;
 }
 
@@ -104,7 +104,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
 }
 
 #dashboard {
@@ -130,7 +130,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
 }
 
 #generalStats {
@@ -153,7 +153,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
 }
 
 #statsOverview {
@@ -164,7 +164,7 @@ body {
 }
 
 .stat-item {
-  background-color: black;
+  
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -201,7 +201,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
 }
 
 #generalRevenue {
@@ -234,7 +234,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
   box-sizing: border-box;
 }
 
@@ -280,7 +280,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
   flex: 1;
   box-sizing: border-box;
 }
@@ -298,7 +298,7 @@ body {
   border: 2px solid #3a3a3a;
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  
   width: 100%;
   box-sizing: border-box;
 }
