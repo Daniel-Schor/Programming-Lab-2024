@@ -57,7 +57,7 @@ header nav ul li a.active {
         position: absolute;
         width: 10%;
         left: -100%;
-        background-color: #b3b3b3;
+        background-color: black;
         transition: 0.3s;
     }
     header #nav_check:checked ~ nav {
@@ -72,20 +72,20 @@ header nav ul li a.active {
 }
 .store-list {
     display: none;
-    list-style-type: none; 
-    padding-left: 20px; 
+    list-style-type: none; /* Optional: removes bullet points from nested lists */
+    padding-left: 20px; /* Optional: indents the nested list */
   }
   
-  
+  /* Show the store list when the show class is added */
   .store-list.show {
     display: block;
   }
   
- 
+  /* Styling for the city buttons */
   .city-button {
     background: none;
     border: none;
-    color: black;
+    color: white; /* Set text color to white */
     cursor: pointer;
     text-align: left;
     padding: 10px;
@@ -95,7 +95,7 @@ header nav ul li a.active {
     text-align: left;
   }
   
-  
+  /* Ensure the button is above any underlying elements */
   .city-button {
     position: relative;
     z-index: 10;
