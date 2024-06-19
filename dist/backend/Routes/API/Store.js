@@ -328,16 +328,13 @@ router.get('/ingredientUsage', async (req, res) => {
             )
             SELECT
                 ingredient,
-                EXTRACT(DOW FROM "purchaseDate") AS day_of_week,
                 AVG("nItems") AS average_quantity
             FROM
                 ingredients_split
             GROUP BY
-                ingredient,
-                EXTRACT(DOW FROM "purchaseDate")
+                ingredient
             ORDER BY
-                ingredient,
-                EXTRACT(DOW FROM "purchaseDate");
+                ingredient;
         `;
         // Parameters for the query
         const parameters = [storeID, date];

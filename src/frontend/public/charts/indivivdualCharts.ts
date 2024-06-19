@@ -398,21 +398,19 @@ function pizzaIngredients(date = "2022-12-01") {
       // Parse the fetched data to create series data
       const ingredients = {};
       data.forEach((item) => {
-        const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
-          item.day_of_week
-        ];
         if (!ingredients[item.ingredient.trim()]) {
-          ingredients[item.ingredient.trim()] = {
-            name: item.ingredient.trim(),
-            type: "bar",
-            emphasis: { focus: "series" },
-            data: [],
-          };
+          ingredients[item.ingredient.trim()] = 0;
         }
-        ingredients[item.ingredient.trim()].data.push(item.average_quantity);
+        ingredients[item.ingredient.trim()] += item.average_quantity;
       });
 
-      const seriesData = Object.values(ingredients);
+      const xAxisData = Object.keys(ingredients);
+      const seriesData = xAxisData.map(ingredient => ({
+        name: ingredient,
+        type: 'bar',
+        emphasis: { focus: 'series' },
+        data: [ingredients[ingredient]]
+      }));
 
       option = {
         tooltip: {
@@ -422,9 +420,9 @@ function pizzaIngredients(date = "2022-12-01") {
           },
         },
         legend: {
-          data: seriesData.map((ingredient) => ingredient.name),
-          selected: seriesData.reduce((acc, ingredient) => {
-            acc[ingredient.name] = false; // Start with all series deselected
+          data: xAxisData,
+          selected: xAxisData.reduce((acc, ingredient) => {
+            acc[ingredient] = false; // Start with all series deselected
             return acc;
           }, {}),
         },
@@ -445,7 +443,7 @@ function pizzaIngredients(date = "2022-12-01") {
           {
             type: "category",
             axisTick: { show: false },
-            data: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            data: ["Ingredients"],
           },
         ],
         yAxis: [
