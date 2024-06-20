@@ -5,5 +5,5 @@ declare function monthlyRevenue(date?: string): void;
 declare function gaugeChart(date?: string): void;
 declare function heatmap(date?: string): void;
 declare function pizzaSize(date?: string): void;
-declare function abc(date?: string): void;
+declare function abcAnalysis(date?: string): void;
 declare function pizzaIngredients(date?: string): void;

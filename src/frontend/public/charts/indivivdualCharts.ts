@@ -394,9 +394,12 @@ function abcAnalysis(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      const categories = data.map(item => item.customerID);
-      const totalSales = data.map(item => item.total_sales);
-      const abcCategories = data.map(item => item.abc_category);
+      console.log('Data received from server:', data);
+
+      let analysisData = data[store.storeID];
+      let totalSales = Object.values(analysisData).map(item => item.total_sales);
+      let categories = Object.keys(analysisData);
+      let abcCategories = Object.values(analysisData).map(item => item.abc_category);
 
       var option = {
         title: {

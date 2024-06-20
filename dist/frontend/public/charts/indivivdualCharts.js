@@ -10,6 +10,7 @@ function updateCharts(date) {
     pizzaSize(date);
     heatmap(date);
     pizzaIngredients(date);
+    abcAnalysis(date);
 }
 // TODO move to generalCharts.ts
 // TODO move to generalCharts.ts
@@ -159,183 +160,265 @@ function pizzaSize(date = "2022-12-01") {
 }
 // TODO move to generalCharts.ts
 // TODO split
-function abc(date = "2022-12-01") {
-    var app = {};
-    var chartDom = document.getElementById('abc');
-    var myChart = echarts.init(chartDom);
-    var option;
-    const posList = [
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'inside',
-        'insideTop',
-        'insideLeft',
-        'insideRight',
-        'insideBottom',
-        'insideTopLeft',
-        'insideTopRight',
-        'insideBottomLeft',
-        'insideBottomRight'
-    ];
-    app.configParameters = {
-        rotate: {
-            min: -90,
-            max: 90
-        },
-        align: {
-            options: {
-                left: 'left',
-                center: 'center',
-                right: 'right'
-            }
-        },
-        verticalAlign: {
-            options: {
-                top: 'top',
-                middle: 'middle',
-                bottom: 'bottom'
-            }
-        },
-        position: {
-            options: posList.reduce(function (map, pos) {
-                map[pos] = pos;
-                return map;
-            }, {})
-        },
-        distance: {
-            min: 0,
-            max: 100
+/*function abc(date = "2022-12-01") {
+  var app: any = {};
+  type EChartsOption = echarts.EChartsOption;
+
+  var chartDom = document.getElementById('abc')!;
+  var myChart = echarts.init(chartDom);
+  var option: EChartsOption;
+
+  const posList = [
+    'left',
+    'right',
+    'top',
+    'bottom',
+    'inside',
+    'insideTop',
+    'insideLeft',
+    'insideRight',
+    'insideBottom',
+    'insideTopLeft',
+    'insideTopRight',
+    'insideBottomLeft',
+    'insideBottomRight'
+  ] as const;
+
+  app.configParameters = {
+    rotate: {
+      min: -90,
+      max: 90
+    },
+    align: {
+      options: {
+        left: 'left',
+        center: 'center',
+        right: 'right'
+      }
+    },
+    verticalAlign: {
+      options: {
+        top: 'top',
+        middle: 'middle',
+        bottom: 'bottom'
+      }
+    },
+    position: {
+      options: posList.reduce(function (map, pos) {
+        map[pos] = pos;
+        return map;
+      }, {} as Record<string, string>)
+    },
+    distance: {
+      min: 0,
+      max: 100
+    }
+  };
+
+  app.config = {
+    rotate: 90,
+    align: 'left',
+    verticalAlign: 'middle',
+    position: 'insideBottom',
+    distance: 15,
+    onChange: function () {
+      const labelOption: BarLabelOption = {
+        rotate: app.config.rotate as BarLabelOption['rotate'],
+        align: app.config.align as BarLabelOption['align'],
+        verticalAlign: app.config
+          .verticalAlign as BarLabelOption['verticalAlign'],
+        position: app.config.position as BarLabelOption['position'],
+        distance: app.config.distance as BarLabelOption['distance']
+      };
+      myChart.setOption<echarts.EChartsOption>({
+        series: [
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          },
+          {
+            label: labelOption
+          }
+        ]
+      });
+    }
+  };
+
+  type BarLabelOption = NonNullable<echarts.BarSeriesOption['label']>;
+
+  const labelOption: BarLabelOption = {
+    show: true,
+    position: app.config.position as BarLabelOption['position'],
+    distance: app.config.distance as BarLabelOption['distance'],
+    align: app.config.align as BarLabelOption['align'],
+    verticalAlign: app.config.verticalAlign as BarLabelOption['verticalAlign'],
+    rotate: app.config.rotate as BarLabelOption['rotate'],
+    formatter: '{c}  {name|{a}}',
+    fontSize: 16,
+    rich: {
+      name: {}
+    }
+  };
+
+  option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+
+    //kann anscheinend leer bleiben
+    legend: {
+      data: []
+    },
+    toolbox: {
+      show: true,
+      orient: 'vertical',
+      left: 'right',
+      top: 'center',
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        magicType: { show: true, type: ['line', 'bar', 'stack'] },
+        restore: { show: true },
+        saveAsImage: { show: true }
+      }
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: ['A', 'B', 'C'],
+        axisLabel: {
+          formatter: function (value, index) {
+            return ['A', 'B', 'C'][index];
+          }
         }
-    };
-    app.config = {
-        rotate: 90,
-        align: 'left',
-        verticalAlign: 'middle',
-        position: 'insideBottom',
-        distance: 15,
-        onChange: function () {
-            const labelOption = {
-                rotate: app.config.rotate,
-                align: app.config.align,
-                verticalAlign: app.config
-                    .verticalAlign,
-                position: app.config.position,
-                distance: app.config.distance
-            };
-            myChart.setOption({
-                series: [
-                    {
-                        label: labelOption
-                    },
-                    {
-                        label: labelOption
-                    },
-                    {
-                        label: labelOption
-                    },
-                    {
-                        label: labelOption
-                    }
-                ]
-            });
-        }
-    };
-    const labelOption = {
-        show: true,
-        position: app.config.position,
-        distance: app.config.distance,
-        align: app.config.align,
-        verticalAlign: app.config.verticalAlign,
-        rotate: app.config.rotate,
-        formatter: '{c}  {name|{a}}',
-        fontSize: 16,
-        rich: {
-            name: {}
-        }
-    };
-    option = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: 'C000015',
+        type: 'bar',
+        barGap: 0,
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
         },
-        //kann anscheinend leer bleiben
-        legend: {
-            data: []
+        data: ['A', 'B', 'C'].map(category => category === 'A' ? 390 : null)
+      },
+      {
+        name: 'C000125',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
         },
-        toolbox: {
-            show: true,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center',
-            feature: {
-                mark: { show: true },
-                dataView: { show: true, readOnly: false },
-                magicType: { show: true, type: ['line', 'bar', 'stack'] },
-                restore: { show: true },
-                saveAsImage: { show: true }
-            }
+        data: ['A', 'B', 'C'].map(category => category === 'B' ? 290 : null)
+      },
+      {
+        name: 'C000172',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
         },
-        xAxis: [
-            {
+        data: ['A', 'B', 'C'].map(category => category === 'C' ? 190 : null)
+      },
+      {
+        name: 'C000179',
+        type: 'bar',
+        label: labelOption,
+        emphasis: {
+          focus: 'series'
+        },
+        data: ['A', 'B', 'C'].map(category => category === 'C' ? 40 : null)
+      }
+    ]
+  };
+
+  option && myChart.setOption(option);
+}*/
+function abcAnalysis(date = "2022-12-01") {
+    var store = JSON.parse(localStorage.getItem("store"));
+    var dom = document.getElementById('abc');
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    myChart.showLoading();
+    fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
+        .then(response => response.json())
+        .then(data => {
+        console.log('Data received from server:', data);
+        let analysisData = data[store.storeID];
+        let totalSales = Object.values(analysisData).map(item => item.total_sales);
+        let categories = Object.keys(analysisData);
+        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
+        var option = {
+            title: {
+                text: 'ABC Analysis of Customers',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Total Sales'],
+                top: '10%'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
                 type: 'category',
-                data: ['A', 'B', 'C'],
+                data: categories,
                 axisLabel: {
-                    formatter: function (value, index) {
-                        return ['A', 'B', 'C'][index];
+                    rotate: 45,
+                    align: 'right'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Total Sales'
+            },
+            series: [
+                {
+                    name: 'Total Sales',
+                    type: 'bar',
+                    data: totalSales,
+                    label: {
+                        show: true,
+                        position: 'insideBottom'
+                    },
+                    itemStyle: {
+                        color: function (params) {
+                            const abcCategory = abcCategories[params.dataIndex];
+                            if (abcCategory === 'A')
+                                return 'green';
+                            if (abcCategory === 'B')
+                                return 'yellow';
+                            return 'red';
+                        }
                     }
                 }
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-                name: 'C000015',
-                type: 'bar',
-                barGap: 0,
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: ['A', 'B', 'C'].map(category => category === 'A' ? 390 : null)
-            },
-            {
-                name: 'C000125',
-                type: 'bar',
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: ['A', 'B', 'C'].map(category => category === 'B' ? 290 : null)
-            },
-            {
-                name: 'C000172',
-                type: 'bar',
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: ['A', 'B', 'C'].map(category => category === 'C' ? 190 : null)
-            },
-            {
-                name: 'C000179',
-                type: 'bar',
-                label: labelOption,
-                emphasis: {
-                    focus: 'series'
-                },
-                data: ['A', 'B', 'C'].map(category => category === 'C' ? 40 : null)
-            }
-        ]
-    };
-    option && myChart.setOption(option);
+            ]
+        };
+        myChart.hideLoading();
+        updateChart(myChart, option);
+    });
 }
 function pizzaIngredients(date = "2022-12-01") {
     var app = {};
