@@ -203,7 +203,10 @@ function revenueBarChart(storeIDsColors = {}, custom = false,date = "2022-12-01"
   return new Promise((resolve, reject) => {
     var chartDom = document.getElementById('revenueBar');
     var myChart = echarts.init(chartDom, theme);
-
+    // Standard bar color
+    const standardColors = ["#4A4A4A", "#FF7043", "#FFA500", "#001AFF", "#FFB347"]
+    const standardColor = standardColors[1];
+    
     let req = `/api/total-store-revenue?date=${date}`;
     fetch(req)
       .then((response) => response.json())
@@ -243,7 +246,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false,date = "2022-12-01"
               data: Object.values(data).map((value, index) => ({
                 value: value,
                 itemStyle: {
-                  color: storeIDsColors[Object.keys(data)[index]]
+                  color: storeIDsColors[Object.keys(data)[index]] || standardColor
                 }
               }))
             }
