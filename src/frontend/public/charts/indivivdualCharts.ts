@@ -15,6 +15,7 @@ function updateCharts(date) {
   pizzaSize(date);
   heatmap(date);
   pizzaIngredients(date);
+  abcAnalysis(date);
 }
 
 // TODO move to generalCharts.ts
@@ -80,7 +81,7 @@ function gaugeChart(date = "2022-12-01") {
       ];
 
       var option = {
-        
+
         series: [{
           type: "gauge",
           startAngle: 90,
@@ -193,7 +194,7 @@ function pizzaSize(date = "2022-12-01") {
 // TODO move to generalCharts.ts
 // TODO split
 
-function abc(date = "2022-12-01") {
+/*function abc(date = "2022-12-01") {
   var app: any = {};
   type EChartsOption = echarts.EChartsOption;
 
@@ -381,6 +382,78 @@ function abc(date = "2022-12-01") {
   };
 
   option && myChart.setOption(option);
+}*/
+
+function abcAnalysis(date = "2022-12-01") {
+  var store = JSON.parse(localStorage.getItem("store"));
+  var dom = document.getElementById('abc');
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+
+  myChart.showLoading();
+
+  fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
+    .then(response => response.json())
+    .then(data => {
+      const categories = data.map(item => item.customerID);
+      const totalSales = data.map(item => item.total_sales);
+      const abcCategories = data.map(item => item.abc_category);
+
+      var option = {
+        title: {
+          text: 'ABC Analysis of Customers',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['Total Sales'],
+          top: '10%'
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: categories,
+          axisLabel: {
+            rotate: 45,
+            align: 'right'
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: 'Total Sales'
+        },
+        series: [
+          {
+            name: 'Total Sales',
+            type: 'bar',
+            data: totalSales,
+            label: {
+              show: true,
+              position: 'insideBottom'
+            },
+            itemStyle: {
+              color: function (params) {
+                const abcCategory = abcCategories[params.dataIndex];
+                if (abcCategory === 'A') return 'green';
+                if (abcCategory === 'B') return 'yellow';
+                return 'red';
+              }
+            }
+          }
+        ]
+      };
+
+      myChart.hideLoading();
+      updateChart(myChart, option);
+    });
 }
 
 function pizzaIngredients(date = "2022-12-01") {
