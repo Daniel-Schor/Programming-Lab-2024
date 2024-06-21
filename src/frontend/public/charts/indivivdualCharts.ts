@@ -384,6 +384,9 @@ function pizzaSize(date = "2022-12-01") {
   option && myChart.setOption(option);
 }*/
 
+//TODO name zu abcAnalysis_customer
+//TODO anzeige top 10 customer
+//TODO rein hovern
 function abcAnalysis(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById('abc');
