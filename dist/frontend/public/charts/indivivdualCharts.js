@@ -362,6 +362,7 @@ function abcAnalysis(date = "2022-12-01") {
         let totalSales = Object.values(analysisData).map(item => item.total_sales);
         let categories = Object.keys(analysisData);
         let abcCategories = Object.values(analysisData).map(item => item.abc_category);
+        let cumulative_percentage = Object.values(analysisData).map(item => item.cumulative_percentage);
         var option = {
             title: {
                 text: 'ABC Analysis of Customers',
@@ -374,7 +375,7 @@ function abcAnalysis(date = "2022-12-01") {
                 }
             },
             legend: {
-                data: ['Total Sales'],
+                data: ['cumulative_percentage'],
                 top: '10%'
             },
             toolbox: {
@@ -392,13 +393,13 @@ function abcAnalysis(date = "2022-12-01") {
             },
             yAxis: {
                 type: 'value',
-                name: 'Total Sales'
+                name: 'cumulative_percentage'
             },
             series: [
                 {
-                    name: 'Total Sales',
+                    name: 'cumulative_percentage',
                     type: 'bar',
-                    data: totalSales,
+                    data: cumulative_percentage,
                     label: {
                         show: true,
                         position: 'insideBottom'

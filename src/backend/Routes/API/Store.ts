@@ -487,7 +487,8 @@ router.get('/abc-analysis-customers', async (req, res) => {
         result.rows.forEach(row => {
             formattedData[row.customerID] = {
                 total_sales: row.total_sales,
-                abc_category: row.abc_category
+                abc_category: row.abc_category,
+                cumulative_percentage: row.cumulative_percentage
             };
         });
 
