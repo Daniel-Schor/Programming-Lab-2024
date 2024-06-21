@@ -348,7 +348,6 @@ router.get('/ingredientUsage', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO echarts yannis
 //TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
@@ -443,6 +442,7 @@ ORDER BY
     }
 });
 //TODO echarts yannis
+//TODO änder sql statement wie bei customers
 //TODO parse sql statement into queries file yannis
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
