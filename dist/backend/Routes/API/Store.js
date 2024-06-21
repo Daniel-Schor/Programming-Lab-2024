@@ -421,7 +421,14 @@ router.get('/abc-analysis-customers', async (req, res) => {
       `;
         const parameters = [storeID, date];
         const result = await client.query(query, parameters);
-        res.status(200).json(result.rows);
+        const formattedData = {};
+        result.rows.forEach(row => {
+            formattedData[row.customerID] = {
+                total_sales: row.total_sales,
+                abc_category: row.abc_category
+            };
+        });
+        res.status(200).json({ [storeID]: formattedData });
     }
     catch (err) {
         console.error(err);

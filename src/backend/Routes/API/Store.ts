@@ -483,7 +483,15 @@ router.get('/abc-analysis-customers', async (req, res) => {
 
         const result = await client.query(query, parameters);
 
-        res.status(200).json(result.rows);
+        const formattedData = {};
+        result.rows.forEach(row => {
+            formattedData[row.customerID] = {
+                total_sales: row.total_sales,
+                abc_category: row.abc_category
+            };
+        });
+
+        res.status(200).json({ [storeID]: formattedData });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -568,7 +576,15 @@ router.get('/abc-analysis-pizza', async (req, res) => {
 
         const result = await client.query(query, parameters);
 
-        res.status(200).json(result.rows);
+        const formattedData = {};
+        result.rows.forEach(row => {
+            formattedData[row.customerID] = {
+                total_sales: row.total_sales,
+                abc_category: row.abc_category
+            };
+        });
+
+        res.status(200).json({ [storeID]: formattedData });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
