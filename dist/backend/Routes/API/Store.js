@@ -360,73 +360,79 @@ router.get('/abc-analysis-customers', async (req, res) => {
         console.log(`Received storeID: ${storeID}`);
         console.log(`Received date: ${date}`);
         const query = `
-        WITH total_sales_per_customer AS (
-            SELECT
-                c."customerID",
-                SUM(p.total) AS total_sales
-            FROM
-                public.customers c
-            JOIN
-                public.purchase p ON c."customerID" = p."customerID"
-            JOIN 
-                public.stores s ON p."storeID" = s."storeID"
-            WHERE
-                p."storeID" = $1 AND p."purchaseDate" > $2
-            GROUP BY
-                c."customerID"
-        ),
-        cumulative_sales_customer AS (
-            SELECT
-                "customerID",
-                total_sales,
-                SUM(total_sales) OVER (ORDER BY total_sales DESC) AS cumulative_sales
-            FROM
-                total_sales_per_customer
-        ),
-        total_sum_sales_all_customer AS (
-            SELECT
-                "customerID",
-                total_sales,
-                cumulative_sales,
-                SUM(total_sales) OVER () AS total_sum_sales
-            FROM
-                cumulative_sales_customer
-        ),
-        abc_analysis AS (
-            SELECT
-                "customerID",
-                total_sales,
-                cumulative_sales,
-                total_sum_sales,
-                cumulative_sales / total_sum_sales AS cumulative_percentage,
-                CASE
-                    WHEN cumulative_sales / total_sum_sales <= 0.8 THEN 'A'
-                    WHEN cumulative_sales / total_sum_sales <= 0.95 THEN 'B'
-                    ELSE 'C'
-                END AS abc_category
-            FROM
-                total_sum_sales_all_customer
-        )
-        SELECT
-            "customerID",
-            total_sales,
-            cumulative_sales,
-            total_sum_sales,
-            cumulative_percentage,
-            abc_category
-        FROM
-            abc_analysis
-        ORDER BY
-            total_sales DESC;
+WITH total_sales_per_customer AS (
+    SELECT
+        c."customerID",
+        SUM(p.total) AS total_sale_customer
+    FROM
+        public.customers c
+    JOIN
+        public.purchase p ON c."customerID" = p."customerID"
+    JOIN 
+        public.stores s ON p."storeID" = s."storeID"
+    WHERE
+        p."storeID" = $1 AND p."purchaseDate" > $2
+    GROUP BY
+        c."customerID"
+    ORDER BY
+        total_sale_customer DESC
+),
+percentage_sales_customer AS (
+    SELECT
+        "customerID",
+        total_sale_customer,
+        SUM(total_sale_customer) OVER () AS total_sum_sales,
+        (total_sale_customer / SUM(total_sale_customer) OVER ()) AS customer_percentage_of_total
+    FROM
+        total_sales_per_customer
+),
+cumulative_sales_customer AS (
+    SELECT
+        "customerID",
+        total_sale_customer,
+        total_sum_sales,
+        customer_percentage_of_total,
+        SUM(customer_percentage_of_total) OVER (ORDER BY total_sale_customer DESC) AS sorted_cumulative_customer_percentage_of_total
+    FROM
+        percentage_sales_customer
+),
+abc_analysis AS (
+    SELECT
+        "customerID",
+        total_sale_customer,
+        total_sum_sales,
+        customer_percentage_of_total,
+        sorted_cumulative_customer_percentage_of_total,
+        CASE
+            WHEN sorted_cumulative_customer_percentage_of_total <= 0.8 THEN 'A'
+            WHEN sorted_cumulative_customer_percentage_of_total <= 0.95 THEN 'B'
+            ELSE 'C'
+        END AS abc_category
+    FROM
+        cumulative_sales_customer
+)
+SELECT
+    "customerID",
+    total_sale_customer,
+    total_sum_sales,
+    customer_percentage_of_total,
+    sorted_cumulative_customer_percentage_of_total,
+    abc_category
+FROM
+    abc_analysis
+ORDER BY
+    total_sale_customer DESC;
       `;
         const parameters = [storeID, date];
         const result = await client.query(query, parameters);
         const formattedData = {};
         result.rows.forEach(row => {
             formattedData[row.customerID] = {
-                total_sales: row.total_sales,
-                abc_category: row.abc_category,
-                cumulative_percentage: row.cumulative_percentage
+                total_sale_customer: row.total_sale_customer,
+                total_sum_sales: row.total_sum_sales,
+                customer_percentage_of_total: row.customer_percentage_of_total,
+                sorted_cumulative_customer_percentage_of_total: row.sorted_cumulative_customer_percentage_of_total,
+                abc_category: row.abc_category
             };
         });
         res.status(200).json({ [storeID]: formattedData });

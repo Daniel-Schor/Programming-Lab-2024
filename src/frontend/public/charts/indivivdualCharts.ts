@@ -397,10 +397,9 @@ function abcAnalysis(date = "2022-12-01") {
       console.log('Data received from server:', data);
 
       let analysisData = data[store.storeID];
-      let totalSales = Object.values(analysisData).map(item => item.total_sales);
+      let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_customer_percentage_of_total);
       let categories = Object.keys(analysisData);
-      let abcCategories = Object.values(analysisData).map(item => item.abc_category);
-      let cumulative_percentage = Object.values(analysisData).map(item => item.cumulative_percentage);
+      let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
 
       var option = {
         title: {
@@ -411,10 +410,14 @@ function abcAnalysis(date = "2022-12-01") {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
+          },
+          formatter: function (params) {
+            let index = params[0].dataIndex;
+            return `Customer ID: ${categories[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
           }
         },
         legend: {
-          data: ['cumulative_percentage'],
+          data: ['Cumulative Percentage'],
           top: '10%'
         },
         toolbox: {
@@ -432,22 +435,31 @@ function abcAnalysis(date = "2022-12-01") {
         },
         yAxis: {
           type: 'value',
-          name: 'cumulative_percentage'
+          name: 'Cumulative Percentage',
+          axisLabel: {
+            formatter: function (value) {
+              return (value * 100).toFixed(0) + '%';
+            }
+          }
         },
         series: [
           {
-            name: 'cumulative_percentage',
+            name: 'Cumulative Percentage',
             type: 'bar',
-            data: cumulative_percentage,
+            data: cumulativePercentage,
             label: {
               show: true,
-              position: 'insideBottom'
+              position: 'insideBottom',
+              formatter: function (params) {
+                return (params.value * 100).toFixed(2) + '%';
+              }
             },
             itemStyle: {
               color: function (params) {
-                const abcCategory = abcCategories[params.dataIndex];
-                if (abcCategory === 'A') return 'green';
-                if (abcCategory === 'B') return 'yellow';
+                let index = params.dataIndex;
+                let cumulativePercentageValue = cumulativePercentage[index];
+                if (cumulativePercentageValue <= 0.8) return 'green';
+                if (cumulativePercentageValue <= 0.95) return 'yellow';
                 return 'red';
               }
             }
