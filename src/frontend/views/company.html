@@ -6,6 +6,7 @@
 <!--TODO Neon farben für Container festlegen-->
 <!--TODO im Container revenue müssen die angeklickten stores weiß 
 und die nicht angeklickten grau sein (aktuell andersrum)-->
+<!--TODO Buttons im Revenue COntainer nach links schieben-->
 <!--TODO farben in den revenue Graphen sollen festgelegt sein-->
 <head>
   <meta charset="UTF-8" />
@@ -13,6 +14,8 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
   <link rel="stylesheet" type="text/css" href="/style/ui.css">
   <link rel="stylesheet" type="text/css" href="/style/companyStyle.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/charts.js" type="text/javascript"></script>
   
@@ -24,8 +27,8 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
     #statsOverviewContainer { width : 50%; height: 150px; }
     #avCustomerContainer { width: 50%; height: 150px; }
     #revenueBarContainer { width: 50%; height: 600px; }
-    #placeholderContainer { width: 30%; height: 600px; }
-    #placeholderContainer2 { width: 30%; height: 600px; }
+    #placeholderContainer { height: 600px; }
+    #placeholderContainer2 { height: 600px; }
     </style>
 
 </head>
@@ -63,6 +66,13 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
   </header>
 <!--TODO add menu button-->
   <div id="dashboardContainer">
+     <!-- Der Codeschnipsel muss in die Funktion rein, damit die Icons dort eingefügt werden können.
+    <div class="card">
+            <div class="icon"><i class="fas fa-shopping-bag"></i></div>
+            <h3>Sales</h3>
+            <p>21 324</p>
+            <p>+2 031</p>
+        </div> -->
     <h1 id="dashboardTitle">@Pizza Hub</h1>  
   </div>
   <div id="generalStatsContainer">  
@@ -74,30 +84,39 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
     </div>
     <div id="avCustomerContainer">
       <h3>Average Customer Data</h3>
+      <div id="avCustomer">
       <!-- Statistiken für das gewählte Datum hier einfügen 
        <div class="avCustomer-item">number of orders</div>
        <div class="avCustomer-item">spending amount</div>
        <div class="avCustomer-item">beispiele</div>-->
     </div> 
   </div>
+  </div>
 
   
   <div id="generalRevenueContainer">
-    <h2 id="generalRevenueTitle">Revenue</h2>
+    <div class="button-container" style="align-items: flex-start;">
+      <div class="button-group">
+        <button id="bestButton" >STABLE</button>
+        <button id="worstButton">UNSTABLE</button>
+        <button id="customButton">CUSTOM</button>
+      </div>
+      <h1 id="generalRevenueTitle">Revenue</h1> 
+    </div>  
 <!--TODO ADD DATE AND SORTING FILTER DEPENDENCY-->
 <div id="revenueWrapper">
   <div id="revenueContainer">
-      <h2 id="revenueTitleDaily">Revenue</h2>
       <div id="revenue" class="chart" style="height: 600px;"></div>
   </div>
 
   <div id="revenueBarContainer" style="height: 650px;">
-      <h2>Total Revenue</h2>
-      <div id="revenueBar" class="chart" style="height: 600px; width: 1000px;"></div>
+      <div id="revenueBar" class="chart" style="height: 600px; width: flex;"></div>
   </div>
 </div>
+</div>
 
-<div id="placeholder">
+<div id="sector3Container">
+  <div id="placeholder">
   <div class="placeholderContainer">
       <h2 class="placeholderTitle">Placeholder</h2>
   </div>
@@ -105,19 +124,20 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
   <div class="placeholderContainer">
       <h2 class="placeholderTitle">Placeholder 2</h2>
   </div>
+  </div>
+
+  <div id="mapContainer">
+      <h2>All Stores in the US</h2>
+    <div id="map" style="height: 600; width: 100%;">  
+    </div>  
+  </div>
+</div>
+  
+
 </div>
 
-
       
-  </div>
-    <div id="mapContainer" style="width: 50%;">
-      <h2>All Stores in the US</h2>
-    <div id="map" style="height: 600; width: 100%;">
-      
-    </div>  
-    </div>
-  </div>
-
+  
   <script>
     const map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();
