@@ -24,17 +24,27 @@ header nav ul li a.active {
     border-bottom-color: dodgerblue;
 }
 .menu-container {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    position: fixed; 
+    overflow-y: auto;
+    top: 50px;
+    left: 0;
     z-index: 100;
+    background-color: #252525;
+    height: 100vh; 
+    width: 250px; 
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    transition: left 0.3s;
+    scrollbar-width: none;
 }
+
 .menu_button {
     cursor: pointer;
     display: block; 
     position: absolute;
-    top: 0;
-    left: 5; 
+    top: 10px;
+    left: 10px; 
 }
 
 .menu_button div {
@@ -42,6 +52,15 @@ header nav ul li a.active {
     height: 4px;
     margin: 6px 0;
     background: #FF4500;
+    transition: 0.4s;
+}
+
+#nav_check:not(:checked) ~ nav .menu-container {
+    left: -250px;
+}
+
+#nav_check:checked ~ nav .menu-container {
+    left: 0;
 }
 
 @media only screen  {
