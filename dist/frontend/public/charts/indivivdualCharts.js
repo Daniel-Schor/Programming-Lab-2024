@@ -10,7 +10,7 @@ function updateCharts(date) {
     pizzaSize(date);
     heatmap(date);
     pizzaIngredients(date);
-    abcAnalysis(date);
+    abcAnalysis_customer_1(date);
 }
 // TODO move to generalCharts.ts
 // TODO move to generalCharts.ts
@@ -352,9 +352,9 @@ function pizzaSize(date = "2022-12-01") {
 //TODO name zu abcAnalysis_customer
 //TODO anzeige top 10 customer
 //TODO rein hovern
-function abcAnalysis(date = "2022-12-01") {
+function abcAnalysis_customer_1(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
-    var dom = document.getElementById('abc');
+    var dom = document.getElementById('abcAnalysis_customer_1');
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
     fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
