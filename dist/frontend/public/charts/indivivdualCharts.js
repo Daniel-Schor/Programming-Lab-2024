@@ -11,6 +11,7 @@ function updateCharts(date) {
     heatmap(date);
     pizzaIngredients(date);
     abcAnalysis_customer_1(date);
+    abcAnalysis_customer_2(date);
 }
 // TODO move to generalCharts.ts
 // TODO move to generalCharts.ts
@@ -349,7 +350,6 @@ function pizzaSize(date = "2022-12-01") {
 
   option && myChart.setOption(option);
 }*/
-//TODO name zu abcAnalysis_customer
 //TODO anzeige top 10 customer
 //TODO rein hovern
 function abcAnalysis_customer_1(date = "2022-12-01") {
@@ -363,11 +363,12 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         console.log('Data received from server:', data);
         let analysisData = data[store.storeID];
         let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_customer_percentage_of_total);
-        let categories = Object.keys(analysisData);
+        let customerID = Object.keys(analysisData);
+        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
         let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
         var option = {
             title: {
-                text: 'ABC Analysis of Customers',
+                text: 'ABC Analysis of Customers 1',
                 left: 'center'
             },
             tooltip: {
@@ -377,7 +378,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                 },
                 formatter: function (params) {
                     let index = params[0].dataIndex;
-                    return `Customer ID: ${categories[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
+                    return `Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
                 }
             },
             legend: {
@@ -391,7 +392,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
             },
             xAxis: {
                 type: 'category',
-                data: categories,
+                data: abcCategories,
                 axisLabel: {
                     rotate: 45,
                     align: 'right'
@@ -420,11 +421,80 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                     },
                     itemStyle: {
                         color: function (params) {
-                            let index = params.dataIndex;
-                            let cumulativePercentageValue = cumulativePercentage[index];
-                            if (cumulativePercentageValue <= 0.8)
+                            const abcCategory = abcCategories[params.dataIndex];
+                            if (abcCategory === 'A')
                                 return 'green';
-                            if (cumulativePercentageValue <= 0.95)
+                            if (abcCategory === 'B')
+                                return 'yellow';
+                            return 'red';
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.hideLoading();
+        updateChart(myChart, option);
+    });
+}
+function abcAnalysis_customer_2(date = "2022-12-01") {
+    var store = JSON.parse(localStorage.getItem("store"));
+    var dom = document.getElementById('abcAnalysis_customer_2');
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    myChart.showLoading();
+    fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
+        .then(response => response.json())
+        .then(data => {
+        console.log('Data received from server:', data);
+        let analysisData = data[store.storeID];
+        let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
+        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
+        var option = {
+            title: {
+                text: 'ABC Analysis of Customers 2',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Total Sales'],
+                top: '10%'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: abcCategories,
+                axisLabel: {
+                    rotate: 45,
+                    align: 'right'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Total Sales'
+            },
+            series: [
+                {
+                    name: 'Total Sales',
+                    type: 'bar',
+                    data: totalSales,
+                    label: {
+                        show: true,
+                        position: 'insideBottom'
+                    },
+                    itemStyle: {
+                        color: function (params) {
+                            const abcCategory = abcCategories[params.dataIndex];
+                            if (abcCategory === 'A')
+                                return 'green';
+                            if (abcCategory === 'B')
                                 return 'yellow';
                             return 'red';
                         }

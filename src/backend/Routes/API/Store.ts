@@ -493,7 +493,8 @@ ORDER BY
                 total_sum_sales: row.total_sum_sales,
                 customer_percentage_of_total: row.customer_percentage_of_total,
                 sorted_cumulative_customer_percentage_of_total: row.sorted_cumulative_customer_percentage_of_total,
-                abc_category: row.abc_category
+                abc_category: row.abc_category,
+                customerID: row.customerID
             };
         });
 
