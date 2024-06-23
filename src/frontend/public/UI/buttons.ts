@@ -106,33 +106,43 @@ function customDate() {
     });
 }
 
+function getTotalRevenue(date, storeID) {
+  const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getTotalPizzas(date, storeID) {
+  const endpoint = storeID ? `/api/totalPizzas?date=${date}&store=${storeID}` : `/api/totalPizzas?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getTotalOrders(date, storeID) {
+  const endpoint = storeID ? `/api/totalOrders?date=${date}&store=${storeID}` : `/api/totalOrders?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getAverageOrderValue(date, storeID) {
+  const endpoint = storeID ? `/api/averageOrderValue?date=${date}&store=${storeID}` : `/api/averageOrderValue?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getPizzasPerOrder(date, storeID) {
+  const endpoint = storeID ? `/api/pizzasPerOrder?date=${date}&store=${storeID}` : `/api/pizzasPerOrder?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
 function statOverview(date = "2022-12-01") {
   const store = JSON.parse(localStorage.getItem("store"));
-
-  
-  console.log(JSON.parse(localStorage.getItem("store")));
-  //Fix das date nicht auf der main  genutzt wird
-  // Definieren der API-Endpunkte
-  const apiEndpoints = store
-    ? [
-        `/api/totalRevenue?date=${date}&store=${store.storeID}`,
-        `/api/totalPizzas?date=${date}&store=${store.storeID}`,
-        `/api/totalOrders?date=${date}&store=${store.storeID}`,
-        `/api/averageOrderValue?date=${date}&store=${store.storeID}`,
-        `/api/pizzasPerOrder?date=${date}&store=${store.storeID}`,
-      ]
-    : [
-        `/api/totalRevenue?date=${date}`,
-        `/api/totalPizzas?date=${date}`,
-        `/api/totalOrders?date=${date}`,
-        `/api/averageOrderValue?date=${date}`,
-        `/api/pizzasPerOrder?date=${date}`,
-      ];
+  const storeID = store ? store.storeID : null;
 
   // Erstellen eines Arrays von Fetch-Promises
-  const fetchPromises = apiEndpoints.map((endpoint) =>
-    fetch(endpoint).then((response) => response.json())
-  );
+  const fetchPromises = [
+    getTotalRevenue(date, storeID),
+    getTotalPizzas(date, storeID),
+    getTotalOrders(date, storeID),
+    getAverageOrderValue(date, storeID),
+    getPizzasPerOrder(date, storeID),
+  ];
 
   // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
   return Promise.all(fetchPromises)
@@ -179,3 +189,8 @@ function statOverview(date = "2022-12-01") {
       throw error;
     });
 }
+
+// Initialisierung beim Laden der Seite
+document.addEventListener('DOMContentLoaded', (event) => {
+  statOverview();
+});
