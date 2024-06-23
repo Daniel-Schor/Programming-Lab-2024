@@ -61,7 +61,7 @@ Y drücken dann wird es installiert
 https://www.postgresql.org/download/
 
 Click on until you reach the password input.
-You will choose your own password.
+Choose the password: admin
 Then click on until you reach the "Locale" setting. There you select "English, United States".
 Then click further.
 
