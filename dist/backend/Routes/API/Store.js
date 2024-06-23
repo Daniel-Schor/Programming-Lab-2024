@@ -466,8 +466,8 @@ router.get('/abc-analysis-pizza', async (req, res) => {
 			JOIN PUBLIC.PURCHASE PCH ON PI."purchaseID" = PCH."purchaseID"
 			JOIN PUBLIC.STORES S ON PCH."storeID" = S."storeID"
 		WHERE
-			PCH."storeID" = 'S688745'
-			AND PCH."purchaseDate" > '2022-12-01'
+			PCH."storeID" = $1
+			AND PCH."purchaseDate" > $2
 		GROUP BY
 			P."SKU"
 		ORDER BY
@@ -517,7 +517,7 @@ SELECT
 	TOTAL_SALES_PIZZA,
 	TOTAL_SUM_SALES,
 	PRODUCT_PERCENTAGE_OF_TOTAL,
-	SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL AS CUMULATIVE_PERCENTAGE,
+	SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL,
 	ABC_CATEGORY
 FROM
 	ABC_ANALYSIS
@@ -532,7 +532,7 @@ ORDER BY
                 total_sales_pizza: row.total_sales_pizza,
                 total_sum_sales: row.total_sum_sales,
                 product_percentage_of_total: row.product_percentage_of_total,
-                cumulative_percentage: row.cumulative_percentage,
+                sorted_cumulative_product_percentage_of_total: row.sorted_cumulative_product_percentage_of_total,
                 abc_category: row.abc_category
             };
         });
