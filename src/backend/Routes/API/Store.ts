@@ -517,67 +517,78 @@ router.get('/abc-analysis-pizza', async (req, res) => {
             return res.status(400).send('StoreID is required');
         }
 
+        console.log(`Received storeID: ${storeID}`);
+        console.log(`Received date: ${date}`);
+
         const query = `
-        WITH total_sales_per_product AS (
-            SELECT
-                p."SKU",
-                SUM(pch.total) AS total_sales
-            FROM
-                public.products p
-            JOIN
-                public."purchaseItems" pi ON p."SKU" = pi."SKU"
-            JOIN
-                public.purchase pch ON pi."purchaseID" = pch."purchaseID"
-            JOIN
-                public.stores s ON pch."storeID" = s."storeID"
-            WHERE
-                pch."storeID" = $1 AND pch."purchaseDate" > $2
-            GROUP BY
-                p."SKU"
-        ),
-        cumulative_sales_product AS (
-            SELECT
-                "SKU",
-                total_sales,
-                SUM(total_sales) OVER (ORDER BY total_sales DESC) AS cumulative_sales
-            FROM
-                total_sales_per_product
-        ),
-        total_sum_sales_all_product AS (
-            SELECT
-                "SKU",
-                total_sales,
-                cumulative_sales,
-                SUM(total_sales) OVER () AS total_sum_sales
-            FROM
-                cumulative_sales_product
-        ),
-        abc_analysis AS (
-            SELECT
-                "SKU",
-                total_sales,
-                cumulative_sales,
-                total_sum_sales,
-                cumulative_sales / total_sum_sales AS cumulative_percentage,
-                CASE
-                    WHEN cumulative_sales / total_sum_sales <= 0.8 THEN 'A'
-                    WHEN cumulative_sales / total_sum_sales <= 0.95 THEN 'B'
-                    ELSE 'C'
-                END AS abc_category
-            FROM
-                total_sum_sales_all_product
-        )
-        SELECT
-            "SKU",
-            total_sales,
-            cumulative_sales,
-            total_sum_sales,
-            cumulative_percentage,
-            abc_category
-        FROM
-            abc_analysis
-        ORDER BY
-            total_sales DESC;
+  WITH
+	TOTAL_SALES_PER_PRODUCT AS (
+		SELECT
+			P."SKU",
+			SUM(PCH.TOTAL) AS TOTAL_SALES_PIZZA
+		FROM
+			PUBLIC.PRODUCTS P
+			JOIN PUBLIC."purchaseItems" PI ON P."SKU" = PI."SKU"
+			JOIN PUBLIC.PURCHASE PCH ON PI."purchaseID" = PCH."purchaseID"
+			JOIN PUBLIC.STORES S ON PCH."storeID" = S."storeID"
+		WHERE
+			PCH."storeID" = 'S688745'
+			AND PCH."purchaseDate" > '2022-12-01'
+		GROUP BY
+			P."SKU"
+		ORDER BY
+			TOTAL_SALES_PIZZA DESC
+	),
+	PERCENTAGE_SALES_PRODUCT AS (
+		SELECT
+			"SKU",
+			TOTAL_SALES_PIZZA,
+			SUM(TOTAL_SALES_PIZZA) OVER () AS TOTAL_SUM_SALES,
+			(
+				TOTAL_SALES_PIZZA / SUM(TOTAL_SALES_PIZZA) OVER ()
+			) AS PRODUCT_PERCENTAGE_OF_TOTAL
+		FROM
+			TOTAL_SALES_PER_PRODUCT
+	),
+	CUMULATIVE_SALES_PRODUCT AS (
+		SELECT
+			"SKU",
+			TOTAL_SALES_PIZZA,
+			TOTAL_SUM_SALES,
+			PRODUCT_PERCENTAGE_OF_TOTAL,
+			SUM(PRODUCT_PERCENTAGE_OF_TOTAL) OVER (
+				ORDER BY
+					TOTAL_SALES_PIZZA DESC
+			) AS SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL
+		FROM
+			PERCENTAGE_SALES_PRODUCT
+	),
+	ABC_ANALYSIS AS (
+		SELECT
+			"SKU",
+			TOTAL_SALES_PIZZA,
+			TOTAL_SUM_SALES,
+			PRODUCT_PERCENTAGE_OF_TOTAL,
+			SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL,
+			CASE
+				WHEN SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL <= 0.8 THEN 'A'
+				WHEN SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL <= 0.95 THEN 'B'
+				ELSE 'C'
+			END AS ABC_CATEGORY
+		FROM
+			CUMULATIVE_SALES_PRODUCT
+	)
+SELECT
+	"SKU",
+	TOTAL_SALES_PIZZA,
+	TOTAL_SUM_SALES,
+	PRODUCT_PERCENTAGE_OF_TOTAL,
+	SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL AS CUMULATIVE_PERCENTAGE,
+	ABC_CATEGORY
+FROM
+	ABC_ANALYSIS
+ORDER BY
+	TOTAL_SALES_PIZZA DESC;
       `;
 
         const parameters = [storeID, date];
@@ -586,8 +597,11 @@ router.get('/abc-analysis-pizza', async (req, res) => {
 
         const formattedData = {};
         result.rows.forEach(row => {
-            formattedData[row.customerID] = {
-                total_sales: row.total_sales,
+            formattedData[row.SKU] = {
+                total_sales_pizza: row.total_sales_pizza,
+                total_sum_sales: row.total_sum_sales,
+                product_percentage_of_total: row.product_percentage_of_total,
+                cumulative_percentage: row.cumulative_percentage,
                 abc_category: row.abc_category
             };
         });
