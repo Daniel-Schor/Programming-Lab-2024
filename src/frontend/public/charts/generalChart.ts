@@ -21,7 +21,7 @@
   function updatePizzasPerOrder(data) {
     const order = parseFloat(data[0].pizzas_order).toFixed(2);
     document.getElementById("pizzasPerOrder").innerHTML = `<p>${order}</p>`;
-  }
+}
   
   function statsOverview(date = "2022-12-01") {
     const apiEndpoints = [
