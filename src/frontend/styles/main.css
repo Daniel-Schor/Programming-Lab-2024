@@ -1,0 +1,126 @@
+h1,
+h2,
+h3 {
+  margin: 1px;
+  text-align: center;
+}
+
+h1 {
+  margin: 3px;
+  font-size: large;
+}
+h2 {
+  margin: 2px;
+  font-size: medium;
+}
+
+h3 {
+  font-size: small;
+}
+
+p {
+  font-size: small;
+  color: #b3b3b3;
+  margin: 1px;
+  margin-left: 7px;
+}
+
+* {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+  color: #ffff;
+}
+
+body {
+  background-color: #1b1b1b;
+  margin: 0;
+}
+
+/*Sidebar -------------------*/
+.sidebar {
+  scrollbar-width: none;
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #252525;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar a, .sidebar p{
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 25px;
+  display: block;
+  transition: 0.3s;
+  margin-right: 5%;
+}
+
+.sidebar a:hover {
+  color: #b3b3b3;
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: 5px;
+  padding-top: 0px;
+  right: 25px;
+  font-size: 36px;
+  color: #ff4500;
+}
+
+.sidebar p:hover {
+  color: #ff6347;
+}
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #ff4500;
+  padding: 10px 15px;
+  height: 56px;
+  width: 56px;
+  border: none;
+  line-height: 3px;
+}
+
+.sidebar.active {
+  width: 250px;
+}
+
+.main {
+  justify-content: space-between;
+  display: flex;
+  padding: 10px;
+  transition: margin-left 0.5s;
+}
+
+.main.active {
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+.openbtn:hover {
+  background-color: #ff6347;
+}
+/*Sidebar -------------------*/
+
+/*Topbar -------------------*/
+#topbar {
+  position: fixed;
+  width: 100%;
+  height: 56px;
+  background-color: #252525;
+  overflow: hidden;
+  z-index: -1;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+/*Topbar -------------------*/

@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="/style/style.css" />
+    <link rel="stylesheet" type="text/css" href="/style/main.css" />
+    <link rel="stylesheet" type="text/css" href="/style/container.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -20,23 +21,75 @@
     <button class="openbtn" onclick="toggleSidebar()">☰</button>
 
     <div id="sidebar" class="sidebar">
-      <a class="closebtn" onclick="toggleSidebar()">&times;</a>
+      <p class="closebtn" onclick="toggleSidebar()">&times;</p>
       <a href="/store=S123456">S123456</a>
     </div>
+    <div id="main" class="main" onclick="toggleSidebar(true)">
+      <!-- Put content here -->
+      <!--Stats-->
+      <div class="section">
+        <h1>Stats</h1>
+        <div class="section-items">
+          <!--PizzaHub-->
+          <div class="section">
+            <h1>PizzaHub</h1>
+            <div class="section-items">
+              <div class="statBox">
+                <h2>Sales<h2>
+                <p>1234</p>
+              </div>
+              <div class="statBox">
+                <h2>Revenue</h2>
+                <p>1234</p>
+              </div>
+              <div class="statBox">
+                <h2>Customers</h2>
+                <p>1234</p>
+              </div>
+              <div class="statBox">
+                <h2>Placeholder</h2>
+                <p>1234</p>
+              </div>
+            </div>
+          </div>
+          <!--Customers-->
+          <div class="section">
+            <h1>Customers</h1>
+            <div class="section-items">
+              <div class="statBox">
+                <h2>Placeholder</h2>
+                <p>1234</p>
+              </div>
+              <div class="statBox">
+                <h2>Order Value</h2>
+                <p>1234</p>
+              </div>
+              <div class="statBox">
+                <h2>PizzaOrder</h2>
+                <p>1234</p>
+              </div>
+              <div class="statBox">
+                <h2>Places</h2>
+                <p>1234</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Stats End-->
 
-    <div id="main" class="main">
-      <h2>Collapsed Sidebar</h2>
-      <p>
-        Click on the hamburger menu/bar icon to open the sidebar, and push this
-        content to the right. Click on the "x" symbol to close the sidebar, and
-        pull this content back to its original position.
-      </p>
+
+      <!-- End of Content -->
     </div>
-
     <script>
-      function toggleSidebar() {
+      function toggleSidebar(turnOff = false) {
+        if (turnOff) {
+          document.getElementById("sidebar").classList.remove("active");
+          document.getElementById("main").classList.remove("active");
+        } else {
         document.getElementById("sidebar").classList.toggle("active");
         document.getElementById("main").classList.toggle("active");
+      }
       }
     </script>
   </body>
