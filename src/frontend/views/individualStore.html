@@ -65,53 +65,47 @@
 
 
 <!--TODO Diagramm in Box schieben-->
- <div id="qualityContainer">
-    <h1>Quality</h1>
-   <div id="quality" style="width: 600px; height: 600px"> 
-  </div>
- </div>
-  
-  <div id="Store-revenueContainer">
-    <h1>Store Revenue</h1>
-    <div id="Store-revenue" style="height: 600px">
-    </div>
-  </div>
+<div id="qualityContainer">
+  <h1 data-tooltip="This is the quality section">Quality</h1>
+  <div id="quality" style="width: 600px; height: 600px"></div>
+</div>
 
-  <div id="heatmapContainer">
-    <h1>Pizzas sold together</h1>
-    <div id="Heatmap" style="width: 1300px; height: 600px">
-    </div>
-  </div>
+<div id="Store-revenueContainer">
+  <h1 data-tooltip="This is the store revenue section">Store Revenue</h1>
+  <div id="Store-revenue" style="height: 600px"></div>
+</div>
+<!--Text ist nur ein Beispiel-->
+<div id="heatmapContainer">
+  <h1  data-tooltip="The heat map reveals patterns in customer behavior, indicating which combinations of pizzas are popular.
+  By analyzing these patterns, the business can understand customer preferences better, 
+  allowing for more tailored marketing and menu development.">Pizzas sold together</h1>
+  <div id="Heatmap" style="width: 1300px; height: 600px"></div>
+</div>
 
-  <div id="PizzaSizeContainer">
-    <h1>Ordered Pizza Sizes</h1>
-    <div id="PizzaSize" style="width: 400px; height: 400px">
-    </div>
-  </div>
+<div id="PizzaSizeContainer">
+  <h1 data-tooltip="This is the ordered pizza sizes section">Ordered Pizza Sizes</h1>
+  <div id="PizzaSize" style="width: 400px; height: 400px"></div>
+</div>
 
-  <div id="abcContainer">
-    <h1>ABC Analysis Customer 1</h1>
-    <div id="abcAnalysis_customer_1" style="width: 600px; height: 600px">
-    </div>
-  </div>
+<div id="abcContainer1">
+  <h1 data-tooltip="This is the ABC analysis for Customer 1 section">ABC Analysis Customer 1</h1>
+  <div id="abcAnalysis_customer_1" style="width: 600px; height: 600px"></div>
+</div>
 
-  <div id="abcContainer">
-    <h1>ABC Analysis Customer 2</h1>
-    <div id="abcAnalysis_customer_2" style="width: 600px; height: 600px">
-    </div>
-  </div>
+<div id="abcContainer2">
+  <h1 data-tooltip="This is the ABC analysis for Customer 2 section">ABC Analysis Customer 2</h1>
+  <div id="abcAnalysis_customer_2" style="width: 600px; height: 600px"></div>
+</div>
 
-  <div id="abcContainer">
-    <h1>ABC Analysis Pizza 1</h1>
-    <div id="abcAnalysis_pizza_1" style="width: 600px; height: 600px">
-    </div>
-  </div>
+<div id="abcContainer3">
+  <h1 data-tooltip="This is the ABC analysis for Pizza 1 section">ABC Analysis Pizza 1</h1>
+  <div id="abcAnalysis_pizza_1" style="width: 600px; height: 600px"></div>
+</div>
 
-
-  <div id="pizzaIngredientsContainer">
-    <h1>Ingredient Consumption in kg per Week</h1>
-    <div id="pizzaIngredients" style="width: 600px; height: 600px">
-    </div>
+<div id="pizzaIngredientsContainer">
+  <h1 data-tooltip="This is the ingredient consumption in kg per week section">Ingredient Consumption in kg per Week</h1>
+  <div id="pizzaIngredients" style="width: 600px; height: 600px"></div>
+</div>
  <!--
   <div id="Heatmap" style="width: 900px; height: 600px">
     <h1>Pizzas sold together</h1>
@@ -126,7 +120,45 @@
     <h1>Ingredient Consumption in kg per Week</h1>
   </div>-->
 </body>
-<script>sideBar();
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const headings = document.querySelectorAll('h1[data-tooltip]');
+
+    headings.forEach(heading => {
+        heading.addEventListener('mouseenter', showTooltip);
+        heading.addEventListener('mouseleave', hideTooltip);
+    });
+
+    function showTooltip(event) {
+        const tooltipText = event.target.getAttribute('data-tooltip');
+        let tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerText = tooltipText;
+        document.body.appendChild(tooltip);
+
+        const rect = event.target.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + window.scrollX}px`;
+        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
+
+        // Show the tooltip
+        tooltip.classList.add('show');
+
+        event.target._tooltip = tooltip;
+    }
+
+    function hideTooltip(event) {
+        const tooltip = event.target._tooltip;
+        if (tooltip) {
+            tooltip.classList.remove('show');
+            tooltip.addEventListener('transitionend', () => {
+                tooltip.remove();
+            });
+            event.target._tooltip = null;
+        }
+    }
+});
+
+  sideBar();
   backButton();
   timeButtons();
   
