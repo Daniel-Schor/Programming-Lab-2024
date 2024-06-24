@@ -1,7 +1,7 @@
 *{
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 600;
-    color: white; 
+    color: #FFFF; 
 }
 
 body {
@@ -9,6 +9,7 @@ body {
     margin : 0;
 }
 
+/*Sidebar -------------------*/
 .sidebar {
     scrollbar-width: none;
     height: 100%;
@@ -34,21 +35,53 @@ body {
 }
 
 .sidebar a:hover {
-    color: #f1f1f1;
+    color: #b3b3b3;
 }
 
 .sidebar .closebtn {
     position: absolute;
-    top: 0;
-    padding-top: 2px;
+    top: 5px;
+    padding-top: 0px;
     right: 25px;
     font-size: 36px;
 }
 
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #FF4500;
+    padding: 10px 15px;
+    height: 56px;
+    width: 56px;
+    border: none;
+    line-height: 3px;
+}
+
+.sidebar.active {
+    width: 250px;
+}
+
+.main {
+    padding: 16px;
+    transition: margin-left 0.5s;
+}
+
+.main.active {
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+.openbtn:hover {
+    background-color: #FF6347;
+}
+/*Sidebar -------------------*/
+
+
+/*Topbar -------------------*/
 #topbar {
     position: fixed;
     width: 100%;
-    height: 47px;
+    height: 56px;
     background-color: #252525;
     overflow: hidden;
     z-index: -1;
@@ -57,27 +90,8 @@ body {
     text-align: center;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
+/*Topbar -------------------*/
 
-#main {
-    padding: 16px;
-    transition: margin-left 0.5s;
-}
 
-.openbtn {
-    font-size: 20px;
-    cursor: pointer;
-    background-color: #FF4500;
-    padding: 10px 15px;
-    height: 47px;
-    width: 47px;
-    border: none;
-    line-height: 3px;
-}
 
-.openbtn:hover {
-    background-color: #FF6347;
-}
 
-.sidebar.active {
-    width: 250px;
-}
