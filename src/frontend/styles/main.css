@@ -72,6 +72,7 @@ body {
   right: 25px;
   font-size: 36px;
   color: #ff4500;
+  cursor: pointer;
 }
 
 .sidebar p:hover {
