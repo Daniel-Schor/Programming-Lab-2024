@@ -4,7 +4,6 @@ body {
   color: white;
 }
 
-/* Button Container */
 .button-container {
   display: flex;
   justify-content: center;
@@ -46,47 +45,8 @@ body {
   background-color: #FF6347;
 }
 
-/* Tooltip styling */
-#tooltip {
-  position: relative;
-  cursor: pointer;
-  border-bottom: 2px dotted;
-  padding: 7px;
-  font-size: 25px;
-  font-weight: bold;
-  font-family: sans-serif;
-}
 
-#tooltipText {
-  position: absolute;
-  left: 50%;
-  top: 0%;
-  transform: translateX(-50%);
-  background-color: #000;
-  color: #fff;
-  white-space: nowrap;
-  padding: 10px 15px;
-  border-radius: 7px;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
 
-#tooltipText::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translateX(-50%);
-  border: 15px solid;
-  border-color: #000 transparent transparent transparent;
-}
-
-#tooltip:hover #tooltipText {
-  top: 130%;
-  visibility: visible;
-  opacity: 1;
-}
 
 /* Chart container styling */
 .chart-container {

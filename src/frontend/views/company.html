@@ -37,16 +37,15 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
   
   <div class="button-container">
     <div class="button-group">
-      <button id="bestButton">Best</button>
-      <button id="worstButton">Worst</button>
-      <button id="customButton">Custom</button>
+      
       <button id="Last-Year">Last Year</button>
       <button id="Last-Quarter">Last Quarter</button>
       <button id="Last-Month">Last Month</button>
       <div class="customdate" id="customDateForm">
       <form id="dateForm">
-        <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
         <button id="customDate">Custom Date</button>
+        <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+        
       </form>
     </div>
     </div>
@@ -196,6 +195,7 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
       setActiveButton("bestButton");
       bestButton();
     }
+   
 
     // -------------
     statOverview();

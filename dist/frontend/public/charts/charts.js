@@ -38,6 +38,10 @@ function setActiveButton(buttonId) {
     document.getElementById("bestButton").classList.remove("active");
     document.getElementById("worstButton").classList.remove("active");
     document.getElementById("customButton").classList.remove("active");
+    document.getElementById("Last-Year").classList.remove("active");
+    document.getElementById("Last-Quarter").classList.remove("active");
+    document.getElementById("Last-Month").classList.remove("active");
+    document.getElementById("customDate").classList.remove("active");
     document.getElementById(buttonId).classList.add("active");
 }
 let best;
