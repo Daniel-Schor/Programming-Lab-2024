@@ -3,23 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <link rel="stylesheet" type="text/css" href="/style/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
 
     <title>Document</title>
   </head>
   <body>
+    <div id="sidebar" class="sidebar">
+      <a href="#" class="closebtn" onclick="toggleSidebar()">&times;</a>
+      <a href="/store=S123456">S123456</a>
+    </div>
 
+    <div id="main">
+      <button class="openbtn" onclick="toggleSidebar()">☰</button>
+      <h2>Collapsed Sidebar</h2>
+      <p>Click on the hamburger menu/bar icon to open the sidebar, and push this content to the right. Click on the "x" symbol to close the sidebar, and pull this content back to its original position.</p>
+    </div>
 
-
-
+    <script>
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("active");
+        document.getElementById("main").classList.toggle("active");
+      }
+    </script>
+    
   </body>
 </html>
