@@ -21,7 +21,7 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
   
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script type="text/javascript" src="/static/UI/buttons.js"></script>
+  <script type="text/javascript" src="/static/UI/ui.js"></script>
   <style>
     #map { height: 600px; width: 50%; }
     #statsOverviewContainer { width : 50%; height: 150px; }
@@ -77,6 +77,7 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
   </div>
   <div id="generalStatsContainer">  
     <h2 id="generalStatsTitle">General Statistics</h2>  
+    
     <div id="statsOverviewContainer"> 
       <!--TODO add chosen date or (last week, month, year)-->
       <h3>Statistics <!--for "customDate" </time>--></h3>
@@ -106,28 +107,30 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
 <!--TODO ADD DATE AND SORTING FILTER DEPENDENCY-->
 <div id="revenueWrapper">
   <div id="revenueContainer">
+      <h2 id="revenueTitle" data-tooltip="This is the revenue chart section">Revenue</h2>
       <div id="revenue" class="chart" style="height: 600px;"></div>
   </div>
 
   <div id="revenueBarContainer" style="height: 650px;">
-      <div id="revenueBar" class="chart" style="height: 600px; width: flex;"></div>
+      <h2 id="revenueBarTitle" data-tooltip="This is the revenue bar chart section">Revenue Bar</h2>
+      <div id="revenueBar" class="chart" style="height: 600px; width: 100%;"></div>
   </div>
-</div>
 </div>
 
 <div id="sector3Container">
   <div id="placeholder">
-  <div class="placeholderContainer">
-      <h2 class="placeholderTitle">Placeholder</h2>
-  </div>
+    <div class="placeholderContainer">
+        <h2 class="placeholderTitle" data-tooltip="This is the first placeholder section">Placeholder</h2>
+    </div>
 
-  <div class="placeholderContainer">
-      <h2 class="placeholderTitle">Placeholder 2</h2>
+    <div class="placeholderContainer">
+        <h2 class="placeholderTitle" data-tooltip="This is the second placeholder section">Placeholder 2</h2>
+    </div>
   </div>
-  </div>
+</div>
 
   <div id="mapContainer">
-      <h2>All Stores in the US</h2>
+      <h2 data-tooltip="This is the a Map showing all Stores">All Stores in the US</h2>
     <div id="map" style="height: 600; width: 100%;">  
     </div>  
   </div>
@@ -142,6 +145,42 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
     const map = L.map('map').setView([37.7749, -122.4194], 5);
     timeButtons();
     customDate();
+    document.addEventListener('DOMContentLoaded', function () {
+    const headings = document.querySelectorAll('h2[data-tooltip]');
+
+    headings.forEach(heading => {
+        heading.addEventListener('mouseenter', showTooltip);
+        heading.addEventListener('mouseleave', hideTooltip);
+    });
+
+    function showTooltip(event) {
+        const tooltipText = event.target.getAttribute('data-tooltip');
+        let tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerText = tooltipText;
+        document.body.appendChild(tooltip);
+
+        const rect = event.target.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + window.scrollX}px`;
+        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
+
+        // Show the tooltip
+        tooltip.classList.add('show');
+
+        event.target._tooltip = tooltip;
+    }
+
+    function hideTooltip(event) {
+        const tooltip = event.target._tooltip;
+        if (tooltip) {
+            tooltip.classList.remove('show');
+            tooltip.addEventListener('transitionend', () => {
+                tooltip.remove();
+            });
+            event.target._tooltip = null;
+        }
+    }
+});
     </script>
   <script>
     
