@@ -84,6 +84,60 @@ async function customButton() {
         }
     }
 }
+function avCustomer() {
+    // Abrufen der storeID aus dem localStorage
+    var store = JSON.parse(localStorage.getItem("store"));
+    var date = "2022-01-01"; // Beispiel-Datum für die Abfragen
+    // Definieren der API-Endpunkte
+    const apiEndpoints = [
+        `/api/totalRevenue?date=${date}`,
+        `/api/totalPizzas?date=${date}`,
+        `/api/totalOrders?date=${date}`,
+        `/api/averageOrderValue?date=${date}`,
+        `/api/pizzasPerOrder?date=${date}`
+    ];
+    // Erstellen eines Arrays von Fetch-Promises
+    const fetchPromises = apiEndpoints.map(endpoint => fetch(endpoint).then(response => response.json()));
+    // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
+    return Promise.all(fetchPromises)
+        .then(dataArray => {
+        // Kombinieren der Daten von den APIs
+        const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
+        var order = Math.round(totalRevenueData[0].total_revenue);
+        var order_1 = Math.round(totalPizzasData[0].total_pizza);
+        var order_2 = Math.round(totalOrdersData[0].total_orders);
+        var order_3 = Math.round(averageOrderValueData[0].average_order_value);
+        var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
+        // Ausgabe der Daten in der Konsole
+        console.log("Total Revenue Data:", order);
+        console.log("Total Pizzas Data:", order_1);
+        console.log("Total Orders Data:", order_2);
+        console.log("Average Order Value Data:", order_3);
+        console.log("Pizzas Per Order Data:", order_4);
+        document.getElementById("avCustomer").innerHTML = `
+        <div class="stat-item">
+          <h3>Placeholder</h3>
+          <p>${order}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Order Value</h3>
+          <p>${order_1}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Pizzas per Order</h3>
+          <p>${order_2}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Placeholder</h3>
+          <p>${order_3}</p>
+        </div>
+      `;
+    })
+        .catch(error => {
+        console.error('Error fetching data:', error);
+        throw error;
+    });
+}
 // TODO move to generalCharts.ts
 function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022-12-01") {
     return new Promise((resolve, reject) => {

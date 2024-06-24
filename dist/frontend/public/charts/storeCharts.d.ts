@@ -4,6 +4,7 @@ declare const theme = "#ccc";
 declare function monthlyRevenue(date?: string): void;
 declare function gaugeChart(date?: string): void;
 declare function heatmap(date?: string): void;
+declare function pizzaSize(date?: string): void;
 declare function abcAnalysis_customer_1(date?: string): void;
 declare function abcAnalysis_customer_2(date?: string): void;
 declare function abcAnalysis_pizza_1(date?: string): void;

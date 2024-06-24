@@ -11,6 +11,7 @@ declare let firstClick: boolean;
 declare function bestButton(): void;
 declare function worstButton(): void;
 declare function customButton(): Promise<void>;
+declare function avCustomer(): Promise<void>;
 declare function revenueChart(best?: boolean, storeIDs?: never[], storeColors?: {}, date?: string): Promise<unknown>;
 declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean, date?: string): Promise<unknown>;
 declare function addMarkers(stores: any): void;

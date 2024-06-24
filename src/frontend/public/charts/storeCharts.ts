@@ -159,121 +159,90 @@ function heatmap(date = "2022-12-01") {
 
 }
 
-/*function pizzaSize(date = "2022-12-01") {
+function pizzaSize(date = "2022-12-01") {
   //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById('PizzaSize');
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   
   //data needed: Pizza names, Size, sales number
-  
-    var data = [
-      {
-        name: 'Flora',
-        itemStyle: {
-          color: '#da0d68'
-        },
-        children: [
-          {
-            name: 'Black Tea',
-            value: 1,
-            itemStyle: {
-              color: '#975e6d'
-            }
+  fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
+    .then((response) => response.json())
+    .then((querieResult) => {
+      var pizzaData = {};
+      querieResult.forEach(pizza => {
+        if (!pizzaData[pizza.Name]) {
+          pizzaData[pizza.Name] = { name: pizza.Name, children: [] };
+        }
+        pizzaData[pizza.Name].children.push({
+          name: pizza.Size,
+          value: parseInt(pizza.size_count)
+        });
+      });
+
+      var data = Object.values(pizzaData);
+      
+      var option = {
+        title: {
+          text: 'Pizza Sales Data',
+          subtext: `Date: ${date}`,
+          textStyle: {
+            fontSize: 14,
+            align: 'center'
           },
-          {
-            name: 'Floral',
-            itemStyle: {
-              color: '#e0719c'
-            },
-            children: [
-              {
-                name: 'Chamomile',
-                value: 1,
-                itemStyle: {
-                  color: '#f99e1c'
-                }
-              },
-              {
-                name: 'Rose',
-                value: 1,
-                itemStyle: {
-                  color: '#ef5a78'
-                }
-              },
-              {
-                name: 'Jasmine',
-                value: 1,
-                itemStyle: {
-                  color: '#f7f1bd'
-                }
-              }
-            ]
+          
+          subtextStyle: {
+            align: 'center'
           }
-        ]
-      },
-      
-      
-    ];
-    option = {
-      title: {
-        text: 'WORLD COFFEE RESEARCH SENSORY LEXICON',
-        subtext: 'Source: https://worldcoffeeresearch.org/work/sensory-lexicon/',
-        textStyle: {
-          fontSize: 14,
-          align: 'center'
         },
         tooltip: { position: "top" },
-        subtextStyle: {
-          align: 'center'
-        },
-        sublink: 'https://worldcoffeeresearch.org/work/sensory-lexicon/'
-      },
-      series: {
-        type: 'sunburst',
-        data: data,
-        radius: [0, '95%'],
-        sort: undefined,
-        emphasis: {
-          focus: 'ancestor'
-        },
-        levels: [
-          {},
-          {
-            r0: '15%',
-            r: '35%',
-            itemStyle: {
-              borderWidth: 2
-            },
-            label: {
-              rotate: 'tangential'
-            }
+        series: {
+          type: 'sunburst',
+          data: data,
+          radius: [0, '95%'],
+          sort: undefined,
+          emphasis: {
+            focus: 'ancestor'
           },
-          {
-            r0: '35%',
-            r: '70%',
-            label: {
-              align: 'right'
-            }
-          },
-          {
-            r0: '70%',
-            r: '72%',
-            label: {
-              position: 'outside',
-              padding: 3,
-              silent: false
+          levels: [
+            {},
+            {
+              r0: '15%',
+              r: '35%',
+              itemStyle: {
+                borderWidth: 2
+              },
+              label: {
+                rotate: 'tangential'
+              }
             },
-            itemStyle: {
-              borderWidth: 3
+            {
+              r0: '35%',
+              r: '70%',
+              label: {
+                align: 'right'
+              }
+            },
+            {
+              r0: '70%',
+              r: '72%',
+              label: {
+                position: 'outside',
+                padding: 3,
+                silent: false
+              },
+              itemStyle: {
+                borderWidth: 3
+              }
             }
-          }
-        ]
-      }
-    };
-    updateChart(myChart, option);
+          ]
+        }
+      };
+      updateChart(myChart, option);
+    });
     
-}*/
+    
+}
 
 //TODO anzeige top 10 customer
 //TODO rein hovern
@@ -287,7 +256,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      console.log('Data received from server:', data);
+      
 
       let analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_customer_percentage_of_total);
@@ -375,7 +344,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      console.log('Data received from server:', data);
+      
       let analysisData = data[store.storeID];
       let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
       let abcCategories = Object.values(analysisData).map(item => item.abc_category);
@@ -447,7 +416,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      console.log('Data received from server:', data);
+      
 
       let analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_product_percentage_of_total);
@@ -550,7 +519,7 @@ function pizzaIngredients(date = "2022-12-01") {
   fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      
 
       // Parse the fetched data to create series data
       const ingredients = {};

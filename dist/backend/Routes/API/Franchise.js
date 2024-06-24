@@ -127,7 +127,7 @@ router.get('/pizzaSize', async (req, res) => {
         let parameters = [date];
         // Create base query to count entries by size
         let query = `
-        SELECT pr."Size", COUNT(*) AS size_count
+        SELECT pr."Name", pr."Size", COUNT(*) AS size_count
         FROM "purchaseItems" pi
         JOIN products pr ON pi."SKU" = pr."SKU"
         JOIN purchase pk ON pi."purchaseID" = pk."purchaseID"
@@ -138,7 +138,7 @@ router.get('/pizzaSize', async (req, res) => {
             query += ` AND pk."storeID" = $2`;
             parameters.push(storeID);
         }
-        query += ` GROUP BY pr."Size"`;
+        query += ` GROUP BY pr."Size", pr."Name"`;
         let result = await client.query(query, parameters);
         console.log(result.rows);
         res.status(200).json(result.rows);
