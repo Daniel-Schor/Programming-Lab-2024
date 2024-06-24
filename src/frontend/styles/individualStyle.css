@@ -29,12 +29,7 @@ body {
   width: 48%;
 }
 
-#dashboardContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-}
+
 #dashboard {
   display: flex;
   justify-content: space-between;
@@ -50,12 +45,7 @@ body {
   padding-bottom: 5px;
 }
 
-#statsOverviewContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-}
+
 
 #statsOverview {
   display: flex;
@@ -113,12 +103,7 @@ body {
   padding-bottom: 5px;
 }
 
-#Store-revenueContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-}
+
 
 #Store-revenue {
   display: flex;
@@ -135,12 +120,7 @@ body {
   padding-bottom: 5px;
 }
 
-#heatmapContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-}
+#heatmapContainer 
 
 #heatmap {
   display: flex;
@@ -157,12 +137,7 @@ body {
   padding-bottom: 5px;
 }
 
-#pizzaSizeContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-}
+#pizzaSizeContainer 
 
 #PizzaSize {
   width: 100%;
@@ -177,12 +152,7 @@ body {
   padding-bottom: 5px;
 }
 
-#abcContainer {
-  margin-top: 20px;
-  border: 2px solid #c0c0c0;
-  border-radius: 10px;
-  padding: 10px;
-}
+
 
 #abc {
   width: 100%;
@@ -196,8 +166,10 @@ body {
   border-bottom: 2px solid #ffffff;
   padding-bottom: 5px;
 }
-
-#pizzaIngredientsContainer {
+#statsOverviewContainer 
+#Store-revenueContainer 
+#abcContainer
+.pizzaIngredientsContainer {
   margin-top: 20px;
   border: 2px solid #c0c0c0;
   border-radius: 10px;
