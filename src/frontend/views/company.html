@@ -1,210 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- //hauptseite mit top 5//
-//css muss in eine extra datei//-->
-<!--TODO Menu Button in eigenen Container packen-->
-<!--TODO Neon farben für Container festlegen-->
-<!--TODO im Container revenue müssen die angeklickten stores weiß 
-und die nicht angeklickten grau sein (aktuell andersrum)-->
-<!--TODO Buttons im Revenue COntainer nach links schieben-->
-<!--TODO farben in den revenue Graphen sollen festgelegt sein-->
-<head>
-  <meta charset="UTF-8" />
- 
-  <link rel="stylesheet" type="text/css" href="/style/ui.css">
-  <link rel="stylesheet" type="text/css" href="/style/companyStyle.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
-  <script src="/static/echarts/echarts.js"></script>
-  <script src="/static/charts/charts.js" type="text/javascript"></script>
-  
-  <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script type="text/javascript" src="/static/UI/ui.js"></script>
-  <style>
-    #map { height: 600px; width: 50%; }
-    #statsOverviewContainer { width : 50%; height: 150px; }
-    #avCustomerContainer { width: 50%; height: 150px; }
-    #revenueBarContainer { width: 50%; height: 600px; }
-    #placeholderContainer { height: 600px; }
-    #placeholderContainer2 { height: 600px; }
-    </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-</head>
+    <link rel="stylesheet" type="text/css" href="/style/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
 
-<body>
-  
-  <div class="button-container">
-    <div class="button-group">
-      
-      <button id="Last-Year">Last Year</button>
-      <button id="Last-Quarter">Last Quarter</button>
-      <button id="Last-Month">Last Month</button>
-      <div class="customdate" id="customDateForm">
-      <form id="dateForm">
-        <button id="customDate">Custom Date</button>
-        <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
-        
-      </form>
-    </div>
-    </div>
-  </div>
-    <header>
-      <input type="checkbox" id="nav_check" hidden>
-      <nav>
-          <ul class="menu-container">
-          </ul>
-      </nav>
-      <div id="mapS"></div>
-      <label for="nav_check" class="menu_button">
-          <div></div>
-          <div></div>
-          <div></div>
-      </label>
-  </header>
-<!--TODO add menu button-->
-  <div id="dashboardContainer">
-     <!-- Der Codeschnipsel muss in die Funktion rein, damit die Icons dort eingefügt werden können.
-    <div class="card">
-            <div class="icon"><i class="fas fa-shopping-bag"></i></div>
-            <h3>Sales</h3>
-            <p>21 324</p>
-            <p>+2 031</p>
-        </div> -->
-    <h1 id="dashboardTitle">@Pizza Hub</h1>  
-  </div>
-  <div id="generalStatsContainer">  
-    <h2 id="generalStatsTitle">General Statistics</h2>  
-    
-    <div id="statsOverviewContainer"> 
-      <!--TODO add chosen date or (last week, month, year)-->
-      <h3>Statistics <!--for "customDate" </time>--></h3>
-      <div id="statsOverview"></div>
-    </div>
-    <div id="avCustomerContainer">
-      <h3>Average Customer Data</h3>
-      <div id="avCustomer">
-      <!-- Statistiken für das gewählte Datum hier einfügen 
-       <div class="avCustomer-item">number of orders</div>
-       <div class="avCustomer-item">spending amount</div>
-       <div class="avCustomer-item">beispiele</div>-->
-    </div> 
-  </div>
-  </div>
+    <title>Document</title>
+  </head>
+  <body>
 
-  
-  <div id="generalRevenueContainer">
-    <div class="button-container" style="align-items: flex-start;">
-      <div class="button-group">
-        <button id="bestButton" >STABLE</button>
-        <button id="worstButton">UNSTABLE</button>
-        <button id="customButton">CUSTOM</button>
-      </div>
-      <h1 id="generalRevenueTitle">Revenue</h1> 
-    </div>  
-<!--TODO ADD DATE AND SORTING FILTER DEPENDENCY-->
-<div id="revenueWrapper">
-  <div id="revenueContainer">
-      <h2 id="revenueTitle" data-tooltip="This is the revenue chart section">Revenue</h2>
-      <div id="revenue" class="chart" style="height: 600px;"></div>
-  </div>
 
-  <div id="revenueBarContainer" style="height: 650px;">
-      <h2 id="revenueBarTitle" data-tooltip="This is the revenue bar chart section">Revenue Bar</h2>
-      <div id="revenueBar" class="chart" style="height: 600px; width: 100%;"></div>
-  </div>
-</div>
 
-<div id="sector3Container">
-  <div id="placeholder">
-    <div class="placeholderContainer">
-        <h2 class="placeholderTitle" data-tooltip="This is the first placeholder section">Placeholder</h2>
-    </div>
 
-    <div class="placeholderContainer">
-        <h2 class="placeholderTitle" data-tooltip="This is the second placeholder section">Placeholder 2</h2>
-    </div>
-  </div>
-</div>
-
-  <div id="mapContainer">
-      <h2 data-tooltip="This is the a Map showing all Stores">All Stores in the US</h2>
-    <div id="map" style="height: 600; width: 100%;">  
-    </div>  
-  </div>
-</div>
-  
-
-</div>
-
-      
-  
-  <script>
-    const map = L.map('map').setView([37.7749, -122.4194], 5);
-    timeButtons();
-    customDate();
-    document.addEventListener('DOMContentLoaded', function () {
-    const headings = document.querySelectorAll('h2[data-tooltip]');
-
-    headings.forEach(heading => {
-        heading.addEventListener('mouseenter', showTooltip);
-        heading.addEventListener('mouseleave', hideTooltip);
-    });
-
-    function showTooltip(event) {
-        const tooltipText = event.target.getAttribute('data-tooltip');
-        let tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.innerText = tooltipText;
-        document.body.appendChild(tooltip);
-
-        const rect = event.target.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + window.scrollX}px`;
-        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
-
-        // Show the tooltip
-        tooltip.classList.add('show');
-
-        event.target._tooltip = tooltip;
-    }
-
-    function hideTooltip(event) {
-        const tooltip = event.target._tooltip;
-        if (tooltip) {
-            tooltip.classList.remove('show');
-            tooltip.addEventListener('transitionend', () => {
-                tooltip.remove();
-            });
-            event.target._tooltip = null;
-        }
-    }
-});
-    </script>
-  <script>
-    
-    bestButton();
-    worstButton();
-    customButton();
-
-    document.getElementById("bestButton").addEventListener("click", bestButton);
-    document.getElementById("worstButton").addEventListener("click", worstButton);
-    document.getElementById("customButton").addEventListener("click", customButton);
-
-    if (firstClick) {
-      setActiveButton("bestButton");
-      bestButton();
-    }
-   
-
-    // -------------
-    statOverview();
-    sideBar();
-    storeLocationMap();
-
-    // Function to display the data in organized boxes
-    
-  </script>
-</body>
-
+  </body>
 </html>
