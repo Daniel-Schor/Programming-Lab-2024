@@ -8,6 +8,7 @@
 und die nicht angeklickten grau sein (aktuell andersrum)-->
 <!--TODO Buttons im Revenue COntainer nach links schieben-->
 <!--TODO farben in den revenue Graphen sollen festgelegt sein-->
+<!--TODO im css den code kürzen und container zusammenfassen (flex einfügen, damit höhe und breite angepasst werden)-->
 <head>
   <meta charset="UTF-8" />
  
@@ -82,7 +83,7 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
       <h3>Statistics <!--for "customDate" </time>--></h3>
       <div id="statsOverview"></div>
     </div>
-    <div id="avCustomerContainer">
+    <div id="statsOverviewContainer">
       <h3>Average Customer Data</h3>
       <div id="avCustomer">
       <!-- Statistiken für das gewählte Datum hier einfügen 
@@ -206,6 +207,7 @@ und die nicht angeklickten grau sein (aktuell andersrum)-->
 
     // -------------
     statOverview();
+    avCustomer();
     sideBar();
     storeLocationMap();
     pizzaRanking();

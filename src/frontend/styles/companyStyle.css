@@ -157,7 +157,7 @@ body {
   padding-bottom: 5px;
 }
 
-#statsOverviewContainer {
+#statsOverviewContainer{
   margin-top: 20px;
   border: 2px solid #3a3a3a;
   border-radius: 10px;
@@ -172,12 +172,19 @@ body {
   flex-wrap: wrap;
 }
 
+#statsOverviewTitle {
+  text-align: center;
+  font-size: 24px;
+  margin: 0 0 10px;
+  border-bottom: 2px solid;
+  padding-bottom: 5px;
+}
 .stat-item {
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   flex: 1;
-  min-width: 150px;
+  width: flex;
   text-align: center;
   background-color: #3a3a3a;
 }
@@ -196,13 +203,7 @@ body {
   margin-top: 20px;
 }
 
-#statsOverviewTitle {
-  text-align: center;
-  font-size: 24px;
-  margin: 0 0 10px;
-  border-bottom: 2px solid;
-  padding-bottom: 5px;
-}
+
 
 /* General revenue container styling */
 #generalRevenueContainer {

@@ -122,25 +122,21 @@ function avCustomer() {
       console.log("Pizzas Per Order Data:", order_4);
 
       document.getElementById("avCustomer").innerHTML = `
-        <div class="avC-item">
+        <div class="stat-item">
           <h3>Placeholder</h3>
           <p>${order}</p>
         </div>
-        <div class="avC-item">
+        <div class="stat-item">
           <h3>Order Value</h3>
           <p>${order_1}</p>
         </div>
-        <div class="avC-item">
-          <h3>Total Orders</h3>
+        <div class="stat-item">
+          <h3>Pizzas per Order</h3>
           <p>${order_2}</p>
         </div>
-        <div class="avC-item">
-          <h3>Average Order Value</h3>
+        <div class="stat-item">
+          <h3>Placeholder</h3>
           <p>${order_3}</p>
-        </div>
-        <div class="avC-item">
-          <h3>Average Pizzas per Order</h3>
-          <p>${order_4}</p>
         </div>
       `;
     })
