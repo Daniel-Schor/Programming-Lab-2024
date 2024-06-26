@@ -226,7 +226,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
         var option = {
             title: {
-                text: 'ABC Analysis of Customers 1',
+                text: 'ABC Analysis of Customers',
                 left: 'center'
             },
             tooltip: {
@@ -236,12 +236,8 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                 },
                 formatter: function (params) {
                     let index = params[0].dataIndex;
-                    return `Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
+                    return `ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
                 }
-            },
-            legend: {
-                data: ['Cumulative Percentage'],
-                top: '10%'
             },
             toolbox: {
                 feature: {
@@ -252,8 +248,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                 type: 'category',
                 data: abcCategories,
                 axisLabel: {
-                    rotate: 45,
-                    align: 'right'
+                    show: false
                 }
             },
             yAxis: {
@@ -303,22 +298,23 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         .then(response => response.json())
         .then(data => {
         let analysisData = data[store.storeID];
+        let customerID = Object.keys(analysisData);
         let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
         let abcCategories = Object.values(analysisData).map(item => item.abc_category);
         var option = {
             title: {
-                text: 'ABC Analysis of Customers 2',
+                text: 'ABC Analysis of Customers total Sales descending',
                 left: 'center'
             },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
+                },
+                formatter: function (params) {
+                    let index = params[0].dataIndex;
+                    return `ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}`;
                 }
-            },
-            legend: {
-                data: ['Total Sales'],
-                top: '10%'
             },
             toolbox: {
                 feature: {
@@ -329,8 +325,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
                 type: 'category',
                 data: abcCategories,
                 axisLabel: {
-                    rotate: 45,
-                    align: 'right'
+                    show: false
                 }
             },
             yAxis: {
@@ -470,99 +465,89 @@ function pizzaIngredients(date = "2022-12-01") {
     fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-            // Parse the fetched data to create series data
-            const ingredients = {};
-            let minQuantity = Number.MAX_VALUE;
-            let maxQuantity = Number.MIN_VALUE;
-            data.forEach((item) => {
-                const ingredient = item.ingredient.trim();
-                const averageQuantity = parseFloat(item.average_quantity);
-                // Update min and max values
-                if (averageQuantity < minQuantity)
-                    minQuantity = averageQuantity;
-                if (averageQuantity > maxQuantity)
-                    maxQuantity = averageQuantity;
-                if (!ingredients[ingredient]) {
-                    ingredients[ingredient] = 0;
-                }
-                ingredients[ingredient] += averageQuantity;
-            });
-            // Normalize the values
-            const normalize = (value) => (value - minQuantity) / (maxQuantity - minQuantity) * 100;
-            const xAxisData = Object.keys(ingredients);
-            const seriesData = xAxisData.map(ingredient => ({
-                name: ingredient,
-                type: 'bar',
-                data: [normalize(ingredients[ingredient]).toFixed(2)] // Normalize and round to 2 decimal places
-            }));
-            option = {
-                tooltip: {
-                    trigger: "axis",
-                    axisPointer: {
-                        type: "shadow",
-                    },
+        // Parse the fetched data to create series data
+        const ingredients = {};
+        let minQuantity = Number.MAX_VALUE;
+        let maxQuantity = Number.MIN_VALUE;
+        data.forEach((item) => {
+            const ingredient = item.ingredient.trim();
+            const averageQuantity = parseFloat(item.average_quantity);
+            // Update min and max values
+            if (averageQuantity < minQuantity)
+                minQuantity = averageQuantity;
+            if (averageQuantity > maxQuantity)
+                maxQuantity = averageQuantity;
+            if (!ingredients[ingredient]) {
+                ingredients[ingredient] = 0;
+            }
+            ingredients[ingredient] += averageQuantity;
+        });
+        // Normalize the values
+        const normalize = (value) => (value - minQuantity) / (maxQuantity - minQuantity) * 100;
+        const xAxisData = Object.keys(ingredients);
+        const seriesData = xAxisData.map(ingredient => ({
+            name: ingredient,
+            type: 'bar',
+            emphasis: { focus: 'series' },
+            data: [normalize(ingredients[ingredient]).toFixed(2)] // Normalize and round to 2 decimal places
+        }));
+        option = {
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "shadow",
                 },
-                grid: {
-                    top: '10%', // Adjust the top margin
-                    bottom: '20%', // Adjust the bottom margin
-                    left: '10%', // Adjust the left margin
-                    right: '10%', // Adjust the right margin
-                    containLabel: true // Ensure labels are within the grid
+            },
+            legend: {
+                data: xAxisData,
+                selected: xAxisData.reduce((acc, ingredient) => {
+                    acc[ingredient] = false; // Start with all series deselected
+                    return acc;
+                }, {}),
+                bottom: 10, // Position the legend at the bottom
+                left: 'center', // Center the legend
+            },
+            grid: {
+                top: '10%', // Adjust the top margin
+                bottom: '20%', // Adjust the bottom margin for legend
+                left: '10%', // Adjust the left margin
+                right: '10%', // Adjust the right margin
+            },
+            toolbox: {
+                show: true,
+                orient: "vertical",
+                left: "right",
+                top: "center",
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: false, readOnly: false },
+                    magicType: { show: false, type: ["line", "bar", "stack"] },
+                    restore: { show: false },
+                    saveAsImage: { show: false },
                 },
-                toolbox: {
-                    show: true,
-                    orient: "vertical",
-                    left: "right",
-                    top: "center",
-                    feature: {
-                        mark: { show: true },
-                        dataView: { show: false, readOnly: false },
-                        magicType: { show: false, type: ["line", "bar", "stack"] },
-                        restore: { show: false },
-                        saveAsImage: { show: true },
-                    },
+            },
+            xAxis: [
+                {
+                    type: "category",
+                    axisTick: { show: false },
+                    data: ["Ingredients"],
                 },
-                xAxis: [
-                    {
-                        type: "category",
-                        axisTick: { show: false },
-                        data: xAxisData,
-                        axisLabel: {
-                            rotate: 45, // Rotate labels to avoid overlap
-                            interval: 0, // Show all labels
-                            formatter: function(value) {
-                                return value.split(' ').join('\n'); // Split labels into multiple lines if needed
-                            }
-                        }
-                    },
-                ],
-                yAxis: [
-                    {
-                        type: "value",
-                        min: 0, // Ensure the Y-axis starts at 0
-                        max: 100, // Normalized max value
-                        interval: 10, // Set a suitable interval for the values
-                        axisLabel: {
-                            formatter: '{value}', // Add a unit if necessary, e.g., '{value} units'
-                        }
-                    },
-                ],
-                series: [{
-                    name: 'Ingredients',
-                    type: 'bar',
-                    data: xAxisData.map(ingredient => normalize(ingredients[ingredient]).toFixed(2)),
-                    itemStyle: {
-                        emphasis: {
-                            focus: 'series'
-                        }
-                    },
-                    barWidth: '60%' // Increase the width of bars
-                }],
-            };
-            myChart.setOption(option);
-        })
+            ],
+            yAxis: [
+                {
+                    type: "value",
+                    min: 0, // Ensure the Y-axis starts at 0
+                    max: 100, // Normalized max value
+                    interval: 10, // Set a suitable interval for the values
+                    axisLabel: {
+                        formatter: '{value}', // Add a unit if necessary, e.g., '{value} units'
+                    }
+                },
+            ],
+            series: seriesData,
+        };
+        myChart.setOption(option);
+    })
         .catch((error) => console.error("Error fetching ingredient data:", error));
 }
-
-
 //# sourceMappingURL=storeCharts.js.map

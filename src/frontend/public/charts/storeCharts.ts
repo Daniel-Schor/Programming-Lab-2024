@@ -266,7 +266,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: 'ABC Analysis of Customers 1',
+          text: 'ABC Analysis of Customers',
           left: 'center'
         },
         tooltip: {
@@ -276,12 +276,8 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
           },
           formatter: function (params) {
             let index = params[0].dataIndex;
-            return `Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
+            return `ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
           }
-        },
-        legend: {
-          data: ['Cumulative Percentage'],
-          top: '10%'
         },
         toolbox: {
           feature: {
@@ -292,8 +288,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
           type: 'category',
           data: abcCategories,
           axisLabel: {
-            rotate: 45,
-            align: 'right'
+            show: false
           }
         },
         yAxis: {
@@ -346,23 +341,24 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
     .then(data => {
       
       let analysisData = data[store.storeID];
+      let customerID = Object.keys(analysisData);
       let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
       let abcCategories = Object.values(analysisData).map(item => item.abc_category);
 
       var option = {
         title: {
-          text: 'ABC Analysis of Customers 2',
+          text: 'ABC Analysis of Customers total Sales descending',
           left: 'center'
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
+          },
+          formatter: function (params) {
+            let index = params[0].dataIndex;
+            return `ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}`;
           }
-        },
-        legend: {
-          data: ['Total Sales'],
-          top: '10%'
         },
         toolbox: {
           feature: {
@@ -373,8 +369,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
           type: 'category',
           data: abcCategories,
           axisLabel: {
-            rotate: 45,
-            align: 'right'
+            show: false
           }
         },
         yAxis: {
