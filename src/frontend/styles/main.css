@@ -38,21 +38,22 @@ body {
 
 /*Sidebar -------------------*/
 .sidebar {
+  position: fixed;
   scrollbar-width: none;
   height: 100%;
   width: 0;
   position: fixed;
   z-index: 1;
-  top: 0;
   left: 0;
   background-color: #252525;
   overflow-x: hidden;
   transition: 0.5s;
-  padding-top: 60px;
+  padding-top: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.sidebar a, .sidebar p{
+.sidebar a,
+.sidebar p {
   padding: 10px 15px;
   text-decoration: none;
   font-size: 25px;
@@ -80,6 +81,7 @@ body {
 }
 
 .openbtn {
+  position: absolute;
   font-size: 20px;
   cursor: pointer;
   background-color: #ff4500;
@@ -88,6 +90,7 @@ body {
   width: 56px;
   border: none;
   line-height: 3px;
+  z-index: 9999;
 }
 
 .sidebar.active {
@@ -99,6 +102,8 @@ body {
   display: flex;
   padding: 10px;
   transition: margin-left 0.5s;
+  transition: 0.3s;
+  opacity: 1;
 }
 
 .main.active {
@@ -113,15 +118,59 @@ body {
 
 /*Topbar -------------------*/
 #topbar {
-  position: fixed;
+  position: relative;
   width: 100%;
   height: 56px;
   background-color: #252525;
   overflow: hidden;
-  z-index: -1;
   align-items: center;
   align-content: center;
   text-align: center;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /*Topbar -------------------*/
+
+/*Button -------------------*/
+.btn,
+.infobox {
+  flex: 1;
+  height: 28px;
+  padding: 0px 10px;
+  align-items: center;
+  text-align: center;
+  background: #ff4500;
+  z-index: 99999999;
+  border-radius: 5px;
+  border-width: 0;
+  margin: 2px;
+}
+
+.btn:hover {
+  background: #ff6347;
+}
+
+.btnbox {
+  background-color: #1b1b1b;
+  box-shadow: 0px 5px 2px rgba(0, 0, 0, 0.3);
+  border-color: #3a3a3a;
+  border-width: 0.5px;
+  border-style: solid;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  width: 320px;
+  justify-content: space-between;
+  margin: 3px;
+}
+
+.infobox {
+  background: #252525;
+	color: #B3B3B3;
+	font-weight: 400;
+	font-size: 10px;
+}
+/*Button -------------------*/
