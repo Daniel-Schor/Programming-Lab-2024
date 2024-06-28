@@ -174,3 +174,20 @@ body {
 	font-size: 10px;
 }
 /*Button -------------------*/
+
+/*Company Name -------------------*/
+#companyname{
+  position: absolute;
+  font-size: 20px;
+  left: 60px;
+  z-index: 9999;
+  padding: 12px 15px;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+#companyname:hover {
+  color: #b3b3b3;
+}
+/*Company Name -------------------*/
+
