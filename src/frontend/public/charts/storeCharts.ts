@@ -287,6 +287,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         xAxis: {
           type: 'category',
           name: 'Volume Share in Percent',
+          nameLocation: 'middle',
           data: abcCategories,
           axisLabel: {
             show: false
@@ -435,10 +436,6 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
             return `Green good, red bad.<br/> A pizza good, c pizza bad.<br/>Product SKU: ${productSKUs[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
           }
         },
-        legend: {
-          data: ['Cumulative Percentage'],
-          top: '10%'
-        },
         toolbox: {
           feature: {
             saveAsImage: {}
@@ -448,26 +445,15 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
           type: 'category',
           name: 'Volume Share in Percent',
           nameLocation: 'middle',
-          nameTextStyle: {
-            fontSize: 16,
-            padding: 20
-          },
           data: abcCategories,
           axisLabel: {
-            rotate: 45,
-            align: 'right'
+            show: false
           }
         },
         yAxis: {
           type: 'value',
           name: 'Value Share in Percentage',
-          nameLocation: 'middle',
-          nameTextStyle: {
-            fontSize: 16,
-            padding: 40
-          },
           axisLabel: {
-
             formatter: function (value) {
               return (value * 100).toFixed(0) + '%';
             }
