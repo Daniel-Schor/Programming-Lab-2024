@@ -66,25 +66,23 @@ body {
   color: #b3b3b3;
 }
 
-.sidebar .closebtn {
-  position: absolute;
-  top: 5px;
-  padding-top: 0px;
-  right: 25px;
-  font-size: 36px;
-  color: #ff4500;
-  cursor: pointer;
-}
-
 .sidebar p:hover {
   color: #ff6347;
+}
+
+button {
+  background-color: #ff4500;
+  z-index: 9999;
+}
+
+button:hover {
+  background-color: #ff6347;
+  cursor: pointer;
 }
 
 .openbtn {
   position: absolute;
   font-size: 20px;
-  cursor: pointer;
-  background-color: #ff4500;
   padding: 10px 15px;
   height: 56px;
   width: 56px;
@@ -109,10 +107,6 @@ body {
 .main.active {
   opacity: 0.5;
   transition: 0.3s;
-}
-
-.openbtn:hover {
-  background-color: #ff6347;
 }
 /*Sidebar -------------------*/
 
@@ -142,15 +136,9 @@ body {
   padding: 0px 10px;
   align-items: center;
   text-align: center;
-  background: #ff4500;
-  z-index: 99999999;
   border-radius: 5px;
   border-width: 0;
   margin: 2px;
-}
-
-.btn:hover {
-  background: #ff6347;
 }
 
 .btnbox {
@@ -163,22 +151,22 @@ body {
   display: inline-flex;
   align-items: center;
   width: 320px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   margin: 3px;
 }
 
-.infobox {
+.infobox, .infobox:hover {
   background: #252525;
 	color: #B3B3B3;
 	font-weight: 400;
 	font-size: 10px;
+  cursor: auto;
 }
 /*Button -------------------*/
 
 /*Company Name -------------------*/
-#companyname{
+#companyname, #user{
   position: absolute;
-  font-size: 20px;
   left: 60px;
   z-index: 9999;
   padding: 12px 15px;
@@ -186,8 +174,50 @@ body {
   font-size: 25px;
 }
 
+#user {
+  position: absolute;
+  left: auto;
+  right: 60px;
+  top: 0;
+  height: 56px;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+#user p, #user h1 {
+  left: auto;
+  right: 0px;
+  text-align: right;
+  margin: 0px;
+}
+
+#user h1 {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#user p{
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
 #companyname:hover {
   color: #b3b3b3;
+}
+
+#icon {
+  position: absolute;
+  left: auto;
+  right: 0px;
+  z-index: 9999;
+  height: 44px;
+  width: 44px;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
 }
 /*Company Name -------------------*/
 
