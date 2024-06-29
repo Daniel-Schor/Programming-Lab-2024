@@ -374,7 +374,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
         let totalSales = Object.values(analysisData).map(item => item.total_sales_pizza);
         var option = {
             title: {
-                text: 'ABC Analysis of Products by sorted_cumulative_customer_percentage_of_total',
+                text: 'ABC Analysis of Pizza by sorted_cumulative_customer_percentage_of_total',
                 left: 'center'
             },
             tooltip: {
