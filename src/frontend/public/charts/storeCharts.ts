@@ -266,7 +266,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: 'ABC Analysis of Customers',
+          text: 'ABC Analysis of Customers by sorted_cumulative_customer_percentage_of_total',
           left: 'center'
         },
         tooltip: {
@@ -276,7 +276,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
           },
           formatter: function (params) {
             let index = params[0].dataIndex;
-            return `ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
+            return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
           }
         },
         toolbox: {
@@ -286,6 +286,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         },
         xAxis: {
           type: 'category',
+          name: 'Volume Share in Percent',
           data: abcCategories,
           axisLabel: {
             show: false
@@ -293,7 +294,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         },
         yAxis: {
           type: 'value',
-          name: 'Cumulative Percentage',
+          name: 'Value Share in Percent',
           axisLabel: {
             formatter: function (value) {
               return (value * 100).toFixed(0) + '%';
@@ -306,7 +307,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
             type: 'bar',
             data: cumulativePercentage,
             label: {
-              show: true,
+              show: false,
               position: 'insideBottom',
               formatter: function (params) {
                 return (params.value * 100).toFixed(2) + '%';
@@ -347,7 +348,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: 'ABC Analysis of Customers total Sales descending',
+          text: 'ABC Analysis of Customers total Revenue descending',
           left: 'center'
         },
         tooltip: {
@@ -357,7 +358,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
           },
           formatter: function (params) {
             let index = params[0].dataIndex;
-            return `ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}`;
+            return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}`;
           }
         },
         toolbox: {
@@ -374,15 +375,15 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         },
         yAxis: {
           type: 'value',
-          name: 'Total Sales'
+          name: 'Total Revenue'
         },
         series: [
           {
-            name: 'Total Sales',
+            name: 'Total Revenue',
             type: 'bar',
             data: totalSales,
             label: {
-              show: true,
+              show: false,
               position: 'insideBottom'
             },
             itemStyle: {
@@ -421,7 +422,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: 'ABC Analysis of Products',
+          text: 'ABC Analysis of Products by sorted_cumulative_customer_percentage_of_total',
           left: 'center'
         },
         tooltip: {
@@ -431,7 +432,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
           },
           formatter: function (params) {
             let index = params[0].dataIndex;
-            return `Product SKU: ${productSKUs[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
+            return `Green good, red bad.<br/> A pizza good, c pizza bad.<br/>Product SKU: ${productSKUs[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
           }
         },
         legend: {
@@ -445,7 +446,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
         },
         xAxis: {
           type: 'category',
-          name: 'Quantity Share in Percentage',
+          name: 'Volume Share in Percent',
           nameLocation: 'middle',
           nameTextStyle: {
             fontSize: 16,
@@ -466,6 +467,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
             padding: 40
           },
           axisLabel: {
+
             formatter: function (value) {
               return (value * 100).toFixed(0) + '%';
             }
@@ -477,7 +479,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
             type: 'bar',
             data: cumulativePercentage,
             label: {
-              show: true,
+              show: false,
               position: 'insideBottom',
               formatter: function (params) {
                 return (params.value * 100).toFixed(2) + '%';
