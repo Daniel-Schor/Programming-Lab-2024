@@ -18,6 +18,7 @@ function updateCharts(date) {
   abcAnalysis_customer_1(date);
   abcAnalysis_customer_2(date);
   abcAnalysis_pizza_1(date);
+  pizza_price_popularity(date);
 }
 
 // TODO move to generalCharts.ts
@@ -593,4 +594,57 @@ function pizzaIngredients(date = "2022-12-01") {
       myChart.setOption(option);
     })
     .catch((error) => console.error("Error fetching ingredient data:", error));
+}
+
+function pizza_price_popularity(date = "2022-12-01") {
+  var store = JSON.parse(localStorage.getItem("store"));
+  var dom = document.getElementById('pizza_price_popularity');
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+
+  myChart.showLoading();
+
+  fetch(`/api/pizza-price-popularity?date=${date}&storeID=${store.storeID}`)
+    .then(response => response.json())
+    .then(data => {
+      
+
+      let analysisData = data[store.storeID];
+      let pizza_price = Object.values(analysisData).map(item => item.pizza_price);
+      let total_sales = Object.values(analysisData).map(item => item.total_sales);
+
+      var option = {
+        title: {
+          text: 'relationship between price and popularity of the pizzas',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: function (params) {
+            let index = params[0].dataIndex;
+            return ` pizza_price: ${pizza_price[index]}<br/>total_sales: ${total_sales[index]}`;
+          }
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+        },
+        yAxis: {
+        },
+        series: [
+          {
+            symbolSize: 20,
+            data: [pizza_price, total_sales]
+          }
+        ]
+      };
+
+      myChart.hideLoading();
+      updateChart(myChart, option);
+    });
 }

@@ -281,11 +281,18 @@ router.get('/pizza-price-popularity', async (req, res) => {
         ORDER BY total_sales DESC;`;
         const parameters = [storeID, date];
         const result = await client.query(query, parameters);
-        res.status(200).json(result.rows);
+        const formattedData = {};
+        result.rows.forEach(row => {
+            formattedData[row.customerID] = {
+                pizza_price: row.pizza_price,
+                total_sales: row.total_sales,
+            };
+        });
+        res.status(200).json({ [storeID]: formattedData });
     }
     catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, out of order');
+        res.status(500).send('Internal Server Error');
     }
 });
 router.get('/Stores', async (req, res) => {

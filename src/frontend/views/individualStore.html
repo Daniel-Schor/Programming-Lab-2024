@@ -21,6 +21,7 @@
   #pizzaSizeContainer {width: 400px; height: 500px;}
   #abcContainer {width: 600px; height: 700px;}
   #pizzaIngredientsContainer {width: 600px; height: 700px;}
+  #pizza_price_popularityContainer {width: 600px; height: 700px;}
   
   </style>
 </head>
@@ -106,6 +107,11 @@
   <h1 data-tooltip="This is the average ingredient consumption">Average Usage of Pizza Ingredients</h1>
   <div id="pizzaIngredients" style="width: 600px; height: 600px"></div>
 </div>
+
+<div id="pizza_price_popularityContainer">
+  <h1 data-tooltip="pizza_price_popularity">pizza_price_popularity</h1>
+  <div id="pizza_price_popularity" style="width: 600px; height: 600px"></div>
+</div>
  <!--
   <div id="Heatmap" style="width: 900px; height: 600px">
     <h1>Pizzas sold together</h1>
@@ -180,6 +186,8 @@
   abcAnalysis_pizza_1();
 
   pizzaIngredients();
+
+  pizza_price_popularity();
 
 </script>
 
