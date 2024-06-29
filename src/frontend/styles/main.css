@@ -217,11 +217,13 @@ button:hover, button:active {
   left: auto;
   right: 0px;
   z-index: 9999;
-  height: 44px;
-  width: 44px;
+  height: 38px;
+  width: 38px;
   justify-content: center;
   align-items: center;
-  padding: 6px;
+  margin: 9px;
+  background-color: white;
+  border-radius: 50%;
 }
 /*Company Name -------------------*/
 
