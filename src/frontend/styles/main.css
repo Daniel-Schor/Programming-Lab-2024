@@ -76,7 +76,8 @@ button {
   z-index: 9999;
 }
 
-button:hover, button:active {
+button:hover,
+button:active {
   background-color: #ff6347;
   cursor: pointer;
 }
@@ -92,7 +93,8 @@ button:hover, button:active {
   z-index: 9999;
 }
 
-.openbtn:active, .openbtn:hover {
+.openbtn:active,
+.openbtn:hover {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -162,17 +164,19 @@ button:hover, button:active {
   display: flex;
 }
 
-.infobox, .infobox:hover {
+.infobox,
+.infobox:hover {
   background: #252525;
-	color: #B3B3B3;
-	font-weight: 400;
-	font-size: 8px;
+  color: #b3b3b3;
+  font-weight: 400;
+  font-size: 8px;
   cursor: auto;
 }
 /*Button -------------------*/
 
 /*Company Name -------------------*/
-#companyname, #user{
+#companyname,
+#user {
   position: absolute;
   left: 60px;
   z-index: 9999;
@@ -194,7 +198,8 @@ button:hover, button:active {
   align-items: flex-end;
 }
 
-#user p, #user h1 {
+#user p,
+#user h1 {
   left: auto;
   right: 0px;
   text-align: right;
@@ -206,7 +211,7 @@ button:hover, button:active {
   margin-top: 10px;
 }
 
-#user p{
+#user p {
   font-size: 10px;
   margin-bottom: 10px;
 }
@@ -230,3 +235,8 @@ button:hover, button:active {
 }
 /*Company Name -------------------*/
 
+.centered {
+  transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+}
