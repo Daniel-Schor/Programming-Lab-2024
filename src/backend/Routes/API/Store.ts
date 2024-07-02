@@ -295,9 +295,7 @@ router.get('/daily-orders-analysis', async (req, res) => {
     }
 });
 
-//TODO echarts Yannis
-//TODO parse sql statement into queries file yannis
-//TODO outsource sql ; check location (is Store.ts right place?)
+//TODO parse sql statement into queries file
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
         const storeID = req.query.storeID;
@@ -331,10 +329,15 @@ router.get('/pizza-price-popularity', async (req, res) => {
 
         const formattedData = {};
         result.rows.forEach(row => {
-            formattedData[row.customerID] = {
+            const pizzaKey = `${row.pizza_name} (${row.pizza_size})`;
+            if (!formattedData[pizzaKey]) {
+                formattedData[pizzaKey] = [];
+            }
+            formattedData[pizzaKey].push({
                 pizza_price: row.pizza_price,
                 total_sales: row.total_sales,
-            };
+                pizza_size: row.pizza_size, // Add size to each item
+            });
         });
 
         res.status(200).json({ [storeID]: formattedData });
@@ -411,7 +414,7 @@ router.get('/ingredientUsage', async (req, res) => {
     }
 });
 
-//TODO parse sql statement into queries file yannis
+//TODO parse sql statement into queries file
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
         const storeID = req.query.storeID;
@@ -512,9 +515,7 @@ ORDER BY
     }
 });
 
-//TODO echarts yannis
-//TODO änder sql statement wie bei customers
-//TODO parse sql statement into queries file yannis
+//TODO parse sql statement into queries file
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
         const storeID = req.query.storeID;

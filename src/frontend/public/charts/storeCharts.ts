@@ -2,7 +2,7 @@
 // TODO use .env variables instead
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
-const theme = 'infographic'; 
+const theme = 'infographic';
 
 
 
@@ -164,7 +164,7 @@ function pizzaSize(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById('PizzaSize');
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-  
+
   //data needed: Pizza names, Size, sales number
   fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -181,7 +181,7 @@ function pizzaSize(date = "2022-12-01") {
       });
 
       var data = Object.values(pizzaData);
-      
+
       var option = {
         title: {
           text: 'Pizza Sales Data',
@@ -190,7 +190,7 @@ function pizzaSize(date = "2022-12-01") {
             fontSize: 14,
             align: 'center'
           },
-          
+
           subtextStyle: {
             align: 'center'
           }
@@ -240,8 +240,8 @@ function pizzaSize(date = "2022-12-01") {
       };
       updateChart(myChart, option);
     });
-    
-    
+
+
 }
 
 //TODO anzeige top 10 customer
@@ -256,7 +256,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      
+
 
       let analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_customer_percentage_of_total);
@@ -338,11 +338,11 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
   myChart.showLoading();
-  
+
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      
+
       let analysisData = data[store.storeID];
       let customerID = Object.keys(analysisData);
       let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
@@ -414,7 +414,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      
+
 
       let analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_product_percentage_of_total);
@@ -503,7 +503,7 @@ function pizzaIngredients(date = "2022-12-01") {
   fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      
+
 
       // Parse the fetched data to create series data
       const ingredients = {};
@@ -606,26 +606,41 @@ function pizza_price_popularity(date = "2022-12-01") {
   fetch(`/api/pizza-price-popularity?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      
-
       let analysisData = data[store.storeID];
-      let pizza_price = Object.values(analysisData).map(item => item.pizza_price);
-      let total_sales = Object.values(analysisData).map(item => item.total_sales);
+      let series = [];
+      let sizes = new Set();
+
+      Object.keys(analysisData).forEach(pizzaKey => {
+        if (Array.isArray(analysisData[pizzaKey])) {
+          analysisData[pizzaKey].forEach(item => {
+            sizes.add(item.pizza_size);
+            series.push({
+              name: `${item.pizza_size} (${pizzaKey})`, // Use pizza size and name as series name
+              type: 'scatter',
+              symbolSize: 20,
+              data: [[item.total_sales, item.pizza_price, pizzaKey]], // Swapped total sales and pizza price
+              emphasis: {
+                focus: 'series'
+              }
+            });
+          });
+        }
+      });
+
+      let sizesArray = Array.from(sizes);
 
       var option = {
-        title: {
-          text: 'relationship between price and popularity of the pizzas',
-          left: 'center'
-        },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
+          trigger: 'item',
           formatter: function (params) {
-            let index = params[0].dataIndex;
-            return ` pizza_price: ${pizza_price[index]}<br/>total_sales: ${total_sales[index]}`;
+            return `Pizza: ${params.value[2]}<br/>Total Sales: ${params.value[0]}<br/>Price: ${params.value[1]}`;
           }
+        },
+        legend: {
+          type: 'scroll',
+          orient: 'horizontal',
+          bottom: 10,
+          data: sizesArray // Add only distinct sizes to legend
         },
         toolbox: {
           feature: {
@@ -633,15 +648,24 @@ function pizza_price_popularity(date = "2022-12-01") {
           }
         },
         xAxis: {
+          type: 'value',
+          name: 'Total Sales'
         },
         yAxis: {
+          type: 'value',
+          name: 'Pizza Price'
         },
-        series: [
-          {
-            symbolSize: 20,
-            data: [pizza_price, total_sales]
+        series: sizesArray.map(size => ({
+          name: size,
+          type: 'scatter',
+          symbolSize: 20,
+          data: series
+            .filter(serie => serie.name.startsWith(size))
+            .flatMap(serie => serie.data),
+          emphasis: {
+            focus: 'series'
           }
-        ]
+        }))
       };
 
       myChart.hideLoading();
