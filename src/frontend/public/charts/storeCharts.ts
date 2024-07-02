@@ -2,8 +2,7 @@
 // TODO use .env variables instead
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
-const theme = '#ccc';
-
+const theme = 'infographic'; 
 
 
 
@@ -322,7 +321,8 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                 if (abcCategory === 'B') return 'yellow';
                 return 'red';
               }
-          }
+            }
+          },
         ]
       };
 

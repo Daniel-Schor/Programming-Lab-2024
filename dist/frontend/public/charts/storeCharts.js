@@ -2,7 +2,7 @@
 // TODO use .env variables instead
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
-const theme = '#ccc';
+const theme = 'infographic';
 function updateCharts(date) {
     monthlyRevenue(date);
     gaugeChart(date);
@@ -285,7 +285,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                             return 'red';
                         }
                     }
-                }
+                },
             ]
         };
         myChart.hideLoading();

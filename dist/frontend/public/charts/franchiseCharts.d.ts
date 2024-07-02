@@ -1,4 +1,4 @@
-declare const theme = "#ccc";
+declare const theme = "infographic";
 declare const defaultDate = "2022-12-01";
 declare const currentDate = "2022-12-31";
 declare const colorsToExclude: string[];

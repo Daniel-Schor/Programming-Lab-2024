@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 */
 // TODO use .env variables instead
-const theme = '#ccc';
+const theme = 'infographic';
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 // TODO move to Helper dir
