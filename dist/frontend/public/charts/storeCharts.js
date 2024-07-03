@@ -7,7 +7,7 @@ function updateCharts(date) {
     monthlyRevenue(date);
     gaugeChart(date);
     statOverview(date);
-    //pizzaSize(date);
+    pizzaSize(date);
     heatmap(date);
     pizzaIngredients(date);
     abcAnalysis_customer_1(date);

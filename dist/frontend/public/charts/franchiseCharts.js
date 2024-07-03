@@ -35,6 +35,7 @@ function randomColor() {
 }
 function updateCharts(date) {
     statOverview(date);
+    pizzaPopularity(date);
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -368,116 +369,122 @@ function storeLocationMap() {
     })
         .catch((error) => console.error("Error fetching data:", error));
 }
-function pizzaPopularity() {
+async function pizzaPopularity(date = "2022-12-01") {
     var chartDom = document.getElementById("pizzaPopularity");
     var myChart = echarts.init(chartDom, theme);
     var option;
-    const names = [
-        "Orange",
-        "Tomato",
-        "Apple",
-        "Sakana",
-        "Banana",
-        "Iwashi",
-        "Snappy Fish",
-        "Lemon",
-        "Pasta",
-    ];
-    const years = ["2001", "2002", "2003", "2004", "2005", "2006"];
-    const shuffle = (array) => {
-        let currentIndex = array.length;
-        let randomIndex = 0;
-        while (currentIndex > 0) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [
-                array[randomIndex],
-                array[currentIndex],
-            ];
-        }
-        return array;
-    };
-    const generateRankingData = () => {
-        const map = new Map();
-        const defaultRanking = Array.from({ length: names.length }, (_, i) => i + 1);
-        for (const _ of years) {
-            const shuffleArray = shuffle(defaultRanking);
-            names.forEach((name, i) => {
-                map.set(name, (map.get(name) || []).concat(shuffleArray[i]));
+    try {
+        const response = await fetch(`/api/pizzaPopularity?date=${date}`);
+        const data = await response.json();
+        const processedData = processData(data);
+        const names = Array.from(new Set(processedData.map(item => item.Name)));
+        const dates = Array.from(new Set(processedData.map(item => item.purchaseDate)));
+        const generateRankingData = () => {
+            const rankingMap = new Map();
+            dates.forEach(date => {
+                const itemsForDate = processedData.filter(item => item.purchaseDate === date);
+                itemsForDate.sort((a, b) => b.revenue - a.revenue);
+                itemsForDate.forEach((item, index) => {
+                    if (!rankingMap.has(item.Name)) {
+                        rankingMap.set(item.Name, []);
+                    }
+                    rankingMap.get(item.Name).push({ rank: index + 1, revenue: item.revenue });
+                });
             });
-        }
-        return map;
-    };
-    const generateSeriesList = () => {
-        const seriesList = [];
-        const rankingMap = generateRankingData();
-        rankingMap.forEach((data, name) => {
-            const series = {
-                name,
-                symbolSize: 20,
-                type: "line",
-                smooth: true,
-                emphasis: {
-                    focus: "series",
+            return rankingMap;
+        };
+        const generateSeriesList = () => {
+            const seriesList = [];
+            const rankingMap = generateRankingData();
+            rankingMap.forEach((data, name) => {
+                const series = {
+                    name,
+                    symbolSize: 20,
+                    type: 'line',
+                    smooth: true,
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    endLabel: {
+                        show: true,
+                        formatter: '{a}',
+                        distance: 20
+                    },
+                    lineStyle: {
+                        width: 4
+                    },
+                    data: data.map(item => item.rank), // Use rank for y-axis
+                    revenueData: data.map(item => item.revenue) // Store revenue data separately
+                };
+                seriesList.push(series);
+            });
+            return seriesList;
+        };
+        const seriesList = generateSeriesList();
+        option = {
+            title: {
+                text: 'Bump Chart (Ranking)'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
                 },
-                endLabel: {
-                    show: true,
-                    formatter: "{a}",
-                    distance: 20,
+                formatter: params => {
+                    const item = params[0];
+                    const series = seriesList.find(series => series.name === item.seriesName);
+                    const revenue = series.revenueData[item.dataIndex];
+                    return `${item.marker}${item.seriesName}: ${revenue.toFixed(2)}`;
+                }
+            },
+            grid: {
+                left: 30,
+                right: 110,
+                bottom: 30,
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                splitLine: {
+                    show: true
                 },
-                lineStyle: {
-                    width: 4,
+                axisLabel: {
+                    margin: 30,
+                    fontSize: 16
                 },
-                data,
-            };
-            seriesList.push(series);
-        });
-        return seriesList;
-    };
-    option = {
-        title: {
-            text: "Bump Chart (Ranking)",
-        },
-        tooltip: {
-            trigger: "item",
-        },
-        grid: {
-            left: 30,
-            right: 110,
-            bottom: 30,
-            containLabel: true,
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {},
+                boundaryGap: false,
+                data: dates
             },
-        },
-        xAxis: {
-            type: "category",
-            splitLine: {
-                show: true,
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    margin: 30,
+                    fontSize: 16,
+                    formatter: '#{value}'
+                },
+                inverse: true,
+                interval: 1,
+                min: 1,
+                max: names.length
             },
-            axisLabel: {
-                margin: 30,
-                fontSize: 16,
-            },
-            boundaryGap: false,
-            data: years,
-        },
-        yAxis: {
-            type: "value",
-            axisLabel: {
-                margin: 30,
-                fontSize: 16,
-                formatter: "#{value}",
-            },
-            inverse: true,
-            interval: 1,
-            min: 1,
-            max: names.length,
-        },
-        series: generateSeriesList(),
-    };
-    option && myChart.setOption(option);
+            series: seriesList
+        };
+        option && myChart.setOption(option);
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+function processData(data) {
+    return data.map(item => ({
+        Name: item.Name,
+        purchaseDate: new Date(item.purchaseDate).toISOString().split("T")[0], // Format date to YYYY-MM-DD
+        revenue: parseFloat(item.revenue) // Convert revenue to a number
+    }));
 }
 //# sourceMappingURL=franchiseCharts.js.map

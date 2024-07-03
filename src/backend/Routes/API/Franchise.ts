@@ -402,9 +402,9 @@ router.get('/pizzaPopularity', async (req, res) => {
         // Initialize parameters array for SQL query
         let parameters = [date];
         
-        // Create base query to count revenue by product name and price
+        // Create base query to sum revenue by product name and date
         let query = `
-        SELECT pr."Name", pr."Price", COUNT(*) AS revenue
+        SELECT pr."Name", DATE(pk."purchaseDate") AS "purchaseDate", SUM(pr."Price") AS revenue
         FROM "purchaseItems" pi
         JOIN products pr ON pi."SKU" = pr."SKU"
         JOIN purchase pk ON pi."purchaseID" = pk."purchaseID"
@@ -417,7 +417,7 @@ router.get('/pizzaPopularity', async (req, res) => {
             parameters.push(storeID);
         }
         
-        query += ` GROUP BY pr."Name", pr."Price"`;
+        query += ` GROUP BY DATE(pk."purchaseDate"),pr."Name"`;
         let result = await client.query(query, parameters);
         console.log(result.rows);
         res.status(200).json(result.rows);
