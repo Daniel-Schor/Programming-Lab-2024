@@ -346,5 +346,36 @@ router.get('/region-total-product', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+router.get('/pizzaPopularity', async (req, res) => {
+    try {
+        // Extract date and storeID from query parameters or set default values
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let storeID = req.query.store;
+        // Initialize parameters array for SQL query
+        let parameters = [date];
+        // Create base query to count revenue by product name and price
+        let query = `
+        SELECT pr."Name", pr."Price", COUNT(*) AS revenue
+        FROM "purchaseItems" pi
+        JOIN products pr ON pi."SKU" = pr."SKU"
+        JOIN purchase pk ON pi."purchaseID" = pk."purchaseID"
+        WHERE DATE(pk."purchaseDate") > $1
+        `;
+        // Add storeID condition if it is provided in the query parameters
+        if (storeID) {
+            query += ` AND pk."storeID" = $2`;
+            parameters.push(storeID);
+        }
+        query += ` GROUP BY pr."Name", pr."Price"`;
+        let result = await client.query(query, parameters);
+        console.log(result.rows);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        // Handle any errors that occur during the query execution
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
 export default router;
 //# sourceMappingURL=Franchise.js.map

@@ -305,9 +305,6 @@ router.get('/pizza-price-popularity', async (req, res) => {
             return res.status(400).send('StoreID is required');
         }
 
-        console.log(`Received storeID: ${storeID}`);
-        console.log(`Received date: ${date}`);
-
         let query: string = `
         SELECT 
             pr."Name" AS pizza_name, pr."Size" AS pizza_size, pr."Price" AS pizza_price, 
