@@ -61,20 +61,20 @@ function backButton() {
     });
 }
 function timeButtons() {
-    document.getElementById("Last-Year").addEventListener("click", function () {
+    document.getElementById("YTD").addEventListener("click", function () {
         updateCharts(subtractMonths(currentDate, 12));
     });
     document
-        .getElementById("Last-Quarter")
+        .getElementById("QTD")
         .addEventListener("click", function () {
         updateCharts(subtractMonths(currentDate, 3));
     });
-    document.getElementById("Last-Month").addEventListener("click", function () {
+    document.getElementById("MTD").addEventListener("click", function () {
         updateCharts(subtractMonths(currentDate, 1));
     });
 }
 function customDate() {
-    document.getElementById("customDate").addEventListener("click", function () {
+    document.getElementById("PTD").addEventListener("click", function () {
         document.getElementById("customDateForm").style.display = "block";
     });
     document

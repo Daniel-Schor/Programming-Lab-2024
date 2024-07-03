@@ -6,21 +6,29 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 */
 // TODO use .env variables instead
-const theme = 'infographic';
+const theme = "infographic";
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 // TODO move to Helper dir
 const colorsToExclude = [
-    "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
-    "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
+    "#0000FF",
+    "#0000EE",
+    "#0000CD",
+    "#0000BB",
+    "#0000AA",
+    "#000099",
+    "#000088",
+    "#000077",
+    "#3d85c6",
+    "#16537e",
 ];
 // TODO move to Helper dir
 function randomColor() {
     let color;
     do {
-        color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        color = "#" + Math.floor(Math.random() * 16777215).toString(16);
         color = color.toUpperCase();
-        color = color.padEnd(7, '0');
+        color = color.padEnd(7, "0");
     } while (colorsToExclude.includes(color));
     colorsToExclude.push(color);
     return color;
@@ -38,9 +46,9 @@ function setActiveButton(buttonId) {
     document.getElementById("bestButton").classList.remove("active");
     document.getElementById("worstButton").classList.remove("active");
     document.getElementById("customButton").classList.remove("active");
-    document.getElementById("Last-Year").classList.remove("active");
-    document.getElementById("Last-Quarter").classList.remove("active");
-    document.getElementById("Last-Month").classList.remove("active");
+    document.getElementById("YTD").classList.remove("active");
+    document.getElementById("QTD").classList.remove("active");
+    document.getElementById("MTD").classList.remove("active");
     document.getElementById("customDate").classList.remove("active");
     document.getElementById(buttonId).classList.add("active");
 }
@@ -52,7 +60,7 @@ function bestButton() {
     best = true;
     custom = false;
     firstClick = false;
-    revenueChart(best).then(colors => {
+    revenueChart(best).then((colors) => {
         curColors = colors;
         revenueBarChart(curColors);
     });
@@ -62,7 +70,7 @@ function worstButton() {
     best = false;
     custom = false;
     firstClick = false;
-    revenueChart(best).then(colors => {
+    revenueChart(best).then((colors) => {
         curColors = colors;
         revenueBarChart(curColors);
     });
@@ -94,15 +102,15 @@ function avCustomer() {
         `/api/totalPizzas?date=${date}`,
         `/api/totalOrders?date=${date}`,
         `/api/averageOrderValue?date=${date}`,
-        `/api/pizzasPerOrder?date=${date}`
+        `/api/pizzasPerOrder?date=${date}`,
     ];
     // Erstellen eines Arrays von Fetch-Promises
-    const fetchPromises = apiEndpoints.map(endpoint => fetch(endpoint).then(response => response.json()));
+    const fetchPromises = apiEndpoints.map((endpoint) => fetch(endpoint).then((response) => response.json()));
     // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
     return Promise.all(fetchPromises)
-        .then(dataArray => {
+        .then((dataArray) => {
         // Kombinieren der Daten von den APIs
-        const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData] = dataArray;
+        const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData,] = dataArray;
         var order = Math.round(totalRevenueData[0].total_revenue);
         var order_1 = Math.round(totalPizzasData[0].total_pizza);
         var order_2 = Math.round(totalOrdersData[0].total_orders);
@@ -133,8 +141,8 @@ function avCustomer() {
         </div>
       `;
     })
-        .catch(error => {
-        console.error('Error fetching data:', error);
+        .catch((error) => {
+        console.error("Error fetching data:", error);
         throw error;
     });
 }
@@ -175,7 +183,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022
                         color: storeColors[storeID],
                     },
                     data: Object.values(data[storeID]),
-                    smooth: true
+                    smooth: true,
                 });
             });
             var dom = document.getElementById("revenue");
@@ -219,9 +227,9 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022
                 myChart.clear();
             }
             updateChart(myChart, option);
-            myChart.on('click', (params) => {
+            myChart.on("click", (params) => {
                 window.location.href = `/individualStore?storeID=${params.seriesName}`;
-                localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
+                localStorage.setItem("store", JSON.stringify({ storeID: params.seriesName })); // Store the store variable
             });
             window.addEventListener("resize", myChart.resize);
             resolve(storeColors);
@@ -234,10 +242,16 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022
 }
 function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01") {
     return new Promise((resolve, reject) => {
-        var chartDom = document.getElementById('revenueBar');
+        var chartDom = document.getElementById("revenueBar");
         var myChart = echarts.init(chartDom, theme);
         // Standard bar color
-        const standardColors = ["#4A4A4A", "#FF7043", "#FFA500", "#001AFF", "#FFB347"];
+        const standardColors = [
+            "#4A4A4A",
+            "#FF7043",
+            "#FFA500",
+            "#001AFF",
+            "#FFB347",
+        ];
         const standardColor = standardColors[1];
         let req = `/api/total-store-revenue?date=${date}`;
         fetch(req)
@@ -245,56 +259,56 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01
             .then((data) => {
             var option = {
                 tooltip: {
-                    trigger: 'axis',
+                    trigger: "axis",
                     axisPointer: {
-                        type: 'shadow'
-                    }
+                        type: "shadow",
+                    },
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                    left: "3%",
+                    right: "4%",
+                    bottom: "3%",
+                    containLabel: true,
                 },
                 xAxis: [
                     {
-                        type: 'value'
-                    }
+                        type: "value",
+                    },
                 ],
                 yAxis: [
                     {
-                        type: 'category',
+                        type: "category",
                         data: Object.keys(data),
                         axisTick: {
-                            alignWithLabel: true
-                        }
-                    }
+                            alignWithLabel: true,
+                        },
+                    },
                 ],
                 series: [
                     {
-                        name: 'Total Revenue',
-                        type: 'bar',
-                        barWidth: '60%',
+                        name: "Total Revenue",
+                        type: "bar",
+                        barWidth: "60%",
                         data: Object.values(data).map((value, index) => ({
                             value: value,
                             itemStyle: {
-                                color: storeIDsColors[Object.keys(data)[index]] || standardColor
-                            }
-                        }))
-                    }
-                ]
+                                color: storeIDsColors[Object.keys(data)[index]] || standardColor,
+                            },
+                        })),
+                    },
+                ],
             };
             option && myChart.setOption(option);
             if (!custom) {
-                myChart.off('click');
-                myChart.on('click', (params) => {
+                myChart.off("click");
+                myChart.on("click", (params) => {
                     window.location.href = `/individualStore?storeID=${params.name}`;
-                    localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
+                    localStorage.setItem("store", JSON.stringify({ storeID: params.name })); // Store the store variable
                 });
             }
             else {
-                myChart.off('click');
-                myChart.on('click', (params) => {
+                myChart.off("click");
+                myChart.on("click", (params) => {
                     if (storeIDsColors[params.name] == undefined) {
                         storeIDsColors[params.name] = randomColor();
                     }
@@ -304,17 +318,17 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01
                     option = {
                         series: [
                             {
-                                name: 'Total Revenue',
-                                type: 'bar',
-                                barWidth: '60%',
+                                name: "Total Revenue",
+                                type: "bar",
+                                barWidth: "60%",
                                 data: Object.values(data).map((value, index) => ({
                                     value: value,
                                     itemStyle: {
-                                        color: storeIDsColors[Object.keys(data)[index]]
-                                    }
-                                }))
-                            }
-                        ]
+                                        color: storeIDsColors[Object.keys(data)[index]],
+                                    },
+                                })),
+                            },
+                        ],
                     };
                     // TODO: peter check
                     //updateChart(myChart, option);
@@ -328,36 +342,148 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01
     });
 }
 function addMarkers(stores) {
-    stores.forEach(store => {
+    stores.forEach((store) => {
         const marker = L.marker([store.lat, store.lon]).addTo(map);
         marker.bindPopup(`<b>Store ID:</b> ${store.storeID}<br><b>Latitude:</b> ${store.lat}<br><b>Longitude:</b> ${store.lon}`);
         // Show popup on hover
-        marker.on('mouseover', function () {
+        marker.on("mouseover", function () {
             this.openPopup();
         });
-        marker.on('mouseout', function () {
+        marker.on("mouseout", function () {
             this.closePopup();
         });
         // Redirect on click
-        marker.on('click', () => {
+        marker.on("click", () => {
             window.location.href = `/individualStore?storeID=${store.storeID}`;
-            localStorage.setItem('store', JSON.stringify(store)); // Store the store variable
+            localStorage.setItem("store", JSON.stringify(store)); // Store the store variable
         });
     });
 }
 function storeLocationMap() {
     // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
     }).addTo(map);
     // Function to add markers to the map
     // Fetch the data and add markers
-    fetch('/api/storeLocations')
-        .then(response => response.json())
-        .then(stores => {
+    fetch("/api/storeLocations")
+        .then((response) => response.json())
+        .then((stores) => {
         //console.log(stores); // Log the data for debugging
         addMarkers(stores); // Add markers to the map
     })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch((error) => console.error("Error fetching data:", error));
+}
+function pizzaPopularity() {
+    var chartDom = document.getElementById("pizzaPopularity");
+    var myChart = echarts.init(chartDom, theme);
+    var option;
+    const names = [
+        "Orange",
+        "Tomato",
+        "Apple",
+        "Sakana",
+        "Banana",
+        "Iwashi",
+        "Snappy Fish",
+        "Lemon",
+        "Pasta",
+    ];
+    const years = ["2001", "2002", "2003", "2004", "2005", "2006"];
+    const shuffle = (array) => {
+        let currentIndex = array.length;
+        let randomIndex = 0;
+        while (currentIndex > 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex],
+                array[currentIndex],
+            ];
+        }
+        return array;
+    };
+    const generateRankingData = () => {
+        const map = new Map();
+        const defaultRanking = Array.from({ length: names.length }, (_, i) => i + 1);
+        for (const _ of years) {
+            const shuffleArray = shuffle(defaultRanking);
+            names.forEach((name, i) => {
+                map.set(name, (map.get(name) || []).concat(shuffleArray[i]));
+            });
+        }
+        return map;
+    };
+    const generateSeriesList = () => {
+        const seriesList = [];
+        const rankingMap = generateRankingData();
+        rankingMap.forEach((data, name) => {
+            const series = {
+                name,
+                symbolSize: 20,
+                type: "line",
+                smooth: true,
+                emphasis: {
+                    focus: "series",
+                },
+                endLabel: {
+                    show: true,
+                    formatter: "{a}",
+                    distance: 20,
+                },
+                lineStyle: {
+                    width: 4,
+                },
+                data,
+            };
+            seriesList.push(series);
+        });
+        return seriesList;
+    };
+    option = {
+        title: {
+            text: "Bump Chart (Ranking)",
+        },
+        tooltip: {
+            trigger: "item",
+        },
+        grid: {
+            left: 30,
+            right: 110,
+            bottom: 30,
+            containLabel: true,
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {},
+            },
+        },
+        xAxis: {
+            type: "category",
+            splitLine: {
+                show: true,
+            },
+            axisLabel: {
+                margin: 30,
+                fontSize: 16,
+            },
+            boundaryGap: false,
+            data: years,
+        },
+        yAxis: {
+            type: "value",
+            axisLabel: {
+                margin: 30,
+                fontSize: 16,
+                formatter: "#{value}",
+            },
+            inverse: true,
+            interval: 1,
+            min: 1,
+            max: names.length,
+        },
+        series: generateSeriesList(),
+    };
+    option && myChart.setOption(option);
 }
 //# sourceMappingURL=franchiseCharts.js.map
