@@ -13,6 +13,7 @@ function updateCharts(date) {
     abcAnalysis_customer_1(date);
     abcAnalysis_customer_2(date);
     abcAnalysis_pizza_1(date);
+    dailyOrders(date);
 }
 // TODO move to generalCharts.ts
 // TODO move to generalCharts.ts
@@ -596,4 +597,77 @@ function pizzaIngredients(date = "2022-12-01") {
     })
         .catch((error) => console.error("Error fetching ingredient data:", error));
 }
+
+function dailyOrders(date = "2022-12-01") {
+    var store = JSON.parse(localStorage.getItem("store"));
+    var dom = document.getElementById("dailyOrders");
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    myChart.showLoading();
+    
+    fetch(`/api/dailyOrders?date=${date}&store=${store.storeID}`)
+        .then((response) => response.json())
+        .then((data) => {
+            // Reformat the data to get hours and average orders
+            const reformattedData = reformat(data[store.storeID]);
+            const hours = Object.keys(reformattedData);
+            const avgOrders = hours.map(hour => reformattedData[hour].avg);
+
+            var option = {
+                title: {
+                    text: 'Average Orders per Hour'
+                },
+                xAxis: { 
+                    type: "category",
+                    data: hours 
+                },
+                tooltip: { 
+                    trigger: "axis" 
+                },
+                legend: { 
+                    data: ['Average Orders'] 
+                },
+                toolbox: { 
+                    feature: { saveAsImage: {} } 
+                },
+                yAxis: { 
+                    type: "value",
+                    name: 'Average Orders'
+                },
+                series: [{ 
+                    data: avgOrders, 
+                    type: "line", 
+                    smooth: true,
+                    name: 'Average Orders'
+                }],
+            };
+            
+            myChart.hideLoading();
+            myChart.setOption(option);
+        })
+        .catch((error) => {
+            console.error("Error fetching daily orders data:", error);
+            myChart.hideLoading();
+        });
+}
+
+function reformat(data) {
+    let reformattedResult = {};
+
+    for (let i = 0; i < 24; i++) {
+        reformattedResult[i] = { total: 0, avg: 0, bestPizza: [] };
+    }
+
+    data.forEach(row => {
+        let hour = row.hour;
+        let totalOrders = parseInt(row.total_orders);
+        let avgOrders = row.avg_orders; // Assuming you have avg_orders in your result
+
+        reformattedResult[hour]['total'] = totalOrders;
+        reformattedResult[hour]['avg'] = avgOrders;
+        reformattedResult[hour]['bestPizza'] = row.bestPizza || [];
+    });
+
+    return reformattedResult;
+}
+//# sourceMappingURL=indivivdualCharts.js.map
 //# sourceMappingURL=indivivdualCharts.js.map

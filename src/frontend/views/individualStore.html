@@ -47,9 +47,9 @@
   <div id="dashboardContainer">
     <div id="UI">
       <button id="redirectButton">MainPage</button>
-      <button id="Last-Year">Last Year</button>
-      <button id="Last-Quarter">Last Quarter</button>
-      <button id="Last-Month">Last Month</button>
+      <button id="MTD">MTD</button>
+      <button id="QTD">QTD</button>
+      <button id="YTD">YTD</button>
       <div class="customdate" id="customDateForm">
         <form id="dateForm">
           <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
@@ -111,6 +111,11 @@
 
 <div id="pizza_price_popularityContainer">
   <h1 data-tooltip="pizza_price_popularity">pizza_price_popularity</h1>
+  <div id="pizza_price_popularity" style="width: 600px; height: 600px"></div>
+</div>
+
+<div id="dailyOrdersContainer">
+  <h1 data-tooltip="dailyOrders">Forecast Orders</h1>
   <div id="pizza_price_popularity" style="width: 600px; height: 600px"></div>
 </div>
  <!--
@@ -189,6 +194,8 @@
   pizzaIngredients();
 
   pizza_price_popularity();
+
+  dailyOrders();
 
 </script>
 

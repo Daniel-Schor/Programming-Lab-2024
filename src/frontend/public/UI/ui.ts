@@ -92,7 +92,7 @@ function timeButtons() {
 }
 
 function customDate() {
-  document.getElementById("PTD").addEventListener("click", function () {
+  document.getElementById("customDate").addEventListener("click", function () {
     document.getElementById("customDateForm").style.display = "block";
   });
 
