@@ -664,8 +664,7 @@ function dailyOrders(date = "2022-12-01") {
     fetch(`/api/daily-orders-analysis?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-        let avgValues = [];
-        Object.keys(data).forEach(hour => { avgValues.push(data[hour]["avg"]); });
+        let avgValues = Object.keys(data).map(hour => data[hour].avg);
         var option = {
             title: {
                 text: "Average Orders per Hour",
