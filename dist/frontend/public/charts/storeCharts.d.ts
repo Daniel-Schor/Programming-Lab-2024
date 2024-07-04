@@ -10,4 +10,4 @@ declare function abcAnalysis_customer_2(date?: string): void;
 declare function abcAnalysis_pizza_1(date?: string): void;
 declare function pizzaIngredients(date?: string): void;
 declare function pizza_price_popularity(date?: string): void;
-declare function dailyOrders(date?: string): void;
+declare function dailyOrders(date?: string, dow?: number): void;

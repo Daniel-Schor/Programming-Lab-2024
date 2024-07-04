@@ -657,11 +657,11 @@ function pizza_price_popularity(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-function dailyOrders(date = "2022-12-01") {
+function dailyOrders(date = "2022-12-01", dow = 1) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("dailyOrders");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    fetch(`/api/daily-orders-analysis?date=${date}&storeID=${store.storeID}`)
+    fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
         let avgValues = Object.keys(data).map(hour => data[hour].avg);
@@ -675,6 +675,10 @@ function dailyOrders(date = "2022-12-01") {
             },
             tooltip: {
                 trigger: "axis",
+                formatter: function (params) {
+                    let index = params[0].dataIndex;
+                    return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza: <br/>${data[index].bestPizza}`;
+                },
             },
             legend: {
                 data: ["Average Orders"],
