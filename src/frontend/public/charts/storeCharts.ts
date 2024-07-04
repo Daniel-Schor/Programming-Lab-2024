@@ -734,21 +734,18 @@ function dailyOrders(date = "2022-12-01") {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   
 
-  fetch(`/api/dailyOrders?date=${date}&store=${store.storeID}`)
+  fetch(`/api/daily-orders-analysis?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      // Reformat the data to get hours and average orders
-      const reformattedData = reformat(data[store.storeID]);
-      const hours = Object.keys(reformattedData);
-      const avgOrders = hours.map((hour) => reformattedData[hour].avg);
-
+      let avgValues = [];
+      Object.keys(data).forEach(hour => {avgValues.push(data[hour]["avg"])});
       var option = {
         title: {
           text: "Average Orders per Hour",
         },
         xAxis: {
           type: "category",
-          data: hours,
+          data: Object.keys(data),
         },
         tooltip: {
           trigger: "axis",
@@ -765,7 +762,7 @@ function dailyOrders(date = "2022-12-01") {
         },
         series: [
           {
-            data: avgOrders,
+            data: avgValues,
             type: "line",
             smooth: true,
             name: "Average Orders",
@@ -779,24 +776,4 @@ function dailyOrders(date = "2022-12-01") {
     .catch((error) => {
       console.error("Error fetching daily orders data:", error);
     });
-}
-
-function reformat(data) {
-  let reformattedResult = {};
-
-  for (let i = 0; i < 24; i++) {
-    reformattedResult[i] = { total: 0, avg: 0, bestPizza: [] };
-  }
-
-  data.forEach((row) => {
-    let hour = row.hour;
-    let totalOrders = parseInt(row.total_orders);
-    let avgOrders = row.avg_orders; // Assuming you have avg_orders in your result
-
-    reformattedResult[hour]["total"] = totalOrders;
-    reformattedResult[hour]["avg"] = avgOrders;
-    reformattedResult[hour]["bestPizza"] = row.bestPizza || [];
-  });
-
-  return reformattedResult;
 }
