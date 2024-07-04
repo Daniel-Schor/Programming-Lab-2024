@@ -9,10 +9,14 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"
     />
+    <script src="/static/echarts/echarts.js"></script>
+    <script src="/static/charts/charts.js" type="text/javascript"></script>
+    
 
     <title>Document</title>
   </head>
@@ -107,18 +111,18 @@
         </div>
         <div class="section-items">
           <div class="subsection">
-            <div id="revenue" class="">
-          </div> 
+            <div id="revenue" class="">test</div> 
           </div>
           <div class="subsection">test</div>
         </div>
       </div>
 
       <div class="section-items">
-        <div class="subsection">test</div>
-        <div class="subsection">test</div>
-        <div class="subsection">test</div>
+        <div id="map" style="height: 600; width: 100%;">/div>
       </div>
+      
+      
+      
     <script>
       function toggleSidebar(turnOff = false) {
         if (turnOff) {
@@ -131,7 +135,8 @@
         }
     </script>
     <script>
-      revenue();
+      const map = L.map('map').setView([37.7749, -122.4194], 5);
+      storeLocationMap();
     </script>
   </body>
 </html>
