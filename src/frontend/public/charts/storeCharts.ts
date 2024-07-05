@@ -583,12 +583,7 @@ function pizzaIngredients(date = "2022-12-01") {
         ((value - minQuantity) / (maxQuantity - minQuantity)) * 100;
 
       const xAxisData = Object.keys(ingredients);
-      const seriesData = xAxisData.map((ingredient) => ({
-        name: ingredient,
-        type: "bar",
-        emphasis: { focus: "series" },
-        data: [normalize(ingredients[ingredient]).toFixed(2)], // Normalize and round to 2 decimal places
-      }));
+      const seriesData = xAxisData.map(ingredient => normalize(ingredients[ingredient]).toFixed(2));
 
       option = {
         tooltip: {
@@ -597,18 +592,9 @@ function pizzaIngredients(date = "2022-12-01") {
             type: "shadow",
           },
         },
-        legend: {
-          data: xAxisData,
-          selected: xAxisData.reduce((acc, ingredient) => {
-            acc[ingredient] = false; // Start with all series deselected
-            return acc;
-          }, {}),
-          bottom: 10, // Position the legend at the bottom
-          left: "center", // Center the legend
-        },
         grid: {
           top: "10%", // Adjust the top margin
-          bottom: "20%", // Adjust the bottom margin for legend
+          bottom: "10%", // Adjust the bottom margin
           left: "10%", // Adjust the left margin
           right: "10%", // Adjust the right margin
         },
@@ -629,7 +615,7 @@ function pizzaIngredients(date = "2022-12-01") {
           {
             type: "category",
             axisTick: { show: false },
-            data: ["Ingredients"],
+            data: xAxisData, // Directly set all ingredients on the X-axis
           },
         ],
         yAxis: [
@@ -643,13 +629,21 @@ function pizzaIngredients(date = "2022-12-01") {
             },
           },
         ],
-        series: seriesData,
+        series: [
+          {
+            name: 'Ingredients',
+            type: 'bar',
+            data: seriesData, // Set the normalized data for each ingredient
+            emphasis: { focus: 'series' },
+          }
+        ]
       };
 
       myChart.setOption(option);
     })
     .catch((error) => console.error("Error fetching ingredient data:", error));
 }
+
 
 function pizza_price_popularity(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
@@ -732,12 +726,11 @@ function dailyOrders(date = "2022-12-01", dow = 1) {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("dailyOrders");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-  
 
   fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      let avgValues = Object.keys(data).map(hour=>data[hour].avg);
+      let avgValues = Object.keys(data).map(hour => data[hour].avg);
       var option = {
         title: {
           text: "Average Orders per Hour",
@@ -748,11 +741,11 @@ function dailyOrders(date = "2022-12-01", dow = 1) {
         },
         tooltip: {
           trigger: "axis",
-          formatter: function(params){
+          formatter: function (params) {
             let index = params[0].dataIndex;
-            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza: <br/>${data[index].bestPizza}`;
+            let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
+            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
           },
-  
         },
         legend: {
           data: ["Average Orders"],
@@ -774,10 +767,10 @@ function dailyOrders(date = "2022-12-01", dow = 1) {
         ],
       };
 
-      
       myChart.setOption(option);
     })
     .catch((error) => {
       console.error("Error fetching daily orders data:", error);
     });
 }
+
