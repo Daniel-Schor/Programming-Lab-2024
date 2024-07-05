@@ -16,7 +16,10 @@
 
 .subsection {
   width: 100%;
-  
+}
+
+.section{
+  width: 100%;
 }
 
 .box,
@@ -34,20 +37,4 @@
   border-width: none;
   background-color: #3a3a3a;
   box-shadow: none;
-}
-#map {
-  width: 600px;
-  height: 500px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-#mapContainer {
-  margin-top: 20px;
-  border: 2px solid #3a3a3a;
-  border-radius: 10px;
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
 }

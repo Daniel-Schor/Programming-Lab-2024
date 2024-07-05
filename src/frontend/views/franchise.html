@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/style/main.css" />
     <link rel="stylesheet" type="text/css" href="/style/container.css" />
+    <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -49,6 +50,8 @@
     <div id="main" class="main" onclick="toggleSidebar(true)">
       <!-- Put content here -->
       <!--Stats-->
+      <div class="section-items">
+
       <div class="section">
         <h1>Stats</h1>
         <div class="section-items">
@@ -98,32 +101,37 @@
           </div>
         </div>
       </div>
+    </div>
       <!--Stats End-->
-     
-      <div class="section">
-        <div class="section-items">
-          <div class="btnbox">
-            <button class="btn">STABLE</button>
-            <button class="btn">UNSTABLE</button>
-            <button class="btn">CUSTOM</button>
+      <div class="section-items">
+        <div class="section">
+          <div class="section-items">
+            <div class="btnbox">
+              <button class="btn">STABLE</button>
+              <button class="btn">UNSTABLE</button>
+              <button class="btn">CUSTOM</button>
+            </div>
+            <h1 class="centered">Revenue</h1>
           </div>
-          <h1 class="centered">Revenue</h1>
-        </div>
-        <div class="section-items">
-          <div class="subsection">
-            <div id="revenue" class="">test</div> 
+          <div class="section-items">
+            <div class="subsection">
+              <div id="revenue"></div>
+            </div> 
+            <div class="subsection">
+                <div id="totalRevenue"></div>
+            </div>
           </div>
-          <div class="subsection">test</div>
         </div>
       </div>
 
-      <div id="mapContainer">
-        <h2 data-tooltip="This is the a Map showing all Stores">All Stores in the US</h2>
-      <div id="map" style="height: 600; width: 100%;">  
-      </div>  
-    </div>
-      
-      
+      <div class="section-items">
+        <div class="subsection">test3</div>
+        <div class="subsection">test4</div>
+        <div class="subsection">
+          <h2 data-tooltip="This is the a Map showing all Stores">All Stores in the US</h2>
+          <div id="map"></div>  
+        </div>
+      </div>
       
     <script>
       function toggleSidebar(turnOff = false) {
