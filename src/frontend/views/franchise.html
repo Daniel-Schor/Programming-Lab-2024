@@ -48,91 +48,97 @@
       <a href="/store">S123456</a>
     </div>
     <div id="main" class="main" onclick="toggleSidebar(true)">
+      <div id="content">
       <!-- Put content here -->
-      <!--Stats-->
-      <div class="section-items">
-
-      <div class="section">
-        <h1>Stats</h1>
+      <!--Stats section-->
         <div class="section-items">
-          <!--PizzaHub-->
-          <div class="subsection">
-            <h1>PizzaHub</h1>
+          <div class="section">
+            <h1>Stats</h1>
             <div class="section-items">
-              <div class="statBox">
-                <h2>Sales<h2>
-                <p>1234</p>
+              <!--PizzaHub-->
+              <div class="subsection">
+                <h1>PizzaHub</h1>
+                <div class="section-items">
+                  <div class="statBox">
+                    <h2>Sales<h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Revenue</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Customers</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Placeholder</h2>
+                    <p>1234</p>
+                  </div>
+                </div>
               </div>
-              <div class="statBox">
-                <h2>Revenue</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Customers</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Placeholder</h2>
-                <p>1234</p>
-              </div>
-            </div>
-          </div>
-          <!--Customers-->
-          <div class="subsection">
-            <h1>Customers</h1>
-            <div class="section-items">
-              <div class="statBox">
-                <h2>Placeholder</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Order Value</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>PizzaOrder</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Places</h2>
-                <p>1234</p>
+              <!--Customers-->
+              <div class="subsection">
+                <h1>Customers</h1>
+                <div class="section-items">
+                  <div class="statBox">
+                    <h2>Placeholder</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Order Value</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>PizzaOrder</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Places</h2>
+                    <p>1234</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-      <!--Stats End-->
-      <div class="section-items">
-        <div class="section">
-          <div class="section-items">
-            <div class="btnbox">
-              <button class="btn">STABLE</button>
-              <button class="btn">UNSTABLE</button>
-              <button class="btn">CUSTOM</button>
+      <!--End of Stats section-->
+      <!--Revenue section-->
+        <div class="section-items">
+          <div class="section">
+            <div class="section-items">
+              <div class="btnbox">
+                <button class="btn" style="z-index: 99;">STABLE</button>
+                <button class="btn" style="z-index: 99;">UNSTABLE</button>
+                <button class="btn" style="z-index: 99;">CUSTOM</button>
+              </div>
+              <h1 class="centered">Revenue</h1>
             </div>
-            <h1 class="centered">Revenue</h1>
-          </div>
-          <div class="section-items">
-            <div class="subsection">
-              <div id="revenue"></div>
-            </div> 
-            <div class="subsection">
-                <div id="totalRevenue"></div>
+            <div class="section-items">
+              <div class="subsection">
+                <div id="revenue" class="diagram"></div>
+              </div> 
+              <div class="subsection">
+                  <div id="totalRevenue" class="diagram"></div>
+              </div>
             </div>
           </div>
         </div>
+        <!--End of Revenue section-->
+        <!--Bottom section-->
+        <div class="section-items">
+          <div class="subsection">test3</div>
+          <div class="subsection">test4</div>
+          <div class="subsection">
+            <h2 data-tooltip="This is the a Map showing all Stores">All Stores in the US</h2>
+            <div id="map" class="diagram"></div>  
+          </div>
+        </div>
+        <!--End of Bottom section-->
+      <!-- END OF CONTENT-->
       </div>
 
-      <div class="section-items">
-        <div class="subsection">test3</div>
-        <div class="subsection">test4</div>
-        <div class="subsection">
-          <h2 data-tooltip="This is the a Map showing all Stores">All Stores in the US</h2>
-          <div id="map"></div>  
-        </div>
-      </div>
-      
+
     <script>
       function toggleSidebar(turnOff = false) {
         if (turnOff) {

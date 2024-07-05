@@ -14,11 +14,7 @@
   white-space: nowrap;
 }
 
-.subsection {
-  width: 100%;
-}
-
-.section{
+.subsection, .section {
   width: 100%;
 }
 

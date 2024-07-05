@@ -48,69 +48,74 @@
       <a href="/store">S123456</a>
     </div>
     <div id="main" class="main" onclick="toggleSidebar(true)">
+      <div id="content">
       <!-- Put content here -->
-      <!--Stats-->
-      <div class="section-items">
-
-      <div class="section">
-        <h1>Stats</h1>
+      <!--Stats section-->
         <div class="section-items">
-          <!--PizzaHub-->
-          <div class="subsection">
-            <h1>PizzaHub</h1>
+          <div class="section">
+            <h1>Stats</h1>
             <div class="section-items">
-              <div class="statBox">
-                <h2>Sales<h2>
-                <p>1234</p>
+              <!--PizzaHub-->
+              <div class="subsection">
+                <h1>PizzaHub</h1>
+                <div class="section-items">
+                  <div class="statBox">
+                    <h2>Sales<h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Revenue</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Customers</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Placeholder</h2>
+                    <p>1234</p>
+                  </div>
+                </div>
               </div>
-              <div class="statBox">
-                <h2>Revenue</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Customers</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Placeholder</h2>
-                <p>1234</p>
-              </div>
-            </div>
-          </div>
-          <!--Customers-->
-          <div class="subsection">
-            <h1>Customers</h1>
-            <div class="section-items">
-              <div class="statBox">
-                <h2>Placeholder</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Order Value</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>PizzaOrder</h2>
-                <p>1234</p>
-              </div>
-              <div class="statBox">
-                <h2>Places</h2>
-                <p>1234</p>
+              <!--Customers-->
+              <div class="subsection">
+                <h1>Customers</h1>
+                <div class="section-items">
+                  <div class="statBox">
+                    <h2>Placeholder</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Order Value</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>PizzaOrder</h2>
+                    <p>1234</p>
+                  </div>
+                  <div class="statBox">
+                    <h2>Places</h2>
+                    <p>1234</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      <!--End of Stats section-->
+      <!--Revenue section-->
+        <div class="section-items">
+          <div class="subsection">
+            <div class="diagram"></div>
+          </div> 
+          <div class="subsection">
+            <div class="diagram"></div>
+          </div>
+        </div>
+        <!--End of Revenue section-->
+      <!-- END OF CONTENT-->
       </div>
-    </div>
-      <!--Stats End-->
-    <div class="section-items">
-      <div class="subsection">
-        <div id="revenue"></div>
-      </div> 
-      <div class="subsection">
-        <div id="totalRevenue"></div>
-      </div>
-    </div>
+
       
     <script>
       function toggleSidebar(turnOff = false) {
@@ -122,6 +127,10 @@
         document.getElementById("main").classList.toggle("active");
       }      
         }
+    </script>
+    <script>
+      const map = L.map('map').setView([37.7749, -122.4194], 5);
+      storeLocationMap();
     </script>
   </body>
 </html>

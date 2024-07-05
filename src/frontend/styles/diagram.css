@@ -3,7 +3,10 @@
     height: 250px;
   }
   
-  #revenue {
-    height: 300px;
-  }
+#revenue {
+  height: 300px;
+}
   
+  .diagram {
+    height: 100px;
+  }
