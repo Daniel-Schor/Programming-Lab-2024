@@ -6,7 +6,7 @@ dotenv.config();
 */
 
 // TODO use .env variables instead
-const theme = '#ccc'; 
+const theme = '#ccc';
 const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 
@@ -31,11 +31,11 @@ function randomColor() {
 
 function updateCharts(date) {
   statOverview(date);
- 
+
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
-  
+
   if (option && typeof option === "object") {
     chart.setOption(option, true);
   }
@@ -98,7 +98,7 @@ async function customButton() {
 
 
 // TODO move to generalCharts.ts
-function revenueChart(best = true, storeIDs = [], storeColors = {},date = "2022-12-01") {
+function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022-12-01") {
   return new Promise((resolve, reject) => {
     var days = [];
     let lineInfos = [];
@@ -111,7 +111,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {},date = "2022-
     } else {
       req += "&limit=5";
     }
-    
+
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
@@ -184,17 +184,17 @@ function revenueChart(best = true, storeIDs = [], storeColors = {},date = "2022-
         }
 
         updateChart(myChart, option);
-        
+
         myChart.on('click', (params) => {
           window.location.href = `/individualStore?storeID=${params.seriesName}`;
           localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
         });
-        
+
         window.addEventListener("resize", myChart.resize);
 
         resolve(storeColors);
       })
-      
+
       .catch((error) => {
         console.error("Error fetching data:", error);
         reject(error);
@@ -203,14 +203,14 @@ function revenueChart(best = true, storeIDs = [], storeColors = {},date = "2022-
 }
 
 
-function revenueBarChart(storeIDsColors = {}, custom = false,date = "2022-12-01") {
+function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01") {
   return new Promise((resolve, reject) => {
     var chartDom = document.getElementById('revenueBar');
     var myChart = echarts.init(chartDom, theme);
     // Standard bar color
     const standardColors = ["#4A4A4A", "#FF7043", "#FFA500", "#001AFF", "#FFB347"]
     const standardColor = standardColors[1];
-    
+
     let req = `/api/total-store-revenue?date=${date}`;
     fetch(req)
       .then((response) => response.json())
@@ -329,7 +329,7 @@ function addMarkers(stores) {
 function storeLocationMap() {
   // Add OpenStreetMap tile layer
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors",
+    attribution: '',
   }).addTo(map);
 
   // Function to add markers to the map

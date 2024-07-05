@@ -294,7 +294,7 @@ function addMarkers(stores) {
 function storeLocationMap() {
     // Add OpenStreetMap tile layer
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap contributors",
+        attribution: '',
     }).addTo(map);
     // Function to add markers to the map
     // Fetch the data and add markers
