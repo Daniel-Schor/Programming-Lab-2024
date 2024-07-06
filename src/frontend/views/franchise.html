@@ -14,6 +14,8 @@
     <script src="/static/echarts/echarts.js"></script>
     <script src="/static/charts/charts.js" type="text/javascript"></script>
     <script src="/src/frontend/public/charts/charts.ts" type="module"></script>
+    <script src="/src/frontend/public/charts/storeCharts.ts" type="module"></script>
+    <script src="/src/frontend/public/UI/ui.ts" type="module"></script>
 
     <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -80,9 +82,10 @@
               </div>
               <!--Customers-->
               <div class="subsection">
-                <h1>Customers</h1>
-                <div class="section-items">
+                 <h1>Customers</h1>
+                 <div class="section-items">
                   <div class="statBox">
+                    <div id="stat-item"></div>
                     <h2>Placeholder</h2>
                     <p>1234</p>
                   </div>
@@ -98,7 +101,7 @@
                     <h2>Places</h2>
                     <p>1234</p>
                   </div>
-                </div>
+                </div> 
               </div>
             </div>
           </div>
@@ -120,7 +123,7 @@
                 <div id="revenue" class="diagram"></div>
               </div> 
               <div class="subsection">
-                  <div id="totalRevenue" class="diagram"></div>
+                  <div id="revenueBar" class="diagram"></div>
               </div>
             </div>
           </div>
@@ -136,9 +139,9 @@
           </div>
         </div>
         <!--End of Bottom section-->
-        <div id="revenueContainer" class="diagram">
-          <div id="statsOverview" class="diagram"></div>
-          <div id="revenue"></div>
+        <div id="subsection">
+          <div id="statsOverview" class="chart"></div>
+          <div id="revenue" class="charts" style="height: 600px; width: 100%;"></div>
         </div>
 
       <!-- END OF CONTENT-->
@@ -162,6 +165,7 @@
       statOverview();
       avCustomer();
       pizzaPopularity();
+      revenueChart();
     </script>
   </body>
 </html>

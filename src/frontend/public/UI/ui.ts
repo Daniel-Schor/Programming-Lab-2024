@@ -161,7 +161,7 @@ function statOverview(date = "2022-12-01") {
       var order_3 = Math.round(averageOrderValueData[0].average_order_value);
       var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
 
-      document.getElementById("statsOverview").innerHTML = `
+      document.getElementById("statsOverview").innerHTML = `	
         <div class="stat-item">
           <h3>Revenue</h3>
           <p>${order}</p>
@@ -182,7 +182,7 @@ function statOverview(date = "2022-12-01") {
           <h3>Average Pizzas per Order</h3>
           <p>${order_4}</p>
         </div>
-      `;
+        `;
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
