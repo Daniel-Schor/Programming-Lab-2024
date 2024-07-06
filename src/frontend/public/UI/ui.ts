@@ -131,6 +131,8 @@ function getPizzasPerOrder(date, storeID) {
   return fetch(endpoint).then((response) => response.json());
 }
 
+let initialData = null;
+
 function statOverview(date = "2022-12-01") {
   const store = JSON.parse(localStorage.getItem("store"));
   const storeID = store ? store.storeID : null;
@@ -155,34 +157,65 @@ function statOverview(date = "2022-12-01") {
         averageOrderValueData,
         pizzasPerOrderData,
       ] = dataArray;
-      var order = Math.round(totalRevenueData[0].total_revenue);
-      var order_1 = Math.round(totalPizzasData[0].total_pizza);
-      var order_2 = Math.round(totalOrdersData[0].total_orders);
-      var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-      var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
+      const currentData = {
+        totalRevenue: Math.round(totalRevenueData[0].total_revenue),
+        totalPizzas: Math.round(totalPizzasData[0].total_pizza),
+        totalOrders: Math.round(totalOrdersData[0].total_orders),
+        averageOrderValue: Math.round(averageOrderValueData[0].average_order_value),
+        pizzasPerOrder: parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2),
+      };
 
-      document.getElementById("statsOverview").innerHTML = `
+      const initialHTML = initialData ? `
+        <h3>Previous Data</h3>
         <div class="stat-item">
           <h3>Revenue</h3>
-          <p>${order}</p>
+          <p>${initialData.totalRevenue}</p>
         </div>
         <div class="stat-item">
           <h3>Pizzas</h3>
-          <p>${order_1}</p>
+          <p>${initialData.totalPizzas}</p>
         </div>
         <div class="stat-item">
           <h3>Orders</h3>
-          <p>${order_2}</p>
+          <p>${initialData.totalOrders}</p>
         </div>
         <div class="stat-item">
           <h3>Average Order Value</h3>
-          <p>${order_3}</p>
+          <p>${initialData.averageOrderValue}</p>
         </div>
         <div class="stat-item">
           <h3>Average Pizzas per Order</h3>
-          <p>${order_4}</p>
+          <p>${initialData.pizzasPerOrder}</p>
+        </div>
+      ` : '';
+
+      document.getElementById("statsOverview").innerHTML = `
+        ${initialHTML}
+        <h3>Current Data</h3>
+        <div class="stat-item">
+          <h3>Revenue</h3>
+          <p>${currentData.totalRevenue}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Pizzas</h3>
+          <p>${currentData.totalPizzas}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Orders</h3>
+          <p>${currentData.totalOrders}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Average Order Value</h3>
+          <p>${currentData.averageOrderValue}</p>
+        </div>
+        <div class="stat-item">
+          <h3>Average Pizzas per Order</h3>
+          <p>${currentData.pizzasPerOrder}</p>
         </div>
       `;
+
+      // Store the current data as initial data for the next comparison
+      initialData = currentData;
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
