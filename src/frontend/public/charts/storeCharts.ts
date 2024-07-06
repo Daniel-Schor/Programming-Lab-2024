@@ -302,7 +302,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: "ABC Analysis of Customers by sorted_cumulative_customer_percentage_of_total",
+          text: "ABC Analysis of Customers  sorted by cumulative customer percentage of total revenue",
           left: "center",
         },
         tooltip: {
@@ -314,7 +314,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
             let index = params[0].dataIndex;
             return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${
               abcCategories[index]
-            }<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${
+            }<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${
               totalSales[index]
             }<br/>Cumulative Percentage: ${(
               cumulativePercentage[index] * 100
