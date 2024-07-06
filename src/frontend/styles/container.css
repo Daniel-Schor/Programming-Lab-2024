@@ -36,22 +36,3 @@
   box-shadow: none;
 }
 
-#revenue {
-  width: auto;
-  display: flex;
-}
-
-#revenueContainer {
-  margin-top: 20px;
-  border: 2px solid #3a3a3a;
-  border-radius: 10px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-#statsOverview {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
