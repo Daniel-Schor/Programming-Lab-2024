@@ -2,6 +2,19 @@
 
 ## Setup
 - Download and install [NODE](https://nodejs.org/en/download)
+- Download and instal [PostgresSQL](https://www.postgresql.org/download/)
+    - Choose the password: admin
+    - Choose Locale setting: English, United States
+- Configuration of PostgressSQL
+    - Start pgAdmin4
+    - Click File -> Preferences > Paths -> -> Binary Path -> PostgreSQL Binary Path -> choose PostgreSQL 16 and edit the binary Path to "C:\Program Files\PostgreSQL\16\bin" or there where your install file of PostgressSQL is
+- Download the [Database](https://studfrauasde-my.sharepoint.com/:u:/g/personal/yannis_koerner_stud_fra-uas_de/EZvGVpPy49pIoH4PIbFGx2ABaNo38A277FUR4gqsklbdQA?e=dA7DX2)
+    - start pgAdmin4
+    - Click on servers -> Click on postgresSQL -> Type your Password here: admin -> Click right on databases -> create database
+        - Database Name: pizza
+        - owner: postgres
+    - Click right on the new database -> Click on restore
+        - Role Name: postgres
 - Clone the Repository to your local machine
 
 ## How to code:
@@ -54,31 +67,3 @@ nodemon@3.1.0
 
 Y drücken dann wird es installiert
 ```
-
-# PostgresSQL
-
-## Download and instal PostgresSQL
-https://www.postgresql.org/download/
-
-Click on until you reach the password input.
-Choose the password: admin
-Then click on until you reach the "Locale" setting. There you select "English, United States".
-Then click further.
-
-## Load Database
-download database file : https://studfrauasde-my.sharepoint.com/:u:/g/personal/yannis_koerner_stud_fra-uas_de/EZvGVpPy49pIoH4PIbFGx2ABaNo38A277FUR4gqsklbdQA?e=dA7DX2
-- open pgAdmin4
-- create a database named "pizza"
-- right click on pizza and choose "restore"
-- now choose the downloaded file through the explorer 
-
-
-# Links
-## Document folder
-https://studfrauasde-my.sharepoint.com/:f:/r/personal/yannis_koerner_stud_fra-uas_de/Documents/Programming-Lab?csf=1&web=1&e=vDj29A
-
-## Analze Data
-https://studfrauasde-my.sharepoint.com/:w:/g/personal/tristan_buls_stud_fra-uas_de/EZX1jaI2qFdCojF1y3b-osABBWreVkqK7syMf01LEtO0Bw?e=Nwg9YH
-
-## Sprint Log
-https://studfrauasde-my.sharepoint.com/:x:/g/personal/fatima_irhzal_stud_fra-uas_de/Ec4mQB_Eqk9HnrkcP1y7kb4BTfjSLtL8Pj2u6e094IZEqQ?e=VrTUaS
