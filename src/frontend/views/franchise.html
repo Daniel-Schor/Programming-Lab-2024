@@ -6,17 +6,18 @@
     <link rel="stylesheet" type="text/css" href="/style/main.css" />
     <link rel="stylesheet" type="text/css" href="/style/container.css" />
     <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"/>
+  
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"
-    />
+
     <script src="/static/echarts/echarts.js"></script>
     <script src="/static/charts/charts.js" type="text/javascript"></script>
+    <script src="/src/frontend/public/charts/charts.ts" type="module"></script>
+
+    <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script type="text/javascript" src="/static/UI/ui.js"></script>
     
 
     <title>Document</title>
@@ -135,6 +136,11 @@
           </div>
         </div>
         <!--End of Bottom section-->
+        <div id="revenueContainer" class="diagram">
+          <div id="statsOverview" class="diagram"></div>
+          <div id="revenue"></div>
+        </div>
+
       <!-- END OF CONTENT-->
       </div>
 
@@ -153,6 +159,9 @@
     <script>
       const map = L.map('map', {attributionControl: false}).setView([39, -120], 5);
       storeLocationMap();
+      statOverview();
+      avCustomer();
+      pizzaPopularity();
     </script>
   </body>
 </html>

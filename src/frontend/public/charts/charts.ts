@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 */
-
+ 
 // TODO use .env variables instead
 const theme = '#ccc';
 const defaultDate = "2022-12-01";
