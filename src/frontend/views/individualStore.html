@@ -18,12 +18,10 @@
  <style>
   #dashboardContainer {width: 1000px;height: 150px;}
   #statsOverviewContainer {width: 100%; height: 150px;}
-  #qualityContainer {width: 600px; height: 600px;}
   #pizzaSizeContainer {width: 400px; height: 500px;}
   #abcContainer {width: 600px; height: 700px;}
   #pizzaIngredientsContainer {width: 600px; height: 700px;}
   #pizza_price_popularityContainer {width: 600px; height: 700px;}
-  
   </style>
 </head>
 
@@ -67,54 +65,59 @@
 
 
 <!--TODO Diagramm in Box schieben-->
-<div id="qualityContainer">
-  <h1 data-tooltip="This is the quality section">Quality</h1>
-  <div id="quality" style="width: 600px; height: 600px"></div>
+<div class="section" style="height: fit-content;">
+  <div class="s2Container" style="width:30%">
+    <h1 data-tooltip="This is the quality section">Quality</h1>
+    <div id="quality" style="width: 600px; height: 600px"></div>
+  </div>
+  <div class="s2Container" style="width:70%">
+    <h1 data-tooltip="This is the store revenue section">Store Revenue</h1>
+    <div id="Store-revenue" style="height: 600px"></div>
+  </div>
 </div>
 
-<div id="Store-revenueContainer">
-  <h1 data-tooltip="This is the store revenue section">Store Revenue</h1>
-  <div id="Store-revenue" style="height: 600px"></div>
+<div class="section" style ="height: fit-content;">
+  <div class="s2Container" style="width: 50%; height:fit-content">
+    <h1 data-tooltip="This is the ordered pizza sizes section">Ordered Pizza Sizes</h1>
+    <div id="PizzaSize" style="width: 1000px; height: 1000px"></div>
+  </div>
+  <div class="s2Container" style="width: 50%">
+    <h1 data-tooltip="The heat map reveals patterns in customer behavior, indicating which combinations of pizzas are popular.
+    By analyzing these patterns, the business can understand customer preferences better, 
+    allowing for more tailored marketing and menu development.">Common combinations in Sales</h1>
+    <div id="Heatmap" style="width: 1300px; height: 600px"></div>
+  </div>
 </div>
+
+<div class="section" style ="height: fit-content;">
+  <div class="s2Container" style="width: 50%; height: fit-content">
+    <h1 data-tooltip="This is the ABC analysis section">ABC Analysis</h1>
+    <div id="abcAnalysis_customer_1" style="width: 600px; height: 600px"></div>
+  </div>
+  <div class="s2Container" style="width: 50%;height: fit-content">
+    <h1 data-tooltip="This is the ordered pizza sizes section">Ordered Pizza Sizes</h1>
+    <div id="abcAnalysis_customer_2" style="width: 600px; height: 600px"></div>
+  </div>
+  <div class="s2Container" style="width: 50%; height: fit-content">
+    <h1 data-tooltip="This is the ABC analysis section">ABC Analysis</h1>
+    <div id="abcAnalysis_pizza_1" style="width: 600px; height: 600px"></div>
+  </div>
+</div>
+
 <!--Text ist nur ein Beispiel-->
-<div id="heatmapContainer">
-  <h1  data-tooltip="The heat map reveals patterns in customer behavior, indicating which combinations of pizzas are popular.
-  By analyzing these patterns, the business can understand customer preferences better, 
-  allowing for more tailored marketing and menu development.">Pizzas sold together</h1>
-  <div id="Heatmap" style="width: 1300px; height: 600px"></div>
+<div class="section" style ="height: fit-content;">
+  <div class="s2Container">
+    <h1 data-tooltip="This is the average ingredient consumption">Average Usage of Pizza Ingredients</h1>
+    <div id="pizzaIngredients" style="width: 600px; height: 600px"></div>
+  </div>
+
+  <div class="s2Container">
+    <h1 data-tooltip="pizza_price_popularity">pizza_price_popularity</h1>
+    <div id="pizza_price_popularity" style="width: 600px; height: 600px"></div>
+  </div>
 </div>
 
-<div id="PizzaSizeContainer">
-  <h1 data-tooltip="This is the ordered pizza sizes section">Ordered Pizza Sizes</h1>
-  <div id="PizzaSize" style="width: 600px; height: 600px"></div>
-</div>
-
-<div id="abcContainer1">
-  <h1 data-tooltip="This is the ABC analysis for Customer 1 section">ABC Analysis of Customers by sorted_cumulative_customer_percentage_of_total</h1>
-  <div id="abcAnalysis_customer_1" style="width: 1000px; height: 600px"></div>
-</div>
-
-<div id="abcContainer2">
-  <h1 data-tooltip="This is the ABC analysis for Customer 2 section">ABC Analysis of Customers total Revenue descending</h1>
-  <div id="abcAnalysis_customer_2" style="width: 1000px; height: 600px"></div>
-</div>
-
-<div id="abcContainer3">
-  <h1 data-tooltip="This is the ABC analysis for Pizza 1 section">ABC Analysis of Pizza by sorted_cumulative_customer_percentage_of_total</h1>
-  <div id="abcAnalysis_pizza_1" style="width: 600px; height: 600px"></div>
-</div>
-
-<div id="pizzaIngredientsContainer">
-  <h1 data-tooltip="This is the average ingredient consumption">Average Usage of Pizza Ingredients</h1>
-  <div id="pizzaIngredients" style="width: 600px; height: 600px"></div>
-</div>
-
-<div id="pizza_price_popularityContainer">
-  <h1 data-tooltip="pizza_price_popularity">pizza_price_popularity</h1>
-  <div id="pizza_price_popularity" style="width: 600px; height: 600px"></div>
-</div>
-
-<div id="dailyOrdersContainer">
+<div class="s2Container">
   <h1 data-tooltip="dailyOrders">Forecast Orders</h1>
   <div id="dailyOrders" style="width: 600px; height: 600px"></div>
 </div>
