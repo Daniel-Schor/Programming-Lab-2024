@@ -342,7 +342,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
             type: 'bar',
             data: cumulativePercentage,
             label: {
-              show: true,
+              show: false,
               position: 'insideBottom',
               formatter: function (params) {
                 return (params.value * 100).toFixed(2) + '%';
@@ -355,8 +355,10 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                 if (abcCategory === 'B') return 'yellow';
                 return 'red';
               }
-          }
+            } // This closing brace was missing
+          },
         ]
+      
       };
 
       myChart.hideLoading();
