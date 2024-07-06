@@ -253,7 +253,6 @@ router.get('/daily-orders-analysis', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO parse sql statement into queries file
 router.get('/pizza-price-popularity', async (req, res) => {
     try {
         const storeID = req.query.storeID;
@@ -356,7 +355,6 @@ router.get('/ingredientUsage', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO parse sql statement into queries file
 router.get('/abc-analysis-customers', async (req, res) => {
     try {
         const storeID = req.query.storeID;
@@ -450,7 +448,6 @@ ORDER BY
         res.status(500).send('Internal Server Error');
     }
 });
-//TODO parse sql statement into queries file
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
         const storeID = req.query.storeID;

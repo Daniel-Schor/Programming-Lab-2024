@@ -258,8 +258,6 @@ function pizzaSize(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-//TODO anzeige top 10 customer
-//TODO rein hovern
 function abcAnalysis_customer_1(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("abcAnalysis_customer_1");
