@@ -154,7 +154,17 @@
           </div>
         </div>
         <div class="subsection">
-          <h1>section b</h1>
+          <div class="section-items" style="justify-content: space-between;">
+            <div class="btnbox" style="width: 120px;">
+              <button class="btn" id="Last-Month">BACK</button>
+              <button class="btn" id="Last-Quarter">NEXT</button>
+            </div>
+            <div class="btnbox" style="width: 60px;">
+              <!--TODO options TODAY, TOMORROW, MONDAY, TUESDAY, etc.-->
+              <button class="infobox">TODAY</button>
+            </div>
+            <h1 class="centered">section b</h1>
+          </div>
           <div class="section-items">
             <div class="subsection">
               <div class="diagram">
@@ -169,28 +179,46 @@
               </div>
             </div>
           </div>
+          <div class="section-items">
+            <div class="statBox">
+              <div id="stat-item"></div>
+              <h2>Placeholder A</h2>
+              <p>1234</p>
+            </div>
+            <div class="statBox">
+              <h2>Order Value B</h2>
+              <p>1234</p>
+            </div>
+            <div class="statBox">
+              <h2>PizzaOrder C</h2>
+              <p>1234</p>
+            </div>
+            <div class="statBox">
+              <h2>Places D</h2>
+              <p>1234</p>
+            </div>
+          </div>
         </div>
+        <!--End of Revenue section-->
+        <!-- END OF CONTENT-->
       </div>
-      <!--End of Revenue section-->
-      <!-- END OF CONTENT-->
-    </div>
 
 
-    <script>
-      function toggleSidebar(turnOff = false) {
-        if (turnOff) {
-          document.getElementById("sidebar").classList.remove("active");
-          document.getElementById("main").classList.remove("active");
-        } else {
-          document.getElementById("sidebar").classList.toggle("active");
-          document.getElementById("main").classList.toggle("active");
+      <script>
+        function toggleSidebar(turnOff = false) {
+          if (turnOff) {
+            document.getElementById("sidebar").classList.remove("active");
+            document.getElementById("main").classList.remove("active");
+          } else {
+            document.getElementById("sidebar").classList.toggle("active");
+            document.getElementById("main").classList.toggle("active");
+          }
         }
-      }
-    </script>
-    <script>
-      const map = L.map('map').setView([37.7749, -122.4194], 5);
-      storeLocationMap();
-    </script>
+      </script>
+      <script>
+        const map = L.map('map').setView([37.7749, -122.4194], 5);
+        storeLocationMap();
+      </script>
 </body>
 
 </html>
