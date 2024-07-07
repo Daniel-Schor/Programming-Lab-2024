@@ -288,7 +288,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      let analysisData = data[store.storeID];
+      const analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(
         (item) => item.sorted_cumulative_customer_percentage_of_total
       );
@@ -300,76 +300,112 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         (item) => item.total_sale_customer
       );
 
-      var option = {
-        title: {
-          text: "ABC Analysis of Customers  sorted by cumulative customer percentage of total revenue",
-          left: "center",
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow",
+      function updateChart() {
+        var option = {
+          title: {
+            text: "ABC Analysis of Customers sorted by cumulative customer percentage of total revenue",
+            left: "center",
           },
-          formatter: function (params) {
-            let index = params[0].dataIndex;
-            return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${
-              abcCategories[index]
-            }<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${
-              totalSales[index]
-            }<br/>Cumulative Percentage: ${(
-              cumulativePercentage[index] * 100
-            ).toFixed(2)}%`;
-          },
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
-        xAxis: {
-          type: "category",
-          name: "Volume Share in Percent",
-          nameLocation: "middle",
-          data: abcCategories,
-          axisLabel: {
-            show: false,
-          },
-        },
-        yAxis: {
-          type: "value",
-          name: "Value Share in Percent",
-          axisLabel: {
-            formatter: function (value) {
-              return (value * 100).toFixed(0) + "%";
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+            formatter: function (params) {
+              let index = params[0].dataIndex;
+              return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${
+                abcCategories[index]
+              }<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${
+                totalSales[index]
+              }<br/>Cumulative Percentage: ${(
+                cumulativePercentage[index] * 100
+              ).toFixed(2)}%`;
             },
           },
-        },
-        series: [
-          {
-            name: "Cumulative Percentage",
-            type: "bar",
-            data: cumulativePercentage,
-            label: {
+          toolbox: {
+            feature: {
+              saveAsImage: {},
+            },
+          },
+          xAxis: {
+            type: "category",
+            name: "Volume Share in Percent",
+            nameLocation: "middle",
+            data: abcCategories,
+            axisLabel: {
               show: false,
-              position: "insideBottom",
-              formatter: function (params) {
-                return (params.value * 100).toFixed(2) + "%";
-              },
             },
-            itemStyle: {
-              color: function (params) {
-                const abcCategory = abcCategories[params.dataIndex];
-                if (abcCategory === "A") return "green";
-                if (abcCategory === "B") return "yellow";
-                return "red";
+          },
+          yAxis: {
+            type: "value",
+            name: "Value Share in Percent",
+            axisLabel: {
+              formatter: function (value) {
+                return (value * 100).toFixed(0) + "%";
               },
             },
           },
-        ],
-      };
+          series: [
+            {
+              name: "Cumulative Percentage",
+              type: "bar",
+              data: cumulativePercentage,
+              label: {
+                show: false,
+                position: "insideBottom",
+                formatter: function (params) {
+                  return (params.value * 100).toFixed(2) + "%";
+                },
+              },
+              itemStyle: {
+                color: function (params) {
+                  const abcCategory = abcCategories[params.dataIndex];
+                  if (abcCategory === "A") return "green";
+                  if (abcCategory === "B") return "yellow";
+                  return "red";
+                },
+              },
+            },
+          ],
+        };
 
+        myChart.hideLoading();
+        myChart.setOption(option);
+      }
+
+      // Initialize the chart with all data
+      updateChart();
+
+      // Add event listener for the search input
+      const searchInput = document.getElementById("customerSearch");
+      searchInput.addEventListener("input", function () {
+        const searchQuery = searchInput.value.toLowerCase();
+        const filteredData = Object.keys(analysisData).reduce(
+          (acc, key) => {
+            if (key.toLowerCase().includes(searchQuery)) {
+              acc.cumulativePercentage.push(
+                analysisData[key].sorted_cumulative_customer_percentage_of_total
+              );
+              acc.customerID.push(key);
+              acc.abcCategories.push(analysisData[key].abc_category);
+              acc.totalSales.push(analysisData[key].total_sale_customer);
+            }
+            return acc;
+          },
+          { cumulativePercentage: [], customerID: [], abcCategories: [], totalSales: [] }
+        );
+
+        cumulativePercentage = filteredData.cumulativePercentage;
+        customerID = filteredData.customerID;
+        abcCategories = filteredData.abcCategories;
+        totalSales = filteredData.totalSales;
+
+        updateChart();
+      });
+    })
+    .catch((error) => {
       myChart.hideLoading();
-      updateChart(myChart, option);
+      console.error("Error fetching or processing data:", error);
     });
 }
 
