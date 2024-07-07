@@ -6,17 +6,20 @@
     <link rel="stylesheet" type="text/css" href="/style/main.css" />
     <link rel="stylesheet" type="text/css" href="/style/container.css" />
     <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"/>
+  
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"
-    />
+
     <script src="/static/echarts/echarts.js"></script>
     <script src="/static/charts/charts.js" type="text/javascript"></script>
+
+    <script src="/static/charts/storeCharts.js" type="module"></script>
+    <script src="/static/UI/ui.js" type="module"></script>
+
+    <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script type="text/javascript" src="/static/UI/ui.js"></script>
     
 
     <title>Document</title>
@@ -31,10 +34,11 @@
     <img id="icon" src="/img/icon.png">
     <div id="topbar" onclick="toggleSidebar(true)">
       <div class="btnbox">
-        <button class="btn">MTD</button>
-        <button class="btn">QTD</button>
-        <button class="btn">YTD</button>
-        <button class="btn">PTD</button>
+        <button class="btn" id = "Last-Month">MTD</button>
+        <button class="btn" id="Last-Quarter">QTD</button>
+        <button class="btn"id= "Last-Year">YTD</button>
+        <button class="btn" id="customDate">PTD</button>
+        <input type="date" id="datePicker" style="display: none;">
       </div>
       <div class="btnbox">
         <button class="infobox">FROM: XX-XX-XXXX</button>
@@ -44,8 +48,8 @@
     </div>
 
     <div id="sidebar" class="sidebar">
-      <a href="/store">S123456</a>
-      <a href="/store">S123456</a>
+      <!-- Store links will be dynamically added here -->
+    
     </div>
     <div id="main" class="main" onclick="toggleSidebar(true)">
       <div id="content">
@@ -79,9 +83,10 @@
               </div>
               <!--Customers-->
               <div class="subsection">
-                <h1>Customers</h1>
-                <div class="section-items">
+                 <h1>Customers</h1>
+                 <div class="section-items">
                   <div class="statBox">
+                    <div id="stat-item"></div>
                     <h2>Placeholder</h2>
                     <p>1234</p>
                   </div>
@@ -97,7 +102,7 @@
                     <h2>Places</h2>
                     <p>1234</p>
                   </div>
-                </div>
+                </div> 
               </div>
             </div>
           </div>
