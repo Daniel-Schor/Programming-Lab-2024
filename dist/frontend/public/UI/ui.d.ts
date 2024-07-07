@@ -1,4 +1,5 @@
 declare function subtractMonths(date: any, months: any): string;
+declare function calculatePeriod(startDate: any, endDate: any): number;
 declare function backButton(): void;
 declare function timeButtons(): void;
 declare function customDate(): void;

@@ -70,9 +70,13 @@ function subtractMonths(date, months) {
   }
   return newDate.toISOString().split("T")[0];
 }
+function calculatePeriod(startDate, endDate) {
+  let diffTime = Math.abs(endDate - startDate);
+  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
 
 function backButton() {
-  
   document
     .getElementById("redirectButton")
     .addEventListener("click", function () {
@@ -84,17 +88,24 @@ function backButton() {
 
 
 function timeButtons() {
+  let fromButton = document.getElementById('FROM');
+  let periodButton = document.getElementById('PERIOD');
   document.getElementById("Last-Year").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 12));
+    fromButton.textContent = subtractMonths(currentDate, 12);
+    periodButton.textContent = "PERIOD: 365 days";
   });
   document
     .getElementById("Last-Quarter")
     .addEventListener("click", function () {
       updateCharts(subtractMonths(currentDate, 3));
+    fromButton.textContent = subtractMonths(currentDate, 3);
+    periodButton.textContent = "PERIOD: 90 days";
     });
   document.getElementById("Last-Month").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 1));
-    console.log(subtractMonths(currentDate, 1));
+    fromButton.textContent = subtractMonths(currentDate, 1);
+    periodButton.textContent = "PERIOD: 30 days";
   });
 }
 

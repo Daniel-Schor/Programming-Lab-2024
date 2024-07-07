@@ -131,6 +131,9 @@ button:active {
   margin-top: 10px;
   padding: 5px;
   font-size: 16px;
+  position: absolute;
+  left: 50%;
+  z-index: 19999;
 }
 .sidebar.active {
   width: 250px;
