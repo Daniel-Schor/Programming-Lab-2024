@@ -40,8 +40,11 @@ body::-webkit-scrollbar {
   width: 0px;
 }
 
+.spacer {
+  height: 250px;
+}
+
 /*Sidebar -------------------*/
-/*TODO make bottom end to sidebar*/
 .sidebar {
   position: fixed;
   scrollbar-width: none;
@@ -82,19 +85,23 @@ body::-webkit-scrollbar {
   
   display: block;
   width: 100%;
-  padding: 5px; /* Adjust padding inside the button */
-  margin-bottom: 4px; /* Add margin to separate the button from the store list */
-  border-radius: px; /* Add border radius */
+  padding: 8px; /* Adjust padding inside the button */
+  margin: 2px; /* Add margin to separate the button from the store list */
   cursor: pointer; /* Change cursor to pointer */
   text-align: left; /* Align button text to the left */
   font-size: 14px; /* Adjust font size */
   white-space: nowrap; 
+  box-shadow: none;
+  border-top-width: 1px;
+  border-top-color: #3a3a3a;
+  border-top-style: solid;
 }
 
 .city-button:active, .city-button:hover {
   transition: 0.3s;
   color: #b3b3b3;
   background: none;
+  outline: none;
 }
 .store-list {
   padding-left: 20px; /* Add padding to the left for indentation */
@@ -104,6 +111,11 @@ body::-webkit-scrollbar {
 /* Style for store list items */
 .store-list li {
   margin-bottom: 0px; /* Add margin to separate store links */
+}
+
+.city-section ul {
+  margin-top: 0px;
+  margin-bottom: 14px;
 }
 
 /* Style for store links */

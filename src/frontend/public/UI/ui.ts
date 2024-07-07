@@ -61,6 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
           }
         }
+        let testdiv = document.createElement("h1");
+        //testdiv.textContent = "End of content";
+        testdiv.classList.add("spacer");
+        sidebar.appendChild(testdiv);
       })
       .catch((error) => {
         console.error("Error fetching stores:", error);
