@@ -127,7 +127,11 @@ button:active {
 .openbtn:hover {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
-
+#datePicker {
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 16px;
+}
 .sidebar.active {
   width: 250px;
 }

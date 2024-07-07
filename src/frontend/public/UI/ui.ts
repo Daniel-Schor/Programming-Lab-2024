@@ -94,6 +94,7 @@ function timeButtons() {
     });
   document.getElementById("Last-Month").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 1));
+    console.log(subtractMonths(currentDate, 1));
   });
 }
 
@@ -112,6 +113,18 @@ function customDate() {
     });
 }
 
+function visibilityCoustomDate() {
+  document.getElementById('customDate').addEventListener('click', function() {
+    const datePicker = document.getElementById('datePicker');
+    datePicker.style.display = 'block';
+    datePicker.focus();
+
+
+    customDateButton.addEventListener("click", function() {
+      
+});
+
+}
 function getTotalRevenue(date, storeID) {
   const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
   return fetch(endpoint).then((response) => response.json());

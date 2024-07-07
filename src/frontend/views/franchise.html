@@ -34,10 +34,11 @@
     <img id="icon" src="/img/icon.png">
     <div id="topbar" onclick="toggleSidebar(true)">
       <div class="btnbox">
-        <button class="btn">MTD</button>
-        <button class="btn">QTD</button>
-        <button class="btn">YTD</button>
-        <button class="btn">PTD</button>
+        <button class="btn" id = "Last-Month">MTD</button>
+        <button class="btn" id="Last-Quarter">QTD</button>
+        <button class="btn"id= "Last-Year">YTD</button>
+        <button class="btn" id="customDate">PTD</button>
+        <input type="date" id="datePicker" style="display: none;">
       </div>
       <div class="btnbox">
         <button class="infobox">FROM: XX-XX-XXXX</button>
@@ -112,9 +113,9 @@
           <div class="section">
             <div class="section-items">
               <div class="btnbox">
-                <button class="btn" style="z-index: 99;">STABLE</button>
-                <button class="btn" style="z-index: 99;">UNSTABLE</button>
-                <button class="btn" style="z-index: 99;">CUSTOM</button>
+                <button class="btn" id="bestButton" style="z-index: 99;">STABLE</button>
+                <button class="btn" id="worstButton" style="z-index: 99;">UNSTABLE</button>
+                <button class="btn" id="customButton" style="z-index: 99;">CUSTOM</button>
               </div>
               <h1 class="centered">Revenue</h1>
             </div>
@@ -149,6 +150,20 @@
 
 
     <script>
+      visibilityCoustomDate()
+      bestButton();
+      worstButton();
+      customButton();
+      timeButtons();
+      customDate();
+    document.getElementById("bestButton").addEventListener("click", bestButton);
+    document.getElementById("worstButton").addEventListener("click", worstButton);
+    document.getElementById("customButton").addEventListener("click", customButton);
+
+    if (firstClick) {
+      setActiveButton("bestButton");
+      bestButton();
+    }
       function toggleSidebar(turnOff = false) {
         if (turnOff) {
           document.getElementById("sidebar").classList.remove("active");

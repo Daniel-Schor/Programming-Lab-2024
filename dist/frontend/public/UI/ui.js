@@ -81,6 +81,7 @@ function timeButtons() {
     });
     document.getElementById("Last-Month").addEventListener("click", function () {
         updateCharts(subtractMonths(currentDate, 1));
+        console.log(subtractMonths(currentDate, 1));
     });
 }
 function customDate() {
@@ -96,48 +97,50 @@ function customDate() {
         updateCharts(date);
     });
 }
-function getTotalRevenue(date, storeID) {
-    const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
-    return fetch(endpoint).then((response) => response.json());
-}
-function getTotalPizzas(date, storeID) {
-    const endpoint = storeID ? `/api/totalPizzas?date=${date}&store=${storeID}` : `/api/totalPizzas?date=${date}`;
-    return fetch(endpoint).then((response) => response.json());
-}
-function getTotalOrders(date, storeID) {
-    const endpoint = storeID ? `/api/totalOrders?date=${date}&store=${storeID}` : `/api/totalOrders?date=${date}`;
-    return fetch(endpoint).then((response) => response.json());
-}
-function getAverageOrderValue(date, storeID) {
-    const endpoint = storeID ? `/api/averageOrderValue?date=${date}&store=${storeID}` : `/api/averageOrderValue?date=${date}`;
-    return fetch(endpoint).then((response) => response.json());
-}
-function getPizzasPerOrder(date, storeID) {
-    const endpoint = storeID ? `/api/pizzasPerOrder?date=${date}&store=${storeID}` : `/api/pizzasPerOrder?date=${date}`;
-    return fetch(endpoint).then((response) => response.json());
-}
-function statOverview(date = "2022-12-01") {
-    const store = JSON.parse(localStorage.getItem("store"));
-    const storeID = store ? store.storeID : null;
-    // Erstellen eines Arrays von Fetch-Promises
-    const fetchPromises = [
-        getTotalRevenue(date, storeID),
-        getTotalPizzas(date, storeID),
-        getTotalOrders(date, storeID),
-        getAverageOrderValue(date, storeID),
-        getPizzasPerOrder(date, storeID),
-    ];
-    // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
-    return Promise.all(fetchPromises)
-        .then((dataArray) => {
-        // Kombinieren der Daten von den APIs
-        const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData,] = dataArray;
-        var order = Math.round(totalRevenueData[0].total_revenue);
-        var order_1 = Math.round(totalPizzasData[0].total_pizza);
-        var order_2 = Math.round(totalOrdersData[0].total_orders);
-        var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-        var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
-        document.getElementById("statsOverview").innerHTML = `	
+function visibilityCoustomDate() {
+    document.getElementById('customDate').addEventListener('click', function () {
+        const datePicker = document.getElementById('datePicker');
+        datePicker.style.display = 'block';
+        datePicker.focus();
+        customDateButton.addEventListener("click", function () {
+        });
+    }, function getTotalRevenue(date, storeID) {
+        const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
+        return fetch(endpoint).then((response) => response.json());
+    }, function getTotalPizzas(date, storeID) {
+        const endpoint = storeID ? `/api/totalPizzas?date=${date}&store=${storeID}` : `/api/totalPizzas?date=${date}`;
+        return fetch(endpoint).then((response) => response.json());
+    }, function getTotalOrders(date, storeID) {
+        const endpoint = storeID ? `/api/totalOrders?date=${date}&store=${storeID}` : `/api/totalOrders?date=${date}`;
+        return fetch(endpoint).then((response) => response.json());
+    }, function getAverageOrderValue(date, storeID) {
+        const endpoint = storeID ? `/api/averageOrderValue?date=${date}&store=${storeID}` : `/api/averageOrderValue?date=${date}`;
+        return fetch(endpoint).then((response) => response.json());
+    }, function getPizzasPerOrder(date, storeID) {
+        const endpoint = storeID ? `/api/pizzasPerOrder?date=${date}&store=${storeID}` : `/api/pizzasPerOrder?date=${date}`;
+        return fetch(endpoint).then((response) => response.json());
+    }, function statOverview(date = "2022-12-01") {
+        const store = JSON.parse(localStorage.getItem("store"));
+        const storeID = store ? store.storeID : null;
+        // Erstellen eines Arrays von Fetch-Promises
+        const fetchPromises = [
+            getTotalRevenue(date, storeID),
+            getTotalPizzas(date, storeID),
+            getTotalOrders(date, storeID),
+            getAverageOrderValue(date, storeID),
+            getPizzasPerOrder(date, storeID),
+        ];
+        // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
+        return Promise.all(fetchPromises)
+            .then((dataArray) => {
+            // Kombinieren der Daten von den APIs
+            const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData,] = dataArray;
+            var order = Math.round(totalRevenueData[0].total_revenue);
+            var order_1 = Math.round(totalPizzasData[0].total_pizza);
+            var order_2 = Math.round(totalOrdersData[0].total_orders);
+            var order_3 = Math.round(averageOrderValueData[0].average_order_value);
+            var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
+            document.getElementById("statsOverview").innerHTML = `	
         <div class="stat-item">
           <h3>Revenue</h3>
           <p>${order}</p>
@@ -159,14 +162,17 @@ function statOverview(date = "2022-12-01") {
           <p>${order_4}</p>
         </div>
         `;
-    })
-        .catch((error) => {
-        console.error("Error fetching data:", error);
-        throw error;
-    });
+        })
+            .catch((error) => {
+            console.error("Error fetching data:", error);
+            throw error;
+        });
+    }
+    // Initialisierung beim Laden der Seite
+    , 
+    // Initialisierung beim Laden der Seite
+    document.addEventListener('DOMContentLoaded', (event) => {
+        statOverview();
+    }));
 }
-// Initialisierung beim Laden der Seite
-document.addEventListener('DOMContentLoaded', (event) => {
-    statOverview();
-});
 //# sourceMappingURL=ui.js.map
