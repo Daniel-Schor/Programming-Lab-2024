@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/style/container.css" />
     <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"/>
   
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -64,18 +65,30 @@
                 <h1>PizzaHub</h1>
                 <div class="section-items">
                   <div class="statBox">
+                    <div class="iconBox"> 
+                    <i class="fas fa-shopping-bag"></i>
+                  </div>
                     <h2>Sales<h2>
                     <p>1234</p>
                   </div>
                   <div class="statBox">
+                    <div class="iconBox"> 
+                    <i class="fas fa-dollar-sign"></i>
+                  </div>
                     <h2>Revenue</h2>
                     <p>1234</p>
                   </div>
                   <div class="statBox">
+                    <div class="iconBox"> 
+                      <i class="fas fa-users"></i>
+                    </div>
                     <h2>Customers</h2>
                     <p>1234</p>
                   </div>
                   <div class="statBox">
+                    <div class="iconBox"> 
+                      <i class="fas fa-chart-line"></i>
+                    </div>
                     <h2>Placeholder</h2>
                     <p>1234</p>
                   </div>
@@ -117,14 +130,16 @@
                 <button class="btn" id="worstButton" style="z-index: 99;">UNSTABLE</button>
                 <button class="btn" id="customButton" style="z-index: 99;">CUSTOM</button>
               </div>
-              <h1 class="centered">Revenue</h1>
+              <h1 class="centered">Revenue</h1><h2 data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
+                'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right." id="revenueTitle">Store Revenues</h2></h2>
             </div>
             <div class="section-items">
               <div class="subsection">
+                
                 <div id="revenue" class="diagram"></div>
               </div> 
               <div class="subsection">
-                  <div id="revenueBar" class="diagram"></div>
+                  <div id="revenueBar" class="diagram" style="height: 100%"></div>
               </div>
             </div>
           </div>
@@ -132,8 +147,13 @@
         <!--End of Revenue section-->
         <!--Bottom section-->
         <div class="section-items">
-          <div class="subsection">test3</div>
-          <div class="subsection">test4</div>
+          <div class="subsection">
+            <div id="pizzaPopularity" class="diagram"></div>
+          </div>
+          <div class="subsection">
+            <div class="pizzaRanking">
+          </div>
+          </div>
           <div class="subsection">
             <h2 data-tooltip="This is the a Map showing all Stores" id="mapTitel">Store locations</h2>
             <div id="map" class="diagram"></div>  
