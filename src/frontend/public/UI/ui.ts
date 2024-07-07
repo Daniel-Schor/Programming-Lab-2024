@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   function sideBar() {
     fetch("/api/Stores")
       .then((response) => response.json())
@@ -25,15 +25,24 @@ document.addEventListener("DOMContentLoaded", function() {
             // Create a button for the city
             var cityDiv = document.createElement("div");
             cityDiv.classList.add("city-section");
-
-            var cityButton = document.createElement("button");
-            cityButton.textContent = city;
-            cityButton.classList.add("city-button");
-            cityButton.onclick = function() {
-              this.nextElementSibling.classList.toggle("show");
-            };
-            cityDiv.appendChild(cityButton);
-
+            if (groupedStores[city].length === 1) {
+              var cityLink = document.createElement("button");
+              let storeID = groupedStores[city][0].storeID;
+              cityLink.textContent = city + " - " + storeID;
+              cityLink.classList.add("city-button");
+              cityLink.onclick = function () {
+                window.location.href = `/store?store=${storeID}`;
+              };
+              cityDiv.appendChild(cityLink);
+            } else {
+              var cityButton = document.createElement("button");
+              cityButton.textContent = city;
+              cityButton.classList.add("city-button");
+              cityButton.onclick = function () {
+                this.nextElementSibling.classList.toggle("show");
+              };
+              cityDiv.appendChild(cityButton);
+            }
             // Create a list for the stores in the city
             var cityUl = document.createElement("ul");
             cityUl.classList.add("store-list", "hidden");
@@ -49,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             cityDiv.appendChild(cityUl);
             sidebar.appendChild(cityDiv);
+
           }
         }
       })
@@ -99,8 +109,8 @@ function timeButtons() {
     .getElementById("Last-Quarter")
     .addEventListener("click", function () {
       updateCharts(subtractMonths(currentDate, 3));
-    fromButton.textContent = subtractMonths(currentDate, 3);
-    periodButton.textContent = "PERIOD: 90 days";
+      fromButton.textContent = subtractMonths(currentDate, 3);
+      periodButton.textContent = "PERIOD: 90 days";
     });
   document.getElementById("Last-Month").addEventListener("click", function () {
     updateCharts(subtractMonths(currentDate, 1));
@@ -125,14 +135,14 @@ function customDate() {
 }
 
 function visibilityCoustomDate() {
-  document.getElementById('customDate').addEventListener('click', function() {
+  document.getElementById('customDate').addEventListener('click', function () {
     const datePicker = document.getElementById('datePicker');
     datePicker.style.display = 'block';
     datePicker.focus();
 
 
-    customDateButton.addEventListener("click", function() {
-      
+    customDateButton.addEventListener("click", function () {
+
     });
   });
 }

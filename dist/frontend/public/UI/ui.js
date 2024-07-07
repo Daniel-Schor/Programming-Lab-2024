@@ -24,13 +24,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Create a button for the city
                     var cityDiv = document.createElement("div");
                     cityDiv.classList.add("city-section");
-                    var cityButton = document.createElement("button");
-                    cityButton.textContent = city;
-                    cityButton.classList.add("city-button");
-                    cityButton.onclick = function () {
-                        this.nextElementSibling.classList.toggle("show");
-                    };
-                    cityDiv.appendChild(cityButton);
+                    if (groupedStores[city].length === 1) {
+                        var cityLink = document.createElement("button");
+                        let storeID = groupedStores[city][0].storeID;
+                        cityLink.textContent = city + " - " + storeID;
+                        cityLink.classList.add("city-button");
+                        cityLink.onclick = function () {
+                            window.location.href = `/store?store=${storeID}`;
+                        };
+                        cityDiv.appendChild(cityLink);
+                    }
+                    else {
+                        var cityButton = document.createElement("button");
+                        cityButton.textContent = city;
+                        cityButton.classList.add("city-button");
+                        cityButton.onclick = function () {
+                            this.nextElementSibling.classList.toggle("show");
+                        };
+                        cityDiv.appendChild(cityButton);
+                    }
                     // Create a list for the stores in the city
                     var cityUl = document.createElement("ul");
                     cityUl.classList.add("store-list", "hidden");

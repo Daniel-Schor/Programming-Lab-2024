@@ -41,6 +41,7 @@ body::-webkit-scrollbar {
 }
 
 /*Sidebar -------------------*/
+/*TODO make bottom end to sidebar*/
 .sidebar {
   position: fixed;
   scrollbar-width: none;
@@ -74,6 +75,7 @@ body::-webkit-scrollbar {
 }
 /* Style for the city buttons */
 .city-button {
+  transition: 0.3s;
   background: none;
   border-width: 0px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
@@ -86,6 +88,13 @@ body::-webkit-scrollbar {
   cursor: pointer; /* Change cursor to pointer */
   text-align: left; /* Align button text to the left */
   font-size: 14px; /* Adjust font size */
+  white-space: nowrap; 
+}
+
+.city-button:active, .city-button:hover {
+  transition: 0.3s;
+  color: #b3b3b3;
+  background: none;
 }
 .store-list {
   padding-left: 20px; /* Add padding to the left for indentation */
@@ -106,12 +115,14 @@ body::-webkit-scrollbar {
 }
 
 button {
+  transition: 0.3s;
   background-color: #ff4500;
   z-index: 9999;
 }
 
 button:hover,
 button:active {
+  transition: 0.3s;
   background-color: #ff6347;
   cursor: pointer;
 }
@@ -224,6 +235,7 @@ button:active {
 /*Company Name -------------------*/
 #companyname,
 #user {
+  transition: 0.3s;
   position: fixed;
   left: 60px;
   z-index: 9999;
@@ -263,6 +275,7 @@ button:active {
 }
 
 #companyname:hover {
+  transition: 0.3s;
   color: #b3b3b3;
 }
 
