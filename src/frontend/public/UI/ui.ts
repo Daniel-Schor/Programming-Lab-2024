@@ -122,9 +122,11 @@ function visibilityCoustomDate() {
 
     customDateButton.addEventListener("click", function() {
       
-});
-
+    });
+  });
 }
+
+
 function getTotalRevenue(date, storeID) {
   const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
   return fetch(endpoint).then((response) => response.json());
