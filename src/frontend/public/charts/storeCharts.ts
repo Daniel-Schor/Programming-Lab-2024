@@ -430,7 +430,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: "ABC Analysis of Customers total Revenue descending",
+          text: "ABC Analysis of Customers sorted by total Revenue descending",
           left: "center",
         },
         tooltip: {
