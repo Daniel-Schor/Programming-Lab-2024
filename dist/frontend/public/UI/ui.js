@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     groupedStores[city].forEach(function (store) {
                         var storeLi = document.createElement("li");
                         var a = document.createElement("a");
-                        a.href = `/individualStore?store=${store.storeID}`;
+                        a.href = `/store?store=${store.storeID}`;
                         a.textContent = store.storeID;
                         storeLi.appendChild(a);
                         cityUl.appendChild(storeLi);
