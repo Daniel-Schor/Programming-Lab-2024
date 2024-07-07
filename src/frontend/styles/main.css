@@ -207,7 +207,8 @@ button:active {
 }
 
 .infobox,
-.infobox:hover {
+.infobox:hover,
+.infobox:active {
   background: #252525;
   color: #b3b3b3;
   font-weight: 400;
