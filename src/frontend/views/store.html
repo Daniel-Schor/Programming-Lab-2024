@@ -1,141 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="/style/main.css" />
-    <link rel="stylesheet" type="text/css" href="/style/container.css" />
-    <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap"/>
-  
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <script src="/static/echarts/echarts.js"></script>
-    <script src="/static/charts/charts.js" type="text/javascript"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/style/main.css" />
+  <link rel="stylesheet" type="text/css" href="/style/container.css" />
+  <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
 
-    <script src="/static/charts/storeCharts.js" type="module"></script>
-    <script src="/static/UI/ui.js" type="module"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script type="text/javascript" src="/static/UI/ui.js"></script>
-    
+  <script src="/static/echarts/echarts.js"></script>
+  <script src="/static/charts/charts.js" type="text/javascript"></script>
 
-    <title>Document</title>
-  </head>
-  <body>
-    <button class="openbtn" onclick="toggleSidebar()">☰</button>
-    <a id="companyname" href="/">@ PizzaHub</a>
-    <div id="user">
-      <h1>Sebastian Bremm</h1>
-      <p>Programming Lab Professor</p>
+  <script src="/static/charts/storeCharts.js" type="module"></script>
+  <script src="/static/UI/ui.js" type="module"></script>
+
+  <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script type="text/javascript" src="/static/UI/ui.js"></script>
+
+
+  <title>Document</title>
+</head>
+
+<body>
+  <button class="openbtn" onclick="toggleSidebar()">☰</button>
+  <a id="companyname" href="/">@ PizzaHub</a>
+  <div id="user">
+    <h1>Sebastian Bremm</h1>
+    <p>Programming Lab Professor</p>
+  </div>
+  <img id="icon" src="/img/icon.png">
+  <div id="topbar" onclick="toggleSidebar(true)">
+    <div class="btnbox">
+      <button class="btn" id="Last-Month">MTD</button>
+      <button class="btn" id="Last-Quarter">QTD</button>
+      <button class="btn" id="Last-Year">YTD</button>
+      <button class="btn" id="customDate">PTD</button>
+      <input type="date" id="datePicker" style="display: none;">
     </div>
-    <img id="icon" src="/img/icon.png">
-    <div id="topbar" onclick="toggleSidebar(true)">
-      <div class="btnbox">
-        <button class="btn" id = "Last-Month">MTD</button>
-        <button class="btn" id="Last-Quarter">QTD</button>
-        <button class="btn"id= "Last-Year">YTD</button>
-        <button class="btn" id="customDate">PTD</button>
-        <input type="date" id="datePicker" style="display: none;">
-      </div>
-      <div class="btnbox">
-        <button class="infobox">FROM: XX-XX-XXXX</button>
-        <button class="infobox">TO: 31-12-2022</button>
-        <button class="infobox">PERIOD: XXDAYS</button>
-      </div>
+    <div class="btnbox">
+      <button class="infobox">FROM: XX-XX-XXXX</button>
+      <button class="infobox">TO: 31-12-2022</button>
+      <button class="infobox">PERIOD: XXDAYS</button>
     </div>
+  </div>
 
-    <div id="sidebar" class="sidebar">
-      <!-- Store links will be dynamically added here -->
-    
-    </div>
-    <div id="main" class="main" onclick="toggleSidebar(true)">
-      <div id="content">
+  <div id="sidebar" class="sidebar">
+    <!-- Store links will be dynamically added here -->
+
+  </div>
+  <div id="main" class="main" onclick="toggleSidebar(true)">
+    <div id="content">
       <!-- Put content here -->
       <!--Stats section-->
-        <div class="section-items">
-          <div class="section">
-            <h1>Stats</h1>
-            <div class="section-items">
-              <!--PizzaHub-->
-              <div class="subsection">
-                <h1>PizzaHub</h1>
-                <div class="section-items">
-                  <div class="statBox">
-                    <h2>Sales<h2>
-                    <p>1234</p>
-                  </div>
-                  <div class="statBox">
-                    <h2>Revenue</h2>
-                    <p>1234</p>
-                  </div>
-                  <div class="statBox">
-                    <h2>Customers</h2>
-                    <p>1234</p>
-                  </div>
-                  <div class="statBox">
-                    <h2>Placeholder</h2>
-                    <p>1234</p>
-                  </div>
+      <div class="section-items">
+        <div class="section">
+          <h1>Stats</h1>
+          <div class="section-items">
+            <!--PizzaHub-->
+            <div class="subsection">
+              <h1>PizzaHub</h1>
+              <div class="section-items">
+                <div class="statBox">
+                  <h2>Sales<h2>
+                      <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <h2>Revenue</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <h2>Customers</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <h2>Placeholder</h2>
+                  <p>1234</p>
                 </div>
               </div>
-              <!--Customers-->
-              <div class="subsection">
-                 <h1>Customers</h1>
-                 <div class="section-items">
-                  <div class="statBox">
-                    <div id="stat-item"></div>
-                    <h2>Placeholder</h2>
-                    <p>1234</p>
-                  </div>
-                  <div class="statBox">
-                    <h2>Order Value</h2>
-                    <p>1234</p>
-                  </div>
-                  <div class="statBox">
-                    <h2>PizzaOrder</h2>
-                    <p>1234</p>
-                  </div>
-                  <div class="statBox">
-                    <h2>Places</h2>
-                    <p>1234</p>
-                  </div>
-                </div> 
+            </div>
+            <!--Customers-->
+            <div class="subsection">
+              <h1>Customers</h1>
+              <div class="section-items">
+                <div class="statBox">
+                  <div id="stat-item"></div>
+                  <h2>Placeholder</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <h2>Order Value</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <h2>PizzaOrder</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <h2>Places</h2>
+                  <p>1234</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       <!--End of Stats section-->
       <!--Revenue section-->
-        <div class="section-items">
-          <div class="subsection">
-            <div class="diagram"></div>
-          </div> 
-          <div class="subsection">
-            <div class="diagram"></div>
+      <div class="section-items">
+        <div class="subsection">
+          <h1>section a</h1>
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram">
+                a
+              </div>
+            </div>
+            <div class="subsection">
+              <div class="diagram">
+                b
+              </div>
+            </div>
+          </div>
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram">
+                c
+              </div>
+            </div>
+          </div>
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram">
+                d
+              </div>
+            </div>
+            <div class="subsection">
+              <div class="diagram">
+                e
+              </div>
+            </div>
+          </div>
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram">
+                f
+              </div>
+            </div>
           </div>
         </div>
-        <!--End of Revenue section-->
-      <!-- END OF CONTENT-->
+        <div class="subsection">
+          <h1>section b</h1>
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram">
+                g
+              </div>
+            </div>
+          </div>
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram">
+                h
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <!--End of Revenue section-->
+      <!-- END OF CONTENT-->
+    </div>
 
-      
+
     <script>
       function toggleSidebar(turnOff = false) {
         if (turnOff) {
           document.getElementById("sidebar").classList.remove("active");
           document.getElementById("main").classList.remove("active");
         } else {
-        document.getElementById("sidebar").classList.toggle("active");
-        document.getElementById("main").classList.toggle("active");
-      }      
+          document.getElementById("sidebar").classList.toggle("active");
+          document.getElementById("main").classList.toggle("active");
         }
+      }
     </script>
     <script>
       const map = L.map('map').setView([37.7749, -122.4194], 5);
       storeLocationMap();
     </script>
-  </body>
+</body>
+
 </html>
