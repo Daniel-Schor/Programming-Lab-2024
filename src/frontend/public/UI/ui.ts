@@ -1,59 +1,65 @@
-function sideBar() {
-  var stores = [];
-  fetch("/api/Stores")
-    .then((response) => response.json())
-    .then((data) => {
-      // Group stores by city
-      var groupedStores = data.reduce((acc, store) => {
-        if (!acc[store.city]) {
-          acc[store.city] = [];
+document.addEventListener("DOMContentLoaded", function() {
+  function sideBar() {
+    fetch("/api/Stores")
+      .then((response) => response.json())
+      .then((data) => {
+        // Group stores by city
+        var groupedStores = data.reduce((acc, store) => {
+          if (!acc[store.city]) {
+            acc[store.city] = [];
+          }
+          acc[store.city].push(store);
+          return acc;
+        }, {});
+        return groupedStores;
+      })
+      .then((groupedStores) => {
+        var sidebar = document.querySelector("#sidebar");
+
+        // Clear existing sidebar content
+        sidebar.innerHTML = "";
+
+        // Loop through each city in groupedStores
+        for (var city in groupedStores) {
+          if (groupedStores.hasOwnProperty(city)) {
+            // Create a button for the city
+            var cityDiv = document.createElement("div");
+            cityDiv.classList.add("city-section");
+
+            var cityButton = document.createElement("button");
+            cityButton.textContent = city;
+            cityButton.classList.add("city-button");
+            cityButton.onclick = function() {
+              this.nextElementSibling.classList.toggle("show");
+            };
+            cityDiv.appendChild(cityButton);
+
+            // Create a list for the stores in the city
+            var cityUl = document.createElement("ul");
+            cityUl.classList.add("store-list", "hidden");
+
+            groupedStores[city].forEach(function (store) {
+              var storeLi = document.createElement("li");
+              var a = document.createElement("a");
+              a.href = `/individualStore?store=${store.storeID}`;
+              a.textContent = store.storeID;
+              storeLi.appendChild(a);
+              cityUl.appendChild(storeLi);
+            });
+
+            cityDiv.appendChild(cityUl);
+            sidebar.appendChild(cityDiv);
+          }
         }
-        acc[store.city].push(store);
-        return acc;
-      }, {});
-      return groupedStores;
-    })
-    .then((groupedStores) => {
-      var ul = document.querySelector("header nav ul");
-      
-      // Loop through each city in groupedStores
-      for (var city in groupedStores) {
-        if (groupedStores.hasOwnProperty(city)) {
-          
-          var cityLi = document.createElement("li");
-          var cityButton = document.createElement("button");
-          cityButton.textContent = city;
-          cityButton.classList.add("city-button");
-          cityButton.onclick = function() {
-            this.nextElementSibling.classList.toggle("show");
-          };
-          cityLi.appendChild(cityButton);
-          ul.appendChild(cityLi);
+      })
+      .catch((error) => {
+        console.error("Error fetching stores:", error);
+      });
+  }
 
-          
-          var cityUl = document.createElement("ul");
-          cityUl.classList.add("store-list");
-
-          
-          groupedStores[city].forEach(function (store) {
-            
-            var storeLi = document.createElement("li");
-            var a = document.createElement("a");
-            a.href = `/individualStore?store=${store.storeID}`;
-            localStorage.setItem(
-              "store",
-              JSON.stringify({ storeID: store.storeID })
-            );
-            a.textContent = store.storeID;
-            storeLi.appendChild(a);
-            cityUl.appendChild(storeLi);
-          });
-
-          cityLi.appendChild(cityUl);
-        }
-      }
-    });
-}
+  // Call the sideBar function to populate the sidebar
+  sideBar();
+});
 
 function subtractMonths(date, months) {
   let newDate = new Date(date);

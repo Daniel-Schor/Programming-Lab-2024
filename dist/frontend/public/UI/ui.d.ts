@@ -1,4 +1,3 @@
-declare function sideBar(): void;
 declare function subtractMonths(date: any, months: any): string;
 declare function backButton(): void;
 declare function timeButtons(): void;

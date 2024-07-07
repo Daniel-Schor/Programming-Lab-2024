@@ -287,7 +287,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      console.log('Data received from server:', data);
+      //console.log('Data received from server:', data);
 
       let analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_customer_percentage_of_total);
@@ -377,7 +377,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      console.log('Data received from server:', data);
+      //console.log('Data received from server:', data);
       let analysisData = data[store.storeID];
       let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
       let abcCategories = Object.values(analysisData).map(item => item.abc_category);
@@ -449,7 +449,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
     .then(response => response.json())
     .then(data => {
-      console.log('Data received from server:', data);
+      //console.log('Data received from server:', data);
 
       let analysisData = data[store.storeID];
       let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_product_percentage_of_total);
@@ -552,7 +552,7 @@ function pizzaIngredients(date = "2022-12-01") {
   fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
 
       // Parse the fetched data to create series data
       const ingredients = {};

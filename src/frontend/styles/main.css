@@ -52,13 +52,12 @@ body::-webkit-scrollbar {
   background-color: #252525;
   overflow-x: hidden;
   transition: 0.5s;
-  padding-top: 20px;
+  padding-top: 60px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar a,
 .sidebar p {
-  padding: 10px 15px;
   text-decoration: none;
   font-size: 25px;
   display: block;
@@ -72,6 +71,34 @@ body::-webkit-scrollbar {
 
 .sidebar p:hover {
   color: #ff6347;
+}
+/* Style for the city buttons */
+.city-button {
+  display: block;
+  width: 100%;
+  padding: 5px; /* Adjust padding inside the button */
+  margin-bottom: 4px; /* Add margin to separate the button from the store list */
+  border-radius: px; /* Add border radius */
+  cursor: pointer; /* Change cursor to pointer */
+  text-align: left; /* Align button text to the left */
+  font-size: 14px; /* Adjust font size */
+}
+.store-list {
+  padding-left: 20px; /* Add padding to the left for indentation */
+  list-style-type: none; /* Remove default list style */
+}
+
+/* Style for store list items */
+.store-list li {
+  margin-bottom: px; /* Add margin to separate store links */
+}
+
+/* Style for store links */
+.store-list li a {
+  text-decoration: none; /* Remove underline from links */
+  color: #ffffff; /* Link color */
+  font-size: 14px;
+
 }
 
 button {
@@ -249,4 +276,12 @@ button:active {
   position: absolute;
   left: 50%;
 }
+/* CSS to hide the store lists */
+.hidden {
+  display: none;
+}
 
+/* CSS to show the store lists when the 'show' class is added */
+.show {
+  display: block;
+}

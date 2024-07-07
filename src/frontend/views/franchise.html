@@ -47,8 +47,8 @@
     </div>
 
     <div id="sidebar" class="sidebar">
-      <a href="/store">S123456</a>
-      <a href="/store">S123456</a>
+      <!-- Store links will be dynamically added here -->
+    
     </div>
     <div id="main" class="main" onclick="toggleSidebar(true)">
       <div id="content">
@@ -162,6 +162,7 @@
     <script>
       const map = L.map('map', {attributionControl: false}).setView([39, -120], 5);
       storeLocationMap();
+      sideBar();
       statOverview();
       avCustomer();
       pizzaPopularity();
