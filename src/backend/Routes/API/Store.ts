@@ -522,91 +522,107 @@ router.get('/abc-analysis-pizza', async (req, res) => {
         console.log(`Received storeID: ${storeID}`);
         console.log(`Received date: ${date}`);
 
+ 
         const query = `
-  WITH
-	TOTAL_SALES_PER_PRODUCT AS (
-		SELECT
-			P."SKU",
-			SUM(PCH.TOTAL) AS TOTAL_SALES_PIZZA
-		FROM
-			PUBLIC.PRODUCTS P
-			JOIN PUBLIC."purchaseItems" PI ON P."SKU" = PI."SKU"
-			JOIN PUBLIC.PURCHASE PCH ON PI."purchaseID" = PCH."purchaseID"
-			JOIN PUBLIC.STORES S ON PCH."storeID" = S."storeID"
-		WHERE
-			PCH."storeID" = $1
-			AND PCH."purchaseDate" > $2
-		GROUP BY
-			P."SKU"
-		ORDER BY
-			TOTAL_SALES_PIZZA DESC
-	),
-	PERCENTAGE_SALES_PRODUCT AS (
-		SELECT
-			"SKU",
-			TOTAL_SALES_PIZZA,
-			SUM(TOTAL_SALES_PIZZA) OVER () AS TOTAL_SUM_SALES,
-			(
-				TOTAL_SALES_PIZZA / SUM(TOTAL_SALES_PIZZA) OVER ()
-			) AS PRODUCT_PERCENTAGE_OF_TOTAL
-		FROM
-			TOTAL_SALES_PER_PRODUCT
-	),
-	CUMULATIVE_SALES_PRODUCT AS (
-		SELECT
-			"SKU",
-			TOTAL_SALES_PIZZA,
-			TOTAL_SUM_SALES,
-			PRODUCT_PERCENTAGE_OF_TOTAL,
-			SUM(PRODUCT_PERCENTAGE_OF_TOTAL) OVER (
-				ORDER BY
-					TOTAL_SALES_PIZZA DESC
-			) AS SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL
-		FROM
-			PERCENTAGE_SALES_PRODUCT
-	),
-	ABC_ANALYSIS AS (
-		SELECT
-			"SKU",
-			TOTAL_SALES_PIZZA,
-			TOTAL_SUM_SALES,
-			PRODUCT_PERCENTAGE_OF_TOTAL,
-			SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL,
-			CASE
-				WHEN SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL <= 0.8 THEN 'A'
-				WHEN SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL <= 0.95 THEN 'B'
-				ELSE 'C'
-			END AS ABC_CATEGORY
-		FROM
-			CUMULATIVE_SALES_PRODUCT
-	)
-SELECT
-	"SKU",
-	TOTAL_SALES_PIZZA,
-	TOTAL_SUM_SALES,
-	PRODUCT_PERCENTAGE_OF_TOTAL,
-	SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL,
-	ABC_CATEGORY
-FROM
-	ABC_ANALYSIS
-ORDER BY
-	TOTAL_SALES_PIZZA DESC;
-      `;
+            WITH
+            TOTAL_SALES_PER_PRODUCT AS (
+                SELECT
+                    P."SKU",
+                    P."Name",
+                    P."Size",
+                    SUM(PCH.TOTAL) AS TOTAL_SALES_PIZZA
+                FROM
+                    PUBLIC.PRODUCTS P
+                    JOIN PUBLIC."purchaseItems" PI ON P."SKU" = PI."SKU"
+                    JOIN PUBLIC.PURCHASE PCH ON PI."purchaseID" = PCH."purchaseID"
+                    JOIN PUBLIC.STORES S ON PCH."storeID" = S."storeID"
+                WHERE
+                    PCH."storeID" = $1
+                    AND PCH."purchaseDate" > $2
+                GROUP BY
+                    P."SKU", P."Name", P."Size"
+                ORDER BY
+                    TOTAL_SALES_PIZZA DESC
+            ),
+            PERCENTAGE_SALES_PRODUCT AS (
+                SELECT
+                    "SKU",
+                    "Name",
+                    "Size",
+                    TOTAL_SALES_PIZZA,
+                    SUM(TOTAL_SALES_PIZZA) OVER () AS TOTAL_SUM_SALES,
+                    (
+                        TOTAL_SALES_PIZZA / SUM(TOTAL_SALES_PIZZA) OVER ()
+                    ) AS PRODUCT_PERCENTAGE_OF_TOTAL
+                FROM
+                    TOTAL_SALES_PER_PRODUCT
+            ),
+            CUMULATIVE_SALES_PRODUCT AS (
+                SELECT
+                    "SKU",
+                    "Name",
+                    "Size",
+                    TOTAL_SALES_PIZZA,
+                    TOTAL_SUM_SALES,
+                    PRODUCT_PERCENTAGE_OF_TOTAL,
+                    SUM(PRODUCT_PERCENTAGE_OF_TOTAL) OVER (
+                        ORDER BY
+                            TOTAL_SALES_PIZZA DESC
+                    ) AS SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL
+                FROM
+                    PERCENTAGE_SALES_PRODUCT
+            ),
+            ABC_ANALYSIS AS (
+                SELECT
+                    "SKU",
+                    "Name",
+                    "Size",
+                    TOTAL_SALES_PIZZA,
+                    TOTAL_SUM_SALES,
+                    PRODUCT_PERCENTAGE_OF_TOTAL,
+                    SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL,
+                    CASE
+                        WHEN SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL <= 0.8 THEN 'A'
+                        WHEN SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL <= 0.95 THEN 'B'
+                        ELSE 'C'
+                    END AS ABC_CATEGORY
+                FROM
+                    CUMULATIVE_SALES_PRODUCT
+            )
+            SELECT
+                "SKU",
+                "Name",
+                "Size",
+                TOTAL_SALES_PIZZA,
+                TOTAL_SUM_SALES,
+                PRODUCT_PERCENTAGE_OF_TOTAL,
+                SORTED_CUMULATIVE_PRODUCT_PERCENTAGE_OF_TOTAL,
+                ABC_CATEGORY
+            FROM
+                ABC_ANALYSIS
+            ORDER BY
+                TOTAL_SALES_PIZZA DESC;
+        `;
 
         const parameters = [storeID, date];
-
         const result = await client.query(query, parameters);
 
-        const formattedData = {};
-        result.rows.forEach(row => {
-            formattedData[row.SKU] = {
+        if (result.rows.length === 0) {
+            return res.status(404).send('No data found for the given storeID and date');
+        }
+
+        const formattedData = result.rows.reduce((acc, row) => {
+            acc[row.SKU] = {
+                name: row.Name,
+                size: row.Size,
                 total_sales_pizza: row.total_sales_pizza,
                 total_sum_sales: row.total_sum_sales,
                 product_percentage_of_total: row.product_percentage_of_total,
                 sorted_cumulative_product_percentage_of_total: row.sorted_cumulative_product_percentage_of_total,
                 abc_category: row.abc_category
             };
-        });
+            return acc;
+        }, {});
 
         res.status(200).json({ [storeID]: formattedData });
     } catch (err) {

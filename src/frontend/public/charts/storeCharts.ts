@@ -458,21 +458,32 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
   fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      let analysisData = data[store.storeID];
-      let cumulativePercentage = Object.values(analysisData).map(
+      if (!data[store.storeID]) {
+        throw new Error('No data found for the given storeID and date');
+      }
+
+      const analysisData = data[store.storeID];
+      const cumulativePercentage = Object.values(analysisData).map(
         (item) => item.sorted_cumulative_product_percentage_of_total
       );
-      let productSKUs = Object.keys(analysisData);
-      let abcCategories = Object.values(analysisData).map(
+      const productSKUs = Object.keys(analysisData);
+      const abcCategories = Object.values(analysisData).map(
         (item) => item.abc_category
       );
-      let totalSales = Object.values(analysisData).map(
+      const totalSales = Object.values(analysisData).map(
         (item) => item.total_sales_pizza
       );
+      const sizes = Object.values(analysisData).map(
+        (item) => item.size
+      );
+      const names = Object.values(analysisData).map(
+        (item) => item.name
+      );
+      const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
 
-      var option = {
+      const option = {
         title: {
-          text: "ABC Analysis of Pizza by sorted_cumulative_customer_percentage_of_total",
+          text: "ABC Analysis of Pizza by Cumulative Percentage",
           left: "center",
         },
         tooltip: {
@@ -481,14 +492,15 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
             type: "shadow",
           },
           formatter: function (params) {
-            let index = params[0].dataIndex;
-            return `Green good, red bad.<br/> A pizza good, c pizza bad.<br/>Product SKU: ${
-              productSKUs[index]
-            }<br/>Total Revenue: ${
-              totalSales[index]
-            }<br/>Cumulative Percentage: ${(
-              cumulativePercentage[index] * 100
-            ).toFixed(2)}%`;
+            const index = params[0].dataIndex;
+            return `
+              Product Name: ${names[index]}<br/>
+              Product SKU: ${productSKUs[index]}<br/>
+              Total Revenue: ${totalSales[index]}<br/>
+              Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%<br/>
+              ABC Category: ${abcCategories[index]}<br/>
+              Size: ${sizes[index]}
+            `;
           },
         },
         toolbox: {
@@ -496,11 +508,21 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
             saveAsImage: {},
           },
         },
+        legend: {
+          type: "scroll",
+          orient: "horizontal",
+          bottom: 10,
+          data: sizesArray,
+          selected: sizesArray.reduce((acc, size) => {
+            acc[size] = true;
+            return acc;
+          }, {})
+        },
         xAxis: {
           type: "category",
           name: "Volume Share in Percent",
           nameLocation: "middle",
-          data: abcCategories,
+          data: productSKUs,
           axisLabel: {
             show: false,
           },
@@ -514,29 +536,28 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
             },
           },
         },
-        series: [
-          {
-            name: "Cumulative Percentage",
-            type: "bar",
-            data: cumulativePercentage,
-            label: {
-              show: false,
-              position: "insideBottom",
-              formatter: function (params) {
-                return (params.value * 100).toFixed(2) + "%";
-              },
-            },
-            itemStyle: {
-              color: function (params) {
-                const abcCategory = abcCategories[params.dataIndex];
-                if (abcCategory === "A") return "green";
-                if (abcCategory === "B") return "yellow";
-                return "red";
-              },
+        series: sizesArray.map(size => ({
+          name: size,
+          type: "bar",
+          data: productSKUs.map((sku, index) => sizes[index] === size ? cumulativePercentage[index] : 0),
+          label: {
+            show: false,
+            position: "insideBottom",
+            formatter: function (params) {
+              return (params.value * 100).toFixed(2) + "%";
             },
           },
-        ],
+          itemStyle: {
+            color: function (params) {
+              const abcCategory = abcCategories[params.dataIndex];
+              if (abcCategory === "A") return "green";
+              if (abcCategory === "B") return "yellow";
+              return "red";
+            },
+          },
+        })),
       };
+
 
       myChart.hideLoading();
       myChart.setOption(option);
