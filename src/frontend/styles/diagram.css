@@ -50,9 +50,14 @@
     box-sizing: border-box;
   }
   
-  #statsOverview {
+#statsOverview {
     display: flex;
     justify-content: space-between;
     gap: 10px;
     flex-wrap: wrap;
+  }
+
+#pizzaPopularity {
+    width: 100%;
+    height: 600px;
   }
