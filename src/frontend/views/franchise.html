@@ -35,9 +35,9 @@
     <img id="icon" src="/img/icon.png">
     <div id="topbar" onclick="toggleSidebar(true)">
       <div class="btnbox">
-        <button class="btn" id = "Last-Month">MTD</button>
-        <button class="btn" id="Last-Quarter">QTD</button>
-        <button class="btn"id= "Last-Year">YTD</button>
+        <button class="btn" id ="MTD">MTD</button>
+        <button class="btn" id="QTD">QTD</button>
+        <button class="btn"id= "YTD">YTD</button>
         <button class="btn" id="customDate">PTD</button>
         <input type="date" id="datePicker" style="display: none;">
       </div>
@@ -46,6 +46,12 @@
         <button class="infobox">TO: 31-12-2022</button>
         <button class="infobox"id = "PERIOD">PERIOD: XXDAYS</button>
       </div>
+      <!--<div class="customdate" id="customDateForm">
+        <form id="dateForm">
+          <input type="date" id="startDate" name="startDate" value="2022-12-01" required>
+          <button id="customDate">Custom Date</button>
+        </form>
+      </div>-->
     </div>
 
     <div id="sidebar" class="sidebar">
@@ -62,7 +68,8 @@
             <div class="section-items">
               <!--PizzaHub-->
               <div class="subsection">
-                <h1>PizzaHub</h1>
+                <h1  data-tooltip="This section shows the general data of the PizzaHub Franchise">PizzaHub</h1>
+               <!-- <div id="statsOverview" class="diagram"></div> -->
                 <div class="section-items">
                   <div class="statBox">
                     <div class="iconBox"> 
@@ -135,7 +142,6 @@
             </div>
             <div class="section-items">
               <div class="subsection">
-                
                 <div id="revenue" class="diagram"></div>
               </div> 
               <div class="subsection">
@@ -148,10 +154,10 @@
         <!--Bottom section-->
         <div class="section-items">
           <div class="subsection">
-            <div id="pizzaPopularity" class="diagram"></div>
+            <div id="pizzaPopularity" class="diagram" style="height: auto;"></div>
           </div>
           <div class="subsection">
-            <div class="pizzaRanking">
+            <div class="pizzaRankingChart">
           </div>
           </div>
           <div class="subsection">
