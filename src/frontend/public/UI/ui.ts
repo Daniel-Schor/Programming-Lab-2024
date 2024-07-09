@@ -209,18 +209,32 @@ function statOverview(date = "2022-12-01") {
 
       document.getElementById("statsOverview").innerHTML = `	
         <div class="stat-item">
+          <div class="statBox">
+            <div class="iconBox"> 
+              <i class="fas fa-shopping-bag"></i>
+            </div>
           <h3>Revenue</h3>
           <p>${order}</p>
         </div>
         <div class="stat-item">
+         <div class="statBox">
+            <div class="iconBox"> 
+            <i class="fas fa-dollar-sign"></i>
+          </div>
           <h3>Pizzas</h3>
           <p>${order_1}</p>
         </div>
         <div class="stat-item">
+          <div class="iconBox"> 
+            <i class="fas fa-users"></i>
+          </div>
           <h3>Orders</h3>
           <p>${order_2}</p>
         </div>
         <div class="stat-item">
+        <div class="iconBox"> 
+            <i class="fas fa-chart-line"></i>
+          </div>
           <h3>Average Order Value</h3>
           <p>${order_3}</p>
         </div>
