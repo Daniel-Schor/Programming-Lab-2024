@@ -103,7 +103,7 @@ function ytd() {
     let fromButton = document.getElementById('FROM');
     let periodButton = document.getElementById('PERIOD');
     updateCharts(subtractMonths(currentDate, 12));
-    fromButton.textContent = subtractMonths(currentDate, 12);
+    fromButton.textContent = "FROM: " + subtractMonths(currentDate, 12);
     periodButton.textContent = "PERIOD: 365 days";
 }
 function qtd() {
@@ -111,7 +111,7 @@ function qtd() {
     let fromButton = document.getElementById('FROM');
     let periodButton = document.getElementById('PERIOD');
     updateCharts(subtractMonths(currentDate, 3));
-    fromButton.textContent = subtractMonths(currentDate, 3);
+    fromButton.textContent = "FROM: " + subtractMonths(currentDate, 3);
     periodButton.textContent = "PERIOD: 90 days";
 }
 function mtd(update = true) {
@@ -121,7 +121,7 @@ function mtd(update = true) {
     if (update) {
         updateCharts(subtractMonths(currentDate, 1));
     }
-    fromButton.textContent = subtractMonths(currentDate, 1);
+    fromButton.textContent = "FROM: " + subtractMonths(currentDate, 1);
     periodButton.textContent = "PERIOD: 30 days";
 }
 function visibilityCoustomDate() {
