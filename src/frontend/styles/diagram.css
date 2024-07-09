@@ -61,3 +61,20 @@
     width: 100%;
     height: 600px;
   }
+
+
+/*style for store view*/
+#abcAnalysis_pizza_1, /*piechart missing*/
+#PizzaSize,
+#pizzaRanking,
+#Heatmap,
+#pizza_price_popularity,
+#quality,
+#Store-revenue,
+#Heatmap {
+  display: flex;
+  justify-content: space-between;
+  width: auto;
+  height: auto;
+  
+}

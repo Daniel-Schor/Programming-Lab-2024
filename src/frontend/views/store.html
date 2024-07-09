@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
 
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
+  
+  <script src="/static/echarts/infographic.js"></script>
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/charts.js" type="text/javascript"></script>
 
@@ -114,30 +115,30 @@
       <div class="section-items">
         <!--section a-->
         <div class="subsection">
-          <h1>section a</h1>
+          <h1>Pizza</h1>
           <div class="section-items">
             <div class="subsection">
-              <div class="diagram">
+              <div id="abcAnalysis_pizza_1" class="diagram">
                 ABC Analaysis
               </div>
             </div>
             <div class="subsection">
-              <div class="diagram">
-                orderedPizzaSizes
+              <div id="PizzaSize" class="diagram">
+                ordered PizzaSizes
               </div>
             </div>
           </div>
           <div class="section-items">
             <div class="subsection">
-              <div class="diagram">
-                pizzaRanking
+              <div id="pizzaRanking" class="diagram">
+                Pizza Ranking
               </div>
             </div>
           </div>
           <div class="section-items">
             <div class="subsection">
-              <div class="diagram">
-                Pizza Pairs
+              <div id="Heatmap" class="diagram">
+                Common Pizza Combinations 
               </div>
             </div>
             <div class="subsection">
@@ -148,7 +149,7 @@
           </div>
           <div class="section-items">
             <div class="subsection">
-              <div class="diagram">
+              <div id="pizza_price_popularity" class="diagram">
                 Relationship between price and popularity of pizzas
               </div>
             </div>
@@ -178,7 +179,7 @@
               </div>
               <div class="section-items">
                 <div class="subsection">
-                  <div class="diagram">
+                  <div id="dailyOrders" class="diagram">
                     Order Prediction
                   </div>
                 </div>
