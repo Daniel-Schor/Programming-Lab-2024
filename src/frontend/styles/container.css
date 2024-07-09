@@ -37,8 +37,7 @@
 }
 
 .iconBox {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 0 8px;
+  position: absolute;
+  right: 0;
+  margin: 0px 8px;
 }
