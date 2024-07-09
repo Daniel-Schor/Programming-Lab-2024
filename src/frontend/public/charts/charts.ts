@@ -162,19 +162,12 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}, date = defau
           tooltip: {
             trigger: "axis",
           },
-          legend: {
-            data: orderedStoreIDs,
-          },
-          toolbox: {
-            feature: {
-              saveAsImage: {},
-            },
-          },
           grid: {
-            left: "3%",
-            right: "1%",
-            bottom: "3%",
-            containLabel: true,
+            left: '1%',
+            right: '5%',
+            bottom: '1%',
+            top: '4%',
+            containLabel: true
           },
           xAxis: [
             {
@@ -235,9 +228,10 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = defaultDate
             }
           },
           grid: {
-            left: '3%',
+            left: '1%',
             right: '4%',
-            bottom: '3%',
+            bottom: '1%',
+            top: '1%',
             containLabel: true
           },
           xAxis: [
