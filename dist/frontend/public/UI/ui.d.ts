@@ -1,12 +1,12 @@
 declare function subtractMonths(date: any, months: any): string;
 declare function calculatePeriod(startDate: any, endDate: any): number;
 declare function backButton(): void;
-declare function timeButtons(): void;
-declare function customDate(): void;
+declare function ytd(): void;
+declare function qtd(): void;
+declare function mtd(): void;
 declare function visibilityCoustomDate(): void;
 declare function getTotalRevenue(date: any, storeID: any): Promise<any>;
 declare function getTotalPizzas(date: any, storeID: any): Promise<any>;
 declare function getTotalOrders(date: any, storeID: any): Promise<any>;
 declare function getAverageOrderValue(date: any, storeID: any): Promise<any>;
 declare function getPizzasPerOrder(date: any, storeID: any): Promise<any>;
-declare function statOverview(date?: string): Promise<void>;

@@ -91,39 +91,26 @@ function backButton() {
         window.location.href = "http://localhost:3000/";
     });
 }
-function timeButtons() {
+function ytd() {
     let fromButton = document.getElementById('FROM');
     let periodButton = document.getElementById('PERIOD');
-    document.getElementById("Last-Year").addEventListener("click", function () {
-        updateCharts(subtractMonths(currentDate, 12));
-        fromButton.textContent = subtractMonths(currentDate, 12);
-        periodButton.textContent = "PERIOD: 365 days";
-    });
-    document
-        .getElementById("Last-Quarter")
-        .addEventListener("click", function () {
-        updateCharts(subtractMonths(currentDate, 3));
-        fromButton.textContent = subtractMonths(currentDate, 3);
-        periodButton.textContent = "PERIOD: 90 days";
-    });
-    document.getElementById("Last-Month").addEventListener("click", function () {
-        updateCharts(subtractMonths(currentDate, 1));
-        fromButton.textContent = subtractMonths(currentDate, 1);
-        periodButton.textContent = "PERIOD: 30 days";
-    });
+    updateCharts(subtractMonths(currentDate, 12));
+    fromButton.textContent = subtractMonths(currentDate, 12);
+    periodButton.textContent = "PERIOD: 365 days";
 }
-function customDate() {
-    document.getElementById("customDate").addEventListener("click", function () {
-        document.getElementById("customDateForm").style.display = "block";
-    });
-    document
-        .getElementById("dateForm")
-        .addEventListener("submit", function (event) {
-        console.log("submit");
-        event.preventDefault();
-        let date = document.getElementById("startDate").value;
-        updateCharts(date);
-    });
+function qtd() {
+    let fromButton = document.getElementById('FROM');
+    let periodButton = document.getElementById('PERIOD');
+    updateCharts(subtractMonths(currentDate, 3));
+    fromButton.textContent = subtractMonths(currentDate, 3);
+    periodButton.textContent = "PERIOD: 90 days";
+}
+function mtd() {
+    let fromButton = document.getElementById('FROM');
+    let periodButton = document.getElementById('PERIOD');
+    updateCharts(subtractMonths(currentDate, 1));
+    fromButton.textContent = subtractMonths(currentDate, 1);
+    periodButton.textContent = "PERIOD: 30 days";
 }
 function visibilityCoustomDate() {
     document.getElementById('customDate').addEventListener('click', function () {
@@ -153,69 +140,5 @@ function getAverageOrderValue(date, storeID) {
 function getPizzasPerOrder(date, storeID) {
     const endpoint = storeID ? `/api/pizzasPerOrder?date=${date}&store=${storeID}` : `/api/pizzasPerOrder?date=${date}`;
     return fetch(endpoint).then((response) => response.json());
-}
-function statOverview(date = "2022-12-01") {
-    const store = JSON.parse(localStorage.getItem("store"));
-    const storeID = store ? store.storeID : null;
-    //anpassen fuer main seite 
-    // Erstellen eines Arrays von Fetch-Promises
-    const fetchPromises = [
-        getTotalRevenue(date, storeID),
-        getTotalPizzas(date, storeID),
-        getTotalOrders(date, storeID),
-        getAverageOrderValue(date, storeID),
-        getPizzasPerOrder(date, storeID),
-    ];
-    // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
-    return Promise.all(fetchPromises)
-        .then((dataArray) => {
-        // Kombinieren der Daten von den APIs
-        const [totalRevenueData, totalPizzasData, totalOrdersData, averageOrderValueData, pizzasPerOrderData,] = dataArray;
-        var order = Math.round(totalRevenueData[0].total_revenue);
-        var order_1 = Math.round(totalPizzasData[0].total_pizza);
-        var order_2 = Math.round(totalOrdersData[0].total_orders);
-        var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-        var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
-        document.getElementById("statsOverview").innerHTML = `	
-        <div class="stat-item">
-          <div class="statBox">
-            <div class="iconBox"> 
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-          <h3>Revenue</h3>
-          <p>${order}</p>
-        </div>
-        <div class="stat-item">
-         <div class="statBox">
-            <div class="iconBox"> 
-            <i class="fas fa-dollar-sign"></i>
-          </div>
-          <h3>Pizzas</h3>
-          <p>${order_1}</p>
-        </div>
-        <div class="stat-item">
-          <div class="iconBox"> 
-            <i class="fas fa-users"></i>
-          </div>
-          <h3>Orders</h3>
-          <p>${order_2}</p>
-        </div>
-        <div class="stat-item">
-        <div class="iconBox"> 
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <h3>Average Order Value</h3>
-          <p>${order_3}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Average Pizzas per Order</h3>
-          <p>${order_4}</p>
-        </div>
-        `;
-    })
-        .catch((error) => {
-        console.error("Error fetching data:", error);
-        throw error;
-    });
 }
 //# sourceMappingURL=ui.js.map

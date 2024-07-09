@@ -30,8 +30,11 @@ function randomColor() {
 
 
 function updateCharts(date) {
-  statOverview(date);
+  // TODO wrong parameter 
+  revenueChart(true, [], {}, date);
+  revenueBarChart({}, false, date);
 
+  //pizzaPopularity(date);
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -51,6 +54,7 @@ function setActiveButton(buttonId) {
   document.getElementById("customDate").classList.remove("active");
   document.getElementById(buttonId).classList.add("active");
 }
+
 let best;
 let custom;
 let curColors;

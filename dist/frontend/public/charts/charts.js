@@ -26,7 +26,10 @@ function randomColor() {
     return color;
 }
 function updateCharts(date) {
-    statOverview(date);
+    // TODO wrong parameter 
+    revenueChart(true, [], {}, date);
+    revenueBarChart({}, false, date);
+    //pizzaPopularity(date);
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
