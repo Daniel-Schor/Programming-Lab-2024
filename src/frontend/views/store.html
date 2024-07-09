@@ -31,9 +31,9 @@
   <img id="icon" src="/img/icon.png">
   <div id="topbar" onclick="toggleSidebar(true)">
     <div class="btnbox">
-      <button class="btn" id="Last-Month">MTD</button>
-      <button class="btn" id="Last-Quarter">QTD</button>
-      <button class="btn" id="Last-Year">YTD</button>
+      <button class="btn" id="Last-Month" onclick="mtd();">MTD</button>
+      <button class="btn" id="Last-Quarter" onclick="qtd();">QTD</button>
+      <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
       <button class="btn" id="customDate">PTD</button>
       <input type="date" id="datePicker" style="display: none;">
     </div>
@@ -255,7 +255,6 @@
       <script>
         visibilityCoustomDate()
       
-      timeButtons();
      
       statOverview();
         function toggleSidebar(turnOff = false) {
