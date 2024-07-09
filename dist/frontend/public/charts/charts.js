@@ -1,6 +1,6 @@
 "use strict";
 // TODO use env variables instead
-/*
+/* MAIN STORE SITE
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -416,5 +416,12 @@ async function pizzaPopularity(date = "2022-12-01") {
     catch (error) {
         console.error('Error fetching data:', error);
     }
+}
+function processData(data) {
+    return data.map(item => ({
+        Name: item.Name,
+        purchaseDate: new Date(item.purchaseDate).toISOString().split("T")[0], // Format date to YYYY-MM-DD
+        revenue: parseFloat(item.revenue) // Convert revenue to a number
+    }));
 }
 //# sourceMappingURL=charts.js.map

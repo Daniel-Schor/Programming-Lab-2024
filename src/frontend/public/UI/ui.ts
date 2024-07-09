@@ -180,7 +180,7 @@ function getPizzasPerOrder(date, storeID) {
 function statOverview(date = "2022-12-01") {
   const store = JSON.parse(localStorage.getItem("store"));
   const storeID = store ? store.storeID : null;
-
+  //anpassen fuer main seite 
   // Erstellen eines Arrays von Fetch-Promises
   const fetchPromises = [
     getTotalRevenue(date, storeID),
