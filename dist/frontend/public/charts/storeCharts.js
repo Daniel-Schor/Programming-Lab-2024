@@ -23,7 +23,7 @@ function updateChart(chart, option) {
     }
 }
 // TODO move to generalCharts.ts
-function monthlyRevenue(date = "2022-12-01") {
+function monthlyRevenue(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("Store-revenue");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
@@ -52,7 +52,7 @@ function monthlyRevenue(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-function gaugeChart(date = "2022-12-01") {
+function gaugeChart(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("quality");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
@@ -88,7 +88,7 @@ function gaugeChart(date = "2022-12-01") {
         console.error("Error:", error);
     });
 }
-function heatmap(date = "2022-12-01") {
+function heatmap(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("Heatmap");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
@@ -132,7 +132,7 @@ function heatmap(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-function pizzaSize(date = "2022-12-01") {
+function pizzaSize(date = defaultDate) {
     //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById('PizzaSize');
@@ -212,7 +212,7 @@ function pizzaSize(date = "2022-12-01") {
 }
 //TODO anzeige top 10 customer
 //TODO rein hovern
-function abcAnalysis_customer_1(date = "2022-12-01") {
+function abcAnalysis_customer_1(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById('abcAnalysis_customer_1');
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
@@ -292,7 +292,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-function abcAnalysis_customer_2(date = "2022-12-01") {
+function abcAnalysis_customer_2(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById('abcAnalysis_customer_2');
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
@@ -361,7 +361,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-function abcAnalysis_pizza_1(date = "2022-12-01") {
+function abcAnalysis_pizza_1(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById('abcAnalysis_pizza_1');
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
@@ -445,7 +445,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
         myChart.hideLoading();
     });
 }
-function pizzaIngredients(date = "2022-12-01") {
+function pizzaIngredients(date = defaultDate) {
     var app = {};
     var store = JSON.parse(localStorage.getItem("store"));
     var chartDom = document.getElementById("pizzaIngredients");
@@ -539,7 +539,7 @@ function pizzaIngredients(date = "2022-12-01") {
     })
         .catch((error) => console.error("Error fetching ingredient data:", error));
 }
-function pizza_price_popularity(date = "2022-12-01") {
+function pizza_price_popularity(date = defaultDate) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById('pizza_price_popularity');
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);

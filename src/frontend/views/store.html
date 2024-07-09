@@ -219,7 +219,7 @@
                   </div>
                 </div>
                 <div class="subsection">
-                  <div class="diagram">
+                  <div class="diagram" id="quality">
                    Quality
                   </div>
                 </div>
@@ -253,10 +253,13 @@
 
 
       <script>
-        visibilityCoustomDate()
-      
-     
-      statOverview();
+        visibilityCoustomDate();
+        statOverview();
+        gaugeChart();
+        pizzaSize();
+        heatmap();
+        abcAnalysis_pizza_1();
+        //monthlyRevenue();
         function toggleSidebar(turnOff = false) {
           if (turnOff) {
             document.getElementById("sidebar").classList.remove("active");
@@ -266,6 +269,7 @@
             document.getElementById("main").classList.toggle("active");
           }
         }
+        
       </script>
       
 </body>
