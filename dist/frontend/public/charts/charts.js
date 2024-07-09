@@ -7,8 +7,12 @@ dotenv.config();
 */
 // TODO use .env variables instead
 const theme = '#ccc';
-const defaultDate = "2022-12-01";
+let defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
+let best = false;
+let custom = false;
+let curColors = false;
+let firstClick = true;
 // TODO move to Helper dir
 const colorsToExclude = [
     "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
@@ -27,8 +31,16 @@ function randomColor() {
 }
 function updateCharts(date) {
     // TODO wrong parameter 
-    revenueChart(true, [], {}, date);
-    revenueBarChart({}, false, date);
+    defaultDate = date;
+    if (firstClick || best) {
+        bestButton(date, curColors);
+    }
+    else if (custom) {
+        customButton(date);
+    }
+    else {
+        worstButton(date, curColors);
+    }
     //pizzaPopularity(date);
 }
 // TODO move to generalCharts.ts
@@ -47,39 +59,35 @@ function setActiveButton(buttonId) {
     document.getElementById("customDate").classList.remove("active");
     document.getElementById(buttonId).classList.add("active");
 }
-let best;
-let custom;
-let curColors;
-let firstClick = true;
-function bestButton() {
+function bestButton(date = defaultDate, colors = {}) {
     best = true;
     custom = false;
     firstClick = false;
-    revenueChart(best).then(colors => {
+    revenueChart(best, [], colors, date).then(colors => {
         curColors = colors;
-        revenueBarChart(curColors);
+        revenueBarChart(curColors, false, date);
     });
     setActiveButton("bestButton");
 }
-function worstButton() {
+function worstButton(date = defaultDate, colors = {}) {
     best = false;
     custom = false;
     firstClick = false;
-    revenueChart(best).then(colors => {
+    revenueChart(best, [], colors, date).then(colors => {
         curColors = colors;
-        revenueBarChart(curColors);
+        revenueBarChart(curColors, false, date);
     });
     setActiveButton("worstButton");
 }
-async function customButton() {
+async function customButton(date = defaultDate) {
     custom = true;
     firstClick = false;
     setActiveButton("customButton");
     while (custom) {
         try {
-            const colors = await revenueBarChart(curColors, custom);
+            const colors = await revenueBarChart(curColors, custom, date);
             const filteredColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
-            await revenueChart(best, [], filteredColors);
+            await revenueChart(best, [], filteredColors, date);
         }
         catch (error) {
             console.error("Error in customButton loop:", error);
@@ -88,7 +96,7 @@ async function customButton() {
     }
 }
 // TODO move to generalCharts.ts
-function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022-12-01") {
+function revenueChart(best = true, storeIDs = [], storeColors = {}, date = defaultDate) {
     return new Promise((resolve, reject) => {
         var days = [];
         let lineInfos = [];
@@ -181,7 +189,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}, date = "2022
         });
     });
 }
-function revenueBarChart(storeIDsColors = {}, custom = false, date = "2022-12-01") {
+function revenueBarChart(storeIDsColors = {}, custom = false, date = defaultDate) {
     return new Promise((resolve, reject) => {
         var chartDom = document.getElementById('revenueBar');
         var myChart = echarts.init(chartDom, theme);
@@ -309,7 +317,7 @@ function storeLocationMap() {
     })
         .catch((error) => console.error("Error fetching data:", error));
 }
-async function pizzaPopularity(date = "2022-12-01") {
+async function pizzaPopularity(date = defaultDate) {
     var chartDom = document.getElementById("pizzaPopularity");
     var myChart = echarts.init(chartDom, theme);
     var option;
