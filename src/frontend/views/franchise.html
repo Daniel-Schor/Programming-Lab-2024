@@ -42,7 +42,7 @@
       <button class="btn" id="Last-Month" onclick="mtd();">MTD</button>
       <button class="btn" id="Last-Quarter" onclick="qtd();">QTD</button>
       <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
-      <button class="btn" id="customDate">PTD</button>
+      <button class="btn" id="customDate" onclick="setActiveButton('customDate')">PTD</button>
       <input type="date" id="datePicker" style="display: none;">
     </div>
     <div class="btnbox">
@@ -175,6 +175,7 @@
       visibilityCoustomDate();
 
       if (firstClick) {
+        mtd(false);
         setActiveButton("bestButton");
         bestButton();
       }

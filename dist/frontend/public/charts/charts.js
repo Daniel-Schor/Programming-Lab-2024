@@ -36,7 +36,7 @@ function updateCharts(date) {
         bestButton(date, curColors);
     }
     else if (custom) {
-        customButton(date);
+        customButton(date, true);
     }
     else {
         worstButton(date, curColors);
@@ -49,17 +49,10 @@ function updateChart(chart, option) {
         chart.setOption(option, true);
     }
 }
-function setActiveButton(buttonId) {
-    document.getElementById("bestButton").classList.remove("active");
-    document.getElementById("worstButton").classList.remove("active");
-    document.getElementById("customButton").classList.remove("active");
-    document.getElementById("Last-Year").classList.remove("active");
-    document.getElementById("Last-Quarter").classList.remove("active");
-    document.getElementById("Last-Month").classList.remove("active");
-    document.getElementById("customDate").classList.remove("active");
-    document.getElementById(buttonId).classList.add("active");
-}
 function bestButton(date = defaultDate, colors = {}) {
+    if (best) {
+        return;
+    }
     best = true;
     custom = false;
     firstClick = false;
@@ -70,6 +63,9 @@ function bestButton(date = defaultDate, colors = {}) {
     setActiveButton("bestButton");
 }
 function worstButton(date = defaultDate, colors = {}) {
+    if (!best && !custom) {
+        return;
+    }
     best = false;
     custom = false;
     firstClick = false;
@@ -79,15 +75,28 @@ function worstButton(date = defaultDate, colors = {}) {
     });
     setActiveButton("worstButton");
 }
-async function customButton(date = defaultDate) {
+async function customButton(date = defaultDate, update = false) {
+    defaultDate = date;
+    best = false;
     custom = true;
     firstClick = false;
     setActiveButton("customButton");
     while (custom) {
         try {
-            const colors = await revenueBarChart(curColors, custom, date);
-            const filteredColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
-            await revenueChart(best, [], filteredColors, date);
+            let colors = curColors || {};
+            if (update) {
+                await revenueChart(best, [], colors, date);
+                await revenueBarChart(colors, custom, date);
+            }
+            else {
+                colors = await revenueBarChart(curColors, custom, date);
+                const filteredColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
+                if (Object.keys(filteredColors).length === 0) {
+                    bestButton(date);
+                    break;
+                }
+                await revenueChart(best, [], filteredColors, date);
+            }
         }
         catch (error) {
             console.error("Error in customButton loop:", error);
@@ -428,5 +437,11 @@ function processData(data) {
         purchaseDate: new Date(item.purchaseDate).toISOString().split("T")[0], // Format date to YYYY-MM-DD
         revenue: parseFloat(item.revenue) // Convert revenue to a number
     }));
+}
+function setActiveButton(buttonId) {
+    document.getElementById("bestButton").classList.remove("active");
+    document.getElementById("worstButton").classList.remove("active");
+    document.getElementById("customButton").classList.remove("active");
+    document.getElementById(buttonId).classList.add("active");
 }
 //# sourceMappingURL=charts.js.map

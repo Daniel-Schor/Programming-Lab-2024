@@ -74,7 +74,7 @@ body::-webkit-scrollbar {
 }
 
 .sidebar p:hover {
-  color: #ff6347;
+  color: #ff7247;
 }
 /* Style for the city buttons */
 .city-button {
@@ -133,9 +133,10 @@ button {
 }
 
 button:hover,
-button:active {
+button:active,
+button.active {
   transition: 0.3s;
-  background-color: #ff6347;
+  background-color: #ff7247;
   cursor: pointer;
 }
 

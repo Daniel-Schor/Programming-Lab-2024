@@ -92,6 +92,7 @@ function backButton() {
     });
 }
 function ytd() {
+    setActiveTimeButton("Last-Year");
     let fromButton = document.getElementById('FROM');
     let periodButton = document.getElementById('PERIOD');
     updateCharts(subtractMonths(currentDate, 12));
@@ -99,16 +100,20 @@ function ytd() {
     periodButton.textContent = "PERIOD: 365 days";
 }
 function qtd() {
+    setActiveTimeButton("Last-Quarter");
     let fromButton = document.getElementById('FROM');
     let periodButton = document.getElementById('PERIOD');
     updateCharts(subtractMonths(currentDate, 3));
     fromButton.textContent = subtractMonths(currentDate, 3);
     periodButton.textContent = "PERIOD: 90 days";
 }
-function mtd() {
+function mtd(update = true) {
+    setActiveTimeButton("Last-Month");
     let fromButton = document.getElementById('FROM');
     let periodButton = document.getElementById('PERIOD');
-    updateCharts(subtractMonths(currentDate, 1));
+    if (update) {
+        updateCharts(subtractMonths(currentDate, 1));
+    }
     fromButton.textContent = subtractMonths(currentDate, 1);
     periodButton.textContent = "PERIOD: 30 days";
 }
@@ -172,5 +177,12 @@ function statOverview(date = "2022-12-01") {
         console.error("Error fetching data:", error);
         throw error;
     });
+}
+function setActiveTimeButton(buttonId) {
+    document.getElementById("Last-Year").classList.remove("active");
+    document.getElementById("Last-Quarter").classList.remove("active");
+    document.getElementById("Last-Month").classList.remove("active");
+    document.getElementById("customDate").classList.remove("active");
+    document.getElementById(buttonId).classList.add("active");
 }
 //# sourceMappingURL=ui.js.map
