@@ -49,28 +49,37 @@ function updateChart(chart, option) {
         chart.setOption(option, true);
     }
 }
-function bestButton(date = defaultDate, colors = {}) {
+function bestButton(date = "", colors = {}) {
+    if (best && !date) {
+        return;
+    }
     best = true;
     custom = false;
     firstClick = false;
-    revenueChart(best, [], colors, date).then(colors => {
+    revenueChart(best, [], colors, date || defaultDate).then(colors => {
         curColors = colors;
-        revenueBarChart(curColors, false, date);
+        revenueBarChart(curColors, false, date || defaultDate);
     });
     setActiveButton("bestButton");
 }
-function worstButton(date = defaultDate, colors = {}) {
+function worstButton(date = "", colors = {}) {
+    if (!best && !custom && !date) {
+        return;
+    }
     best = false;
     custom = false;
     firstClick = false;
-    revenueChart(best, [], colors, date).then(colors => {
+    revenueChart(best, [], colors, date || defaultDate).then(colors => {
         curColors = colors;
-        revenueBarChart(curColors, false, date);
+        revenueBarChart(curColors, false, date || defaultDate);
     });
     setActiveButton("worstButton");
 }
-async function customButton(date = defaultDate, update = false) {
-    defaultDate = date;
+async function customButton(date = "", update = false) {
+    if (custom && !date) {
+        return;
+    }
+    defaultDate = date || defaultDate;
     best = false;
     custom = true;
     firstClick = false;
@@ -79,17 +88,17 @@ async function customButton(date = defaultDate, update = false) {
         try {
             let colors = curColors || {};
             if (update) {
-                await revenueChart(best, [], colors, date);
-                await revenueBarChart(colors, custom, date);
+                await revenueChart(best, [], colors, date || defaultDate);
+                await revenueBarChart(colors, custom, date || defaultDate);
             }
             else {
-                colors = await revenueBarChart(curColors, custom, date);
-                const filteredColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
-                if (Object.keys(filteredColors).length === 0) {
-                    bestButton(date);
+                colors = await revenueBarChart(curColors, custom, date || defaultDate);
+                curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
+                if (Object.keys(curColors).length === 0) {
+                    bestButton(date || defaultDate);
                     break;
                 }
-                await revenueChart(best, [], filteredColors, date);
+                await revenueChart(best, [], curColors, date || defaultDate);
             }
         }
         catch (error) {
