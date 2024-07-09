@@ -50,9 +50,6 @@ function updateChart(chart, option) {
     }
 }
 function bestButton(date = defaultDate, colors = {}) {
-    if (best) {
-        return;
-    }
     best = true;
     custom = false;
     firstClick = false;
@@ -63,9 +60,6 @@ function bestButton(date = defaultDate, colors = {}) {
     setActiveButton("bestButton");
 }
 function worstButton(date = defaultDate, colors = {}) {
-    if (!best && !custom) {
-        return;
-    }
     best = false;
     custom = false;
     firstClick = false;

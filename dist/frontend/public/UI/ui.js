@@ -1,5 +1,8 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", function () {
+    const addPassiveEventListener = (type) => {
+        document.addEventListener(type, (event) => { }, { passive: true });
+    };
     function sideBar() {
         fetch("/api/Stores")
             .then((response) => response.json())
@@ -67,6 +70,10 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error fetching stores:", error);
         });
     }
+    addPassiveEventListener('wheel');
+    addPassiveEventListener('mousewheel');
+    addPassiveEventListener('touchstart');
+    addPassiveEventListener('touchmove');
     // Call the sideBar function to populate the sidebar
     sideBar();
 });

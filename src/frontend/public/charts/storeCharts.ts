@@ -159,6 +159,8 @@ function heatmap(date = defaultDate) {
 
 }
 
+
+
 function pizzaSize(date = defaultDate) {
   //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
   var store = JSON.parse(localStorage.getItem("store"));
