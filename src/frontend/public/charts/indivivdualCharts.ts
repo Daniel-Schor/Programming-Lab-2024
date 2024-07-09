@@ -4,10 +4,6 @@ const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 const theme = '#ccc';
 
-
-
-
-
 function updateCharts(date) {
   monthlyRevenue(date);
   gaugeChart(date);

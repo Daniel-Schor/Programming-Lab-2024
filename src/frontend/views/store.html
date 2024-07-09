@@ -7,21 +7,15 @@
   <link rel="stylesheet" type="text/css" href="/style/main.css" />
   <link rel="stylesheet" type="text/css" href="/style/container.css" />
   <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
-
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   
   <script src="/static/echarts/infographic.js"type="text/javascript"></script>
   <script src="/static/echarts/echarts.js"></script>
-  <script src="/static/charts/charts.js" type="text/javascript"></script>
-
   <script src="/static/charts/storeCharts.js" type="text/javascript"></script>
   <script src="/static/UI/ui.js" type="text/javascript"></script>
 
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script type="text/javascript" src="/static/UI/ui.js"></script>
+
 
 
   <title>Document</title>
@@ -68,15 +62,15 @@
               <div class="section-items">
                 <div class="statBox">
                   <h2>Sales<h2>
-                      <p>1234</p>
+                      <p id="sSales"></p>
                 </div>
                 <div class="statBox">
                   <h2>Revenue</h2>
-                  <p>1234</p>
+                  <p id="sRevenue">1234</p>
                 </div>
                 <div class="statBox">
                   <h2>Customers</h2>
-                  <p>1234</p>
+                  <p id="sCustomers">1234</p>
                 </div>
                 <div class="statBox">
                   <h2>Placeholder</h2>
@@ -95,7 +89,7 @@
                 </div>
                 <div class="statBox">
                   <h2>Order Value</h2>
-                  <p>1234</p>
+                  <p id="oValue">1234</p>
                 </div>
                 <div class="statBox">
                   <h2>PizzaOrder</h2>
@@ -259,6 +253,11 @@
 
 
       <script>
+        visibilityCoustomDate()
+      
+      timeButtons();
+     
+      statOverview();
         function toggleSidebar(turnOff = false) {
           if (turnOff) {
             document.getElementById("sidebar").classList.remove("active");
