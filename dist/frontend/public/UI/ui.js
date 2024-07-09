@@ -217,8 +217,4 @@ function statOverview(date = "2022-12-01") {
         throw error;
     });
 }
-// Initialisierung beim Laden der Seite
-document.addEventListener('DOMContentLoaded', (event) => {
-    statOverview();
-});
 //# sourceMappingURL=ui.js.map

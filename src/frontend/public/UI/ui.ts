@@ -250,7 +250,3 @@ function statOverview(date = "2022-12-01") {
     });
 }
 
-// Initialisierung beim Laden der Seite
-document.addEventListener('DOMContentLoaded', (event) => {
-  statOverview();
-});
