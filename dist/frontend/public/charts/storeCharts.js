@@ -210,239 +210,355 @@ function pizzaSize(date = defaultDate) {
         updateChart(myChart, option);
     });
 }
-//TODO anzeige top 10 customer
-//TODO rein hovern
-function abcAnalysis_customer_1(date = defaultDate) {
+function abcAnalysis_customer_1(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
-    var dom = document.getElementById('abcAnalysis_customer_1');
+    var dom = document.getElementById("abcAnalysis_customer_1");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
     fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
-        .then(response => response.json())
-        .then(data => {
-        let analysisData = data[store.storeID];
-        let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_customer_percentage_of_total);
+        .then((response) => response.json())
+        .then((data) => {
+        const analysisData = data[store.storeID];
+        let cumulativePercentage = Object.values(analysisData).map((item) => item.sorted_cumulative_customer_percentage_of_total);
         let customerID = Object.keys(analysisData);
-        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
-        let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
-        var option = {
-            title: {
-                text: 'ABC Analysis of Customers by sorted_cumulative_customer_percentage_of_total',
-                left: 'center'
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
+        let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
+        let totalSales = Object.values(analysisData).map((item) => item.total_sale_customer);
+        function updateChart() {
+            var option = {
+                title: {
+                    text: "ABC Analysis of Customers sorted by cumulative customer percentage of total revenue",
+                    left: "center",
                 },
-                formatter: function (params) {
-                    let index = params[0].dataIndex;
-                    return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Sales: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
-                }
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            xAxis: {
-                type: 'category',
-                name: 'Volume Share in Percent',
-                nameLocation: 'middle',
-                data: abcCategories,
-                axisLabel: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                name: 'Value Share in Percent',
-                axisLabel: {
-                    formatter: function (value) {
-                        return (value * 100).toFixed(0) + '%';
-                    }
-                }
-            },
-            series: [
-                {
-                    name: 'Cumulative Percentage',
-                    type: 'bar',
-                    data: cumulativePercentage,
-                    label: {
-                        show: false,
-                        position: 'insideBottom',
-                        formatter: function (params) {
-                            return (params.value * 100).toFixed(2) + '%';
-                        }
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        type: "shadow",
                     },
-                    itemStyle: {
-                        color: function (params) {
-                            const abcCategory = abcCategories[params.dataIndex];
-                            if (abcCategory === 'A')
-                                return 'green';
-                            if (abcCategory === 'B')
-                                return 'yellow';
-                            return 'red';
-                        }
-                    }
+                    formatter: function (params) {
+                        let index = params[0].dataIndex;
+                        return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
+                    },
                 },
-            ]
-        };
+                toolbox: {
+                    feature: {
+                        saveAsImage: {},
+                    },
+                },
+                xAxis: {
+                    type: "category",
+                    name: "Volume Share in Percent",
+                    nameLocation: "middle",
+                    data: abcCategories,
+                    axisLabel: {
+                        show: false,
+                    },
+                },
+                yAxis: {
+                    type: "value",
+                    name: "Value Share in Percent",
+                    axisLabel: {
+                        formatter: function (value) {
+                            return (value * 100).toFixed(0) + "%";
+                        },
+                    },
+                },
+                series: [
+                    {
+                        name: "Cumulative Percentage",
+                        type: "bar",
+                        data: cumulativePercentage,
+                        label: {
+                            show: false,
+                            position: "insideBottom",
+                            formatter: function (params) {
+                                return (params.value * 100).toFixed(2) + "%";
+                            },
+                        },
+                        itemStyle: {
+                            color: function (params) {
+                                const abcCategory = abcCategories[params.dataIndex];
+                                if (abcCategory === "A")
+                                    return "green";
+                                if (abcCategory === "B")
+                                    return "yellow";
+                                return "red";
+                            },
+                        },
+                    },
+                ],
+            };
+            myChart.hideLoading();
+            myChart.setOption(option);
+        }
+        // Initialize the chart with all data
+        updateChart();
+        // Add event listener for the search input
+        const searchInput = document.getElementById("customerSearch");
+        searchInput.addEventListener("input", function () {
+            const searchQuery = searchInput.value.toLowerCase();
+            const filteredData = Object.keys(analysisData).reduce((acc, key) => {
+                if (key.toLowerCase().includes(searchQuery)) {
+                    acc.cumulativePercentage.push(analysisData[key].sorted_cumulative_customer_percentage_of_total);
+                    acc.customerID.push(key);
+                    acc.abcCategories.push(analysisData[key].abc_category);
+                    acc.totalSales.push(analysisData[key].total_sale_customer);
+                }
+                return acc;
+            }, { cumulativePercentage: [], customerID: [], abcCategories: [], totalSales: [] });
+            cumulativePercentage = filteredData.cumulativePercentage;
+            customerID = filteredData.customerID;
+            abcCategories = filteredData.abcCategories;
+            totalSales = filteredData.totalSales;
+            updateChart();
+        });
+    })
+        .catch((error) => {
         myChart.hideLoading();
-        updateChart(myChart, option);
+        console.error("Error fetching or processing data:", error);
     });
 }
-function abcAnalysis_customer_2(date = defaultDate) {
+function abcAnalysis_customer_2(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
-    var dom = document.getElementById('abcAnalysis_customer_2');
+    var dom = document.getElementById("abcAnalysis_customer_2");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
     fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
         let analysisData = data[store.storeID];
         let customerID = Object.keys(analysisData);
-        let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
-        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
+        let totalSales = Object.values(analysisData).map((item) => item.total_sale_customer);
+        let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
         var option = {
             title: {
-                text: 'ABC Analysis of Customers total Revenue descending',
-                left: 'center'
+                text: "ABC Analysis of Customers sorted by total Revenue descending",
+                left: "center",
             },
             tooltip: {
-                trigger: 'axis',
+                trigger: "axis",
                 axisPointer: {
-                    type: 'shadow'
+                    type: "shadow",
                 },
                 formatter: function (params) {
                     let index = params[0].dataIndex;
                     return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}`;
-                }
+                },
             },
             toolbox: {
                 feature: {
-                    saveAsImage: {}
-                }
+                    saveAsImage: {},
+                },
             },
             xAxis: {
-                type: 'category',
+                type: "category",
                 data: abcCategories,
                 axisLabel: {
-                    show: false
-                }
+                    show: false,
+                },
             },
             yAxis: {
-                type: 'value',
-                name: 'Total Revenue'
+                type: "value",
+                name: "Total Revenue",
             },
             series: [
                 {
-                    name: 'Total Revenue',
-                    type: 'bar',
+                    name: "Total Revenue",
+                    type: "bar",
                     data: totalSales,
                     label: {
                         show: false,
-                        position: 'insideBottom'
+                        position: "insideBottom",
                     },
                     itemStyle: {
                         color: function (params) {
                             const abcCategory = abcCategories[params.dataIndex];
-                            if (abcCategory === 'A')
-                                return 'green';
-                            if (abcCategory === 'B')
-                                return 'yellow';
-                            return 'red';
-                        }
-                    }
-                }
-            ]
+                            if (abcCategory === "A")
+                                return "green";
+                            if (abcCategory === "B")
+                                return "yellow";
+                            return "red";
+                        },
+                    },
+                },
+            ],
         };
         myChart.hideLoading();
         updateChart(myChart, option);
     });
 }
-function abcAnalysis_pizza_1(date = defaultDate) {
+function abcAnalysis_pizza_1(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
-    var dom = document.getElementById('abcAnalysis_pizza_1');
+    var dom = document.getElementById("abcAnalysis_pizza_1");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
     fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
-        .then(response => response.json())
-        .then(data => {
-        let analysisData = data[store.storeID];
-        let cumulativePercentage = Object.values(analysisData).map(item => item.sorted_cumulative_product_percentage_of_total);
-        let productSKUs = Object.keys(analysisData);
-        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
-        let totalSales = Object.values(analysisData).map(item => item.total_sales_pizza);
-        var option = {
+        .then((response) => response.json())
+        .then((data) => {
+        if (!data[store.storeID]) {
+            throw new Error('No data found for the given storeID and date');
+        }
+        const analysisData = data[store.storeID];
+        const cumulativePercentage = Object.values(analysisData).map((item) => item.sorted_cumulative_product_percentage_of_total);
+        const productSKUs = Object.keys(analysisData);
+        const abcCategories = Object.values(analysisData).map((item) => item.abc_category);
+        const totalSales = Object.values(analysisData).map((item) => item.total_sales_pizza);
+        const sizes = Object.values(analysisData).map((item) => item.size);
+        const names = Object.values(analysisData).map((item) => item.name);
+        const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
+        const option = {
             title: {
-                text: 'ABC Analysis of Pizza by sorted_cumulative_customer_percentage_of_total',
-                left: 'center'
+                text: "ABC Analysis of Pizza by Cumulative Percentage",
+                left: "center",
             },
             tooltip: {
-                trigger: 'axis',
+                trigger: "axis",
                 axisPointer: {
-                    type: 'shadow'
+                    type: "shadow",
                 },
                 formatter: function (params) {
-                    let index = params[0].dataIndex;
-                    return `Green good, red bad.<br/> A pizza good, c pizza bad.<br/>Product SKU: ${productSKUs[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
-                }
+                    const index = params[0].dataIndex;
+                    return `
+              Product Name: ${names[index]}<br/>
+              Product SKU: ${productSKUs[index]}<br/>
+              Total Revenue: ${totalSales[index]}<br/>
+              Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%<br/>
+              ABC Category: ${abcCategories[index]}<br/>
+              Size: ${sizes[index]}
+            `;
+                },
             },
             toolbox: {
                 feature: {
-                    saveAsImage: {}
-                }
+                    saveAsImage: {},
+                },
+            },
+            legend: {
+                type: "scroll",
+                orient: "horizontal",
+                bottom: 10,
+                data: sizesArray,
+                selected: sizesArray.reduce((acc, size) => {
+                    acc[size] = true;
+                    return acc;
+                }, {})
             },
             xAxis: {
-                type: 'category',
-                name: 'Volume Share in Percent',
-                nameLocation: 'middle',
-                data: abcCategories,
+                type: "category",
+                name: "Volume Share in Percent",
+                nameLocation: "middle",
+                data: productSKUs,
                 axisLabel: {
-                    show: false
-                }
+                    show: false,
+                },
             },
             yAxis: {
-                type: 'value',
-                name: 'Value Share in Percentage',
+                type: "value",
+                name: "Value Share in Percentage",
                 axisLabel: {
                     formatter: function (value) {
-                        return (value * 100).toFixed(0) + '%';
-                    }
-                }
-            },
-            series: [
-                {
-                    name: 'Cumulative Percentage',
-                    type: 'bar',
-                    data: cumulativePercentage,
-                    label: {
-                        show: false,
-                        position: 'insideBottom',
-                        formatter: function (params) {
-                            return (params.value * 100).toFixed(2) + '%';
-                        }
+                        return (value * 100).toFixed(0) + "%";
                     },
-                    itemStyle: {
-                        color: function (params) {
-                            const abcCategory = abcCategories[params.dataIndex];
-                            if (abcCategory === 'A')
-                                return 'green';
-                            if (abcCategory === 'B')
-                                return 'yellow';
-                            return 'red';
-                        }
-                    }
-                }
-            ]
+                },
+            },
+            series: sizesArray.map(size => ({
+                name: size,
+                type: "bar",
+                data: productSKUs.map((sku, index) => sizes[index] === size ? cumulativePercentage[index] : 0),
+                label: {
+                    show: false,
+                    position: "insideBottom",
+                    formatter: function (params) {
+                        return (params.value * 100).toFixed(2) + "%";
+                    },
+                },
+                itemStyle: {
+                    color: function (params) {
+                        const abcCategory = abcCategories[params.dataIndex];
+                        if (abcCategory === "A")
+                            return "green";
+                        if (abcCategory === "B")
+                            return "yellow";
+                        return "red";
+                    },
+                },
+            })),
         };
         myChart.hideLoading();
         myChart.setOption(option);
     })
-        .catch(error => {
+        .catch((error) => {
         console.error("Error fetching or processing data:", error);
         myChart.hideLoading();
+    });
+}
+function pizza_price_popularity(date = "2022-12-01") {
+    var store = JSON.parse(localStorage.getItem("store"));
+    var dom = document.getElementById("pizza_price_popularity");
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    myChart.showLoading();
+    fetch(`/api/pizza-price-popularity?date=${date}&storeID=${store.storeID}`)
+        .then((response) => response.json())
+        .then((data) => {
+        let analysisData = data[store.storeID];
+        let series = [];
+        let sizes = new Set();
+        Object.keys(analysisData).forEach((pizzaKey) => {
+            if (Array.isArray(analysisData[pizzaKey])) {
+                analysisData[pizzaKey].forEach((item) => {
+                    sizes.add(item.pizza_size);
+                    series.push({
+                        name: `${item.pizza_size} (${pizzaKey})`, // Use pizza size and name as series name
+                        type: "scatter",
+                        symbolSize: 20,
+                        data: [[item.total_sales, item.pizza_price, pizzaKey]], // Swapped total sales and pizza price
+                        emphasis: {
+                            focus: "series",
+                        },
+                    });
+                });
+            }
+        });
+        let sizesArray = Array.from(sizes);
+        var option = {
+            tooltip: {
+                trigger: "item",
+                formatter: function (params) {
+                    return `Pizza: ${params.value[2]}<br/>Total Sales: ${params.value[0]}<br/>Price: ${params.value[1]}`;
+                },
+            },
+            legend: {
+                type: "scroll",
+                orient: "horizontal",
+                bottom: 10,
+                data: sizesArray, // Add only distinct sizes to legend
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {},
+                },
+            },
+            xAxis: {
+                type: "value",
+                name: "Total Sales",
+            },
+            yAxis: {
+                type: "value",
+                name: "Pizza Price",
+            },
+            series: sizesArray.map((size) => ({
+                name: size,
+                type: "scatter",
+                symbolSize: 20,
+                data: series
+                    .filter((serie) => serie.name.startsWith(size))
+                    .flatMap((serie) => serie.data),
+                emphasis: {
+                    focus: "series",
+                },
+            })),
+        };
+        myChart.hideLoading();
+        updateChart(myChart, option);
     });
 }
 function pizzaIngredients(date = defaultDate) {
@@ -538,75 +654,5 @@ function pizzaIngredients(date = defaultDate) {
         myChart.setOption(option);
     })
         .catch((error) => console.error("Error fetching ingredient data:", error));
-}
-function pizza_price_popularity(date = defaultDate) {
-    var store = JSON.parse(localStorage.getItem("store"));
-    var dom = document.getElementById('pizza_price_popularity');
-    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
-    myChart.showLoading();
-    fetch(`/api/pizza-price-popularity?date=${date}&storeID=${store.storeID}`)
-        .then(response => response.json())
-        .then(data => {
-        let analysisData = data[store.storeID];
-        let series = [];
-        let sizes = new Set();
-        Object.keys(analysisData).forEach(pizzaKey => {
-            if (Array.isArray(analysisData[pizzaKey])) {
-                analysisData[pizzaKey].forEach(item => {
-                    sizes.add(item.pizza_size);
-                    series.push({
-                        name: `${item.pizza_size} (${pizzaKey})`, // Use pizza size and name as series name
-                        type: 'scatter',
-                        symbolSize: 20,
-                        data: [[item.total_sales, item.pizza_price, pizzaKey]], // Swapped total sales and pizza price
-                        emphasis: {
-                            focus: 'series'
-                        }
-                    });
-                });
-            }
-        });
-        let sizesArray = Array.from(sizes);
-        var option = {
-            tooltip: {
-                trigger: 'item',
-                formatter: function (params) {
-                    return `Pizza: ${params.value[2]}<br/>Total Sales: ${params.value[0]}<br/>Price: ${params.value[1]}`;
-                }
-            },
-            legend: {
-                type: 'scroll',
-                orient: 'horizontal',
-                bottom: 10,
-                data: sizesArray // Add only distinct sizes to legend
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            xAxis: {
-                type: 'value',
-                name: 'Total Sales'
-            },
-            yAxis: {
-                type: 'value',
-                name: 'Pizza Price'
-            },
-            series: sizesArray.map(size => ({
-                name: size,
-                type: 'scatter',
-                symbolSize: 20,
-                data: series
-                    .filter(serie => serie.name.startsWith(size))
-                    .flatMap(serie => serie.data),
-                emphasis: {
-                    focus: 'series'
-                }
-            }))
-        };
-        myChart.hideLoading();
-        updateChart(myChart, option);
-    });
 }
 //# sourceMappingURL=storeCharts.js.map

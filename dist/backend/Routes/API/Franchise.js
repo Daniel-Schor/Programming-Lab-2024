@@ -318,9 +318,7 @@ router.get('/revenue', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-//TODO integration in maps yannis
-//TODO parse sql statement into queries file yannis
-//TODO outsource sql ; check location (is Store.ts right place?)
+//is not used becaus vegie pizza is overall on all stores the most popular
 router.get('/region-total-product', async (req, res) => {
     try {
         let query = `
