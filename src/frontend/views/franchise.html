@@ -59,6 +59,8 @@
   <div id="main" class="main" onclick="toggleSidebar(true)">
     <div id="content">
       <!-- Put content here -->
+      <!-- TODO insert real data -->
+      <!-- TODO modify icon -->
       <!--Stats section-->
       <div class="section-items">
         <div class="section">
@@ -73,7 +75,7 @@
                   <div class="iconBox">
                     <i class="fas fa-shopping-bag"></i>
                   </div>
-                  <h2>Sales<h2>
+                  <h2>Orders<h2>
                       <p>1234</p>
                 </div>
                 <div class="statBox">
@@ -94,30 +96,42 @@
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
-                  <h2>Placeholder</h2>
+                  <h2>Pizzas sold</h2>
                   <p>1234</p>
                 </div>
               </div>
             </div>
             <!--Customers-->
             <div class="subsection">
-              <h1>Customers</h1>
+              <h1>Average Customer</h1>
               <div class="section-items">
                 <div class="statBox">
                   <div id="stat-item"></div>
-                  <h2>Placeholder</h2>
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Orders</h2>
                   <p>1234</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
                   <h2>Order Value</h2>
                   <p>1234</p>
                 </div>
                 <div class="statBox">
-                  <h2>PizzaOrder</h2>
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Pizzas per Order</h2>
                   <p>1234</p>
                 </div>
                 <div class="statBox">
-                  <h2>Places</h2>
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Order frequency</h2>
                   <p>1234</p>
                 </div>
               </div>
@@ -135,11 +149,9 @@
               <button class="btn" id="worstButton" style="z-index: 99;" onclick="worstButton();">UNSTABLE</button>
               <button class="btn" id="customButton" style="z-index: 99;" onclick="customButton();">CUSTOM</button>
             </div>
-            <h1 class="centered">Revenue</h1>
-            <h2 data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
+            <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
-              id="revenueTitle">Store Revenues</h2>
-            </h2>
+              id="revenueTitle">Revenue</h1>
           </div>
           <div class="section-items">
             <div class="subsection">
@@ -155,6 +167,7 @@
       <!--Bottom section-->
       <div class="section-items">
         <div class="subsection">
+          <h2>Pizza popularity</h2>
           <div id="pizzaPopularity" class="diagram"></div>
         </div>
         <div class="pizzaRankingChart"></div>
@@ -166,7 +179,8 @@
           </div>
           <div class="subsection">
             <!--<h2 data-tooltip="This is the a Map showing all Stores" id="mapTitel">Store locations</h2>-->
-            <h2 id="mapTitel">Store locations</h2>
+            <!--<h2 id="mapTitel">Store locations</h2>-->
+            <h2>Store locations</h2>
             <div id="map" class="diagram"></div>
           </div>
         </div>

@@ -446,9 +446,6 @@ async function pizzaPopularity(date = defaultDate) {
     const seriesList = generateSeriesList();
 
     option = {
-      title: {
-        text: 'Bump Chart (Ranking)'
-      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
