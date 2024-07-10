@@ -56,7 +56,7 @@ function bestButton(date = "", colors = {}) {
     best = true;
     custom = false;
     firstClick = false;
-    revenueChart(best, [], colors, date || defaultDate).then(colors => {
+    revenueChart(best, colors, date || defaultDate).then(colors => {
         curColors = colors;
         revenueBarChart(curColors, false, date || defaultDate);
     });
@@ -69,7 +69,7 @@ function worstButton(date = "", colors = {}) {
     best = false;
     custom = false;
     firstClick = false;
-    revenueChart(best, [], colors, date || defaultDate).then(colors => {
+    revenueChart(best, colors, date || defaultDate).then(colors => {
         curColors = colors;
         revenueBarChart(curColors, false, date || defaultDate);
     });
@@ -88,17 +88,16 @@ async function customButton(date = "", update = false) {
         try {
             let colors = curColors || {};
             if (update) {
-                await revenueChart(best, [], colors, date || defaultDate);
-                await revenueBarChart(colors, custom, date || defaultDate);
+                await revenueChart(best, colors, date || defaultDate);
             }
-            else {
-                colors = await revenueBarChart(curColors, custom, date || defaultDate);
-                curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
-                if (Object.keys(curColors).length === 0) {
-                    bestButton(date || defaultDate);
-                    break;
-                }
-                await revenueChart(best, [], curColors, date || defaultDate);
+            colors = await revenueBarChart(curColors, custom, date || defaultDate);
+            curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
+            if (Object.keys(curColors).length === 0) {
+                bestButton(date || defaultDate);
+                break;
+            }
+            if (!update) {
+                await revenueChart(best, curColors, date || defaultDate);
             }
         }
         catch (error) {
@@ -108,16 +107,13 @@ async function customButton(date = "", update = false) {
     }
 }
 // TODO move to generalCharts.ts
-function revenueChart(best = true, storeIDs = [], storeColors = {}, date = defaultDate) {
+function revenueChart(best = true, storeColors = {}, date = defaultDate) {
     return new Promise((resolve, reject) => {
         var days = [];
         let lineInfos = [];
         let req = `/api/revenue?reverse=true&best=${best}&date=${date}`;
         if (Object.keys(storeColors).length != 0) {
             req += "&store=" + Object.keys(storeColors).join(",");
-        }
-        else if (storeIDs.length != 0) {
-            req += "&store=" + storeIDs.join(",");
         }
         else {
             req += "&limit=5";
@@ -177,7 +173,7 @@ function revenueChart(best = true, storeIDs = [], storeColors = {}, date = defau
                 ],
                 series: lineInfos,
             };
-            if (storeIDs.length != 0 || Object.keys(storeColors).length != 0) {
+            if (Object.keys(storeColors).length != 0) {
                 myChart.clear();
             }
             updateChart(myChart, option);

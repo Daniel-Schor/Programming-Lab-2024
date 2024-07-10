@@ -10,7 +10,7 @@ declare function randomColor(): string;
 declare function bestButton(date?: string, colors?: {}): void;
 declare function worstButton(date?: string, colors?: {}): void;
 declare function customButton(date?: string, update?: boolean): Promise<void>;
-declare function revenueChart(best?: boolean, storeIDs?: never[], storeColors?: {}, date?: string): Promise<unknown>;
+declare function revenueChart(best?: boolean, storeColors?: {}, date?: string): Promise<unknown>;
 declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean, date?: string): Promise<unknown>;
 declare function addMarkers(stores: any): void;
 declare function storeLocationMap(): void;
