@@ -16,7 +16,6 @@ function updateCharts(date) {
     pizza_price_popularity(date);
 }
 // TODO move to generalCharts.ts
-// TODO move to generalCharts.ts
 function updateChart(chart, option) {
     if (option && typeof option === "object") {
         chart.setOption(option, true);

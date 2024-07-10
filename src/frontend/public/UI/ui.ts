@@ -135,17 +135,29 @@ function mtd(update = true) {
 }
 
 function visibilityCoustomDate() {
-  document.getElementById('customDate').addEventListener('click', function () {
-    const datePicker = document.getElementById('datePicker');
+  const customDateButton = document.getElementById('customDate');
+  const datePicker = document.getElementById('datePicker');
+  let isDatePickerInitialized = false;
+
+  customDateButton.addEventListener('click', function () {
+    if (!isDatePickerInitialized) {
+      datePicker.value = '2022-12-01'; // Set the initial date only once
+      isDatePickerInitialized = true;
+    }
     datePicker.style.display = 'block';
+    datePicker.style.color = 'black'; // Ensure the text color is black
     datePicker.focus();
+  });
 
-
-    customDateButton.addEventListener("click", function () {
-
-    });
+  datePicker.addEventListener('change', function () {
+    const date = datePicker.value;
+    updateCharts(date);
+    datePicker.style.display = 'none'; // Hide the date picker after date is chosen
   });
 }
+
+
+      
 
 
 function getTotalRevenue(date, storeID) {

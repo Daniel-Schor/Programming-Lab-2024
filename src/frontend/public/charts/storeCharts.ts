@@ -19,10 +19,6 @@ function updateCharts(date) {
   abcAnalysis_pizza_1(date);
   pizza_price_popularity(date);
 }
-
-// TODO move to generalCharts.ts
-
-
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
 
