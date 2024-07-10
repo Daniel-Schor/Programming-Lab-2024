@@ -388,15 +388,11 @@ async function pizzaPopularity(date = defaultDate) {
                 }
             },
             grid: {
-                left: 30,
-                right: 110,
-                bottom: 30,
+                left: '0%',
+                right: '5%',
+                bottom: '0%',
+                top: '6%',
                 containLabel: true
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
             },
             xAxis: {
                 type: 'category',

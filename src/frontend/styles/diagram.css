@@ -1,38 +1,37 @@
 #map {
-    border-radius: 4px;
-    height: 250px;
+  border-radius: 4px;
+  height: 250px;
 }
 
 #revenue {
-    height: 300px;
+  height: 300px;
 }
 
 .diagram {
-    display: absolute;
-    height: 100px;
+  display: absolute;
+  height: 100px;
 }
-z
 
 #mapTitel {
-    position: absolute;
-    bottom: 6px;
-    left: 6px;
-    padding: 5px;
-    top: auto;
-    z-index: 999;
-    background-color: #1b1b1b;
-    border-top-right-radius: 4px;
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  padding: 5px;
+  z-index: 999;
+  background-color: #1b1b1b;
+  border-top-right-radius: 4px;
 }
 
+
 #revenue {
-    width: auto;
-    display: flex;
-  }
+  width: auto;
+  display: flex;
+}
 
 #pizzaRanking {
-    width: auto;
-    display: flex;
-  }
+  width: auto;
+  display: flex;
+}
 
 #pizzaRankingContainer {
   flex: 1;
@@ -44,28 +43,29 @@ z
 }
 
 #revenueContainer {
-    margin-top: 20px;
-    border: 2px solid #3a3a3a;
-    border-radius: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  
+  margin-top: 20px;
+  border: 2px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
 #statsOverview {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
 #pizzaPopularity {
-    width: 100%;
-    height: 600px;
-  }
+  width: 100%;
+  height: 100%;
+}
 
 
 /*style for store view*/
-#abcAnalysis_pizza_1, /*piechart missing*/
+#abcAnalysis_pizza_1,
+/*piechart missing*/
 #PizzaSize,
 #pizzaRanking,
 #Heatmap,
@@ -76,5 +76,5 @@ z
   display: flex;
   justify-content: space-between;
   height: 100%;
-  width: 100%;  
+  width: 100%;
 }
