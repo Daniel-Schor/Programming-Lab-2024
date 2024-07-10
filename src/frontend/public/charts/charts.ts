@@ -45,7 +45,7 @@ function updateCharts(date) {
     worstButton(date, curColors);
   }
 
-  //pizzaPopularity(date);
+  pizzaPopularity(date);
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
