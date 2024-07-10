@@ -90,6 +90,7 @@ async function customButton(date = "", update = false) {
         try {
             let colors = curColors || {};
             if (update) {
+                storeLocationMap();
                 await revenueChart(best, colors, date || defaultDate);
             }
             colors = await revenueBarChart(curColors, custom, date || defaultDate);
