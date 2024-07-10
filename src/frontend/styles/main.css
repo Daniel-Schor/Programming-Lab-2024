@@ -9,6 +9,7 @@ h1 {
   margin: 3px;
   font-size: large;
 }
+
 h2 {
   margin: 2px;
   font-size: medium;
@@ -76,41 +77,52 @@ body::-webkit-scrollbar {
 .sidebar p:hover {
   color: #ff7247;
 }
+
 /* Style for the city buttons */
 .city-button {
   transition: 0.3s;
   background: none;
   border-width: 0px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-  
+
   display: block;
   width: 100%;
-  padding: 8px; /* Adjust padding inside the button */
-  margin: 2px; /* Add margin to separate the button from the store list */
-  cursor: pointer; /* Change cursor to pointer */
-  text-align: left; /* Align button text to the left */
-  font-size: 14px; /* Adjust font size */
-  white-space: nowrap; 
+  padding: 8px;
+  /* Adjust padding inside the button */
+  margin: 2px;
+  /* Add margin to separate the button from the store list */
+  cursor: pointer;
+  /* Change cursor to pointer */
+  text-align: left;
+  /* Align button text to the left */
+  font-size: 14px;
+  /* Adjust font size */
+  white-space: nowrap;
   box-shadow: none;
   border-top-width: 1px;
   border-top-color: #3a3a3a;
   border-top-style: solid;
 }
 
-.city-button:active, .city-button:hover {
+.city-button:active,
+.city-button:hover {
   transition: 0.3s;
   color: #b3b3b3;
   background: none;
   outline: none;
 }
+
 .store-list {
-  padding-left: 20px; /* Add padding to the left for indentation */
-  list-style-type: none; /* Remove default list style */
+  padding-left: 20px;
+  /* Add padding to the left for indentation */
+  list-style-type: none;
+  /* Remove default list style */
 }
 
 /* Style for store list items */
 .store-list li {
-  margin-bottom: 0px; /* Add margin to separate store links */
+  margin-bottom: 0px;
+  /* Add margin to separate store links */
 }
 
 .city-section ul {
@@ -120,8 +132,10 @@ body::-webkit-scrollbar {
 
 /* Style for store links */
 .store-list li a {
-  text-decoration: none; /* Remove underline from links */
-  color: #ffffff; /* Link color */
+  text-decoration: none;
+  /* Remove underline from links */
+  color: #ffffff;
+  /* Link color */
   font-size: 14px;
 
 }
@@ -155,6 +169,7 @@ button.active {
 .openbtn:hover {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
+
 #datePicker {
   margin-top: 10px;
   padding: 5px;
@@ -163,6 +178,7 @@ button.active {
   left: 50%;
   z-index: 19999;
 }
+
 .sidebar.active {
   width: 250px;
 }
@@ -183,6 +199,7 @@ button.active {
 #content {
   margin-top: 59px;
 }
+
 /*Sidebar -------------------*/
 
 /*Topbar -------------------*/
@@ -201,6 +218,7 @@ button.active {
   align-items: center;
   justify-content: center;
 }
+
 /*Topbar -------------------*/
 
 /*Button -------------------*/
@@ -243,6 +261,7 @@ button.active {
   font-size: 8px;
   cursor: auto;
 }
+
 /*Button -------------------*/
 
 /*Company Name -------------------*/
@@ -305,6 +324,7 @@ button.active {
   background-color: #b3b3b3;
   border-radius: 50%;
 }
+
 /*Company Name -------------------*/
 /*charts*/
 
@@ -314,6 +334,7 @@ button.active {
   position: absolute;
   left: 50%;
 }
+
 /* CSS to hide the store lists */
 .hidden {
   display: none;
@@ -324,3 +345,29 @@ button.active {
   display: block;
 }
 
+/* CSS to style the map tiles */
+:root {
+  --map-tiles-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .map-tiles {
+    filter: var(--map-tiles-filter, none);
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #1b1b1b; /* Dark background */
+  color: white; /* White text color */
+  border-radius: 5px; /* Optional: rounded corners */
+  padding: 10px; /* Optional: padding for content */
+}
+
+.leaflet-popup-content {
+  background-color: #1b1b1b;
+  color: white;
+}
+
+.leaflet-popup-content b {
+  color: white;
+}

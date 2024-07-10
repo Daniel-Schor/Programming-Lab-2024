@@ -61,6 +61,7 @@ function bestButton(date = "", colors = {}) {
         revenueBarChart(curColors, false, date || defaultDate);
     });
     setActiveButton("bestButton");
+    storeLocationMap();
 }
 function worstButton(date = "", colors = {}) {
     if (!best && !custom && !date) {
@@ -74,6 +75,7 @@ function worstButton(date = "", colors = {}) {
         revenueBarChart(curColors, false, date || defaultDate);
     });
     setActiveButton("worstButton");
+    storeLocationMap();
 }
 async function customButton(date = "", update = false) {
     if (custom && !date) {
@@ -97,6 +99,7 @@ async function customButton(date = "", update = false) {
                 break;
             }
             if (!update) {
+                storeLocationMap();
                 await revenueChart(best, curColors, date || defaultDate);
             }
         }
@@ -131,6 +134,7 @@ function revenueChart(best = true, storeColors = {}, date = defaultDate) {
                     storeColors[storeID] = randomColor();
                 }
                 lineInfos.push({
+                    symbolSize: 0,
                     name: storeID,
                     type: "line",
                     emphasis: {
@@ -195,8 +199,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = defaultDate
         var chartDom = document.getElementById('revenueBar');
         var myChart = echarts.init(chartDom, theme);
         // Standard bar color
-        const standardColors = ["#4A4A4A", "#FF7043", "#FFA500", "#001AFF", "#FFB347"];
-        const standardColor = standardColors[1];
+        const standardColor = '#ff4500';
         let req = `/api/total-store-revenue?date=${date}`;
         fetch(req)
             .then((response) => response.json())
@@ -287,16 +290,37 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = defaultDate
     });
 }
 function addMarkers(stores) {
+    markersLayer.clearLayers();
+    function createColoredMarkerIcon(color) {
+        const svgIcon = `
+      <svg width="32" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48">
+        <path d="M16 0C10.477 0 6 4.477 6 10c0 8 10 20 10 20s10-12 10-20c0-5.523-4.477-10-10-10zm0 15a5 5 0 110-10 5 5 0 010 10z" fill="${color}" stroke="black" stroke-width="2"/>
+      </svg>
+    `;
+        return L.icon({
+            iconUrl: 'data:image/svg+xml;base64,' + btoa(svgIcon),
+            iconSize: [32, 48],
+            iconAnchor: [16, 48],
+            popupAnchor: [0, -48]
+        });
+    }
     stores.forEach((store) => {
-        const marker = L.marker([store.lat, store.lon]).addTo(map);
-        marker.bindPopup(`<b>Store ID:</b> ${store.storeID}<br><b>Latitude:</b> ${store.lat}<br><b>Longitude:</b> ${store.lon}`);
+        if (curColors[store.storeID] == undefined) {
+            return;
+        }
+        const marker = L.marker([store.lat, store.lon], { icon: createColoredMarkerIcon(curColors[store.storeID] || "#ff4500") }).addTo(markersLayer);
+        /*marker.bindPopup(
+          `<b>Store ID:</b> ${store.storeID}<br>`
+        );
+    
         // Show popup on hover
         marker.on("mouseover", function () {
-            this.openPopup();
+          this.openPopup();
         });
+    
         marker.on("mouseout", function () {
-            this.closePopup();
-        });
+          this.closePopup();
+        });*/
         // Redirect on click
         marker.on("click", () => {
             window.location.href = `/store?storeID=${store.storeID}`;
@@ -308,6 +332,7 @@ function storeLocationMap() {
     // Add OpenStreetMap tile layer
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '',
+        className: 'map-tiles'
     }).addTo(map);
     // Function to add markers to the map
     // Fetch the data and add markers
@@ -349,7 +374,7 @@ async function pizzaPopularity(date = defaultDate) {
             rankingMap.forEach((data, name) => {
                 const series = {
                     name,
-                    symbolSize: 20,
+                    symbolSize: 0,
                     type: 'line',
                     smooth: true,
                     emphasis: {
@@ -389,7 +414,7 @@ async function pizzaPopularity(date = defaultDate) {
             },
             grid: {
                 left: '0%',
-                right: '5%',
+                right: '16%',
                 bottom: '0%',
                 top: '6%',
                 containLabel: true

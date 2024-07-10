@@ -196,7 +196,7 @@
       }
     </script>
     <script>
-      const map = L.map('map', { attributionControl: false }).setView([39, -120], 5);
+      const map = L.map('map', { attributionControl: false }).setView([39, -120], 4);
       /*function storeLocationMap() {
         // Add OpenStreetMap tile layer
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -216,6 +216,7 @@
       }*/
 
       storeLocationMap();
+      let markersLayer = L.layerGroup().addTo(map);
 
       //statOverview();
 
