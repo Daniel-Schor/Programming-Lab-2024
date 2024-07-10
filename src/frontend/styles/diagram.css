@@ -75,7 +75,6 @@ z
 #Heatmap {
   display: flex;
   justify-content: space-between;
-  width: auto;
-  height: auto;
-  
+  height: 100%;
+  width: 100%;  
 }
