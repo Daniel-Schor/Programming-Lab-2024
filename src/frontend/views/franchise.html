@@ -168,7 +168,7 @@
       <!--Bottom section-->
       <div class="section-items">
         <div class="subsection">
-          <h2>Pizza popularity</h2>
+          <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
           <div id="pizzaPopularity" class="diagram"></div>
         </div>
         <div class="pizzaRankingChart"></div>
@@ -209,6 +209,50 @@
           document.getElementById("main").classList.toggle("active");
         }
       }
+    const headings = document.querySelectorAll('h2[data-tooltip]');
+
+    headings.forEach(heading => {
+    heading.addEventListener('mouseenter', showTooltip);
+    heading.addEventListener('mouseleave', hideTooltip);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const headings = document.querySelectorAll('h2[data-tooltip]');
+
+    headings.forEach(heading => {
+        heading.addEventListener('mouseenter', showTooltip);
+        heading.addEventListener('mouseleave', hideTooltip);
+    });
+
+    function showTooltip(event) {
+        const tooltipText = event.target.getAttribute('data-tooltip');
+        let tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerText = tooltipText;
+        document.body.appendChild(tooltip);
+
+        const rect = event.target.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + window.scrollX}px`;
+        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
+
+        // Show the tooltip
+        tooltip.classList.add('show');
+
+        event.target._tooltip = tooltip;
+    }
+
+    function hideTooltip(event) {
+        const tooltip = event.target._tooltip;
+        if (tooltip) {
+            tooltip.classList.remove('show');
+            tooltip.addEventListener('transitionend', () => {
+                tooltip.remove();
+            });
+            event.target._tooltip = null;
+        }
+    }
+});
+
     </script>
     <script>
       const map = L.map('map', { attributionControl: false }).setView([39, -120], 4);

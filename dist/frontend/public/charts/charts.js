@@ -450,8 +450,19 @@ async function pizzaPopularity(date = defaultDate) {
     }
 }
 function processData(data) {
-    const entriesPerPizza = 30; // Number of entries per pizza
-    const desiredEntriesPerPizza = 15; // Desired number of entries per pizza
+    const totalEntries = data.length;
+    // Determine desiredEntriesPerPizza based on totalEntries
+    let desiredEntriesPerPizza;
+    if (totalEntries < 260) {
+        desiredEntriesPerPizza = 15;
+    }
+    else if (totalEntries > 270 && totalEntries <= 800) {
+        desiredEntriesPerPizza = 30;
+    }
+    else {
+        // Handle cases where totalEntries exceeds 800 (if needed)
+        desiredEntriesPerPizza = 30; // Default to 30 for cases > 800
+    }
     // Create a map to store filtered data for each pizza type
     const filteredDataMap = new Map();
     // Process each entry and group by pizza type

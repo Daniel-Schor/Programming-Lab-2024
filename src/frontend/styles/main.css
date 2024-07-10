@@ -371,3 +371,20 @@ button.active {
 .leaflet-popup-content b {
   color: white;
 }
+
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.2s;
+}
+
+.tooltip.show {
+  visibility: visible;
+  opacity: 1;
+}
