@@ -450,7 +450,25 @@ async function pizzaPopularity(date = defaultDate) {
     }
 }
 function processData(data) {
-    return data.map(item => ({
+    const entriesPerPizza = 30; // Number of entries per pizza
+    const desiredEntriesPerPizza = 15; // Desired number of entries per pizza
+    // Create a map to store filtered data for each pizza type
+    const filteredDataMap = new Map();
+    // Process each entry and group by pizza type
+    data.forEach(item => {
+        const pizzaName = item.Name;
+        if (!filteredDataMap.has(pizzaName)) {
+            filteredDataMap.set(pizzaName, []);
+        }
+        filteredDataMap.get(pizzaName).push(item);
+    });
+    // Filter each pizza type to retain only the desired number of entries
+    const processedData = [];
+    filteredDataMap.forEach((entries, pizzaName) => {
+        const filteredEntries = entries.slice(0, desiredEntriesPerPizza);
+        processedData.push(...filteredEntries);
+    });
+    return processedData.map(item => ({
         Name: item.Name,
         purchaseDate: new Date(item.purchaseDate).toISOString().split("T")[0], // Format date to YYYY-MM-DD
         revenue: parseFloat(item.revenue) // Convert revenue to a number
