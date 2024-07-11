@@ -642,6 +642,127 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
     });
 }
 
+function abcAnalysis_pizza_2(date = "2022-12-01") {
+  var store = JSON.parse(localStorage.getItem("store"));
+  var dom = document.getElementById("abcAnalysis_pizza_2");
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+
+  myChart.showLoading();
+
+  fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data[store.storeID]) {
+        throw new Error('No data found for the given storeID and date');
+      }
+
+      const analysisData = data[store.storeID];
+      const cumulativePercentage = Object.values(analysisData).map(
+        (item) => item.sorted_cumulative_product_percentage_of_total
+      );
+      const productSKUs = Object.keys(analysisData);
+      const abcCategories = Object.values(analysisData).map(
+        (item) => item.abc_category
+      );
+      const totalSales = Object.values(analysisData).map(
+        (item) => item.total_sales_pizza
+      );
+      const sizes = Object.values(analysisData).map(
+        (item) => item.size
+      );
+      const names = Object.values(analysisData).map(
+        (item) => item.name
+      );
+      const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
+
+      const option = {
+        title: {
+          text: "ABC by total revenue descending",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+          formatter: function (params) {
+            const index = params[0].dataIndex;
+            return `
+              Product Name: ${names[index]}<br/>
+              Product SKU: ${productSKUs[index]}<br/>
+              Total Revenue: ${totalSales[index]}<br/>
+              Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%<br/>
+              ABC Category: ${abcCategories[index]}<br/>
+              Size: ${sizes[index]}
+            `;
+          },
+        },
+        legend: {
+          type: "scroll",
+          orient: "horizontal",
+          bottom: 10,
+          data: sizesArray,
+          selected: sizesArray.reduce((acc, size) => {
+            acc[size] = true;
+            return acc;
+          }, {}),
+          itemStyle: {
+            borderColor: 'transparent',  // Remove border color
+            color: 'transparent'  // Remove fill color
+          },
+        },
+        xAxis: {
+          type: "category",
+          name: "Volume Share in Percent",
+          nameLocation: "middle",
+          data: productSKUs,
+          axisLabel: {
+            show: false,
+          },
+        },
+        yAxis: {
+          type: "value",
+          name: "Value Share in Percentage",
+          axisLabel: {
+            formatter: function (value) {
+              return (value * 100).toFixed(0) + "%";
+            },
+          },
+        },
+        series: sizesArray.map(size => ({
+          name: size,
+          type: "bar",
+          data: productSKUs.map((sku, index) => sizes[index] === size ? totalSales[index] : 0),
+          label: {
+            show: false,
+            position: "insideBottom",
+            formatter: function (params) {
+              return (params.value * 100).toFixed(2) + "%";
+            },
+          },
+          itemStyle: {
+            color: function (params) {
+              const abcCategory = abcCategories[params.dataIndex];
+              if (abcCategory === "A") return "green";
+              if (abcCategory === "B") return "yellow";
+              return "red";
+            },
+          },
+        })),
+      };
+      
+      myChart.hideLoading();
+      myChart.setOption(option);
+
+
+      myChart.hideLoading();
+      myChart.setOption(option);
+    })
+    .catch((error) => {
+      console.error("Error fetching or processing data:", error);
+      myChart.hideLoading();
+    });
+}
+
 function pizza_price_popularity(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("pizza_price_popularity");
