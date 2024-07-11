@@ -339,14 +339,13 @@ function addMarkers(stores) {
     });
   }
 
-
-
   stores.forEach((store) => {
     if (curColors[store.storeID] == undefined) {
       return;
     }
 
-    const marker = L.marker([store.lat, store.lon], { icon: createColoredMarkerIcon(curColors[store.storeID] || "#ff4500") }).addTo(markersLayer);
+    const marker = L.marker([store.lat, store.lon], 
+      { icon: createColoredMarkerIcon(curColors[store.storeID] || "#ff4500") }).addTo(markersLayer);
     /*marker.bindPopup(
       `<b>Store ID:</b> ${store.storeID}<br>`
     );

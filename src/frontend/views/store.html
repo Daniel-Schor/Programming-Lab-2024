@@ -114,7 +114,7 @@
           <h1>Pizza</h1>
           <div class="section-items">
             <div class="subsection" style="height: 300px;">
-              <div id="abcAnalysis_pizza_1" class="diagram" style="height: 100%"width="100%">
+              <div id="abcAnalysis_pizza_1" class="diagram" style="height: 100%" width="100%">
                 ABC Analysis of Pizza by Cumulative Percentage
               </div>
             </div>
@@ -140,7 +140,7 @@
           </div>
           <div class="section-items">
             <div class="subsection">
-              <div id="pizza_price_popularity" class="diagram" style="height: 100%"width="100%">
+              <div id="pizza_price_popularity" class="diagram" style="height: 100%" width="100%">
                 Relationship between price and popularity of pizzas
               </div>
             </div>
@@ -212,13 +212,14 @@
             margin-left: 0px;
             margin-right: 0px;">
               <h1>Customer</h1>
+              <input type="text" id="customerSearch" placeholder="Search..">
               <div class="section-items">
-                <div class="subsection" >
-                  <div class="diagram" id="abcAnalysis_customer_2"  style="height: '100%'; width: '100%'">
-                    ABC Analysis of Customers sorted by total Revenue descending
+                <div class="subsection">
+                  <div class="diagram" id="" style="height: '100%'; width: '100%'">
+                    placeholder
                   </div>
                 </div>
-                <div class="subsection" style="height: 400px;">
+                <div class="subsection" style="height: 400px; overflow: visible;">
                   <div class="diagram" id="quality" style="height: '100%'; width: '100%'">
                     Quality
                   </div>
@@ -229,9 +230,27 @@
         </div>
         <!--End of section b-->
         <!--End of Revenue section-->
-        <!-- END OF CONTENT-->
       </div>
-
+      <div class="section-items">
+        <div class="subsection" style="
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;">
+          <h1>ABC Analysis Customer</h1>
+          <input type="text" id="customerSearch" placeholder="Search Customer ID">
+          <div class="section-items">
+            <div class="subsection">
+              <div class="diagram" id="abcAnalysis_customer_1" style="height: '100%'; width: '100%'">
+                ABC Analysis of Customers sorted by cumulative customer percentage of total revenue
+              </div>
+            </div>
+            <div class="subsection" style="height: 400px;">
+              <div class="diagram" id="abcAnalysis_customer_2" style="height: '100%'; width: '100%'">
+                ABC Analysis of Customers sorted by total Revenue descending
+              </div>
+            </div>
+          </div>
+          <!-- END OF CONTENT-->
 
       <script>
 
@@ -241,6 +260,7 @@
         pizzaSize();
         heatmap();
         abcAnalysis_pizza_1();
+        abcAnalysis_customer_1();
         abcAnalysis_customer_2();
         pizza_price_popularity();
         //monthlyRevenue();
