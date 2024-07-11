@@ -804,8 +804,9 @@ async function pizzaPopularity(date = defaultDate) {
     var chartDom = document.getElementById("pizzaPopularity");
     var myChart = echarts.init(chartDom, theme);
     var option;
+    var store = JSON.parse(localStorage.getItem("store"));
     try {
-        const response = await fetch(`/api/pizzaPopularity?date=${date}`);
+        const response = await fetch(`/api/pizzaPopularity?date=${date}&storeID=${store.storeID}`);
         const data = await response.json();
         const processedData = processData(data);
         const names = Array.from(new Set(processedData.map(item => item.Name)));
