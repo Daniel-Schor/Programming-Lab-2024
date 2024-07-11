@@ -37,7 +37,7 @@
       <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
       <button class="btn" id="customDate" onclick="visibilityCoustomDate()">PTD</button>
       <input type="date" id="datePicker" style="display: none;">
-      <input type="date" id="startDate" name="startDate" value="2022-12-01"style="display: none;" required>
+      <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
     </div>
     <div class="btnbox">
       <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
@@ -125,9 +125,9 @@
             </div>
           </div>
           <div class="section-items">
-            <div class="subsection">
-              <div id="pizzaRanking" class="diagram" style="height: 100%">
-                Pizza Ranking
+            <div class="subsection" style="min-height: 300px;">
+              <div id="pizza_price_popularity" class="diagram" style="height: 100%" width="100%">
+                Relationship between price and popularity of pizzas
               </div>
             </div>
           </div>
@@ -140,18 +140,10 @@
           </div>
           <div class="section-items">
             <div class="subsection" style="min-height: 300px;">
-              <div id="pizza_price_popularity" class="diagram" style="height: 100%" width="100%">
-                Relationship between price and popularity of pizzas
-              </div>
+              <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
+              <div id="pizzaPopularity" class="diagram" style="height: 100%"></div>
             </div>
-            
           </div>
-          <div class="section-items">
-          <div class="subsection"style="min-height: 300px;">
-            <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
-            <div id="pizzaPopularity" class="diagram"style="height: 100%"></div>
-          </div>
-        </div>
         </div>
         <!--End of Pizza section-->
         <!--Forecast section-->
@@ -164,8 +156,8 @@
               margin-right: 0px;">
               <div class="section-items" style="justify-content: space-between;">
                 <div class="btnbox" style="width: 120px;">
-                  <button class="btn" id="Last-Month">BACK</button>
-                  <button class="btn" id="Last-Quarter">NEXT</button>
+                  <button class="btn" id="">BACK</button>
+                  <button class="btn" id="">NEXT</button>
                 </div>
                 <div class="btnbox" style="width: 60px;">
                   <!--TODO options TODAY, TOMORROW, MONDAY, TUESDAY, etc.-->
@@ -223,7 +215,8 @@
               <div class="section-items">
                 <div class="subsection">
                   <div class="diagram" id="abcAnalysis_customer_2" style="height: '100%'; width: '100%'">
-                    ABC Analysis of Customers sorted by total Revenue descending <!--sorted by total Revenue descending-->
+                    ABC Analysis of Customers sorted by total Revenue descending
+                    <!--sorted by total Revenue descending-->
                   </div>
                 </div>
                 <div class="subsection" style="height: 400px; overflow: visible;">
@@ -238,28 +231,28 @@
         <!--End of Revenue section-->
         <!-- END OF CONTENT-->
 
-      <script>
+        <script>
 
-      pizzaPopularity();
-      //statOverview();
-        gaugeChart();
-        pizzaSize();
-        heatmap();
-        abcAnalysis_pizza_2();
-        abcAnalysis_customer_2();
-        pizza_price_popularity();
-        //monthlyRevenue();
-        function toggleSidebar(turnOff = false) {
-          if (turnOff) {
-            document.getElementById("sidebar").classList.remove("active");
-            document.getElementById("main").classList.remove("active");
-          } else {
-            document.getElementById("sidebar").classList.toggle("active");
-            document.getElementById("main").classList.toggle("active");
+          pizzaPopularity();
+          //statOverview();
+          gaugeChart();
+          pizzaSize();
+          heatmap();
+          abcAnalysis_pizza_2();
+          abcAnalysis_customer_2();
+          pizza_price_popularity();
+          //monthlyRevenue();
+          function toggleSidebar(turnOff = false) {
+            if (turnOff) {
+              document.getElementById("sidebar").classList.remove("active");
+              document.getElementById("main").classList.remove("active");
+            } else {
+              document.getElementById("sidebar").classList.toggle("active");
+              document.getElementById("main").classList.toggle("active");
+            }
           }
-        }
 
-      </script>
+        </script>
 
 </body>
 
