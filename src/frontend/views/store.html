@@ -229,16 +229,16 @@
         <!-- END OF CONTENT-->
 
         <script>
-
           pizzaPopularity();
-          //statOverview();
           gaugeChart();
           pizzaSize();
           heatmap();
           abcAnalysis_pizza_2();
           abcAnalysis_customer_2();
           pizza_price_popularity();
-          //monthlyRevenue();
+          dailyOrders(); // Funktionsaufruf für Order Prediction
+          pizzaIngredients(); // Funktionsaufruf für Ingredient Prediction
+
           function toggleSidebar(turnOff = false) {
             if (turnOff) {
               document.getElementById("sidebar").classList.remove("active");
@@ -248,9 +248,7 @@
               document.getElementById("main").classList.toggle("active");
             }
           }
-
         </script>
-
 </body>
 
 </html>
