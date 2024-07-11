@@ -37,13 +37,9 @@ function monthlyRevenue(date = defaultDate) {
         delete days.changeValue;
         days = Object.keys(days);
         var option = {
-            title: {
-                text: 'Revenue'
-            },
             xAxis: { type: "category", data: days },
             tooltip: { trigger: "axis" },
             legend: { data: [store.storeID] },
-            toolbox: { feature: { saveAsImage: {} } },
             yAxis: { type: "value" },
             series: [{ data: revenue, type: "line", smooth: true }],
         };
@@ -238,11 +234,6 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
                         return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%`;
                     },
                 },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {},
-                    },
-                },
                 xAxis: {
                     type: "category",
                     name: "Volume Share in Percent",
@@ -343,11 +334,6 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
                     return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}`;
                 },
             },
-            toolbox: {
-                feature: {
-                    saveAsImage: {},
-                },
-            },
             xAxis: {
                 type: "category",
                 data: abcCategories,
@@ -407,7 +393,6 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
         const option = {
             title: {
                 text: "ABC Analysis of Pizza by Cumulative Percentage",
-                left: "center",
             },
             tooltip: {
                 trigger: "axis",
@@ -424,11 +409,6 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
               ABC Category: ${abcCategories[index]}<br/>
               Size: ${sizes[index]}
             `;
-                },
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {},
                 },
             },
             legend: {
@@ -531,11 +511,6 @@ function pizza_price_popularity(date = "2022-12-01") {
                 bottom: 10,
                 data: sizesArray, // Add only distinct sizes to legend
             },
-            toolbox: {
-                feature: {
-                    saveAsImage: {},
-                },
-            },
             xAxis: {
                 type: "value",
                 name: "Total Sales",
@@ -616,19 +591,6 @@ function pizzaIngredients(date = defaultDate) {
                 bottom: '20%', // Adjust the bottom margin for legend
                 left: '10%', // Adjust the left margin
                 right: '10%', // Adjust the right margin
-            },
-            toolbox: {
-                show: true,
-                orient: "vertical",
-                left: "right",
-                top: "center",
-                feature: {
-                    mark: { show: true },
-                    dataView: { show: false, readOnly: false },
-                    magicType: { show: false, type: ["line", "bar", "stack"] },
-                    restore: { show: false },
-                    saveAsImage: { show: false },
-                },
             },
             xAxis: [
                 {
