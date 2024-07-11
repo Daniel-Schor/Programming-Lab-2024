@@ -583,7 +583,11 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
           selected: sizesArray.reduce((acc, size) => {
             acc[size] = true;
             return acc;
-          }, {})
+          }, {}),
+          itemStyle: {
+            borderColor: 'transparent',  // Remove border color
+            color: 'transparent'  // Remove fill color
+          },
         },
         xAxis: {
           type: "category",
@@ -624,6 +628,9 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
           },
         })),
       };
+      
+      myChart.hideLoading();
+      myChart.setOption(option);
 
 
       myChart.hideLoading();
