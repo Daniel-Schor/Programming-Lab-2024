@@ -8,7 +8,7 @@ const theme = 'infographic';
 
 
 function updateCharts(date) {
-  
+
   gaugeChart(date);
   //statOverview(date);
   pizzaSize(date);
@@ -70,7 +70,7 @@ function gaugeChart(date = defaultDate) {
       var gaugeData = [
         {
           value: Math.round(data[0].overall), name:
-            "Overall test"
+            "Overall"
           , title: { offsetCenter: ["0%", "-30%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] }
         },
         {
@@ -95,7 +95,7 @@ function gaugeChart(date = defaultDate) {
           trigger: "item",
           formatter: function (params) {
             switch (params.name) {
-              case "Overall test":
+              case "Overall":
                 return `
                 ${params.marker} 
                 Overall<br/>
@@ -133,6 +133,8 @@ function gaugeChart(date = defaultDate) {
         },
         series: [{
           type: "gauge",
+          center: ['50%', '47%'],
+          radius: "85%",
           startAngle: 90,
           endAngle: -270,
           pointer: { show: false },
@@ -624,7 +626,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
           },
         })),
       };
-      
+
       myChart.hideLoading();
       myChart.setOption(option);
 
@@ -742,7 +744,7 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
           },
         })),
       };
-      
+
       myChart.hideLoading();
       myChart.setOption(option);
 
