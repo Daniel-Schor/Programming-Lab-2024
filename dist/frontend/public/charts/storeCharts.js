@@ -608,7 +608,7 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
             },
             xAxis: {
                 type: "category",
-                name: "Volume Share in Percent",
+                name: "Pizza SKU",
                 nameLocation: "middle",
                 data: productSKUs,
                 axisLabel: {
@@ -617,7 +617,7 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
             },
             yAxis: {
                 type: "value",
-                name: "Value Share in Percentage",
+                name: "Total Revenue",
                 axisLabel: {
                     formatter: function (value) {
                         return (value * 100).toFixed(0) + "%";
