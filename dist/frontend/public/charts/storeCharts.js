@@ -189,10 +189,12 @@ function pizzaSize(date = "2022-12-01") {
         .then((querieResult) => {
         var pizzaData = {};
         querieResult.forEach((pizza) => {
-            if (!pizzaData[pizza.Name]) {
-                pizzaData[pizza.Name] = { name: pizza.Name, children: [] };
+            // Remove "Pizza" from the pizza name
+            var pizzaName = pizza.Name.replace(/ Pizza$/, "");
+            if (!pizzaData[pizzaName]) {
+                pizzaData[pizzaName] = { name: pizzaName, children: [] };
             }
-            pizzaData[pizza.Name].children.push({
+            pizzaData[pizzaName].children.push({
                 name: pizza.Size,
                 value: parseInt(pizza.size_count),
             });
@@ -697,5 +699,145 @@ function pizzaIngredients(date = defaultDate) {
         myChart.setOption(option);
     })
         .catch((error) => console.error("Error fetching ingredient data:", error));
+}
+async function pizzaPopularity(date = defaultDate) {
+    var chartDom = document.getElementById("pizzaPopularity");
+    var myChart = echarts.init(chartDom, theme);
+    var option;
+    try {
+        const response = await fetch(`/api/pizzaPopularity?date=${date}`);
+        const data = await response.json();
+        const processedData = processData(data);
+        const names = Array.from(new Set(processedData.map(item => item.Name)));
+        const dates = Array.from(new Set(processedData.map(item => item.purchaseDate)));
+        const generateRankingData = () => {
+            const rankingMap = new Map();
+            dates.forEach(date => {
+                const itemsForDate = processedData.filter(item => item.purchaseDate === date);
+                itemsForDate.sort((a, b) => b.revenue - a.revenue);
+                itemsForDate.forEach((item, index) => {
+                    if (!rankingMap.has(item.Name)) {
+                        rankingMap.set(item.Name, []);
+                    }
+                    rankingMap.get(item.Name).push({ rank: index + 1, revenue: item.revenue });
+                });
+            });
+            return rankingMap;
+        };
+        const generateSeriesList = () => {
+            const seriesList = [];
+            const rankingMap = generateRankingData();
+            rankingMap.forEach((data, name) => {
+                const series = {
+                    name,
+                    symbolSize: 0,
+                    type: 'line',
+                    smooth: true,
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    endLabel: {
+                        show: true,
+                        formatter: '{a}',
+                        distance: 20
+                    },
+                    lineStyle: {
+                        width: 4
+                    },
+                    data: data.map(item => item.rank), // Use rank for y-axis
+                    revenueData: data.map(item => item.revenue) // Store revenue data separately
+                };
+                seriesList.push(series);
+            });
+            return seriesList;
+        };
+        const seriesList = generateSeriesList();
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                },
+                formatter: params => {
+                    const item = params[0];
+                    const series = seriesList.find(series => series.name === item.seriesName);
+                    const revenue = series.revenueData[item.dataIndex];
+                    return `${item.marker}${item.seriesName}: ${revenue.toFixed(2)}`;
+                }
+            },
+            grid: {
+                left: '0%',
+                right: '16%',
+                bottom: '0%',
+                top: '6%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                splitLine: {
+                    show: true
+                },
+                axisLabel: {
+                    margin: 30,
+                    fontSize: 16
+                },
+                boundaryGap: false,
+                data: dates
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    margin: 30,
+                    fontSize: 16,
+                    formatter: '#{value}'
+                },
+                inverse: true,
+                interval: 1,
+                min: 1,
+                max: names.length
+            },
+            series: seriesList
+        };
+        option && myChart.setOption(option);
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+function processData(data) {
+    const totalEntries = data.length;
+    // Determine desiredEntriesPerPizza based on totalEntries
+    let desiredEntriesPerPizza;
+    if (totalEntries < 260) {
+        desiredEntriesPerPizza = 15;
+    }
+    else if (totalEntries > 270 && totalEntries <= 800) {
+        desiredEntriesPerPizza = 30;
+    }
+    else {
+        // Handle cases where totalEntries exceeds 800 (if needed)
+        desiredEntriesPerPizza = 30; // Default to 30 for cases > 800
+    }
+    // Create a map to store filtered data for each pizza type
+    const filteredDataMap = new Map();
+    // Process each entry and group by pizza type
+    data.forEach(item => {
+        const pizzaName = item.Name;
+        if (!filteredDataMap.has(pizzaName)) {
+            filteredDataMap.set(pizzaName, []);
+        }
+        filteredDataMap.get(pizzaName).push(item);
+    });
+    // Filter each pizza type to retain only the desired number of entries
+    const processedData = [];
+    filteredDataMap.forEach((entries, pizzaName) => {
+        const filteredEntries = entries.slice(0, desiredEntriesPerPizza);
+        processedData.push(...filteredEntries);
+    });
+    return processedData.map(item => ({
+        Name: item.Name,
+        purchaseDate: new Date(item.purchaseDate).toISOString().split("T")[0], // Format date to YYYY-MM-DD
+        revenue: parseFloat(item.revenue) // Convert revenue to a number
+    }));
 }
 //# sourceMappingURL=storeCharts.js.map
