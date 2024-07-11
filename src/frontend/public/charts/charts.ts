@@ -344,7 +344,7 @@ function addMarkers(stores) {
       return;
     }
 
-    const marker = L.marker([store.lat, store.lon], 
+    const marker = L.marker([store.lat, store.lon],
       { icon: createColoredMarkerIcon(curColors[store.storeID] || "#ff4500") }).addTo(markersLayer);
     /*marker.bindPopup(
       `<b>Store ID:</b> ${store.storeID}<br>`
@@ -369,11 +369,14 @@ function addMarkers(stores) {
 
 function storeLocationMap() {
   // Add OpenStreetMap tile layer
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '',
-    className: 'map-tiles'
-  }).addTo(map);
-
+  try {
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '',
+      className: 'map-tiles'
+    }).addTo(map);
+  } catch (error) {
+    console.error("IGNORE (does not affect functionality) Error adding OpenStreetMap tile layer:", error);
+  }
 
   // Function to add markers to the map
 

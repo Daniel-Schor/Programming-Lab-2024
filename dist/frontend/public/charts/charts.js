@@ -331,10 +331,15 @@ function addMarkers(stores) {
 }
 function storeLocationMap() {
     // Add OpenStreetMap tile layer
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '',
-        className: 'map-tiles'
-    }).addTo(map);
+    try {
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '',
+            className: 'map-tiles'
+        }).addTo(map);
+    }
+    catch (error) {
+        console.error("IGNORE (does not affect functionality) Error adding OpenStreetMap tile layer:", error);
+    }
     // Function to add markers to the map
     // Fetch the data and add markers
     fetch("/api/storeLocations")
