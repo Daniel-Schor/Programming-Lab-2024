@@ -370,56 +370,81 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         let customerID = Object.keys(analysisData);
         let totalSales = Object.values(analysisData).map((item) => item.total_sale_customer);
         let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
-        var option = {
-            title: {
-                text: "sorted by total Revenue descending",
-                left: "center",
-            },
-            tooltip: {
-                trigger: "axis",
-                axisPointer: {
-                    type: "shadow",
+        function updateChart() {
+            var option = {
+                title: {
+                    text: "sorted by total Revenue descending",
+                    left: "center",
                 },
-                formatter: function (params) {
-                    let index = params[0].dataIndex;
-                    return `Green good, red bad.<br/> A customer good, c customer bad.<br/>ABC Categorie: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}`;
-                },
-            },
-            xAxis: {
-                type: "category",
-                data: abcCategories,
-                axisLabel: {
-                    show: false,
-                },
-            },
-            yAxis: {
-                type: "value",
-                name: "Total Revenue",
-            },
-            series: [
-                {
-                    name: "Total Revenue",
-                    type: "bar",
-                    data: totalSales,
-                    label: {
-                        show: false,
-                        position: "insideBottom",
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        type: "shadow",
                     },
-                    itemStyle: {
-                        color: function (params) {
-                            const abcCategory = abcCategories[params.dataIndex];
-                            if (abcCategory === "A")
-                                return "green";
-                            if (abcCategory === "B")
-                                return "yellow";
-                            return "red";
+                    formatter: function (params) {
+                        let index = params[0].dataIndex;
+                        return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}`;
+                    },
+                },
+                xAxis: {
+                    type: "category",
+                    data: abcCategories,
+                    axisLabel: {
+                        show: false,
+                    },
+                },
+                yAxis: {
+                    type: "value",
+                    name: "Total Revenue",
+                },
+                series: [
+                    {
+                        name: "Total Revenue",
+                        type: "bar",
+                        data: totalSales,
+                        label: {
+                            show: false,
+                            position: "insideBottom",
+                        },
+                        itemStyle: {
+                            color: function (params) {
+                                const abcCategory = abcCategories[params.dataIndex];
+                                if (abcCategory === "A")
+                                    return "green";
+                                if (abcCategory === "B")
+                                    return "yellow";
+                                return "red";
+                            },
                         },
                     },
-                },
-            ],
-        };
+                ],
+            };
+            myChart.hideLoading();
+            myChart.setOption(option);
+        }
+        // Initialize the chart with all data
+        updateChart();
+        // Add event listener for the search input
+        const searchInput = document.getElementById("customerSearch");
+        searchInput.addEventListener("input", function () {
+            const searchQuery = searchInput.value.toLowerCase();
+            const filteredData = Object.keys(analysisData).reduce((acc, key) => {
+                if (key.toLowerCase().includes(searchQuery)) {
+                    acc.customerID.push(key);
+                    acc.totalSales.push(analysisData[key].total_sale_customer);
+                    acc.abcCategories.push(analysisData[key].abc_category);
+                }
+                return acc;
+            }, { customerID: [], totalSales: [], abcCategories: [] });
+            customerID = filteredData.customerID;
+            totalSales = filteredData.totalSales;
+            abcCategories = filteredData.abcCategories;
+            updateChart();
+        });
+    })
+        .catch((error) => {
         myChart.hideLoading();
-        updateChart(myChart, option);
+        console.error("Error fetching or processing data:", error);
     });
 }
 function abcAnalysis_pizza_1(date = "2022-12-01") {
