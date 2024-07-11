@@ -56,12 +56,64 @@ function gaugeChart(date = defaultDate) {
         .then((response) => response.json())
         .then((data) => {
         var gaugeData = [
-            { value: Math.round(data[0].overall), name: "Overall", title: { offsetCenter: ["0%", "-60%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-50%"] } },
-            { value: Math.round(data[0].loyalty), name: "Loyalty", title: { offsetCenter: ["0%", "-40%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] } },
-            { value: Math.round(data[0].order), name: "Orders", title: { offsetCenter: ["0%", "-20%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] } },
-            { value: Math.round(data[0].single), name: "Single", title: { offsetCenter: ["0%", "00%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] } },
+            {
+                value: Math.round(data[0].overall), name: "Overall test",
+                title: { offsetCenter: ["0%", "-60%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-50%"] }
+            },
+            {
+                value: Math.round(data[0].loyalty), name: "Loyalty",
+                title: { offsetCenter: ["0%", "-40%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] }
+            },
+            {
+                value: Math.round(data[0].order), name: "Orders",
+                title: { offsetCenter: ["0%", "-20%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] }
+            },
+            {
+                value: Math.round(data[0].single), name: "one-time",
+                title: { offsetCenter: ["0%", "00%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] }
+            },
         ];
         var option = {
+            tooltip: {
+                trigger: "item",
+                formatter: function (params) {
+                    switch (params.name) {
+                        case "Overall test":
+                            return `
+                ${params.marker} 
+                Overall<br/>
+                Score compared to <br/>
+                other stores: ${params.value}
+                `;
+                        case "Loyalty":
+                            return `
+                ${params.marker} 
+                Loyalty<br/>
+                Loyal customers per<br/>
+                all customers<br/>
+                compared to best store: 
+                ${params.value}%
+                `;
+                        case "Orders":
+                            return `
+                ${params.marker} 
+                Orders<br/>
+                Orders per customer<br/>
+                compared to best store: 
+                ${params.value}%
+                `;
+                        case "one-time":
+                            return `
+                ${params.marker} 
+                One-Time<br/>
+                Customers who ordered once<br/>
+                compared to all customers<br/>
+                compared to best store: 
+                ${params.value}%
+                `;
+                    }
+                }
+            },
             series: [{
                     type: "gauge",
                     startAngle: 90,
@@ -73,7 +125,7 @@ function gaugeChart(date = defaultDate) {
                     axisTick: { show: false },
                     axisLabel: { show: false, distance: 50 },
                     data: gaugeData,
-                    title: { fontSize: 14 },
+                    title: { fontSize: 0 },
                     detail: { width: 50, height: 14, fontSize: 14, color: "inherit", borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
                 }],
         };
