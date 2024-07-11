@@ -60,7 +60,7 @@ function gaugeChart(date = defaultDate) {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("quality");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-  
+
   //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
 
   fetch(`/api/quality?date=${date}&store=${store.storeID}`)
@@ -263,7 +263,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
       function updateChart() {
         var option = {
           title: {
-            text: "ABC Analysis of Customers sorted by cumulative customer percentage of total revenue",
+            text: "sorted by cumulative customer percentage of total revenue",
             left: "center",
           },
           tooltip: {
@@ -273,13 +273,11 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
             },
             formatter: function (params) {
               let index = params[0].dataIndex;
-              return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${
-                abcCategories[index]
-              }<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${
-                totalSales[index]
-              }<br/>Cumulative Percentage: ${(
-                cumulativePercentage[index] * 100
-              ).toFixed(2)}%`;
+              return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]
+                }<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]
+                }<br/>Cumulative Percentage: ${(
+                  cumulativePercentage[index] * 100
+                ).toFixed(2)}%`;
             },
           },
           xAxis: {
@@ -385,7 +383,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
 
       var option = {
         title: {
-          text: "ABC Analysis of Customers sorted by total Revenue descending",
+          text: "sorted by total Revenue descending",
           left: "center",
         },
         tooltip: {
@@ -469,7 +467,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
 
       const option = {
         title: {
-          text: "ABC Analysis of Pizza by Cumulative Percentage",
+          text: "ABC by Cumulative Percentage",
         },
         tooltip: {
           trigger: "axis",
