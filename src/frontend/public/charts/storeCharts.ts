@@ -71,22 +71,22 @@ function gaugeChart(date = defaultDate) {
         {
           value: Math.round(data[0].overall), name:
             "Overall test"
-          , title: { offsetCenter: ["0%", "-60%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-50%"] }
+          , title: { offsetCenter: ["0%", "-30%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] }
         },
         {
           value: Math.round(data[0].loyalty), name:
             "Loyalty"
-          , title: { offsetCenter: ["0%", "-40%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] }
+          , title: { offsetCenter: ["0%", "-10%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] }
         },
         {
           value: Math.round(data[0].order), name:
             "Orders"
-          , title: { offsetCenter: ["0%", "-20%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] }
+          , title: { offsetCenter: ["0%", "10%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] }
         },
         {
           value: Math.round(data[0].single), name:
             "one-time"
-          , title: { offsetCenter: ["0%", "00%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] }
+          , title: { offsetCenter: ["0%", "30%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "30%"] }
         },
       ];
 
