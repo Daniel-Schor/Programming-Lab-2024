@@ -188,7 +188,7 @@ function heatmap(date = defaultDate) {
 
       option = {
         tooltip: { position: "top" },
-        grid: { height: "50%", top: "10%", bottom: "10%"},
+        grid: { height: "50%", top: "10%", bottom: "10%", right: "5%", left: "5%"},
         xAxis: { type: "category", data: pizzas, splitArea: { show: true } },
         yAxis: { type: "category", data: pizzas, splitArea: { show: true } },
         visualMap: { min: min, max: max, calculable: true, orient: "horizontal", left: "center", bottom: "15%" },

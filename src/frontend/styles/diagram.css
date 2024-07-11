@@ -8,7 +8,7 @@
 }
 
 .diagram {
-  display: absolute;
+  display: flex;
   height: 250px;
 }
 
