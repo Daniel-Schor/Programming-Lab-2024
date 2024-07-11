@@ -273,7 +273,7 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         function updateChart() {
             var option = {
                 title: {
-                    text: "ABC Analysis of Customers sorted by cumulative customer percentage of total revenue",
+                    text: "sorted by cumulative customer percentage of total revenue",
                     left: "center",
                 },
                 tooltip: {
@@ -373,7 +373,7 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
         var option = {
             title: {
-                text: "ABC Analysis of Customers sorted by total Revenue descending",
+                text: "sorted by total Revenue descending",
                 left: "center",
             },
             tooltip: {
@@ -444,7 +444,7 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
         const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
         const option = {
             title: {
-                text: "ABC Analysis of Pizza by Cumulative Percentage",
+                text: "ABC by Cumulative Percentage",
             },
             tooltip: {
                 trigger: "axis",
