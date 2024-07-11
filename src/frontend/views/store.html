@@ -144,7 +144,14 @@
                 Relationship between price and popularity of pizzas
               </div>
             </div>
+            
           </div>
+          <div class="section-items">
+          <div class="subsection"style="min-height: 300px;">
+            <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
+            <div id="pizzaPopularity" class="diagram"style="height: 100%"></div>
+          </div>
+        </div>
         </div>
         <!--End of Pizza section-->
         <!--Forecast section-->
@@ -216,7 +223,7 @@
               <div class="section-items">
                 <div class="subsection">
                   <div class="diagram" id="abcAnalysis_customer_2" style="height: '100%'; width: '100%'">
-                    ABC Analysis of Customers sorted by total Revenue descending
+                    ABC Analysis of Customers sorted by total Revenue descending <!--sorted by total Revenue descending-->
                   </div>
                 </div>
                 <div class="subsection" style="height: 400px; overflow: visible;">
@@ -233,7 +240,7 @@
 
       <script>
 
-
+      pizzaPopularity();
       //statOverview();
         gaugeChart();
         pizzaSize();
