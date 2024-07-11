@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--EINZELNER STORE MIT STOREID !-->
+<!-- EINZELNER STORE MIT STOREID !-->
 
 <head>
   <meta charset="UTF-8" />
@@ -10,14 +10,12 @@
   <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
 
-  <!--<script src="/static/echarts/infographic.js"type="text/javascript"></script>-->
+  <!--<script src="/static/echarts/infographic.js" type="text/javascript"></script>-->
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/storeCharts.js" type="text/javascript"></script>
   <script src="/static/UI/ui.js" type="text/javascript"></script>
 
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
-
-
 
   <title>Document</title>
 </head>
@@ -37,7 +35,7 @@
       <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
       <button class="btn" id="customDate" onclick="visibilityCoustomDate()">PTD</button>
       <input type="date" id="datePicker" style="display: none;">
-      <input type="date" id="startDate" name="startDate" value="2022-12-01"style="display: none;" required>
+      <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
     </div>
     <div class="btnbox">
       <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
@@ -48,8 +46,8 @@
 
   <div id="sidebar" class="sidebar">
     <!-- Store links will be dynamically added here -->
-
   </div>
+
   <div id="main" class="main" onclick="toggleSidebar(true)">
     <div id="content">
       <!-- Put content here -->
@@ -144,18 +142,16 @@
                 Relationship between price and popularity of pizzas
               </div>
             </div>
-            
           </div>
           <div class="section-items">
-          <div class="subsection"style="min-height: 300px;">
-            <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
-            <div id="pizzaPopularity" class="diagram"style="height: 100%"></div>
+            <div class="subsection" style="min-height: 300px;">
+              <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
+              <div id="pizzaPopularity" class="diagram" style="height: 100%"></div>
+            </div>
           </div>
-        </div>
         </div>
         <!--End of Pizza section-->
         <!--Forecast section-->
-        <!--TODO-->
         <div class="subsection" style="padding: 0px; border-width: 0px;">
           <div class="section-items">
             <div class="subsection" style="
@@ -182,7 +178,7 @@
               </div>
               <div class="section-items">
                 <div class="subsection">
-                  <div class="diagram">
+                  <div id="pizzaIngredients" class="diagram">
                     Ingredient Prediction
                   </div>
                 </div>
@@ -239,16 +235,6 @@
         <!-- END OF CONTENT-->
 
       <script>
-
-      pizzaPopularity();
-      //statOverview();
-        gaugeChart();
-        pizzaSize();
-        heatmap();
-        abcAnalysis_pizza_2();
-        abcAnalysis_customer_2();
-        pizza_price_popularity();
-        //monthlyRevenue();
         function toggleSidebar(turnOff = false) {
           if (turnOff) {
             document.getElementById("sidebar").classList.remove("active");
@@ -259,6 +245,17 @@
           }
         }
 
+        document.addEventListener('DOMContentLoaded', function () {
+          pizzaPopularity();
+          gaugeChart();
+          pizzaSize();
+          heatmap();
+          abcAnalysis_pizza_2();
+          abcAnalysis_customer_2();
+          pizza_price_popularity();
+          dailyOrders(); // Funktionsaufruf für Order Prediction
+          pizzaIngredients(); // Funktionsaufruf für Ingredient Prediction
+        });
       </script>
 
 </body>

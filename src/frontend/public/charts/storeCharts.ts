@@ -1134,3 +1134,150 @@ function processData(data) {
     revenue: parseFloat(item.revenue) // Convert revenue to a number
   }));
 }
+
+function dailyOrders(date = "2022-12-01", dow = 1) {
+  var store = JSON.parse(localStorage.getItem("store"));
+  var dom = document.getElementById("dailyOrders");
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+
+  fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&storeID=${store.storeID}`)
+    .then((response) => response.json())
+    .then((data) => {
+      let avgValues = Object.keys(data).map(hour => data[hour].avg);
+      var option = {
+        title: {
+          text: "Average Orders per Hour",
+        },
+        xAxis: {
+          type: "category",
+          data: Object.keys(data),
+        },
+        tooltip: {
+          trigger: "axis",
+          formatter: function (params) {
+            let index = params[0].dataIndex;
+            let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
+            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
+          },
+        },
+        legend: {
+          data: ["Average Orders"],
+        },
+        toolbox: {
+          feature: { saveAsImage: {} },
+        },
+        yAxis: {
+          type: "value",
+          name: "Average Orders",
+        },
+        series: [
+          {
+            data: avgValues,
+            type: "line",
+            smooth: true,
+            name: "Average Orders",
+          },
+        ],
+      };
+
+      myChart.setOption(option);
+    })
+    .catch((error) => {
+      console.error("Error fetching daily orders data:", error);
+    });
+}
+
+function pizzaIngredients(date = "2022-12-01") {
+  var app = {};
+  var store = JSON.parse(localStorage.getItem("store"));
+  var chartDom = document.getElementById("pizzaIngredients");
+  var myChart = echarts.init(chartDom);
+  var option;
+
+  fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
+    .then((response) => response.json())
+    .then((data) => {
+      // Parse the fetched data to create series data
+      const ingredients = {};
+      let minQuantity = Number.MAX_VALUE;
+      let maxQuantity = Number.MIN_VALUE;
+
+      data.forEach((item) => {
+        const ingredient = item.ingredient.trim();
+        const averageQuantity = parseFloat(item.average_quantity);
+
+        // Update min and max values
+        if (averageQuantity < minQuantity) minQuantity = averageQuantity;
+        if (averageQuantity > maxQuantity) maxQuantity = averageQuantity;
+
+        if (!ingredients[ingredient]) {
+          ingredients[ingredient] = 0;
+        }
+        ingredients[ingredient] += averageQuantity;
+      });
+
+      // Normalize the values
+      const normalize = (value) =>
+        ((value - minQuantity) / (maxQuantity - minQuantity)) * 100;
+
+      const xAxisData = Object.keys(ingredients);
+      const seriesData = xAxisData.map(ingredient => normalize(ingredients[ingredient]).toFixed(2));
+
+      option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        grid: {
+          top: "10%", // Adjust the top margin
+          bottom: "10%", // Adjust the bottom margin
+          left: "10%", // Adjust the left margin
+          right: "10%", // Adjust the right margin
+        },
+        toolbox: {
+          show: true,
+          orient: "vertical",
+          left: "right",
+          top: "center",
+          feature: {
+            mark: { show: true },
+            dataView: { show: false, readOnly: false },
+            magicType: { show: false, type: ["line", "bar", "stack"] },
+            restore: { show: false },
+            saveAsImage: { show: false },
+          },
+        },
+        xAxis: [
+          {
+            type: "category",
+            axisTick: { show: false },
+            data: xAxisData, // Directly set all ingredients on the X-axis
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+            min: 0, // Ensure the Y-axis starts at 0
+            max: 100, // Normalized max value
+            interval: 10, // Set a suitable interval for the values
+            axisLabel: {
+              formatter: "{value}", // Add a unit if necessary, e.g., '{value} units'
+            },
+          },
+        ],
+        series: [
+          {
+            name: 'Ingredients',
+            type: 'bar',
+            data: seriesData, // Set the normalized data for each ingredient
+            emphasis: { focus: 'series' },
+          }
+        ]
+      };
+
+      myChart.setOption(option);
+    })
+    .catch((error) => console.error("Error fetching ingredient data:", error));
+}
