@@ -40,9 +40,9 @@
       <input type="date" id="startDate" name="startDate" value="2022-12-01"style="display: none;" required>
     </div>
     <div class="btnbox">
-      <button class="infobox">FROM: XX-XX-XXXX</button>
+      <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
       <button class="infobox">TO: 31-12-2022</button>
-      <button class="infobox">PERIOD: XXDAYS</button>
+      <button class="infobox" id="PERIOD">PERIOD: XXDAYS</button>
     </div>
   </div>
 
@@ -255,7 +255,7 @@
       <script>
 
 
-        statOverview();
+      //statOverview();
         gaugeChart();
         pizzaSize();
         heatmap();

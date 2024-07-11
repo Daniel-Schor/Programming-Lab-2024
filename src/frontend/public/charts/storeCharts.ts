@@ -8,12 +8,12 @@ const theme = 'infographic';
 
 
 function updateCharts(date) {
-  monthlyRevenue(date);
+  
   gaugeChart(date);
-  statOverview(date);
+  //statOverview(date);
   pizzaSize(date);
   heatmap(date);
-  pizzaIngredients(date);
+  //pizzaIngredients(date);
   abcAnalysis_customer_1(date);
   abcAnalysis_customer_2(date);
   abcAnalysis_pizza_1(date);
