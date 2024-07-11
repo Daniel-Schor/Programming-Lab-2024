@@ -157,10 +157,10 @@ function heatmap(date = defaultDate) {
 
 
 
-function pizzaSize(date = defaultDate) {
+function pizzaSize(date = "2022-12-01") {
   //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
   var store = JSON.parse(localStorage.getItem("store"));
-  var dom = document.getElementById('PizzaSize');
+  var dom = document.getElementById("PizzaSize");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   //data needed: Pizza names, Size, sales number
@@ -168,13 +168,13 @@ function pizzaSize(date = defaultDate) {
     .then((response) => response.json())
     .then((querieResult) => {
       var pizzaData = {};
-      querieResult.forEach(pizza => {
+      querieResult.forEach((pizza) => {
         if (!pizzaData[pizza.Name]) {
           pizzaData[pizza.Name] = { name: pizza.Name, children: [] };
         }
         pizzaData[pizza.Name].children.push({
           name: pizza.Size,
-          value: parseInt(pizza.size_count)
+          value: parseInt(pizza.size_count),
         });
       });
 
@@ -182,64 +182,62 @@ function pizzaSize(date = defaultDate) {
 
       var option = {
         title: {
-          text: 'Pizza Sales Data',
+          text: "Pizza Sales Data",
           subtext: `Date: ${date}`,
           textStyle: {
             fontSize: 14,
-            align: 'center'
+            align: "center",
           },
 
           subtextStyle: {
-            align: 'center'
-          }
+            align: "center",
+          },
         },
         tooltip: { position: "top" },
         series: {
-          type: 'sunburst',
+          type: "sunburst",
           data: data,
-          radius: [0, '95%'],
+          radius: [0, "95%"],
           sort: undefined,
           emphasis: {
-            focus: 'ancestor'
+            focus: "ancestor",
           },
           levels: [
             {},
             {
-              r0: '15%',
-              r: '35%',
+              r0: "15%",
+              r: "35%",
               itemStyle: {
-                borderWidth: 2
+                borderWidth: 2,
               },
               label: {
-                rotate: 'tangential'
-              }
+                rotate: "tangential",
+              },
             },
             {
-              r0: '35%',
-              r: '70%',
+              r0: "35%",
+              r: "70%",
               label: {
-                align: 'right'
-              }
+                align: "right",
+              },
             },
             {
-              r0: '70%',
-              r: '72%',
+              r0: "70%",
+              r: "72%",
               label: {
-                position: 'outside',
+                position: "outside",
                 padding: 3,
-                silent: false
+                silent: false,
               },
               itemStyle: {
-                borderWidth: 3
-              }
-            }
-          ]
-        }
+                borderWidth: 3,
+              },
+            },
+          ],
+        },
       };
       updateChart(myChart, option);
     });
-
-
 }
 
 function abcAnalysis_customer_1(date = "2022-12-01") {
