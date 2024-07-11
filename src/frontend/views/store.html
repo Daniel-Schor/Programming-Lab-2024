@@ -207,12 +207,13 @@
             margin-right: 0px;">
               <h1>Customer</h1>
               <div class="section-items">
-                <div class="subsection">
-                  <div class="diagram">
-                    ABC Analaysis
+                <div class="subsection" >
+                  <div class="diagram" id="abcAnalysis_customer_2"  style="height: 100%" width="100%">
+                    ABC Analysis of Customers sorted by total Revenue descending
                   </div>
                 </div>
                 <div class="subsection" style="height: 400px;">
+                  
                   <div class="diagram" id="quality" style="height: 100%"width="100%">
                    Quality
                   </div>
@@ -254,6 +255,7 @@
         pizzaSize();
         heatmap();
         abcAnalysis_pizza_1();
+        abcAnalysis_customer_2();
         pizza_price_popularity();
         //monthlyRevenue();
         function toggleSidebar(turnOff = false) {
