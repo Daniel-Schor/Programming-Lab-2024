@@ -56,20 +56,20 @@ function gaugeChart(date = defaultDate) {
         .then((data) => {
         var gaugeData = [
             {
-                value: Math.round(data[0].overall), name: "Overall test",
-                title: { offsetCenter: ["0%", "-60%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-50%"] }
+                value: Math.round(data[0].overall), name: "Overall",
+                title: { offsetCenter: ["0%", "-30%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] }
             },
             {
                 value: Math.round(data[0].loyalty), name: "Loyalty",
-                title: { offsetCenter: ["0%", "-40%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-30%"] }
+                title: { offsetCenter: ["0%", "-10%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] }
             },
             {
                 value: Math.round(data[0].order), name: "Orders",
-                title: { offsetCenter: ["0%", "-20%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "-10%"] }
+                title: { offsetCenter: ["0%", "10%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] }
             },
             {
                 value: Math.round(data[0].single), name: "one-time",
-                title: { offsetCenter: ["0%", "00%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "10%"] }
+                title: { offsetCenter: ["0%", "30%"] }, detail: { valueAnimation: true, offsetCenter: ["0%", "30%"] }
             },
         ];
         var option = {
@@ -77,7 +77,7 @@ function gaugeChart(date = defaultDate) {
                 trigger: "item",
                 formatter: function (params) {
                     switch (params.name) {
-                        case "Overall test":
+                        case "Overall":
                             return `
                 ${params.marker} 
                 Overall<br/>
@@ -115,6 +115,8 @@ function gaugeChart(date = defaultDate) {
             },
             series: [{
                     type: "gauge",
+                    center: ['50%', '47%'],
+                    radius: "85%",
                     startAngle: 90,
                     endAngle: -270,
                     pointer: { show: false },
@@ -525,6 +527,111 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
                 name: size,
                 type: "bar",
                 data: productSKUs.map((sku, index) => sizes[index] === size ? cumulativePercentage[index] : 0),
+                label: {
+                    show: false,
+                    position: "insideBottom",
+                    formatter: function (params) {
+                        return (params.value * 100).toFixed(2) + "%";
+                    },
+                },
+                itemStyle: {
+                    color: function (params) {
+                        const abcCategory = abcCategories[params.dataIndex];
+                        if (abcCategory === "A")
+                            return "green";
+                        if (abcCategory === "B")
+                            return "yellow";
+                        return "red";
+                    },
+                },
+            })),
+        };
+        myChart.hideLoading();
+        myChart.setOption(option);
+        myChart.hideLoading();
+        myChart.setOption(option);
+    })
+        .catch((error) => {
+        console.error("Error fetching or processing data:", error);
+        myChart.hideLoading();
+    });
+}
+function abcAnalysis_pizza_2(date = "2022-12-01") {
+    var store = JSON.parse(localStorage.getItem("store"));
+    var dom = document.getElementById("abcAnalysis_pizza_2");
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    myChart.showLoading();
+    fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
+        .then((response) => response.json())
+        .then((data) => {
+        if (!data[store.storeID]) {
+            throw new Error('No data found for the given storeID and date');
+        }
+        const analysisData = data[store.storeID];
+        const cumulativePercentage = Object.values(analysisData).map((item) => item.sorted_cumulative_product_percentage_of_total);
+        const productSKUs = Object.keys(analysisData);
+        const abcCategories = Object.values(analysisData).map((item) => item.abc_category);
+        const totalSales = Object.values(analysisData).map((item) => item.total_sales_pizza);
+        const sizes = Object.values(analysisData).map((item) => item.size);
+        const names = Object.values(analysisData).map((item) => item.name);
+        const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
+        const option = {
+            title: {
+                text: "ABC by total revenue descending",
+            },
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "shadow",
+                },
+                formatter: function (params) {
+                    const index = params[0].dataIndex;
+                    return `
+              Product Name: ${names[index]}<br/>
+              Product SKU: ${productSKUs[index]}<br/>
+              Total Revenue: ${totalSales[index]}<br/>
+              Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%<br/>
+              ABC Category: ${abcCategories[index]}<br/>
+              Size: ${sizes[index]}
+            `;
+                },
+            },
+            legend: {
+                type: "scroll",
+                orient: "horizontal",
+                bottom: 10,
+                data: sizesArray,
+                selected: sizesArray.reduce((acc, size) => {
+                    acc[size] = true;
+                    return acc;
+                }, {}),
+                itemStyle: {
+                    borderColor: 'transparent', // Remove border color
+                    color: 'transparent' // Remove fill color
+                },
+            },
+            xAxis: {
+                type: "category",
+                name: "Pizza SKU",
+                nameLocation: "middle",
+                data: productSKUs,
+                axisLabel: {
+                    show: false,
+                },
+            },
+            yAxis: {
+                type: "value",
+                name: "Total Revenue",
+                axisLabel: {
+                    formatter: function (value) {
+                        return (value * 100).toFixed(0) + "%";
+                    },
+                },
+            },
+            series: sizesArray.map(size => ({
+                name: size,
+                type: "bar",
+                data: productSKUs.map((sku, index) => sizes[index] === size ? totalSales[index] : 0),
                 label: {
                     show: false,
                     position: "insideBottom",
