@@ -186,7 +186,7 @@ function heatmap(date = defaultDate) {
 
       option = {
         tooltip: { position: "top" },
-        grid: { height: "50%", top: "10%" },
+        grid: { height: "50%", top: "10%", bottom: "10%"},
         xAxis: { type: "category", data: pizzas, splitArea: { show: true } },
         yAxis: { type: "category", data: pizzas, splitArea: { show: true } },
         visualMap: { min: min, max: max, calculable: true, orient: "horizontal", left: "center", bottom: "15%" },
@@ -232,13 +232,13 @@ function pizzaSize(date = "2022-12-01") {
       var data = Object.values(pizzaData);
 
       var option = {
-        title: {
+       /* title: {
           text: "Pizza Sales Data",
           subtext: `Date: ${date}`,
           textStyle: {
             fontSize: 14,
             align: "center",
-          },
+          },*/
 
           subtextStyle: {
             align: "center",
@@ -315,10 +315,10 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
 
       function updateChart() {
         var option = {
-          title: {
+          /*title: {
             text: "sorted by cumulative customer percentage of total revenue",
             left: "center",
-          },
+          },*/
           tooltip: {
             trigger: "axis",
             axisPointer: {
@@ -436,10 +436,6 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
 
       function updateChart() {
         var option = {
-          title: {
-            text: "sorted by total Revenue descending",
-            left: "center",
-          },
           tooltip: {
             trigger: "axis",
             axisPointer: {
@@ -555,9 +551,9 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
       const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
 
       const option = {
-        title: {
+        /*title: {
           text: "ABC by Cumulative Percentage",
-        },
+        },*/
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -676,9 +672,6 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
       const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
 
       const option = {
-        title: {
-          text: "ABC by total revenue descending",
-        },
         tooltip: {
           trigger: "axis",
           axisPointer: {
