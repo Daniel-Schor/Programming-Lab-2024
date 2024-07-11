@@ -165,7 +165,7 @@ function heatmap(date = defaultDate) {
         //----
         option = {
             tooltip: { position: "top" },
-            grid: { height: "50%", top: "10%" },
+            grid: { height: "50%", top: "10%", bottom: "10%" },
             xAxis: { type: "category", data: pizzas, splitArea: { show: true } },
             yAxis: { type: "category", data: pizzas, splitArea: { show: true } },
             visualMap: { min: min, max: max, calculable: true, orient: "horizontal", left: "center", bottom: "15%" },
@@ -275,10 +275,10 @@ function abcAnalysis_customer_1(date = "2022-12-01") {
         let totalSales = Object.values(analysisData).map((item) => item.total_sale_customer);
         function updateChart() {
             var option = {
-                title: {
-                    text: "sorted by cumulative customer percentage of total revenue",
-                    left: "center",
-                },
+                /*title: {
+                  text: "sorted by cumulative customer percentage of total revenue",
+                  left: "center",
+                },*/
                 tooltip: {
                     trigger: "axis",
                     axisPointer: {
@@ -376,10 +376,6 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
         function updateChart() {
             var option = {
-                title: {
-                    text: "sorted by total Revenue descending",
-                    left: "center",
-                },
                 tooltip: {
                     trigger: "axis",
                     axisPointer: {
@@ -471,9 +467,9 @@ function abcAnalysis_pizza_1(date = "2022-12-01") {
         const names = Object.values(analysisData).map((item) => item.name);
         const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
         const option = {
-            title: {
-                text: "ABC by Cumulative Percentage",
-            },
+            /*title: {
+              text: "ABC by Cumulative Percentage",
+            },*/
             tooltip: {
                 trigger: "axis",
                 axisPointer: {
@@ -576,9 +572,6 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
         const names = Object.values(analysisData).map((item) => item.name);
         const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
         const option = {
-            title: {
-                text: "ABC by total revenue descending",
-            },
             tooltip: {
                 trigger: "axis",
                 axisPointer: {

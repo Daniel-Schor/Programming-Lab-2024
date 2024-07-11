@@ -15,10 +15,4 @@ declare function revenueChart(best?: boolean, storeColors?: {}, date?: string): 
 declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean, date?: string): Promise<unknown>;
 declare function addMarkers(stores: any): void;
 declare function storeLocationMap(): void;
-declare function pizzaPopularity(date?: string): Promise<void>;
-declare function processData(data: any): {
-    Name: any;
-    purchaseDate: string;
-    revenue: number;
-}[];
 declare function setActiveButton(buttonId: any): void;
