@@ -212,10 +212,10 @@
             margin-left: 0px;
             margin-right: 0px;">
               <h1>Customer</h1>
-              <input type="text" placeholder="Search..">
+              <input type="text" id="customerSearch" placeholder="Search..">
               <div class="section-items">
                 <div class="subsection">
-                  <div class="diagram" id="abcAnalysis_customer_2" style="height: '100%'; width: '100%'">
+                  <div class="diagram" id="abcAnalysis_customer_1" style="height: '100%'; width: '100%'">
                     ABC Analysis of Customers sorted by total Revenue descending
                   </div>
                 </div>
@@ -242,7 +242,7 @@
         pizzaSize();
         heatmap();
         abcAnalysis_pizza_1();
-        abcAnalysis_customer_2();
+        abcAnalysis_customer_1();
         pizza_price_popularity();
         //monthlyRevenue();
         function toggleSidebar(turnOff = false) {
