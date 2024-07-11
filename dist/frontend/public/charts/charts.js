@@ -14,19 +14,19 @@ let custom = false;
 let curColors = false;
 let firstClick = true;
 // TODO move to Helper dir
-const colorsToExclude = [
-    "#0000FF", "#0000EE", "#0000CD", "#0000BB", "#0000AA",
-    "#000099", "#000088", "#000077", "#3d85c6", "#16537e"
-];
-// TODO move to Helper dir
+let colorsToExclude = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9'];
+let excludedColors = new Set();
 function randomColor() {
+    // If all colors have been used, reset the excludedColors set
+    if (excludedColors.size === colorsToExclude.length) {
+        excludedColors.clear();
+    }
     let color;
     do {
-        color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-        color = color.toUpperCase();
-        color = color.padEnd(7, '0');
-    } while (colorsToExclude.includes(color));
-    colorsToExclude.push(color);
+        // Randomly pick a color from colorsToExclude array
+        color = colorsToExclude[Math.floor(Math.random() * colorsToExclude.length)];
+    } while (excludedColors.has(color)); // Ensure the color hasn't been used before
+    excludedColors.add(color); // Add color to excludedColors set
     return color;
 }
 function updateCharts(date) {
