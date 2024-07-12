@@ -373,8 +373,10 @@ function abcAnalysis_customer_1() {
         console.error("Error fetching or processing data:", error);
     });
 }
-function abcAnalysis_customer_2(date = "2022-12-01") {
+function abcAnalysis_customer_2() {
+    console.log("abcAnalysis_customer_2");
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("abcAnalysis_customer_2");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
@@ -387,6 +389,13 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
         function updateChart() {
             var option = {
+                grid: {
+                    top: '3%', // Adjust top padding to make space for title/legend if necessary
+                    left: '1%', // Adjust left padding
+                    right: '1%', // Adjust right padding
+                    bottom: '2%', // Adjust bottom padding
+                    containLabel: true // Ensure the chart size includes the labels
+                },
                 tooltip: {
                     trigger: "axis",
                     axisPointer: {

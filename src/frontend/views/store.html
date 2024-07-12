@@ -34,8 +34,11 @@
       <button class="btn" id="Last-Quarter" onclick="qtd();">QTD</button>
       <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
       <button class="btn" id="customDate" onclick="visibilityCoustomDate()">PTD</button>
+
+      <!--FIXME-->
       <input type="date" id="datePicker" style="display: none;">
       <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
+
     </div>
     <div class="btnbox">
       <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
@@ -108,44 +111,40 @@
       <!--Revenue section-->
       <div class="section-items">
         <!--section a-->
-        <div class="subsection">
+        <div class="section">
           <h1>Pizza</h1>
           <div class="section-items">
             <div class="subsection">
-              <div id="PizzaSize" class="diagram" style="height: 100%">
-                ordered PizzaSizes
-              </div>
+              <h2>Sales in sizes</h2>
+              <div id="PizzaSize" class="diagram"></div>
             </div>
-            <div class="subsection" style="height: 300px;">
-              <div id="abcAnalysis_pizza_2" class="diagram" style="height: 100%" width="100%">
-                ABC Analysis of Pizza by total sales
-              </div>
+            <div class="subsection">
+              <h2>ABC - Analysis</h2>
+              <div id="abcAnalysis_pizza_2" class="diagram"></div>
             </div>
           </div>
           <div class="section-items">
-            <div class="subsection" style="min-height: 300px;">
-              <div id="pizza_price_popularity" class="diagram" style="height: 100%" width="100%">
-                Relationship between price and popularity of pizzas
-              </div>
+            <div class="subsection">
+              <h2>Relationship between price and popularity of pizzas</h2>
+              <div id="pizza_price_popularity" class="diagram"></div>
             </div>
           </div>
           <div class="section-items">
-            <div class="subsection" style="height: 300px;">
-              <div id="Heatmap" class="diagram">
-                Common Pizza Combinations
-              </div>
+            <div class="subsection">
+              <h2>Heatmap</h2>
+              <div id="Heatmap" class="diagram"></div>
             </div>
           </div>
           <div class="section-items">
-            <div class="subsection" style="min-height: 300px;">
+            <div class="subsection">
               <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
-              <div id="pizzaPopularity" class="diagram" style="height: 100%"></div>
+              <div id="pizzaPopularity" class="diagram"></div>
             </div>
           </div>
         </div>
         <!--End of Pizza section-->
         <!--Forecast section-->
-        <div class="subsection" style="padding: 0px; border-width: 0px;">
+        <div class="section">
           <div class="section-items">
             <div class="subsection" style="
               margin-top: 0px;
@@ -205,17 +204,15 @@
             margin-left: 0px;
             margin-right: 0px;">
               <h1>Customer</h1>
-              <input type="text" id="customerSearch" placeholder="Search..">
               <div class="section-items">
                 <div class="subsection">
-                  <div class="diagram" id="abcAnalysis_customer_2" style="height: '100%'; width: '100%'">
-                    ABC Analysis of Customers sorted by total Revenue descending
-                    <!--sorted by total Revenue descending-->
-                  </div>
+                  <h2>ABC - Analysis</h2>
+                  <div class="diagram" id="abcAnalysis_customer_2"></div>
+                  <input type="text" id="customerSearch" placeholder="Search..">
                 </div>
-                <div class="subsection" style="height: 400px; overflow: visible;">
+                <div class="subsection">
                   <h2>Customer relationship</h2>
-                  <div class="diagram" id="quality" style="height: '100%'; width: '100%'"></div>
+                  <div class="diagram" id="quality"></div>
                 </div>
               </div>
             </div>

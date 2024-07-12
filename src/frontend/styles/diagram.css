@@ -8,8 +8,7 @@
 }
 
 .diagram {
-  display: flex;
-  height: 250px;
+  min-height: 300px;
 }
 
 #mapTitel {
