@@ -10,5 +10,5 @@ declare function getTotalPizzas(date: any, storeID: any): Promise<any>;
 declare function getTotalOrders(date: any, storeID: any): Promise<any>;
 declare function getAverageOrderValue(date: any, storeID: any): Promise<any>;
 declare function getPizzasPerOrder(date: any, storeID: any): Promise<any>;
-declare function statOverview(date?: string): Promise<void>;
+declare function statOverview(): Promise<void>;
 declare function setActiveTimeButton(buttonId: any): void;

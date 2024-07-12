@@ -40,14 +40,14 @@ function updateCharts(date) {
   // TODO wrong parameter 
   defaultDate = date;
   if (firstClick || best) {
-    bestButton(date, curColors);
+    bestButton(curColors);
   } else if (custom) {
-    customButton(date, true);
+    customButton(true);
   } else {
-    worstButton(date, curColors);
+    worstButton(curColors);
   }
 
-  pizzaPopularity(date);
+  pizzaPopularity();
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -58,7 +58,8 @@ function updateChart(chart, option) {
 }
 
 
-function bestButton(date = "", colors = {}) {
+function bestButton(colors = {}) {
+  let date = JSON.parse(localStorage.getItem("date"));
   if (best && !date) {
     return;
   }
@@ -73,7 +74,8 @@ function bestButton(date = "", colors = {}) {
   storeLocationMap();
 }
 
-function worstButton(date = "", colors = {}) {
+function worstButton(colors = {}) {
+  let date = JSON.parse(localStorage.getItem("date"));
   if (!best && !custom && !date) {
     return;
   }
@@ -88,7 +90,8 @@ function worstButton(date = "", colors = {}) {
   storeLocationMap();
 }
 
-async function customButton(date = "", update = false) {
+async function customButton(update = false) {
+  let date = JSON.parse(localStorage.getItem("date"));
   if (custom && !date) {
     return;
   }
@@ -111,7 +114,7 @@ async function customButton(date = "", update = false) {
       curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
 
       if (Object.keys(curColors).length === 0) {
-        bestButton(date || defaultDate);
+        bestButton();
         break;
       }
 
@@ -392,9 +395,11 @@ function storeLocationMap() {
     .catch((error) => console.error("Error fetching data:", error));
 }
 
-async function pizzaPopularity(date = defaultDate) {
+async function pizzaPopularity() {
   var chartDom = document.getElementById("pizzaPopularity");
   var myChart = echarts.init(chartDom, theme);
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var option;
 
   try {

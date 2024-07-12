@@ -1,25 +1,24 @@
 
 // TODO use .env variables instead
-const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 const theme = 'infographic';
 
 
 
 
-function updateCharts(date) {
-  pizzaPopularity(date);
-  gaugeChart(date);
+function updateCharts() {
+  pizzaPopularity();
+  gaugeChart();
   //statOverview(date);
-  pizzaSize(date);
-  heatmap(date);
-  //pizzaIngredients(date);
-  //abcAnalysis_customer_1(date);
+  pizzaSize();
+  heatmap();
+  //pizzaIngredients();
+  //abcAnalysis_customer_1();
 
-  //abcAnalysis_pizza_1(date);
-  pizza_price_popularity(date);
+  //abcAnalysis_pizza_1();
+  pizza_price_popularity();
   
-  dailyOrders(date);
+  dailyOrders();
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -30,8 +29,10 @@ function updateChart(chart, option) {
 }
 
 // TODO move to generalCharts.ts
-function monthlyRevenue(date = defaultDate) {
+function monthlyRevenue() {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("Store-revenue");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   myChart.showLoading();
@@ -58,8 +59,10 @@ function monthlyRevenue(date = defaultDate) {
     });
 }
 
-function gaugeChart(date = defaultDate) {
+function gaugeChart() {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("quality");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
@@ -158,8 +161,10 @@ function gaugeChart(date = defaultDate) {
     });
 }
 
-function heatmap(date = defaultDate) {
+function heatmap() {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("Heatmap");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   var option;
@@ -212,9 +217,11 @@ function heatmap(date = defaultDate) {
 
 
 
-function pizzaSize(date = "2022-12-01") {
+function pizzaSize() {
   //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("PizzaSize");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
@@ -295,8 +302,10 @@ function pizzaSize(date = "2022-12-01") {
       updateChart(myChart, option);
     });
 }
-function abcAnalysis_customer_1(date = "2022-12-01") {
+function abcAnalysis_customer_1() {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("abcAnalysis_customer_1");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
@@ -521,8 +530,10 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
 }
 
 
-function abcAnalysis_pizza_1(date = "2022-12-01") {
+function abcAnalysis_pizza_1() {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("abcAnalysis_pizza_1");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
@@ -760,8 +771,10 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
     });
 }
 
-function pizza_price_popularity(date = "2022-12-01") {
+function pizza_price_popularity() {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("pizza_price_popularity");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
@@ -833,8 +846,9 @@ function pizza_price_popularity(date = "2022-12-01") {
 }
 
 // TODO dow (must also be modified in backend)
-function pizzaIngredients(date = defaultDate) {
+function pizzaIngredients() {
   var app = {};
+  let date = JSON.parse(localStorage.getItem("date"));
   var store = JSON.parse(localStorage.getItem("store"));
   var chartDom = document.getElementById("pizzaIngredients");
   var myChart = echarts.init(chartDom);
@@ -922,8 +936,10 @@ function pizzaIngredients(date = defaultDate) {
     })
     .catch((error) => console.error("Error fetching ingredient data:", error));
 }
-async function pizzaPopularity(date = defaultDate) {
+async function pizzaPopularity() {
   var chartDom = document.getElementById("pizzaPopularity");
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var myChart = echarts.init(chartDom, theme);
   var option;
   var store = JSON.parse(localStorage.getItem("store"));
@@ -1074,8 +1090,10 @@ function processData(data) {
   }));
 }
 
-function dailyOrders(date = "2022-12-01", dow = 3) {
+function dailyOrders(dow = 3) {
   var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   var dom = document.getElementById("dailyOrders");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 

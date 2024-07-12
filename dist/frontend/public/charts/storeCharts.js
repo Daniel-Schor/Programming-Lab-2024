@@ -1,19 +1,18 @@
 "use strict";
 // TODO use .env variables instead
-const defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 const theme = 'infographic';
-function updateCharts(date) {
-    pizzaPopularity(date);
-    gaugeChart(date);
+function updateCharts() {
+    pizzaPopularity();
+    gaugeChart();
     //statOverview(date);
-    pizzaSize(date);
-    heatmap(date);
-    //pizzaIngredients(date);
-    //abcAnalysis_customer_1(date);
-    //abcAnalysis_pizza_1(date);
-    pizza_price_popularity(date);
-    dailyOrders(date);
+    pizzaSize();
+    heatmap();
+    //pizzaIngredients();
+    //abcAnalysis_customer_1();
+    //abcAnalysis_pizza_1();
+    pizza_price_popularity();
+    dailyOrders();
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -22,8 +21,9 @@ function updateChart(chart, option) {
     }
 }
 // TODO move to generalCharts.ts
-function monthlyRevenue(date = defaultDate) {
+function monthlyRevenue() {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("Store-revenue");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     myChart.showLoading();
@@ -47,8 +47,9 @@ function monthlyRevenue(date = defaultDate) {
         updateChart(myChart, option);
     });
 }
-function gaugeChart(date = defaultDate) {
+function gaugeChart() {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("quality");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
@@ -137,8 +138,9 @@ function gaugeChart(date = defaultDate) {
         console.error("Error:", error);
     });
 }
-function heatmap(date = defaultDate) {
+function heatmap() {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("Heatmap");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     var option;
@@ -181,9 +183,10 @@ function heatmap(date = defaultDate) {
         updateChart(myChart, option);
     });
 }
-function pizzaSize(date = "2022-12-01") {
+function pizzaSize() {
     //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("PizzaSize");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     //data needed: Pizza names, Size, sales number
@@ -205,7 +208,6 @@ function pizzaSize(date = "2022-12-01") {
         var data = Object.values(pizzaData);
         var option = {
             title: {
-                text: "Pizza Sales Data",
                 subtext: `Date: ${date}`,
                 textStyle: {
                     fontSize: 14,
@@ -261,8 +263,9 @@ function pizzaSize(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
-function abcAnalysis_customer_1(date = "2022-12-01") {
+function abcAnalysis_customer_1() {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("abcAnalysis_customer_1");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
@@ -448,8 +451,9 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         console.error("Error fetching or processing data:", error);
     });
 }
-function abcAnalysis_pizza_1(date = "2022-12-01") {
+function abcAnalysis_pizza_1() {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("abcAnalysis_pizza_1");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
@@ -655,8 +659,9 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
         myChart.hideLoading();
     });
 }
-function pizza_price_popularity(date = "2022-12-01") {
+function pizza_price_popularity() {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("pizza_price_popularity");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading();
@@ -721,8 +726,9 @@ function pizza_price_popularity(date = "2022-12-01") {
     });
 }
 // TODO dow (must also be modified in backend)
-function pizzaIngredients(date = defaultDate) {
+function pizzaIngredients() {
     var app = {};
+    let date = JSON.parse(localStorage.getItem("date"));
     var store = JSON.parse(localStorage.getItem("store"));
     var chartDom = document.getElementById("pizzaIngredients");
     var myChart = echarts.init(chartDom);
@@ -802,8 +808,9 @@ function pizzaIngredients(date = defaultDate) {
     })
         .catch((error) => console.error("Error fetching ingredient data:", error));
 }
-async function pizzaPopularity(date = defaultDate) {
+async function pizzaPopularity() {
     var chartDom = document.getElementById("pizzaPopularity");
+    let date = JSON.parse(localStorage.getItem("date"));
     var myChart = echarts.init(chartDom, theme);
     var option;
     var store = JSON.parse(localStorage.getItem("store"));
@@ -943,8 +950,9 @@ function processData(data) {
         revenue: parseFloat(item.revenue) // Convert revenue to a number
     }));
 }
-function dailyOrders(date = "2022-12-01", dow = 3) {
+function dailyOrders(dow = 3) {
     var store = JSON.parse(localStorage.getItem("store"));
+    let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("dailyOrders");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
@@ -952,9 +960,6 @@ function dailyOrders(date = "2022-12-01", dow = 3) {
         .then((data) => {
         let avgValues = Object.keys(data).map(hour => data[hour].avg);
         var option = {
-            title: {
-                text: "Average Orders per Hour",
-            },
             xAxis: {
                 type: "category",
                 data: Object.keys(data),

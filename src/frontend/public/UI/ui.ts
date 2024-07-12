@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const addPassiveEventListener = (type) => {
-    document.addEventListener(type, (event) => {}, { passive: true });
+    document.addEventListener(type, (event) => { }, { passive: true });
   };
   function sideBar() {
     fetch("/api/Stores")
@@ -92,6 +92,7 @@ function subtractMonths(date, months) {
   }
   return newDate.toISOString().split("T")[0];
 }
+
 function calculatePeriod(startDate, endDate) {
   let diffTime = Math.abs(endDate - startDate);
   let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -111,8 +112,13 @@ function ytd() {
   setActiveTimeButton("Last-Year");
   let fromButton = document.getElementById('FROM');
   let periodButton = document.getElementById('PERIOD');
-  updateCharts(subtractMonths(currentDate, 12));
-  fromButton.textContent = "FROM: " + subtractMonths(currentDate, 12);
+
+  let startDate = subtractMonths(currentDate, 12);
+
+  localStorage.setItem('date', JSON.stringify(startDate));
+
+  updateCharts(startDate);
+  fromButton.textContent = "FROM: " + startDate;
   periodButton.textContent = "PERIOD: 365 days";
 }
 
@@ -120,8 +126,14 @@ function qtd() {
   setActiveTimeButton("Last-Quarter");
   let fromButton = document.getElementById('FROM');
   let periodButton = document.getElementById('PERIOD');
-  updateCharts(subtractMonths(currentDate, 3));
-  fromButton.textContent = "FROM: " + subtractMonths(currentDate, 3);
+
+  let startDate = subtractMonths(currentDate, 3);
+
+  localStorage.setItem('date', JSON.stringify(startDate));
+
+  updateCharts(startDate);
+
+  fromButton.textContent = "FROM: " + startDate;
   periodButton.textContent = "PERIOD: 90 days";
 }
 
@@ -129,10 +141,13 @@ function mtd(update = true) {
   setActiveTimeButton("Last-Month");
   let fromButton = document.getElementById('FROM');
   let periodButton = document.getElementById('PERIOD');
+
+  let startDate = subtractMonths(currentDate, 1);
+  localStorage.setItem('date', JSON.stringify(startDate));
   if (update) {
-    updateCharts(subtractMonths(currentDate, 1));
+    updateCharts(startDate);
   }
-  fromButton.textContent = "FROM: " + subtractMonths(currentDate, 1);
+  fromButton.textContent = "FROM: " + startDate;
   periodButton.textContent = "PERIOD: 30 days";
 }
 
@@ -159,7 +174,7 @@ function visibilityCoustomDate() {
 }
 
 
-      
+
 
 
 function getTotalRevenue(date, storeID) {
@@ -187,8 +202,10 @@ function getPizzasPerOrder(date, storeID) {
   return fetch(endpoint).then((response) => response.json());
 }
 
-function statOverview(date = "2022-12-01") {
+function statOverview() {
   const store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
   const storeID = store ? store.storeID : null;
   //anpassen fuer main seite 
   // Erstellen eines Arrays von Fetch-Promises
