@@ -11,10 +11,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app: express.Application = express();
-//app.use("/static", express.static(path.join(__dirname, '../../../src/frontend/public')));
-// TODO try migrating to dist and typescript in frontend
 app.use("/static", express.static(path.join(__dirname, '../../../dist/frontend/public/')));
 app.use("/style", express.static(path.join(__dirname, '../../../src/frontend/styles')));
+app.use("/img", express.static(path.join(__dirname, '../../../src/frontend/img')));
 
 
 app.use(cors({

@@ -104,7 +104,7 @@ router.get('/averageOrderValue', async (req, res) => {
         From "purchase"
         WHERE "purchaseDate" > $1`;
         if (req.query.store) {
-            console.log(req.query.store);
+            console.log("Franchise.ts: req.query.store = ", req.query.store);
             
             query += ` AND "storeID" = $2`;
             parameter.push(req.query.store);

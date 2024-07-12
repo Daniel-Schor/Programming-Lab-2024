@@ -1,0 +1,405 @@
+h1,
+h2,
+h3 {
+  margin: 1px;
+  text-align: center;
+}
+
+h1 {
+  margin: 3px;
+  margin-top: 0px;
+  margin-bottom: 6px;
+  font-size: large;
+}
+
+h2 {
+  margin: 2px;
+  font-size: medium;
+}
+
+h3 {
+  font-size: small;
+}
+
+p {
+  font-size: small;
+  color: #b3b3b3;
+  margin: 1px;
+  margin-left: 7px;
+}
+
+* {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+  color: #ffff;
+}
+
+body {
+  background-color: #1b1b1b;
+  margin: 0;
+}
+
+body::-webkit-scrollbar {
+  width: 0px;
+}
+
+.spacer {
+  height: 250px;
+}
+
+/*Sidebar -------------------*/
+.sidebar {
+  position: fixed;
+  scrollbar-width: none;
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  background-color: #252525;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar a,
+.sidebar p {
+  text-decoration: none;
+  font-size: 25px;
+  display: block;
+  transition: 0.3s;
+  margin-right: 5%;
+}
+
+.sidebar a:hover {
+  color: #b3b3b3;
+}
+
+.sidebar p:hover {
+  color: #ff7247;
+}
+
+/* Style for the city buttons */
+.city-button {
+  transition: 0.3s;
+  background: none;
+  border-width: 0px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+
+  display: block;
+  width: 100%;
+  padding: 8px;
+  /* Adjust padding inside the button */
+  margin: 2px;
+  /* Add margin to separate the button from the store list */
+  cursor: pointer;
+  /* Change cursor to pointer */
+  text-align: left;
+  /* Align button text to the left */
+  font-size: 14px;
+  /* Adjust font size */
+  white-space: nowrap;
+  box-shadow: none;
+  border-top-width: 1px;
+  border-top-color: #3a3a3a;
+  border-top-style: solid;
+}
+
+.city-button:active,
+.city-button:hover {
+  transition: 0.3s;
+  color: #b3b3b3;
+  background: none;
+  outline: none;
+}
+
+.store-list {
+  padding-left: 20px;
+  /* Add padding to the left for indentation */
+  list-style-type: none;
+  /* Remove default list style */
+}
+
+/* Style for store list items */
+.store-list li {
+  margin-bottom: 0px;
+  /* Add margin to separate store links */
+}
+
+.city-section ul {
+  margin-top: 0px;
+  margin-bottom: 14px;
+}
+
+/* Style for store links */
+.store-list li a {
+  text-decoration: none;
+  /* Remove underline from links */
+  color: #ffffff;
+  /* Link color */
+  font-size: 14px;
+
+}
+
+input {
+  background-color: #1b1b1b;
+  width: calc(100% - 6px);
+  color: #ffffff;
+  padding: 8px;
+  border: 1px solid #3a3a3a;
+  margin: 3px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.3);
+}
+
+button {
+  transition: 0.3s;
+  background-color: #ff4500;
+  z-index: 9999;
+}
+
+button:hover,
+button:active,
+button.active {
+  transition: 0.3s;
+  background-color: #ff7247;
+  cursor: pointer;
+}
+
+.openbtn {
+  position: fixed;
+  font-size: 20px;
+  padding: 10px 15px;
+  height: 56px;
+  width: 56px;
+  border: none;
+  line-height: 3px;
+  z-index: 9999;
+}
+
+.openbtn:active,
+.openbtn:hover {
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#datePicker {
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 16px;
+  position: absolute;
+  left: 50%;
+  z-index: 19999;
+}
+
+.sidebar.active {
+  width: 250px;
+}
+
+.main {
+  justify-content: space-between;
+  padding: 4px;
+  transition: 0.3s;
+  opacity: 1;
+  scrollbar-width: 0px;
+}
+
+.main.active {
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+#content {
+  margin-top: 59px;
+}
+
+/*Sidebar -------------------*/
+
+/*Topbar -------------------*/
+#topbar {
+  position: fixed;
+  width: 100%;
+  height: 56px;
+  background-color: #252525;
+  overflow: hidden;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*Topbar -------------------*/
+
+/*Button -------------------*/
+.btn,
+.infobox {
+  flex: 1;
+  height: 24px;
+  padding: 0px 6px;
+  align-items: center;
+  text-align: center;
+  border-radius: 5px;
+  border-width: 0;
+  margin: 2px;
+  font-size: 12px;
+  flex: 1;
+  justify-content: center;
+}
+
+.btnbox {
+  background-color: #1b1b1b;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  border-color: #3a3a3a;
+  border-width: 0.5px;
+  border-style: solid;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  width: 240px;
+  justify-content: space-evenly;
+  margin: 3px;
+  display: flex;
+}
+
+.infobox,
+.infobox:hover,
+.infobox:active {
+  background: #252525;
+  color: #b3b3b3;
+  font-weight: 400;
+  font-size: 8px;
+  cursor: auto;
+}
+
+/*Button -------------------*/
+
+/*Company Name -------------------*/
+#companyname,
+#user {
+  transition: 0.3s;
+  position: fixed;
+  left: 60px;
+  z-index: 9999;
+  padding: 12px 15px;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+#user {
+  left: auto;
+  right: 60px;
+  top: 0;
+  height: 56px;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+#user p,
+#user h1 {
+  left: auto;
+  right: 0px;
+  text-align: right;
+  margin: 0px;
+}
+
+#user h1 {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#user p {
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+#companyname:hover {
+  transition: 0.3s;
+  color: #b3b3b3;
+}
+
+#icon {
+  position: fixed;
+  left: auto;
+  right: 0px;
+  z-index: 9999;
+  height: 38px;
+  width: 38px;
+  justify-content: center;
+  align-items: center;
+  margin: 9px;
+  background-color: #b3b3b3;
+  border-radius: 50%;
+}
+
+/*Company Name -------------------*/
+/*charts*/
+
+
+.centered {
+  transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+}
+
+/* CSS to hide the store lists */
+.hidden {
+  display: none;
+}
+
+/* CSS to show the store lists when the 'show' class is added */
+.show {
+  display: block;
+}
+
+/* CSS to style the map tiles */
+:root {
+  --map-tiles-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .map-tiles {
+    filter: var(--map-tiles-filter, none);
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #1b1b1b; /* Dark background */
+  color: white; /* White text color */
+  border-radius: 5px; /* Optional: rounded corners */
+  padding: 10px; /* Optional: padding for content */
+}
+
+.leaflet-popup-content {
+  background-color: #1b1b1b;
+  color: white;
+}
+
+.leaflet-popup-content b {
+  color: white;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.2s;
+}
+
+.tooltip.show {
+  visibility: visible;
+  opacity: 1;
+}

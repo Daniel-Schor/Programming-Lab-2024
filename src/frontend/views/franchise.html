@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!--MAIN SEITE FÜR DIE GESAMTE FIRMA !-->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/style/main.css" />
+  <link rel="stylesheet" type="text/css" href="/style/container.css" />
+  <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <script src="/static/echarts/echarts.js"></script>
+  <script src="/static/charts/charts.js" type="text/javascript"></script>
+  <script src="/static/charts/generalChart.js" type="module"></script>
+
+  <script src="/static/UI/ui.js" type="module"></script>
+
+  <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
+  <script type="text/javascript" src="/static/UI/ui.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="../img/PizzaHub_icon.ico">
+  <title>PizzaHub Dashboard</title>
+</head>
+
+<body>
+  <button class="openbtn" onclick="toggleSidebar()">☰</button>
+  <a id="companyname" href="/">@ PizzaHub</a>
+  <div id="user">
+    <h1>Sebastian Bremm</h1>
+    <p>Programming Lab Professor</p>
+  </div>
+  <img id="icon" src="/img/icon.png">
+  <div id="topbar" onclick="toggleSidebar(true)">
+    <div class="btnbox">
+      <button class="btn" id="Last-Month" onclick="mtd();">MTD</button>
+      <button class="btn" id="Last-Quarter" onclick="qtd();">QTD</button>
+      <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
+      <button class="btn" id="customDate" onclick="visibilityCoustomDate()">PTD</button>
+      <input type="date" id="datePicker" style="display: none;">
+      <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
+    </div>
+    <div class="btnbox">
+      <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
+      <button class="infobox">TO: 31-12-2022</button>
+      <button class="infobox" id="PERIOD">PERIOD: XXDAYS</button>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <!-- Store links will be dynamically added here -->
+
+  </div>
+  <div id="main" class="main" onclick="toggleSidebar(true)">
+    <div id="content">
+      <!-- Put content here -->
+      <!-- TODO insert real data -->
+      <!-- TODO modify icon -->
+      <!--Stats section-->
+      <div class="section-items">
+        <div class="section">
+          <h1>Stats</h1>
+          <div class="section-items">
+            <!--PizzaHub-->
+            <div class="subsection">
+              <h1 data-tooltip="This section shows the general data of the PizzaHub Franchise">PizzaHub</h1>
+              <!-- <div id="statsOverview" class="diagram"></div> -->
+              <div class="section-items">
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-shopping-bag"></i>
+                  </div>
+                  <h2>Orders<h2>
+                      <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-dollar-sign"></i>
+                  </div>
+                  <h2>Revenue</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-users"></i>
+                  </div>
+                  <h2>Customers</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Pizzas sold</h2>
+                  <p>1234</p>
+                </div>
+              </div>
+            </div>
+            <!--Customers-->
+            <div class="subsection">
+              <h1>Average Customer</h1>
+              <div class="section-items">
+                <div class="statBox">
+                  <div id="stat-item"></div>
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Orders</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Order Value</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Pizzas per Order</h2>
+                  <p>1234</p>
+                </div>
+                <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Order frequency</h2>
+                  <p>1234</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End of Stats section-->
+      <!--Revenue section-->
+      <div class="section-items">
+        <div class="section">
+          <div class="section-items">
+            <div class="btnbox">
+              <button class="btn" id="bestButton" style="z-index: 99;" onclick="bestButton();">STABLE</button>
+              <button class="btn" id="worstButton" style="z-index: 99;" onclick="worstButton();">UNSTABLE</button>
+              <button class="btn" id="customButton" style="z-index: 99;" onclick="customButton();">CUSTOM</button>
+            </div>
+            <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
+                'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
+              id="revenueTitle" style="margin-top: 4px;">Revenue</h1>
+          </div>
+          <div class="section-items">
+            <div class="subsection">
+              <h2>Revenue over time</h2>
+              <div id="revenue" class="diagram"></div>
+            </div>
+            <div class="subsection">
+              <h2>Total revenue</h2>
+              <div id="revenueBar" class="diagram" style="height: 100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End of Revenue section-->
+      <!--Bottom section-->
+      <div class="section-items">
+        <div class="subsection">
+          <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
+          <div id="pizzaPopularity" class="diagram"></div>
+        </div>
+        <div class="pizzaRankingChart"></div>
+
+        <div class="section-items" style="width: 50%;">
+          <div class="subsection">
+            <h2>Revenue Forecast</h2>
+            <div id="revenueForecast" class="diagram"></div>
+          </div>
+          <div class="subsection">
+            <!--<h2 data-tooltip="This is the a Map showing all Stores" id="mapTitel">Store locations</h2>-->
+            <!--<h2 id="mapTitel">Store locations</h2>-->
+            <h2>Store locations</h2>
+            <div id="map" class="diagram"></div>
+          </div>
+        </div>
+      </div>
+      <!--End of Bottom section-->
+      <!-- END OF CONTENT-->
+    </div>
+
+
+    <script>
+
+
+      if (firstClick) {
+        mtd(false);
+        setActiveButton("bestButton");
+        bestButton();
+      }
+
+      function toggleSidebar(turnOff = false) {
+        if (turnOff) {
+          document.getElementById("sidebar").classList.remove("active");
+          document.getElementById("main").classList.remove("active");
+        } else {
+          document.getElementById("sidebar").classList.toggle("active");
+          document.getElementById("main").classList.toggle("active");
+        }
+      }
+      const headings = document.querySelectorAll('h2[data-tooltip]');
+
+      headings.forEach(heading => {
+        heading.addEventListener('mouseenter', showTooltip);
+        heading.addEventListener('mouseleave', hideTooltip);
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const headings = document.querySelectorAll('h2[data-tooltip]');
+
+        headings.forEach(heading => {
+          heading.addEventListener('mouseenter', showTooltip);
+          heading.addEventListener('mouseleave', hideTooltip);
+        });
+
+        function showTooltip(event) {
+          const tooltipText = event.target.getAttribute('data-tooltip');
+          let tooltip = document.createElement('div');
+          tooltip.className = 'tooltip';
+          tooltip.innerText = tooltipText;
+          document.body.appendChild(tooltip);
+
+          const rect = event.target.getBoundingClientRect();
+          tooltip.style.left = `${rect.left + window.scrollX}px`;
+          tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
+
+          // Show the tooltip
+          tooltip.classList.add('show');
+
+          event.target._tooltip = tooltip;
+        }
+
+        function hideTooltip(event) {
+          const tooltip = event.target._tooltip;
+          if (tooltip) {
+            tooltip.classList.remove('show');
+            tooltip.addEventListener('transitionend', () => {
+              tooltip.remove();
+            });
+            event.target._tooltip = null;
+          }
+        }
+      });
+
+    </script>
+    <script>
+      const map = L.map('map', { attributionControl: false }).setView([39, -120], 4);
+      /*function storeLocationMap() {
+        // Add OpenStreetMap tile layer
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: '',
+        }).addTo(map);
+
+        // Function to add markers to the map
+
+        // Fetch the data and add markers
+        fetch("/api/storeLocations")
+          .then((response) => response.json())
+          .then((stores) => {
+            //console.log(stores); // Log the data for debugging
+            addMarkers(stores); // Add markers to the map
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      }*/
+
+      storeLocationMap();
+      let markersLayer = L.layerGroup().addTo(map);
+
+      //statOverview();
+
+      pizzaPopularity();
+      revenueForecast();
+    </script>
+</body>
+
+</html>

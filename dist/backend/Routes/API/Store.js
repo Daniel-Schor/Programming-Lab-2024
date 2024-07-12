@@ -188,7 +188,7 @@ router.get('/quality', async (req, res) => {
  * Query Options:
  * <ul>
  *     <li>date: cutOfDate (default 2022-12-01)</li>
- *     <li>dow: day of week (0=Monday, 6=Saturday, 7=Sunday) (default 1)</li>
+ *     <li>dow: day of week (1=Monday, 6=Saturday, 0=Sunday) (default 1)</li>
  *     <li>store: storeID of the specified store (default S302800)</li>
  * </ul>
  * ----
@@ -311,6 +311,7 @@ router.get('/ingredientUsage', async (req, res) => {
         // Extract storeID and date from query parameters
         const storeID = req.query.storeID;
         const date = req.query.date;
+        let dayOfWeek = req.query.dow || 5;
         // Validate the presence of storeID and date
         if (!storeID || !date) {
             return res.status(400).send('storeID and date parameters are required');
@@ -332,6 +333,7 @@ router.get('/ingredientUsage', async (req, res) => {
                 WHERE
                     purchase."storeID" = $1
                     AND purchase."purchaseDate" > $2
+                    AND EXTRACT(DOW FROM "purchaseDate" AT TIME ZONE $3) = $4
             )
             SELECT
                 ingredient,
@@ -344,7 +346,8 @@ router.get('/ingredientUsage', async (req, res) => {
                 ingredient;
         `;
         // Parameters for the query
-        const parameters = [storeID, date];
+        const parameters = [storeID, date, process.env.DB_TIMEZONE, dayOfWeek];
+        console.log(parameters);
         // Execute the query
         const result = await client.query(query, parameters);
         // Send the result as JSON

@@ -1,59 +1,87 @@
-function sideBar() {
-  var stores = [];
-  fetch("/api/Stores")
-    .then((response) => response.json())
-    .then((data) => {
-      // Group stores by city
-      var groupedStores = data.reduce((acc, store) => {
-        if (!acc[store.city]) {
-          acc[store.city] = [];
+document.addEventListener("DOMContentLoaded", function () {
+  const addPassiveEventListener = (type) => {
+    document.addEventListener(type, (event) => { }, { passive: true });
+  };
+  function sideBar() {
+    fetch("/api/Stores")
+      .then((response) => response.json())
+      .then((data) => {
+        // Group stores by city
+        var groupedStores = data.reduce((acc, store) => {
+          if (!acc[store.city]) {
+            acc[store.city] = [];
+          }
+          acc[store.city].push(store);
+          return acc;
+        }, {});
+        return groupedStores;
+      })
+      .then((groupedStores) => {
+        var sidebar = document.querySelector("#sidebar");
+
+        // Clear existing sidebar content
+        sidebar.innerHTML = "";
+
+        // Loop through each city in groupedStores
+        for (var city in groupedStores) {
+          if (groupedStores.hasOwnProperty(city)) {
+            // Create a button for the city
+            var cityDiv = document.createElement("div");
+            cityDiv.classList.add("city-section");
+            if (groupedStores[city].length === 1) {
+              var cityLink = document.createElement("button");
+              let storeID = groupedStores[city][0].storeID;
+              cityLink.textContent = city + " - " + storeID;
+              cityLink.classList.add("city-button");
+              cityLink.onclick = function () {
+                window.location.href = `/store`;
+                localStorage.setItem('store', JSON.stringify({ "storeID": storeID }));
+              };
+              cityDiv.appendChild(cityLink);
+            } else {
+              var cityButton = document.createElement("button");
+              cityButton.textContent = city;
+              cityButton.classList.add("city-button");
+              cityButton.onclick = function () {
+                this.nextElementSibling.classList.toggle("show");
+              };
+              cityDiv.appendChild(cityButton);
+            }
+            // Create a list for the stores in the city
+            var cityUl = document.createElement("ul");
+            cityUl.classList.add("store-list", "hidden");
+
+            groupedStores[city].forEach(function (store) {
+              var storeLi = document.createElement("li");
+              var a = document.createElement("a");
+              a.href = `/store`;
+              localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
+              a.textContent = store.storeID;
+              storeLi.appendChild(a);
+              cityUl.appendChild(storeLi);
+            });
+
+            cityDiv.appendChild(cityUl);
+            sidebar.appendChild(cityDiv);
+
+          }
         }
-        acc[store.city].push(store);
-        return acc;
-      }, {});
-      return groupedStores;
-    })
-    .then((groupedStores) => {
-      var ul = document.querySelector("header nav ul");
-      
-      // Loop through each city in groupedStores
-      for (var city in groupedStores) {
-        if (groupedStores.hasOwnProperty(city)) {
-          
-          var cityLi = document.createElement("li");
-          var cityButton = document.createElement("button");
-          cityButton.textContent = city;
-          cityButton.classList.add("city-button");
-          cityButton.onclick = function() {
-            this.nextElementSibling.classList.toggle("show");
-          };
-          cityLi.appendChild(cityButton);
-          ul.appendChild(cityLi);
-
-          
-          var cityUl = document.createElement("ul");
-          cityUl.classList.add("store-list");
-
-          
-          groupedStores[city].forEach(function (store) {
-            
-            var storeLi = document.createElement("li");
-            var a = document.createElement("a");
-            a.href = `/individualStore?store=${store.storeID}`;
-            localStorage.setItem(
-              "store",
-              JSON.stringify({ storeID: store.storeID })
-            );
-            a.textContent = store.storeID;
-            storeLi.appendChild(a);
-            cityUl.appendChild(storeLi);
-          });
-
-          cityLi.appendChild(cityUl);
-        }
-      }
-    });
-}
+        let testdiv = document.createElement("h1");
+        //testdiv.textContent = "End of content";
+        testdiv.classList.add("spacer");
+        sidebar.appendChild(testdiv);
+      })
+      .catch((error) => {
+        console.error("Error fetching stores:", error);
+      });
+  }
+  addPassiveEventListener('wheel');
+  addPassiveEventListener('mousewheel');
+  addPassiveEventListener('touchstart');
+  addPassiveEventListener('touchmove');
+  // Call the sideBar function to populate the sidebar
+  sideBar();
+});
 
 function subtractMonths(date, months) {
   let newDate = new Date(date);
@@ -65,8 +93,13 @@ function subtractMonths(date, months) {
   return newDate.toISOString().split("T")[0];
 }
 
+function calculatePeriod(startDate, endDate) {
+  let diffTime = Math.abs(endDate - startDate);
+  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
+
 function backButton() {
-  
   document
     .getElementById("redirectButton")
     .addEventListener("click", function () {
@@ -75,36 +108,74 @@ function backButton() {
     });
 }
 
+function ytd() {
+  setActiveTimeButton("Last-Year");
+  let fromButton = document.getElementById('FROM');
+  let periodButton = document.getElementById('PERIOD');
 
+  let startDate = subtractMonths(currentDate, 12);
 
-function timeButtons() {
-  document.getElementById("YTD").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 12));
+  localStorage.setItem('date', JSON.stringify(startDate));
+
+  updateCharts(startDate);
+  fromButton.textContent = "FROM: " + startDate;
+  periodButton.textContent = "PERIOD: 365 days";
+}
+
+function qtd() {
+  setActiveTimeButton("Last-Quarter");
+  let fromButton = document.getElementById('FROM');
+  let periodButton = document.getElementById('PERIOD');
+
+  let startDate = subtractMonths(currentDate, 3);
+
+  localStorage.setItem('date', JSON.stringify(startDate));
+
+  updateCharts(startDate);
+
+  fromButton.textContent = "FROM: " + startDate;
+  periodButton.textContent = "PERIOD: 90 days";
+}
+
+function mtd(update = true) {
+  setActiveTimeButton("Last-Month");
+  let fromButton = document.getElementById('FROM');
+  let periodButton = document.getElementById('PERIOD');
+
+  let startDate = subtractMonths(currentDate, 1);
+  localStorage.setItem('date', JSON.stringify(startDate));
+  if (update) {
+    updateCharts(startDate);
+  }
+  fromButton.textContent = "FROM: " + startDate;
+  periodButton.textContent = "PERIOD: 30 days";
+}
+
+function visibilityCoustomDate() {
+  const customDateButton = document.getElementById('customDate');
+  const datePicker = document.getElementById('datePicker');
+  let isDatePickerInitialized = false;
+
+  customDateButton.addEventListener('click', function () {
+    if (!isDatePickerInitialized) {
+      datePicker.value = '2022-12-01'; // Set the initial date only once
+      isDatePickerInitialized = true;
+    }
+    datePicker.style.display = 'block';
+    datePicker.style.color = 'black'; // Ensure the text color is black
+    datePicker.focus();
   });
-  document
-    .getElementById("QTD")
-    .addEventListener("click", function () {
-      updateCharts(subtractMonths(currentDate, 3));
-    });
-  document.getElementById("MTD").addEventListener("click", function () {
-    updateCharts(subtractMonths(currentDate, 1));
+
+  datePicker.addEventListener('change', function () {
+    const date = datePicker.value;
+    updateCharts(date);
+    datePicker.style.display = 'none'; // Hide the date picker after date is chosen
   });
 }
 
-function customDate() {
-  document.getElementById("customDate").addEventListener("click", function () {
-    document.getElementById("customDateForm").style.display = "block";
-  });
 
-  document
-    .getElementById("dateForm")
-    .addEventListener("submit", function (event) {
-      console.log("submit");
-      event.preventDefault();
-      let date = document.getElementById("startDate").value;
-      updateCharts(date);
-    });
-}
+
+
 
 function getTotalRevenue(date, storeID) {
   const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
@@ -131,12 +202,12 @@ function getPizzasPerOrder(date, storeID) {
   return fetch(endpoint).then((response) => response.json());
 }
 
-let initialData = null;
-
-function statOverview(date = "2022-12-01") {
+function statOverview() {
   const store = JSON.parse(localStorage.getItem("store"));
-  const storeID = store ? store.storeID : null;
+  let date = JSON.parse(localStorage.getItem("date"));
 
+  const storeID = store ? store.storeID : null;
+  //anpassen fuer main seite 
   // Erstellen eines Arrays von Fetch-Promises
   const fetchPromises = [
     getTotalRevenue(date, storeID),
@@ -145,7 +216,6 @@ function statOverview(date = "2022-12-01") {
     getAverageOrderValue(date, storeID),
     getPizzasPerOrder(date, storeID),
   ];
-
   // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
   return Promise.all(fetchPromises)
     .then((dataArray) => {
@@ -157,65 +227,16 @@ function statOverview(date = "2022-12-01") {
         averageOrderValueData,
         pizzasPerOrderData,
       ] = dataArray;
-      const currentData = {
-        totalRevenue: Math.round(totalRevenueData[0].total_revenue),
-        totalPizzas: Math.round(totalPizzasData[0].total_pizza),
-        totalOrders: Math.round(totalOrdersData[0].total_orders),
-        averageOrderValue: Math.round(averageOrderValueData[0].average_order_value),
-        pizzasPerOrder: parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2),
-      };
+      var order = Math.round(totalRevenueData[0].total_revenue);
+      var order_1 = Math.round(totalPizzasData[0].total_pizza);
+      var order_2 = Math.round(totalOrdersData[0].total_orders);
+      var order_3 = Math.round(averageOrderValueData[0].average_order_value);
+      var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
+      document.getElementById("sSales").innerHTML = order_1;
+      document.getElementById("sRevenue").innerHTML = order;
+      document.getElementById("sCustomers").innerHTML = order;
+      document.getElementById("oValue").innerHTML = order_3;
 
-      const initialHTML = initialData ? `
-        <h3>Previous Data</h3>
-        <div class="stat-item">
-          <h3>Revenue</h3>
-          <p>${initialData.totalRevenue}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Pizzas</h3>
-          <p>${initialData.totalPizzas}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Orders</h3>
-          <p>${initialData.totalOrders}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Average Order Value</h3>
-          <p>${initialData.averageOrderValue}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Average Pizzas per Order</h3>
-          <p>${initialData.pizzasPerOrder}</p>
-        </div>
-      ` : '';
-
-      document.getElementById("statsOverview").innerHTML = `
-        ${initialHTML}
-        <h3>Current Data</h3>
-        <div class="stat-item">
-          <h3>Revenue</h3>
-          <p>${currentData.totalRevenue}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Pizzas</h3>
-          <p>${currentData.totalPizzas}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Orders</h3>
-          <p>${currentData.totalOrders}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Average Order Value</h3>
-          <p>${currentData.averageOrderValue}</p>
-        </div>
-        <div class="stat-item">
-          <h3>Average Pizzas per Order</h3>
-          <p>${currentData.pizzasPerOrder}</p>
-        </div>
-      `;
-
-      // Store the current data as initial data for the next comparison
-      initialData = currentData;
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -223,7 +244,10 @@ function statOverview(date = "2022-12-01") {
     });
 }
 
-// Initialisierung beim Laden der Seite
-document.addEventListener('DOMContentLoaded', (event) => {
-  statOverview();
-});
+function setActiveTimeButton(buttonId) {
+  document.getElementById("Last-Year").classList.remove("active");
+  document.getElementById("Last-Quarter").classList.remove("active");
+  document.getElementById("Last-Month").classList.remove("active");
+  document.getElementById("customDate").classList.remove("active");
+  document.getElementById(buttonId).classList.add("active");
+}
