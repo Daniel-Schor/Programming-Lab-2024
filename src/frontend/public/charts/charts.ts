@@ -379,6 +379,64 @@ function addMarkers(stores) {
   });
 }
 
+function revenueForecast() {
+  let dow = JSON.parse(localStorage.getItem("dow"));
+  var store = JSON.parse(localStorage.getItem("store"));
+  let date = JSON.parse(localStorage.getItem("date"));
+
+  var dom = document.getElementById("revenueForecast");
+  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+
+  myChart.showLoading();
+
+  fetch(`/api/yearly-revenue-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
+    .then((response) => response.json())
+    .then((data) => {
+      let avgValues = Object.keys(data).map(hour => data[hour].avg);
+      var option = {
+        grid: {
+          top: '11%',
+          bottom: '7%',
+          left: '6%',
+          right: '6%'
+        },
+        xAxis: {
+          type: "category",
+          data: Object.keys(data),
+          /*name: "Hour",*/
+        },
+        tooltip: {
+          trigger: "axis",
+          formatter: function (params) {
+            let index = params[0].dataIndex;
+            let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
+            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
+          },
+        },
+        yAxis: {
+          type: "value",
+          name: "Average Revenue",
+        },
+        series: [
+          {
+            data: avgValues,
+            type: "line",
+            smooth: true,
+            /*name: "Timeline",*/
+            symbolSize: 0
+          },
+        ],
+      };
+
+      myChart.hideLoading();
+      myChart.setOption(option);
+    })
+    .catch((error) => {
+      console.error("Error fetching revenue forecast data:", error);
+    });
+}
+
+
 function storeLocationMap() {
   // Add OpenStreetMap tile layer
   try {

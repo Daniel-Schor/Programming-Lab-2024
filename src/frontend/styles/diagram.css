@@ -21,7 +21,7 @@
   border-top-right-radius: 4px;
 }
 
-
+#revenueForecast,
 #revenue {
   width: auto;
   display: flex;
