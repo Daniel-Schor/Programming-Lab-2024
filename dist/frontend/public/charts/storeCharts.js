@@ -720,6 +720,7 @@ function pizza_price_popularity(date = "2022-12-01") {
         updateChart(myChart, option);
     });
 }
+// TODO dow (must also be modified in backend)
 function pizzaIngredients(date = defaultDate) {
     var app = {};
     var store = JSON.parse(localStorage.getItem("store"));
