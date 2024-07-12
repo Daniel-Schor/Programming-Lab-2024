@@ -21,17 +21,16 @@
   width: 100%;
 }
 
-/*
-.section, .pseudoSection {
-  flex: 1; 
-}
-
 .pseudoSection {
-  padding: 0;
-  border: none;
+  padding: 0px;
+  border-width: 0px;
+  margin: 0px;
   box-shadow: none;
 }
-*/
+
+.pseudoSubSection {
+  padding: 3px;
+}
 
 .subsection {
   display: flex;

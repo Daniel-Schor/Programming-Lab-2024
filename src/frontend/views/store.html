@@ -17,7 +17,8 @@
 
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
 
-  <title>Document</title>
+  <link rel="icon" type="image/x-icon" href="../img/PizzaHub_icon.ico">
+  <title>PizzaHub Store Dashboard</title>
 </head>
 
 <body>
@@ -111,41 +112,49 @@
       <!--Revenue section-->
       <div class="section-items">
         <!--section a-->
-        <div class="section">
-          <h1>Pizza</h1>
+
+        <div class="pseudoSection">
           <div class="section-items">
-            <div class="subsection">
-              <h2>Sales in sizes</h2>
-              <div id="PizzaSize" class="diagram"></div>
-            </div>
-            <div class="subsection">
-              <h2>ABC - Analysis</h2>
-              <div id="abcAnalysis_pizza_2" class="diagram"></div>
-            </div>
-          </div>
-          <div class="section-items">
-            <div class="subsection">
-              <h2>Relationship between price and popularity of pizzas</h2>
-              <div id="pizza_price_popularity" class="diagram"></div>
-            </div>
-          </div>
-          <div class="section-items">
-            <div class="subsection">
-              <h2>Heatmap</h2>
-              <div id="Heatmap" class="diagram"></div>
-            </div>
-          </div>
-          <div class="section-items">
-            <div class="subsection">
-              <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
-              <div id="pizzaPopularity" class="diagram"></div>
+
+            <div class="section">
+              <h1>Pizza</h1>
+              <div class="section-items">
+                <div class="subsection">
+                  <h2>Sales in sizes</h2>
+                  <div id="PizzaSize" class="diagram"></div>
+                </div>
+                <div class="subsection">
+                  <h2>ABC - Analysis</h2>
+                  <div id="abcAnalysis_pizza_2" class="diagram"></div>
+                </div>
+              </div>
+              <div class="section-items">
+                <div class="subsection">
+                  <h2>Relationship between price and popularity of pizzas</h2>
+                  <div id="pizza_price_popularity" class="diagram"></div>
+                </div>
+              </div>
+              <div class="section-items">
+                <div class="subsection">
+                  <h2>Heatmap</h2>
+                  <div id="Heatmap" class="diagram"></div>
+                </div>
+              </div>
+              <div class="section-items">
+                <div class="subsection">
+                  <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity
+                  </h2>
+                  <div id="pizzaPopularity" class="diagram"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <!--End of Pizza section-->
         <!--Forecast section-->
         <div class="pseudoSection">
-          <div class="section-items">
+          <div class="pseudoSubSection" style="padding-bottom: 0px;"">
+            <div class=" section-items">
             <div class="subsection" style="
               margin-top: 0px;
               margin-left: 0px;
@@ -198,6 +207,8 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="pseudoSubSection" style="padding-top: 0px;">
           <div class="section-items">
             <div class="subsection" style="
             margin-bottom: 0px;
@@ -218,29 +229,44 @@
             </div>
           </div>
         </div>
-        <!--End of section b-->
-        <!--End of Revenue section-->
-        <!-- END OF CONTENT-->
+        <div class="section-items">
+          <div class="section">
+            <h1>Attribution</h1>
+            <div class="section-items">
+              <h3>Daniel</h3>
+              <h3>Peter</h3>
+            </div>
+            <h3>Yannis</h3>
+            <div class="section-items">
+              <h3>Fatima </h3>
+              <h3>Tristan</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End of section b-->
+      <!--End of Revenue section-->
+      <!-- END OF CONTENT-->
 
-        <script>
-          const d = new Date();
-          let dow = d.getDay();
-          localStorage.setItem('dow', JSON.stringify(dow));
-          document.getElementById('storeName').textContent = JSON.parse(localStorage.getItem("store")).storeID;
+      <script>
+        const d = new Date();
+        let dow = d.getDay();
+        localStorage.setItem('dow', JSON.stringify(dow));
+        document.getElementById('storeName').textContent = JSON.parse(localStorage.getItem("store")).storeID;
 
-          mtd();
+        mtd();
 
 
-          function toggleSidebar(turnOff = false) {
-            if (turnOff) {
-              document.getElementById("sidebar").classList.remove("active");
-              document.getElementById("main").classList.remove("active");
-            } else {
-              document.getElementById("sidebar").classList.toggle("active");
-              document.getElementById("main").classList.toggle("active");
-            }
+        function toggleSidebar(turnOff = false) {
+          if (turnOff) {
+            document.getElementById("sidebar").classList.remove("active");
+            document.getElementById("main").classList.remove("active");
+          } else {
+            document.getElementById("sidebar").classList.toggle("active");
+            document.getElementById("main").classList.toggle("active");
           }
-        </script>
+        }
+      </script>
 </body>
 
 </html>
