@@ -14,7 +14,6 @@ function updateCharts(date) {
     pizzaSize();
     heatmap();
     pizza_price_popularity();
-    dailyOrders();
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -1012,7 +1011,6 @@ function changeDow(index = 1) {
 }
 function dailyOrders() {
     let dow = JSON.parse(localStorage.getItem("dow"));
-    console.log(dow);
     var store = JSON.parse(localStorage.getItem("store"));
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("dailyOrders");
@@ -1023,9 +1021,14 @@ function dailyOrders() {
         .then((data) => {
         let avgValues = Object.keys(data).map(hour => data[hour].avg);
         var option = {
+            grid: { top: '11%',
+                bottom: '7%',
+                left: '6%',
+                right: '6%' },
             xAxis: {
                 type: "category",
                 data: Object.keys(data),
+                name: "Hour",
             },
             tooltip: {
                 trigger: "axis",
@@ -1034,12 +1037,6 @@ function dailyOrders() {
                     let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
                     return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
                 },
-            },
-            legend: {
-                data: ["Average Orders"],
-            },
-            toolbox: {
-                feature: { saveAsImage: {} },
             },
             yAxis: {
                 type: "value",
@@ -1051,7 +1048,6 @@ function dailyOrders() {
                     type: "line",
                     smooth: true,
                     name: "Average Orders",
-                    // TODO check best size
                     symbolSize: 0
                 },
             ],
