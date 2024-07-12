@@ -9,13 +9,16 @@ const theme = 'infographic';
 function updateCharts() {
   pizzaPopularity();
   gaugeChart();
-  //statOverview(date);
+  abcAnalysis_pizza_2();
+  abcAnalysis_customer_2();
+  pizza_price_popularity();
+  dailyOrders();
+  pizzaIngredients();
+
   pizzaSize();
   heatmap();
-  //pizzaIngredients();
-  //abcAnalysis_customer_1();
 
-  //abcAnalysis_pizza_1();
+
   pizza_price_popularity();
   
   dailyOrders();

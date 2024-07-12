@@ -1,5 +1,4 @@
 declare const theme = "#ccc";
-declare let defaultDate: string;
 declare const currentDate = "2022-12-31";
 declare let best: boolean;
 declare let custom: boolean;
@@ -11,8 +10,8 @@ declare function randomColor(): string;
 declare function bestButton(colors?: {}): void;
 declare function worstButton(colors?: {}): void;
 declare function customButton(update?: boolean): Promise<void>;
-declare function revenueChart(best?: boolean, storeColors?: {}, date?: string): Promise<unknown>;
-declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean, date?: string): Promise<unknown>;
+declare function revenueChart(best?: boolean, storeColors?: {}): Promise<unknown>;
+declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean): Promise<unknown>;
 declare function addMarkers(stores: any): void;
 declare function storeLocationMap(): void;
 declare function setActiveButton(buttonId: any): void;

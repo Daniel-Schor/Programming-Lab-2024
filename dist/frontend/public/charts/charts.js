@@ -7,7 +7,6 @@ dotenv.config();
 */
 // TODO use .env variables instead
 const theme = '#ccc';
-let defaultDate = "2022-12-01";
 const currentDate = "2022-12-31";
 let best = false;
 let custom = false;
@@ -31,7 +30,7 @@ function randomColor() {
 }
 function updateCharts(date) {
     // TODO wrong parameter 
-    defaultDate = date;
+    localStorage.setItem('date', JSON.stringify(date));
     if (firstClick || best) {
         bestButton(curColors);
     }
@@ -57,9 +56,9 @@ function bestButton(colors = {}) {
     best = true;
     custom = false;
     firstClick = false;
-    revenueChart(best, colors, date || defaultDate).then(colors => {
+    revenueChart(best, colors).then(colors => {
         curColors = colors;
-        revenueBarChart(curColors, false, date || defaultDate);
+        revenueBarChart(curColors, false);
     });
     setActiveButton("bestButton");
     storeLocationMap();
@@ -72,9 +71,9 @@ function worstButton(colors = {}) {
     best = false;
     custom = false;
     firstClick = false;
-    revenueChart(best, colors, date || defaultDate).then(colors => {
+    revenueChart(best, colors).then(colors => {
         curColors = colors;
-        revenueBarChart(curColors, false, date || defaultDate);
+        revenueBarChart(curColors, false);
     });
     setActiveButton("worstButton");
     storeLocationMap();
@@ -84,7 +83,6 @@ async function customButton(update = false) {
     if (custom && !date) {
         return;
     }
-    defaultDate = date || defaultDate;
     best = false;
     custom = true;
     firstClick = false;
@@ -94,9 +92,9 @@ async function customButton(update = false) {
             let colors = curColors || {};
             if (update) {
                 storeLocationMap();
-                await revenueChart(best, colors, date || defaultDate);
+                await revenueChart(best, colors);
             }
-            colors = await revenueBarChart(curColors, custom, date || defaultDate);
+            colors = await revenueBarChart(curColors, custom);
             curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
             if (Object.keys(curColors).length === 0) {
                 bestButton();
@@ -104,7 +102,7 @@ async function customButton(update = false) {
             }
             if (!update) {
                 storeLocationMap();
-                await revenueChart(best, curColors, date || defaultDate);
+                await revenueChart(best, curColors);
             }
         }
         catch (error) {
@@ -114,7 +112,8 @@ async function customButton(update = false) {
     }
 }
 // TODO move to generalCharts.ts
-function revenueChart(best = true, storeColors = {}, date = defaultDate) {
+function revenueChart(best = true, storeColors = {}) {
+    let date = JSON.parse(localStorage.getItem("date"));
     return new Promise((resolve, reject) => {
         var days = [];
         let lineInfos = [];
@@ -198,7 +197,8 @@ function revenueChart(best = true, storeColors = {}, date = defaultDate) {
         });
     });
 }
-function revenueBarChart(storeIDsColors = {}, custom = false, date = defaultDate) {
+function revenueBarChart(storeIDsColors = {}, custom = false) {
+    let date = JSON.parse(localStorage.getItem("date"));
     return new Promise((resolve, reject) => {
         var chartDom = document.getElementById('revenueBar');
         var myChart = echarts.init(chartDom, theme);
