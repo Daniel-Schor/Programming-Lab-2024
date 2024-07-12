@@ -117,6 +117,11 @@ function revenueChart(best = true, storeColors = {}) {
     return new Promise((resolve, reject) => {
         var days = [];
         let lineInfos = [];
+        var dom = document.getElementById("revenue");
+        var myChart = echarts.init(dom, theme, {
+            renderer: "canvas",
+            useDirtyRect: false,
+        });
         let req = `/api/revenue?reverse=true&best=${best}&date=${date}`;
         if (Object.keys(storeColors).length != 0) {
             req += "&store=" + Object.keys(storeColors).join(",");
@@ -124,6 +129,7 @@ function revenueChart(best = true, storeColors = {}) {
         else {
             req += "&limit=5";
         }
+        myChart.showLoading();
         fetch(req)
             .then((response) => response.json())
             .then((data) => {
@@ -149,11 +155,6 @@ function revenueChart(best = true, storeColors = {}) {
                     data: Object.values(data[storeID]),
                     smooth: true
                 });
-            });
-            var dom = document.getElementById("revenue");
-            var myChart = echarts.init(dom, theme, {
-                renderer: "canvas",
-                useDirtyRect: false,
             });
             var option = {
                 tooltip: {
@@ -189,6 +190,7 @@ function revenueChart(best = true, storeColors = {}) {
                 localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
             });
             window.addEventListener("resize", myChart.resize);
+            myChart.hideLoading();
             resolve(storeColors);
         })
             .catch((error) => {
@@ -204,6 +206,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
         var myChart = echarts.init(chartDom, theme);
         // Standard bar color
         const standardColor = '#ff4500';
+        myChart.showLoading();
         let req = `/api/total-store-revenue?date=${date}`;
         fetch(req)
             .then((response) => response.json())
@@ -287,6 +290,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     resolve(storeIDsColors);
                 });
             }
+            myChart.hideLoading();
         })
             .catch((error) => {
             console.error("Error fetching data:", error);
@@ -357,6 +361,7 @@ async function pizzaPopularity() {
     var chartDom = document.getElementById("pizzaPopularity");
     var myChart = echarts.init(chartDom, theme);
     let date = JSON.parse(localStorage.getItem("date"));
+    myChart.showLoading();
     var option;
     try {
         const response = await fetch(`/api/pizzaPopularity?date=${date}`);
@@ -452,6 +457,7 @@ async function pizzaPopularity() {
             },
             series: seriesList
         };
+        myChart.hideLoading();
         option && myChart.setOption(option);
     }
     catch (error) {

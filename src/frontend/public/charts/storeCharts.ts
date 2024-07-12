@@ -6,7 +6,9 @@ const theme = 'infographic';
 
 
 
-function updateCharts() {
+function updateCharts(date: string) {
+  localStorage.setItem('date', JSON.stringify(date));
+
   pizzaPopularity();
   gaugeChart();
   abcAnalysis_pizza_2();
@@ -20,7 +22,7 @@ function updateCharts() {
 
 
   pizza_price_popularity();
-  
+
   dailyOrders();
 }
 // TODO move to generalCharts.ts
@@ -38,7 +40,9 @@ function monthlyRevenue() {
 
   var dom = document.getElementById("Store-revenue");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+
   myChart.showLoading();
+
   fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -70,6 +74,8 @@ function gaugeChart() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
+  
+  myChart.showLoading();
 
   fetch(`/api/quality?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -156,7 +162,7 @@ function gaugeChart() {
           detail: { width: 50, height: 14, fontSize: 14, color: "inherit", borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
         }],
       };
-
+      myChart.hideLoading();
       updateChart(myChart, option);
     })
     .catch((error) => {
@@ -172,6 +178,8 @@ function heatmap() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
   var option;
   let newData: any[] = [];
+
+  myChart.showLoading();
 
   fetch(`/api/pizzaPairs?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -210,10 +218,8 @@ function heatmap() {
           emphasis: { itemStyle: { shadowBlur: 10, shadowColor: "rgba(0, 0, 0, 0.5)" } },
         }],
       };
-
+      myChart.hideLoading();
       updateChart(myChart, option);
-
-
     });
 
 }
@@ -227,6 +233,8 @@ function pizzaSize() {
 
   var dom = document.getElementById("PizzaSize");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+
+  myChart.showLoading();
 
   //data needed: Pizza names, Size, sales number
   fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
@@ -302,6 +310,7 @@ function pizzaSize() {
           ],
         },
       };
+      myChart.hideLoading();
       updateChart(myChart, option);
     });
 }
@@ -522,7 +531,8 @@ function abcAnalysis_customer_2(date = "2022-12-01") {
         customerID = filteredData.customerID;
         totalSales = filteredData.totalSales;
         abcCategories = filteredData.abcCategories;
-
+        
+        myChart.hideLoading();
         updateChart();
       });
     })
@@ -763,10 +773,6 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
 
       myChart.hideLoading();
       myChart.setOption(option);
-
-
-      myChart.hideLoading();
-      myChart.setOption(option);
     })
     .catch((error) => {
       console.error("Error fetching or processing data:", error);
@@ -857,6 +863,8 @@ function pizzaIngredients() {
   var myChart = echarts.init(chartDom);
   var option;
 
+  myChart.showLoading();
+
   fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -935,6 +943,7 @@ function pizzaIngredients() {
         series: seriesData,
       };
 
+      myChart.hideLoading();
       myChart.setOption(option);
     })
     .catch((error) => console.error("Error fetching ingredient data:", error));
@@ -948,6 +957,8 @@ async function pizzaPopularity() {
   var store = JSON.parse(localStorage.getItem("store"));
 
   try {
+    myChart.showLoading();
+
     const response = await fetch(`/api/pizzaPopularity?date=${date}&storeID=${store.storeID}`);
     const data = await response.json();
 
@@ -1047,6 +1058,7 @@ async function pizzaPopularity() {
       series: seriesList
     };
 
+    myChart.hideLoading();
     option && myChart.setOption(option);
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -1100,6 +1112,8 @@ function dailyOrders(dow = 3) {
   var dom = document.getElementById("dailyOrders");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
+  myChart.showLoading();
+
   fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -1139,6 +1153,7 @@ function dailyOrders(dow = 3) {
         ],
       };
 
+      myChart.hideLoading();
       myChart.setOption(option);
     })
     .catch((error) => {
@@ -1152,7 +1167,9 @@ function pizzaIngredients(date = "2022-12-01") {
   var chartDom = document.getElementById("pizzaIngredients");
   var myChart = echarts.init(chartDom);
   var option;
-  
+
+  myChart.showLoading();
+
   fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
@@ -1235,7 +1252,7 @@ function pizzaIngredients(date = "2022-12-01") {
           }
         ]
       };
-
+      myChart.hideLoading();
       myChart.setOption(option);
     })
     .catch((error) => console.error("Error fetching ingredient data:", error));

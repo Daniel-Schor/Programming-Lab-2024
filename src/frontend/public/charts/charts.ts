@@ -15,7 +15,7 @@ let curColors = false;
 let firstClick = true;
 
 // TODO move to Helper dir
-let colorsToExclude = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9'];
+let colorsToExclude = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9'];
 let excludedColors = new Set();
 
 function randomColor() {
@@ -35,7 +35,7 @@ function randomColor() {
 }
 
 
-function updateCharts(date) {
+function updateCharts(date: string) {
   // TODO wrong parameter 
   localStorage.setItem('date', JSON.stringify(date));
   if (firstClick || best) {
@@ -136,6 +136,11 @@ function revenueChart(best = true, storeColors = {}) {
   return new Promise((resolve, reject) => {
     var days = [];
     let lineInfos = [];
+    var dom = document.getElementById("revenue");
+    var myChart = echarts.init(dom, theme, {
+      renderer: "canvas",
+      useDirtyRect: false,
+    });
 
     let req = `/api/revenue?reverse=true&best=${best}&date=${date}`;
     if (Object.keys(storeColors).length != 0) {
@@ -143,6 +148,8 @@ function revenueChart(best = true, storeColors = {}) {
     } else {
       req += "&limit=5";
     }
+
+    myChart.showLoading();
 
     fetch(req)
       .then((response) => response.json())
@@ -174,11 +181,6 @@ function revenueChart(best = true, storeColors = {}) {
             });
         });
 
-        var dom = document.getElementById("revenue");
-        var myChart = echarts.init(dom, theme, {
-          renderer: "canvas",
-          useDirtyRect: false,
-        });
         var option = {
           tooltip: {
             trigger: "axis",
@@ -218,6 +220,8 @@ function revenueChart(best = true, storeColors = {}) {
 
         window.addEventListener("resize", myChart.resize);
 
+        myChart.hideLoading();
+
         resolve(storeColors);
       })
 
@@ -237,6 +241,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
     // Standard bar color
     const standardColor = '#ff4500';
 
+    myChart.showLoading();
     let req = `/api/total-store-revenue?date=${date}`;
     fetch(req)
       .then((response) => response.json())
@@ -322,6 +327,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
             resolve(storeIDsColors);
           });
         }
+        myChart.hideLoading();
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -400,6 +406,8 @@ async function pizzaPopularity() {
   var chartDom = document.getElementById("pizzaPopularity");
   var myChart = echarts.init(chartDom, theme);
   let date = JSON.parse(localStorage.getItem("date"));
+
+  myChart.showLoading();
 
   var option;
 
@@ -502,7 +510,8 @@ async function pizzaPopularity() {
       },
       series: seriesList
     };
-
+        
+    myChart.hideLoading();
     option && myChart.setOption(option);
   } catch (error) {
     console.error('Error fetching data:', error);
