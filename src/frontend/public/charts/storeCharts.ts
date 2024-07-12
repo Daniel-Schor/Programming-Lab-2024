@@ -1171,10 +1171,12 @@ function dailyOrders() {
     .then((data) => {
       let avgValues = Object.keys(data).map(hour => data[hour].avg);
       var option = {
-        grid: {top: '11%', 
-          bottom: '7%', 
-          left: '6%', 
-          right: '6%'},
+        grid: {
+          top: '11%',
+          bottom: '7%',
+          left: '6%',
+          right: '6%'
+        },
         xAxis: {
           type: "category",
           data: Object.keys(data),
@@ -1257,10 +1259,10 @@ function pizzaIngredients(date = "2022-12-01") {
           },
         },
         grid: {
-          top: "10%", // Adjust the top margin
-          bottom: "10%", // Adjust the bottom margin
-          left: "10%", // Adjust the left margin
-          right: "10%", // Adjust the right margin
+          top: '4%',
+          bottom: '7%',
+          left: '4%',
+          right: '1%'
         },
         toolbox: {
           show: true,
