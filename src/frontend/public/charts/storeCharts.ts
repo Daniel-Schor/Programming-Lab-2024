@@ -232,69 +232,6 @@ function pizzaSize(date = "2022-12-01") {
         name: pizza.Size,
         value: parseInt(pizza.size_count),
       });
-<<<<<<< HEAD
-=======
-
-      var data = Object.values(pizzaData);
-
-      var option = {
-       /* title: {
-          text: "Pizza Sales Data",
-          subtext: `Date: ${date}`,
-          textStyle: {
-            fontSize: 14,
-            align: "center",
-          },*/
-
-          subtextStyle: {
-            align: "center",
-          },
-        },
-        tooltip: { position: "top" },
-        series: {
-          type: "sunburst",
-          data: data,
-          radius: [0, "95%"],
-          sort: undefined,
-          emphasis: {
-            focus: "ancestor",
-          },
-          levels: [
-            {},
-            {
-              r0: "15%",
-              r: "35%",
-              itemStyle: {
-                borderWidth: 2,
-              },
-              label: {
-                rotate: "tangential",
-              },
-            },
-            {
-              r0: "35%",
-              r: "70%",
-              label: {
-                align: "right",
-              },
-            },
-            {
-              r0: "70%",
-              r: "72%",
-              label: {
-                position: "outside",
-                padding: 3,
-                silent: false,
-              },
-              itemStyle: {
-                borderWidth: 3,
-              },
-            },
-          ],
-        },
-      };
-      updateChart(myChart, option);
->>>>>>> 81cf8dcff4c11e1b6cf95f397f362f77d211e87f
     });
 
     var data = Object.values(pizzaData);
