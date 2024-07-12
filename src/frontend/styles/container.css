@@ -1,7 +1,8 @@
 .section,
 .box,
 .statBox,
-.subsection {
+.subsection,
+.pseudoSection {
   position: relative;
   justify-content: space-between;
   padding: 8px;
@@ -14,9 +15,23 @@
   white-space: nowrap;
 }
 
-.subsection, .section {
+.subsection,
+.section,
+.pseudoSection {
   width: 100%;
 }
+
+/*
+.section, .pseudoSection {
+  flex: 1; 
+}
+
+.pseudoSection {
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+*/
 
 .subsection {
   display: flex;

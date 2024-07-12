@@ -42,7 +42,7 @@
       <button class="btn" id="Last-Year" onclick="ytd();">YTD</button>
       <button class="btn" id="customDate" onclick="visibilityCoustomDate()">PTD</button>
       <input type="date" id="datePicker" style="display: none;">
-      <input type="date" id="startDate" name="startDate" value="2022-12-01"style="display: none;" required>
+      <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
     </div>
     <div class="btnbox">
       <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
@@ -150,13 +150,15 @@
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
-              id="revenueTitle">Revenue</h1>
+              id="revenueTitle" style="margin-top: 4px;">Revenue</h1>
           </div>
           <div class="section-items">
             <div class="subsection">
+              <h2>Revenue over time</h2>
               <div id="revenue" class="diagram"></div>
             </div>
             <div class="subsection">
+              <h2>Total revenue</h2>
               <div id="revenueBar" class="diagram" style="height: 100%"></div>
             </div>
           </div>
@@ -190,7 +192,7 @@
 
 
     <script>
-      
+
 
       if (firstClick) {
         mtd(false);
@@ -207,49 +209,49 @@
           document.getElementById("main").classList.toggle("active");
         }
       }
-    const headings = document.querySelectorAll('h2[data-tooltip]');
+      const headings = document.querySelectorAll('h2[data-tooltip]');
 
-    headings.forEach(heading => {
-    heading.addEventListener('mouseenter', showTooltip);
-    heading.addEventListener('mouseleave', hideTooltip);
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-    const headings = document.querySelectorAll('h2[data-tooltip]');
-
-    headings.forEach(heading => {
+      headings.forEach(heading => {
         heading.addEventListener('mouseenter', showTooltip);
         heading.addEventListener('mouseleave', hideTooltip);
-    });
+      });
 
-    function showTooltip(event) {
-        const tooltipText = event.target.getAttribute('data-tooltip');
-        let tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.innerText = tooltipText;
-        document.body.appendChild(tooltip);
+      document.addEventListener('DOMContentLoaded', function () {
+        const headings = document.querySelectorAll('h2[data-tooltip]');
 
-        const rect = event.target.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + window.scrollX}px`;
-        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
+        headings.forEach(heading => {
+          heading.addEventListener('mouseenter', showTooltip);
+          heading.addEventListener('mouseleave', hideTooltip);
+        });
 
-        // Show the tooltip
-        tooltip.classList.add('show');
+        function showTooltip(event) {
+          const tooltipText = event.target.getAttribute('data-tooltip');
+          let tooltip = document.createElement('div');
+          tooltip.className = 'tooltip';
+          tooltip.innerText = tooltipText;
+          document.body.appendChild(tooltip);
 
-        event.target._tooltip = tooltip;
-    }
+          const rect = event.target.getBoundingClientRect();
+          tooltip.style.left = `${rect.left + window.scrollX}px`;
+          tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
 
-    function hideTooltip(event) {
-        const tooltip = event.target._tooltip;
-        if (tooltip) {
+          // Show the tooltip
+          tooltip.classList.add('show');
+
+          event.target._tooltip = tooltip;
+        }
+
+        function hideTooltip(event) {
+          const tooltip = event.target._tooltip;
+          if (tooltip) {
             tooltip.classList.remove('show');
             tooltip.addEventListener('transitionend', () => {
-                tooltip.remove();
+              tooltip.remove();
             });
             event.target._tooltip = null;
+          }
         }
-    }
-});
+      });
 
     </script>
     <script>
