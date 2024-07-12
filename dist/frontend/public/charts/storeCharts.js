@@ -13,6 +13,7 @@ function updateCharts(date) {
     //abcAnalysis_customer_1(date);
     //abcAnalysis_pizza_1(date);
     pizza_price_popularity(date);
+    dailyOrders(date);
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -941,11 +942,11 @@ function processData(data) {
         revenue: parseFloat(item.revenue) // Convert revenue to a number
     }));
 }
-function dailyOrders(date = "2022-12-01", dow = 1) {
+function dailyOrders(date = "2022-12-01", dow = 3) {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("dailyOrders");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&storeID=${store.storeID}`)
+    fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
         let avgValues = Object.keys(data).map(hour => data[hour].avg);
@@ -981,6 +982,8 @@ function dailyOrders(date = "2022-12-01", dow = 1) {
                     type: "line",
                     smooth: true,
                     name: "Average Orders",
+                    // TODO check best size
+                    symbolSize: 0
                 },
             ],
         };

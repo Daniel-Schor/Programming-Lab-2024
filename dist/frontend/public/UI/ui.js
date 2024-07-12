@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         cityLink.textContent = city + " - " + storeID;
                         cityLink.classList.add("city-button");
                         cityLink.onclick = function () {
-                            window.location.href = `/store?store=${storeID}`;
+                            window.location.href = `/store`;
+                            localStorage.setItem('store', JSON.stringify({ "storeID": storeID }));
                         };
                         cityDiv.appendChild(cityLink);
                     }
@@ -52,7 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     groupedStores[city].forEach(function (store) {
                         var storeLi = document.createElement("li");
                         var a = document.createElement("a");
-                        a.href = `/store?store=${store.storeID}`;
+                        a.href = `/store`;
+                        localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
                         a.textContent = store.storeID;
                         storeLi.appendChild(a);
                         cityUl.appendChild(storeLi);

@@ -15,9 +15,11 @@ function updateCharts(date) {
   heatmap(date);
   //pizzaIngredients(date);
   //abcAnalysis_customer_1(date);
-  
+
   //abcAnalysis_pizza_1(date);
   pizza_price_popularity(date);
+  
+  dailyOrders(date);
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -188,7 +190,7 @@ function heatmap(date = defaultDate) {
 
       option = {
         tooltip: { position: "top" },
-        grid: { height: "50%", top: "10%", bottom: "10%", right: "5%", left: "5%"},
+        grid: { height: "50%", top: "10%", bottom: "10%", right: "5%", left: "5%" },
         xAxis: { type: "category", data: pizzas, splitArea: { show: true } },
         yAxis: { type: "category", data: pizzas, splitArea: { show: true } },
         visualMap: { min: min, max: max, calculable: true, orient: "horizontal", left: "center", bottom: "15%" },
@@ -218,81 +220,81 @@ function pizzaSize(date = "2022-12-01") {
 
   //data needed: Pizza names, Size, sales number
   fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
-  .then((response) => response.json())
-  .then((querieResult) => {
-    var pizzaData = {};
-    querieResult.forEach((pizza) => {
-      // Remove "Pizza" from the pizza name
-      var pizzaName = pizza.Name.replace(/ Pizza$/, "");
+    .then((response) => response.json())
+    .then((querieResult) => {
+      var pizzaData = {};
+      querieResult.forEach((pizza) => {
+        // Remove "Pizza" from the pizza name
+        var pizzaName = pizza.Name.replace(/ Pizza$/, "");
 
-      if (!pizzaData[pizzaName]) {
-        pizzaData[pizzaName] = { name: pizzaName, children: [] };
-      }
-      pizzaData[pizzaName].children.push({
-        name: pizza.Size,
-        value: parseInt(pizza.size_count),
+        if (!pizzaData[pizzaName]) {
+          pizzaData[pizzaName] = { name: pizzaName, children: [] };
+        }
+        pizzaData[pizzaName].children.push({
+          name: pizza.Size,
+          value: parseInt(pizza.size_count),
+        });
       });
+
+      var data = Object.values(pizzaData);
+
+      var option = {
+        title: {
+          text: "Pizza Sales Data",
+          subtext: `Date: ${date}`,
+          textStyle: {
+            fontSize: 14,
+            align: "center",
+          },
+          subtextStyle: {
+            align: "center",
+          },
+        },
+        tooltip: { position: "top" },
+        series: {
+          type: "sunburst",
+          data: data,
+          radius: [0, "95%"],
+          sort: undefined,
+          emphasis: {
+            focus: "ancestor",
+          },
+          levels: [
+            {},
+            {
+              r0: "15%",
+              r: "35%",
+              itemStyle: {
+                borderWidth: 2,
+              },
+              label: {
+                rotate: "tangential",
+              },
+            },
+            {
+              r0: "35%",
+              r: "70%",
+              label: {
+                align: "right",
+              },
+            },
+            {
+              r0: "70%",
+              r: "72%",
+              label: {
+                position: "outside",
+                padding: 3,
+                silent: false,
+              },
+              itemStyle: {
+                borderWidth: 3,
+              },
+            },
+          ],
+        },
+      };
+      updateChart(myChart, option);
     });
-
-    var data = Object.values(pizzaData);
-
-    var option = {
-      title: {
-        text: "Pizza Sales Data",
-        subtext: `Date: ${date}`,
-        textStyle: {
-          fontSize: 14,
-          align: "center",
-        },
-        subtextStyle: {
-          align: "center",
-        },
-      },
-      tooltip: { position: "top" },
-      series: {
-        type: "sunburst",
-        data: data,
-        radius: [0, "95%"],
-        sort: undefined,
-        emphasis: {
-          focus: "ancestor",
-        },
-        levels: [
-          {},
-          {
-            r0: "15%",
-            r: "35%",
-            itemStyle: {
-              borderWidth: 2,
-            },
-            label: {
-              rotate: "tangential",
-            },
-          },
-          {
-            r0: "35%",
-            r: "70%",
-            label: {
-              align: "right",
-            },
-          },
-          {
-            r0: "70%",
-            r: "72%",
-            label: {
-              position: "outside",
-              padding: 3,
-              silent: false,
-            },
-            itemStyle: {
-              borderWidth: 3,
-            },
-          },
-        ],
-      },
-    };
-    updateChart(myChart, option);
-  });
 }
 function abcAnalysis_customer_1(date = "2022-12-01") {
   var store = JSON.parse(localStorage.getItem("store"));
@@ -1072,12 +1074,12 @@ function processData(data) {
   }));
 }
 
-function dailyOrders(date = "2022-12-01", dow = 1) {
+function dailyOrders(date = "2022-12-01", dow = 3) {
   var store = JSON.parse(localStorage.getItem("store"));
   var dom = document.getElementById("dailyOrders");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
-  fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&storeID=${store.storeID}`)
+  fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
       let avgValues = Object.keys(data).map(hour => data[hour].avg);
@@ -1113,6 +1115,8 @@ function dailyOrders(date = "2022-12-01", dow = 1) {
             type: "line",
             smooth: true,
             name: "Average Orders",
+            // TODO check best size
+            symbolSize: 0
           },
         ],
       };
@@ -1130,7 +1134,7 @@ function pizzaIngredients(date = "2022-12-01") {
   var chartDom = document.getElementById("pizzaIngredients");
   var myChart = echarts.init(chartDom);
   var option;
-
+  
   fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {

@@ -183,7 +183,7 @@ function revenueChart(best = true, storeColors = {}, date = defaultDate) {
             }
             updateChart(myChart, option);
             myChart.on('click', (params) => {
-                window.location.href = `/store?storeID=${params.seriesName}`;
+                window.location.href = `/store`;
                 localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName })); // Store the store variable
             });
             window.addEventListener("resize", myChart.resize);
@@ -251,7 +251,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false, date = defaultDate
             if (!custom) {
                 myChart.off('click');
                 myChart.on('click', (params) => {
-                    window.location.href = `/store?storeID=${params.name}`;
+                    window.location.href = `/store`;
                     localStorage.setItem('store', JSON.stringify({ "storeID": params.name })); // Store the store variable
                 });
             }
@@ -324,7 +324,7 @@ function addMarkers(stores) {
         });*/
         // Redirect on click
         marker.on("click", () => {
-            window.location.href = `/store?storeID=${store.storeID}`;
+            window.location.href = `/store`;
             localStorage.setItem("store", JSON.stringify(store)); // Store the store variable
         });
     });

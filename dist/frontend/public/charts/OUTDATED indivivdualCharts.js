@@ -743,4 +743,4 @@ function pizzaIngredients(date = "2022-12-01") {
     })
         .catch((error) => console.error("Error fetching ingredient data:", error));
 }
-//# sourceMappingURL=indivivdualCharts.js.map
+//# sourceMappingURL=OUTDATED%20indivivdualCharts.js.map

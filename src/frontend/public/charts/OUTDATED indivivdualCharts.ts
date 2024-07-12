@@ -677,6 +677,7 @@ function pizza_price_popularity(date = "2022-12-01") {
 
 function dailyOrders(date = "2022-12-01", dow = 1) {
   var store = JSON.parse(localStorage.getItem("store"));
+  console.log("Store: ", store);
   var dom = document.getElementById("dailyOrders");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
