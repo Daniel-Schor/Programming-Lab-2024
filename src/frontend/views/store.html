@@ -160,12 +160,12 @@
           localStorage.setItem('store', JSON.stringify({ "storeID": params.seriesName }));
           TODO implement function to change dow
                   -->
-                  <button class="btn" id="">BACK</button>
-                  <button class="btn" id="">NEXT</button>
+                  <button class="btn" id="" onclick="changeDow(-1);">BACK</button>
+                  <button class="btn" id="" onclick="changeDow(1);">NEXT</button>
                 </div>
                 <div class="btnbox" style="width: 60px;">
                   <!--TODO options TODAY, TOMORROW, MONDAY, TUESDAY, etc.-->
-                  <button class="infobox">TODAY</button>
+                  <button class="infobox" id="dowInfo">TODAY</button>
                 </div>
                 <h1 class="centered">Forecast</h1>
               </div>
@@ -236,7 +236,12 @@
         <!-- END OF CONTENT-->
 
         <script>
+          const d = new Date();
+          let dow = d.getDay();
+          localStorage.setItem('dow', JSON.stringify(dow));
+
           mtd();
+
 
           function toggleSidebar(turnOff = false) {
             if (turnOff) {

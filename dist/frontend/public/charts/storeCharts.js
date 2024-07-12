@@ -961,7 +961,58 @@ function processData(data) {
         revenue: parseFloat(item.revenue) // Convert revenue to a number
     }));
 }
-function dailyOrders(dow = 3) {
+function changeDow(index = 1) {
+    let dow = JSON.parse(localStorage.getItem("dow"));
+    dow += index;
+    if (dow > 6) {
+        dow = 0;
+    }
+    else if (dow < 0) {
+        dow = 6;
+    }
+    localStorage.setItem('dow', JSON.stringify(dow));
+    let dayText = "";
+    let today = new Date().getDay();
+    switch (dow) {
+        case today:
+            dayText = "TODAY";
+            break;
+        case today + 1:
+            dayText = "TOMORROW";
+            break;
+        case 0:
+            dayText = "SUNDAY";
+            break;
+        case 1:
+            dayText = "MONDAY";
+            break;
+        case 2:
+            dayText = "TUESDAY";
+            break;
+        case 3:
+            dayText = "WEDNESDAY";
+            break;
+        case 4:
+            dayText = "THURSDAY";
+            break;
+        case 5:
+            dayText = "FRIDAY";
+            break;
+        case 6:
+            dayText = "SATURDAY";
+            break;
+        default:
+            dayText = "DEFAULT";
+            break;
+    }
+    document.getElementById('dowInfo').textContent = dayText;
+    dailyOrders();
+    pizzaIngredients();
+    // TODO stats
+}
+function dailyOrders() {
+    let dow = JSON.parse(localStorage.getItem("dow"));
+    console.log(dow);
     var store = JSON.parse(localStorage.getItem("store"));
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("dailyOrders");

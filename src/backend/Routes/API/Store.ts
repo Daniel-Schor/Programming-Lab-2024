@@ -220,7 +220,7 @@ router.get('/quality', async (req, res) => {
  * Query Options:
  * <ul>
  *     <li>date: cutOfDate (default 2022-12-01)</li>
- *     <li>dow: day of week (0=Monday, 6=Saturday, 7=Sunday) (default 1)</li>
+ *     <li>dow: day of week (1=Monday, 6=Saturday, 0=Sunday) (default 1)</li>
  *     <li>store: storeID of the specified store (default S302800)</li>
  * </ul>
  * ----
