@@ -157,7 +157,7 @@ function gaugeChart() {
           axisLabel: { show: false, distance: 50 },
           data: gaugeData,
           title: { fontSize: 0 },
-          detail: { width: 50, height: 14, fontSize: 14, color: "inherit", borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
+          detail: { width: 50, height: 14, fontSize: 14, color: "inherit", fontFamily: 'Source Sans Pro', borderColor: "inherit", borderRadius: 20, borderWidth: 1, formatter: "{value}" }
         }],
       };
       myChart.hideLoading();
@@ -852,100 +852,6 @@ function pizza_price_popularity() {
     });
 }
 
-// TODO dow (must also be modified in backend)
-function pizzaIngredients() {
-  var app = {};
-  let date = JSON.parse(localStorage.getItem("date"));
-  var store = JSON.parse(localStorage.getItem("store"));
-  var chartDom = document.getElementById("pizzaIngredients");
-  var myChart = echarts.init(chartDom);
-  var option;
-
-  myChart.showLoading();
-
-  fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
-    .then((response) => response.json())
-    .then((data) => {
-
-
-      // Parse the fetched data to create series data
-      const ingredients = {};
-      let minQuantity = Number.MAX_VALUE;
-      let maxQuantity = Number.MIN_VALUE;
-
-      data.forEach((item) => {
-        const ingredient = item.ingredient.trim();
-        const averageQuantity = parseFloat(item.average_quantity);
-
-        // Update min and max values
-        if (averageQuantity < minQuantity) minQuantity = averageQuantity;
-        if (averageQuantity > maxQuantity) maxQuantity = averageQuantity;
-
-        if (!ingredients[ingredient]) {
-          ingredients[ingredient] = 0;
-        }
-        ingredients[ingredient] += averageQuantity;
-      });
-
-      // Normalize the values
-      const normalize = (value) => (value - minQuantity) / (maxQuantity - minQuantity) * 100;
-
-      const xAxisData = Object.keys(ingredients);
-      const seriesData = xAxisData.map(ingredient => ({
-        name: ingredient,
-        type: 'bar',
-        emphasis: { focus: 'series' },
-        data: [normalize(ingredients[ingredient]).toFixed(2)] // Normalize and round to 2 decimal places
-      }));
-
-      option = {
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow",
-          },
-        },
-        legend: {
-          data: xAxisData,
-          selected: xAxisData.reduce((acc, ingredient) => {
-            acc[ingredient] = false; // Start with all series deselected
-            return acc;
-          }, {}),
-          bottom: 10, // Position the legend at the bottom
-          left: 'center', // Center the legend
-        },
-        grid: {
-          top: '10%', // Adjust the top margin
-          bottom: '20%', // Adjust the bottom margin for legend
-          left: '10%', // Adjust the left margin
-          right: '10%', // Adjust the right margin
-        },
-        xAxis: [
-          {
-            type: "category",
-            axisTick: { show: false },
-            data: ["Ingredients"],
-          },
-        ],
-        yAxis: [
-          {
-            type: "value",
-            min: 0, // Ensure the Y-axis starts at 0
-            max: 100, // Normalized max value
-            interval: 10, // Set a suitable interval for the values
-            axisLabel: {
-              formatter: '{value}', // Add a unit if necessary, e.g., '{value} units'
-            }
-          },
-        ],
-        series: seriesData,
-      };
-
-      myChart.hideLoading();
-      myChart.setOption(option);
-    })
-    .catch((error) => console.error("Error fetching ingredient data:", error));
-}
 async function pizzaPopularity() {
   var chartDom = document.getElementById("pizzaPopularity");
   let date = JSON.parse(localStorage.getItem("date"));
@@ -1213,16 +1119,18 @@ function dailyOrders() {
     });
 }
 
-function pizzaIngredients(date = "2022-12-01") {
-  var app = {};
+function pizzaIngredients() {
+  let date = JSON.parse(localStorage.getItem("date"));
   var store = JSON.parse(localStorage.getItem("store"));
+  var dow = JSON.parse(localStorage.getItem("dow"));
   var chartDom = document.getElementById("pizzaIngredients");
   var myChart = echarts.init(chartDom);
   var option;
 
   myChart.showLoading();
 
-  fetch(`/api/ingredientUsage?date=${date}&storeID=${store.storeID}`)
+  let request = `/api/ingredientUsage?date=${date}&storeID=${store.storeID}&dow=${dow}`;
+  fetch(request)
     .then((response) => response.json())
     .then((data) => {
       // Parse the fetched data to create series data
@@ -1245,62 +1153,88 @@ function pizzaIngredients(date = "2022-12-01") {
       });
 
       // Normalize the values
-      const normalize = (value) =>
-        ((value - minQuantity) / (maxQuantity - minQuantity)) * 100;
+      //const normalize = (value) =>
+      //  ((value - minQuantity) / (maxQuantity - minQuantity)) * 100;
 
       const xAxisData = Object.keys(ingredients);
-      const seriesData = xAxisData.map(ingredient => normalize(ingredients[ingredient]).toFixed(2));
+      const seriesData = xAxisData.map(ingredient => ingredients[ingredient].toFixed(2));
 
       option = {
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow",
-          },
-        },
         grid: {
           top: '4%',
-          bottom: '7%',
+          bottom: '9%',
           left: '4%',
           right: '1%'
-        },
-        toolbox: {
-          show: true,
-          orient: "vertical",
-          left: "right",
-          top: "center",
-          feature: {
-            mark: { show: true },
-            dataView: { show: false, readOnly: false },
-            magicType: { show: false, type: ["line", "bar", "stack"] },
-            restore: { show: false },
-            saveAsImage: { show: false },
-          },
         },
         xAxis: [
           {
             type: "category",
             axisTick: { show: false },
             data: xAxisData, // Directly set all ingredients on the X-axis
+            axisLabel: { show: false }, // Hide X-axis tick labels
+            name: 'Ingredients', // Set the name of the axis
+            nameLocation: 'middle', // Position the name in the middle
+            nameTextStyle: {
+              fontSize: 'small',
+              fontWeight: '600',
+              fontFamily: 'Source Sans Pro',
+              color: 'white'
+            },
+            nameGap: 7
           },
         ],
         yAxis: [
           {
             type: "value",
-            min: 0, // Ensure the Y-axis starts at 0
-            max: 100, // Normalized max value
-            interval: 10, // Set a suitable interval for the values
+            min: Math.floor(minQuantity), // Ensure the Y-axis starts at 0
+            max: Math.ceil(maxQuantity), // Normalized max value
+            interval: 0.25,
             axisLabel: {
-              formatter: "{value}", // Add a unit if necessary, e.g., '{value} units'
+              formatter: function (value) {
+                if (value === Math.floor(minQuantity) || value === Math.ceil(maxQuantity)) {
+                  return value; // Display only the min and max values
+                }
+                return ''; // Hide other values
+              },
+              color: 'white', // Ensure the labels are white to match the rest of your chart's styling
+              fontSize: 'small',
+              fontFamily: 'Source Sans Pro'
             },
+            name: 'Used in pizzas', // Set the name of the Y-axis
+            nameLocation: 'middle', // Position the name in the middle
+            nameTextStyle: {
+              fontSize: 'small',
+              fontWeight: '600',
+              color: 'white',
+              fontFamily: 'Source Sans Pro',
+              rotate: 90 // Rotate the Y-axis name
+            },
+            nameGap: 7 // Adjust the distance between the axis name and the axis line
           },
         ],
+
         series: [
           {
             name: 'Ingredients',
             type: 'bar',
-            data: seriesData, // Set the normalized data for each ingredient
+            data: seriesData, // Set the data for each ingredient
             emphasis: { focus: 'series' },
+            label: {
+              show: true,
+              rotate: 90,
+              align: 'left',
+              verticalAlign: 'middle',
+              position: 'insideBottom',
+              distance: 10,
+              formatter: function (params) {
+                const ingredientName = xAxisData[params.dataIndex];
+                const ingredientValue = params.data;
+                return `${ingredientName}:  ${ingredientValue}`; // Display the ingredient name and value
+              },
+              fontSize: 'small',
+              fontFamily: 'Source Sans Pro',
+              color: 'white'
+            },
           }
         ]
       };

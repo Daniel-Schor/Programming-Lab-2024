@@ -361,6 +361,7 @@ router.get('/ingredientUsage', async (req, res) => {
         // Extract storeID and date from query parameters
         const storeID = req.query.storeID;
         const date = req.query.date;
+        let dayOfWeek: string = req.query.dow || 5;
 
         // Validate the presence of storeID and date
         if (!storeID || !date) {
@@ -384,6 +385,7 @@ router.get('/ingredientUsage', async (req, res) => {
                 WHERE
                     purchase."storeID" = $1
                     AND purchase."purchaseDate" > $2
+                    AND EXTRACT(DOW FROM "purchaseDate" AT TIME ZONE $3) = $4
             )
             SELECT
                 ingredient,
@@ -397,8 +399,8 @@ router.get('/ingredientUsage', async (req, res) => {
         `;
 
         // Parameters for the query
-        const parameters = [storeID, date];
-
+        const parameters = [storeID, date, process.env.DB_TIMEZONE, dayOfWeek];
+        console.log(parameters);
         // Execute the query
         const result = await client.query(query, parameters);
 
