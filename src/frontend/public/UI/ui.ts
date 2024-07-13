@@ -152,6 +152,7 @@ function mtd(update = true) {
 }
 
 function visibilityCoustomDate() {
+  setActiveTimeButton("customDate");
   const customDateButton = document.getElementById('customDate');
   const datePicker = document.getElementById('datePicker');
   let isDatePickerInitialized = false;
@@ -249,5 +250,6 @@ function setActiveTimeButton(buttonId) {
   document.getElementById("Last-Quarter").classList.remove("active");
   document.getElementById("Last-Month").classList.remove("active");
   document.getElementById("customDate").classList.remove("active");
+  
   document.getElementById(buttonId).classList.add("active");
 }

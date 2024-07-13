@@ -133,6 +133,7 @@ function mtd(update = true) {
     periodButton.textContent = "PERIOD: 30 days";
 }
 function visibilityCoustomDate() {
+    setActiveTimeButton("customDate");
     const customDateButton = document.getElementById('customDate');
     const datePicker = document.getElementById('datePicker');
     let isDatePickerInitialized = false;
