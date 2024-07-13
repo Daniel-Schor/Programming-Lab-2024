@@ -403,3 +403,25 @@ button.active {
   visibility: visible;
   opacity: 1;
 }
+
+/* Style for the date picker */
+#datePicker {
+  position: fixed;
+  top: 44px;
+  left: 37%;
+  background-color: #1b1b1b;
+  box-shadow: 3px 10px 10px rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+}
+
+/* Additional styles to ensure the calendar picker inherits these styles */
+#datePicker::-webkit-inner-spin-button,
+#datePicker::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* For other browsers (e.g., Firefox) */
+input[type="date"] {
+  background-color: #1b1b1b;
+  color: white;
+}

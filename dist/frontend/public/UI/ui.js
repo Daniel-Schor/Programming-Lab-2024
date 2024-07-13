@@ -147,7 +147,6 @@ function visibilityCoustomDate() {
     datePicker.value = JSON.parse(localStorage.getItem("date"));
     // Display and style date picker
     datePicker.style.display = 'block';
-    datePicker.style.color = 'black';
     datePicker.focus();
     function acceptInput() {
         let pickedDate = new Date(datePicker.value);

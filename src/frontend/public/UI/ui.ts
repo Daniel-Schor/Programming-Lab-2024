@@ -171,7 +171,6 @@ function visibilityCoustomDate() {
 
   // Display and style date picker
   datePicker.style.display = 'block';
-  datePicker.style.color = 'black';
   datePicker.focus();
 
   function acceptInput() {
