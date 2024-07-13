@@ -17,107 +17,6 @@ router.get('/storeLocations', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-// TODO move to General.ts
-router.get('/totalRevenue', async (req, res) => {
-    try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
-        let query = `Select SUM(total) AS total_revenue
-        From "purchase"
-        WHERE "purchaseDate" > $1`;
-        if (req.query.store) {
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        let result = await client.query(query, parameter);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-// TODO move to General.ts
-router.get('/totalPizzas', async (req, res) => {
-    try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
-        let query = `Select SUM("nItems") AS total_pizza
-        From "purchase"
-        WHERE "purchaseDate" > $1`;
-        if (req.query.store) {
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        let result = await client.query(query, parameter);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-// TODO move to General.ts
-router.get('/totalOrders', async (req, res) => {
-    try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
-        let query = `Select COUNT("purchaseID") AS total_orders
-        From "purchase"
-        WHERE "purchaseDate" > $1`;
-        if (req.query.store) {
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        let result = await client.query(query, parameter);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-// TODO move to General.ts
-router.get('/averageOrderValue', async (req, res) => {
-    try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
-        let query = `Select SUM("total") / COUNT(*) AS average_order_value
-        From "purchase"
-        WHERE "purchaseDate" > $1`;
-        if (req.query.store) {
-            console.log("Franchise.ts: req.query.store = ", req.query.store);
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        let result = await client.query(query, parameter);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
-// TODO move to General.ts
-router.get('/pizzasPerOrder', async (req, res) => {
-    try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
-        let query = `SELECT SUM("nItems") * 1.0 / COUNT("purchaseID") AS pizzas_order
-        FROM "purchase"
-        WHERE "purchaseDate" > $1`;
-        if (req.query.store) {
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        let result = await client.query(query, parameter);
-        res.status(200).json(result.rows);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send('Sorry, out of order');
-    }
-});
 router.get('/pizzaSize', async (req, res) => {
     try {
         // Extract date and storeID from query parameters or set default values
@@ -371,6 +270,200 @@ router.get('/pizzaPopularity', async (req, res) => {
     }
     catch (err) {
         // Handle any errors that occur during the query execution
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/revenue-forecast-analysis', async (req, res) => {
+    try {
+        const date = req.query.date || process.env.DEFAULT_DATE;
+        const dow = req.query.dow;
+        const store = req.query.store;
+        let parameters = [date, dow];
+        let query = `
+            SELECT DATE_TRUNC('hour', purchaseDate) as hour, AVG(total) as avg
+            FROM purchase
+            WHERE purchaseDate > $1
+              AND EXTRACT(DOW FROM purchaseDate) = $2
+        `;
+        if (store && store !== 'all') {
+            query += ` AND storeID = $3`;
+            parameters.push(store);
+        }
+        query += ` GROUP BY hour ORDER BY hour`;
+        const result = await client.query(query, parameters);
+        res.status(200).json(result.rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/totalOrders', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `SELECT COUNT("purchaseID") AS total_orders
+                     FROM "purchase"
+                     WHERE "purchaseDate" > $1`;
+        if (req.query.store) {
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/totalRevenue', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `SELECT SUM(total) AS total_revenue
+                     FROM "purchase"
+                     WHERE "purchaseDate" > $1`;
+        if (req.query.store) {
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/totalCustomers', async (req, res) => {
+    try {
+        let result = await client.query(QUERIES.ALL_CUSTOMER);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/totalPizzas', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `SELECT COUNT(*) AS "total_pizzas_sold"
+                     FROM "purchaseItems"
+                     JOIN "purchase" ON "purchaseItems"."purchaseID" = "purchase"."purchaseID"
+                     WHERE "purchase"."purchaseDate" > $1`;
+        if (req.query.store) {
+            query += ` AND "purchase"."storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/averageOrderCustomer', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `SELECT ROUND(AVG("order_count"), 2) AS "avg_orders_per_customer"
+                     FROM (
+                         SELECT "customerID", COUNT(*) AS "order_count"
+                         FROM "purchase"
+                         WHERE "purchaseDate" > $1
+                         GROUP BY "customerID"
+                     ) AS "customer_orders"`;
+        if (req.query.store) {
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/averageOrderValueCustomer', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `SELECT ROUND(AVG("total_order_value" / "order_count"), 2) AS "avg_order_value_per_order"
+                     FROM (
+                         SELECT "customerID", SUM("total") AS "total_order_value", COUNT(*) AS "order_count"
+                         FROM "purchase"
+                         WHERE "purchaseDate" > $1
+                         GROUP BY "customerID"
+                     ) AS "customer_order_values"`;
+        if (req.query.store) {
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `SELECT AVG("pizzas_per_order") AS "avg_pizzas_per_order"
+                     FROM (
+                         SELECT "purchase"."customerID", "purchase"."purchaseID", COUNT("purchaseItems"."SKU") AS "pizzas_per_order"
+                         FROM "purchase"
+                         JOIN "purchaseItems" ON "purchase"."purchaseID" = "purchaseItems"."purchaseID"
+                         JOIN "products" ON "purchaseItems"."SKU" = "products"."SKU"
+                         WHERE "purchase"."purchaseDate" > $1
+                         GROUP BY "purchase"."customerID", "purchase"."purchaseID"
+                     ) AS "pizzas_per_order_data"`;
+        if (req.query.store) {
+            query += ` AND "purchase"."storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status;
+        500.;
+        send('Sorry, out of order');
+    }
+});
+router.get('/averageOrderFrequency', async (req, res) => {
+    try {
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `
+            SELECT ROUND(AVG(order_frequency), 2) AS avg_order_frequency_in_days
+            FROM (
+                SELECT customerID, 
+                       COUNT(purchaseID) AS total_orders, 
+                       DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS customer_period, 
+                       COUNT(purchaseID) / DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS order_frequency
+                FROM purchase
+                WHERE "purchaseDate" > $1
+                GROUP BY customerID
+            ) AS customer_order_frequencies
+        `;
+        if (req.query.store) {
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+        let result = await client.query(query, parameter);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (err) {
         console.error(err);
         res.status(500).send('Sorry, out of order');
     }

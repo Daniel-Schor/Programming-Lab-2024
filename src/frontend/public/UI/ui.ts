@@ -211,28 +211,43 @@ function visibilityCoustomDate() {
 
 
 
-function getTotalRevenue(date, storeID) {
-  const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
-}
-
-function getTotalPizzas(date, storeID) {
-  const endpoint = storeID ? `/api/totalPizzas?date=${date}&store=${storeID}` : `/api/totalPizzas?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
-}
-
 function getTotalOrders(date, storeID) {
   const endpoint = storeID ? `/api/totalOrders?date=${date}&store=${storeID}` : `/api/totalOrders?date=${date}`;
   return fetch(endpoint).then((response) => response.json());
 }
 
-function getAverageOrderValue(date, storeID) {
-  const endpoint = storeID ? `/api/averageOrderValue?date=${date}&store=${storeID}` : `/api/averageOrderValue?date=${date}`;
+function getTotalRevenue(date, storeID) {
+  const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
   return fetch(endpoint).then((response) => response.json());
 }
 
-function getPizzasPerOrder(date, storeID) {
-  const endpoint = storeID ? `/api/pizzasPerOrder?date=${date}&store=${storeID}` : `/api/pizzasPerOrder?date=${date}`;
+function getTotalCustomers(date, storeID) {
+  const endpoint = storeID ? `/api/totalCustomers?date=${date}&store=${storeID}` : `/api/totalCustomers?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getTotalPizzasSold(date, storeID) {
+  const endpoint = storeID ? `/api/totalPizzasSold?date=${date}&store=${storeID}` : `/api/totalPizzasSold?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getAverageOrderCustomer(date, storeID) {
+  const endpoint = storeID ? `/api/averageOrderCustomer?date=${date}&store=${storeID}` : `/api/averageOrderCustomer?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getAverageOrderValueCustomer(date, storeID) {
+  const endpoint = storeID ? `/api/averageOrderValueCustomer?date=${date}&store=${storeID}` : `/api/averageOrderValueCustomer?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getAveragePizzasPerOrderCustomer(date, storeID) {
+  const endpoint = storeID ? `/api/averagePizzasPerOrderCustomer?date=${date}&store=${storeID}` : `/api/averagePizzasPerOrderCustomer?date=${date}`;
+  return fetch(endpoint).then((response) => response.json());
+}
+
+function getOrderFrequencyCustomer(date, storeID) {
+  const endpoint = storeID ? `/api/orderFrequencyCustomer?date=${date}&store=${storeID}` : `/api/orderFrequencyCustomer?date=${date}`;
   return fetch(endpoint).then((response) => response.json());
 }
 
