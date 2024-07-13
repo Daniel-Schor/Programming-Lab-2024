@@ -1,5 +1,14 @@
 declare const currentDate = "2022-12-31";
 declare const theme = "infographic";
+declare function monthlyRevenue(): void;
+declare function gaugeChart(): void;
+declare function heatmap(): void;
 declare function pizzaSize(): void;
+declare function abcAnalysis_customer_1(): void;
+declare function abcAnalysis_customer_2(): void;
+declare function abcAnalysis_pizza_1(): void;
 declare function abcAnalysis_pizza_2(date?: string): void;
+declare function pizza_price_popularity(): void;
 declare function changeDow(index?: number): void;
+declare function dailyOrders(): void;
+declare function pizzaIngredients(): void;
