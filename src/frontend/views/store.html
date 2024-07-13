@@ -67,15 +67,15 @@
                 </div>
                 <div class="statBox">
                   <h2>Revenue</h2>
-                  <p id="sRevenue">1234</p>
+                  <p id="sRevenue"></p>
                 </div>
                 <div class="statBox">
                   <h2>Customers</h2>
-                  <p id="sCustomers">1234</p>
+                  <p id="sCustomers"></p>
                 </div>
                 <div class="statBox">
                   <h2>Pizzas sold</h2>
-                  <p>1234</p>
+                  <p id="sPizzasSold"></p>
                 </div>
               </div>
             </div>
@@ -86,19 +86,19 @@
                 <div class="statBox">
                   <div id="stat-item"></div>
                   <h2>Orders</h2>
-                  <p>1234</p>
+                  <p id="avgOrdersPerCustomer"></p>
                 </div>
                 <div class="statBox">
                   <h2>Order Value</h2>
-                  <p id="oValue">1234</p>
+                  <p id="avgOrderValuePerCustomer"></p>
                 </div>
                 <div class="statBox">
                   <h2>Pizzas per Order</h2>
-                  <p>1234</p>
+                  <p id="avgPizzasPerOrder"></p>
                 </div>
                 <div class="statBox">
                   <h2>Order frequency</h2>
-                  <p>1234</p>
+                  <p>1234</p> <!-- Placeholder retained -->
                 </div>
               </div>
             </div>
@@ -150,120 +150,125 @@
         <!--End of Pizza section-->
         <!--Forecast section-->
         <div class="pseudoSection">
-          <div class="pseudoSubSection" style="padding-bottom: 0px;"">
-            <div class=" section-items">
-            <div class="subsection" style="
-              margin-top: 0px;
-              margin-left: 0px;
-              margin-right: 0px;">
-              <div class="section-items" style="justify-content: space-between;">
-                <div class="btnbox" style="width: 120px;">
-                  <button class="btn" id="" onclick="changeDow(-1);" style="z-index: 99;">BACK</button>
-                  <button class="btn" id="" onclick="changeDow(1);" style="z-index: 99;">NEXT</button>
+          <div class="pseudoSubSection" style="padding-bottom: 0px;">
+            <div class="section-items">
+              <div class="subsection" style="margin-top: 0px; margin-left: 0px; margin-right: 0px;">
+                <div class="section-items" style="justify-content: space-between;">
+                  <div class="btnbox" style="width: 120px;">
+                    <button class="btn" id="" onclick="changeDow(-1);" style="z-index: 99;">BACK</button>
+                    <button class="btn" id="" onclick="changeDow(1);" style="z-index: 99;">NEXT</button>
+                  </div>
+                  <div class="btnbox" style="width: 60px;">
+                    <button class="infobox" id="dowInfo">TODAY</button>
+                  </div>
+                  <h1 class="centered">Forecast</h1>
                 </div>
-                <div class="btnbox" style="width: 60px;">
-                  <button class="infobox" id="dowInfo">TODAY</button>
+                <div class="section-items">
+                  <div class="subsection">
+                    <h2>Average orders per hour</h2>
+                    <div id="dailyOrders" class="diagram"></div>
+                  </div>
                 </div>
-                <h1 class="centered">Forecast</h1>
-              </div>
-              <div class="section-items">
-                <div class="subsection">
-                  <h2>Average orders per hour</h2>
-                  <div id="dailyOrders" class="diagram"></div>
+                <div class="section-items">
+                  <div class="subsection">
+                    <h2>Average ingredients used</h2>
+                    <div id="pizzaIngredients" class="diagram"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="section-items">
-                <div class="subsection">
-                  <h2>Average ingredients used</h2>
-                  <div id="pizzaIngredients" class="diagram"></div>
-                </div>
-              </div>
-              <div class="section-items">
-                <div class="section">
-                  <h2>Stats</h2>
-                  <div class="section-items">
-                    <div class="statBox">
-                      <div id="stat-item"></div>
-                      <h2>Pizzas</h2>
-                      <p>1234</p>
-                    </div>
-                    <div class="statBox">
-                      <h2>Revenue</h2>
-                      <p>1234</p>
-                    </div>
-                    <div class="statBox">
-                      <h2>Orders</h2>
-                      <p>1234</p>
-                    </div>
-                    <div class="statBox">
-                      <h2>Customers</h2>
-                      <p>1234</p>
+                <div class="section-items">
+                  <div class="section">
+                    <h2>Stats</h2>
+                    <div class="section-items">
+                      <div class="statBox">
+                        <div id="stat-item"></div>
+                        <h2>Pizzas</h2>
+                        <p id="totalPizzas"></p>
+                      </div>
+                      <div class="statBox">
+                        <h2>Revenue</h2>
+                        <p id="totalRevenue"></p>
+                      </div>
+                      <div class="statBox">
+                        <h2>Orders</h2>
+                        <p id="totalOrders"></p>
+                      </div>
+                      <div class="statBox">
+                        <h2>Customers</h2>
+                        <p id="totalCustomers"></p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="pseudoSubSection" style="padding-top: 0px;">
-          <div class="section-items">
-            <div class="subsection" style="
-            margin-bottom: 0px;
-            margin-left: 0px;
-            margin-right: 0px;">
-              <h1>Customer</h1>
-              <div class="section-items">
-                <div class="subsection">
-                  <h2>ABC - Analysis</h2>
-                  <div class="diagram" id="abcAnalysis_customer_2"></div>
-                  <input type="text" id="customerSearch" placeholder="Search..">
-                </div>
-                <div class="subsection">
-                  <h2>Customer relationship</h2>
-                  <div class="diagram" id="quality"></div>
+          <div class="pseudoSubSection" style="padding-top: 0px;">
+            <div class="section-items">
+              <div class="subsection" style="margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
+                <h1>Customer</h1>
+                <div class="section-items">
+                  <div class="subsection">
+                    <h2>ABC - Analysis</h2>
+                    <div class="diagram" id="abcAnalysis_customer_2"></div>
+                    <input type="text" id="customerSearch" placeholder="Search..">
+                  </div>
+                  <div class="subsection">
+                    <h2>Customer relationship</h2>
+                    <div class="diagram" id="quality"></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="section-items">
-          <div class="section">
-            <h1>Attribution</h1>
-            <div class="section-items">
-              <h3>Daniel</h3>
-              <h3>Peter</h3>
-            </div>
-            <h3>Yannis</h3>
-            <div class="section-items">
-              <h3>Fatima </h3>
-              <h3>Tristan</h3>
+          <div class="section-items">
+            <div class="section">
+              <h1>Attribution</h1>
+              <div class="section-items">
+                <h3>Daniel</h3>
+                <h3>Peter</h3>
+              </div>
+              <h3>Yannis</h3>
+              <div class="section-items">
+                <h3>Fatima </h3>
+                <h3>Tristan</h3>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!--End of section b-->
-      <!--End of Revenue section-->
-      <!-- END OF CONTENT-->
+        <!--End of section b-->
+        <!--End of Revenue section-->
+        <!-- END OF CONTENT-->
 
-      <script>
-        const d = new Date();
-        let dow = d.getDay();
-        localStorage.setItem('dow', JSON.stringify(dow));
-        document.getElementById('storeName').textContent = JSON.parse(localStorage.getItem("store")).storeID;
-        
-        mtd();
+        <script>
+          const d = new Date();
+          let dow = d.getDay();
+          localStorage.setItem('dow', JSON.stringify(dow));
+          document.getElementById('storeName').textContent = JSON.parse(localStorage.getItem("store")).storeID;
+          
+          mtd();
 
-
-        function toggleSidebar(turnOff = false) {
-          if (turnOff) {
-            document.getElementById("sidebar").classList.remove("active");
-            document.getElementById("main").classList.remove("active");
-          } else {
-            document.getElementById("sidebar").classList.toggle("active");
-            document.getElementById("main").classList.toggle("active");
+          function toggleSidebar(turnOff = false) {
+            if (turnOff) {
+              document.getElementById("sidebar").classList.remove("active");
+              document.getElementById("main").classList.remove("active");
+            } else {
+              document.getElementById("sidebar").classList.toggle("active");
+              document.getElementById("main").classList.toggle("active");
+            }
           }
-        }
-      </script>
+        </script>
+        <script>
+          // Call functions to fetch and display stats
+          const date = '2022-12-01'; // Example date, adjust as necessary
+          fetchTotalOrders(date);
+          fetchTotalRevenue(date);
+          fetchTotalCustomers();
+          fetchTotalPizzasSold(date);
+          fetchAverageOrderCustomer(date);
+          fetchAverageOrderValueCustomer(date);
+          fetchAveragePizzasPerOrderCustomer(date);
+          fetchOrderFrequencyCustomer(date);
+        </script>
 </body>
 
 </html>

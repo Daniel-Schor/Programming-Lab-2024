@@ -13,13 +13,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
 
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/charts.js" type="text/javascript"></script>
   <script src="/static/charts/generalChart.js" type="module"></script>
-
   <script src="/static/UI/ui.js" type="module"></script>
-
   <script type="text/javascript" src="/static/echarts/echarts.min.js"></script>
   <script type="text/javascript" src="/static/UI/ui.js"></script>
 
@@ -53,7 +50,6 @@
 
   <div id="sidebar" class="sidebar">
     <!-- Store links will be dynamically added here -->
-
   </div>
   <div id="main" class="main" onclick="toggleSidebar(true)">
     <div id="content">
@@ -68,35 +64,34 @@
             <!--PizzaHub-->
             <div class="subsection">
               <h1 data-tooltip="This section shows the general data of the PizzaHub Franchise">PizzaHub</h1>
-              <!-- <div id="statsOverview" class="diagram"></div> -->
               <div class="section-items">
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-shopping-bag"></i>
                   </div>
                   <h2>Orders<h2>
-                      <p>1234</p>
+                      <p id="totalOrders">1234</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-dollar-sign"></i>
                   </div>
                   <h2>Revenue</h2>
-                  <p>1234</p>
+                  <p id="totalRevenue">1234</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-users"></i>
                   </div>
                   <h2>Customers</h2>
-                  <p>1234</p>
+                  <p id="totalCustomers">1234</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Pizzas sold</h2>
-                  <p>1234</p>
+                  <p id="totalPizzasSold">1234</p>
                 </div>
               </div>
             </div>
@@ -110,28 +105,28 @@
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Orders</h2>
-                  <p>1234</p>
+                  <p id="avgOrdersPerCustomer">1234</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Order Value</h2>
-                  <p>1234</p>
+                  <p id="avgOrderValuePerCustomer">1234</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Pizzas per Order</h2>
-                  <p>1234</p>
+                  <p id="avgPizzasPerOrder">1234</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Order frequency</h2>
-                  <p>1234</p>
+                  <p id="orderFrequency">1234</p>
                 </div>
               </div>
             </div>
@@ -190,10 +185,7 @@
       <!-- END OF CONTENT-->
     </div>
 
-
     <script>
-
-
       if (firstClick) {
         mtd(false);
         setActiveButton("bestButton");
@@ -281,6 +273,18 @@
 
       pizzaPopularity();
       revenueForecast();
+    </script>
+    <script>
+      // Call functions to fetch and display stats
+      const date = '2022-12-01'; // Example date, adjust as necessary
+      fetchTotalOrders(date);
+      fetchTotalRevenue(date);
+      fetchTotalCustomers();
+      fetchTotalPizzasSold(date);
+      fetchAverageOrderCustomer(date);
+      fetchAverageOrderValueCustomer(date);
+      fetchAveragePizzasPerOrderCustomer(date);
+      fetchOrderFrequencyCustomer(date);
     </script>
 </body>
 

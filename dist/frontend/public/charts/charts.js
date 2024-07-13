@@ -357,19 +357,19 @@ function addMarkers(stores) {
     });
 }
 function revenueForecast() {
-    async function fetchRevenueForecast(date, dow) {
-        const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&dow=${dow}&store=all`);
+    async function fetchRevenueForecast(date, periodType) {
+        const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&periodType=${periodType}&store=all`);
         const data = await response.json();
         return data;
     }
     async function generateRevenueForecast() {
-        let dow = JSON.parse(localStorage.getItem("dow"));
-        let date = JSON.parse(localStorage.getItem("date"));
-        var dom = document.getElementById("revenueForecast");
-        var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+        const periodType = 'day'; // 'day', 'month' oder 'year' - hier können Sie den gewünschten Wert festlegen
+        const date = JSON.parse(localStorage.getItem("date"));
+        const dom = document.getElementById("revenueForecast");
+        const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
         myChart.showLoading();
-        const revenueData = await fetchRevenueForecast(date, dow);
-        const hours = revenueData.map(entry => entry.hour);
+        const revenueData = await fetchRevenueForecast(date, periodType);
+        const periods = revenueData.map(entry => entry.period);
         const avgValues = revenueData.map(entry => entry.avg);
         const lastValue = avgValues[avgValues.length - 1];
         const growthRate = 1.05;
@@ -377,9 +377,10 @@ function revenueForecast() {
         for (let i = 1; i <= 12; i++) {
             forecastValues.push(lastValue * Math.pow(growthRate, i));
         }
-        const allHours = [...hours, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
+        const allPeriods = [...periods, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
         const avgValuesWithForecast = [...avgValues, ...forecastValues];
-        var option = {
+        const periodLabel = periodType === 'day' ? 'Day' : periodType === 'month' ? 'Month' : 'Year';
+        const option = {
             title: {
                 text: 'Revenue Forecast',
                 left: 'center'
@@ -393,9 +394,44 @@ function revenueForecast() {
             },
             grid: {
                 top: '11%',
-            }
+                bottom: '7%',
+                left: '6%',
+                right: '6%'
+            },
+            xAxis: {
+                type: 'category',
+                data: allPeriods,
+                name: periodLabel,
+            },
+            yAxis: {
+                type: 'value',
+                name: "Average Revenue",
+            },
+            series: [
+                {
+                    name: 'Average Revenue',
+                    data: avgValues,
+                    type: 'line',
+                    smooth: true,
+                    symbolSize: 0
+                },
+                {
+                    name: 'Forecast',
+                    data: avgValuesWithForecast.slice(avgValues.length),
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        type: 'dashed'
+                    },
+                    symbolSize: 0
+                }
+            ]
         };
+        myChart.hideLoading();
+        myChart.setOption(option);
     }
+    // Funktion aufrufen
+    generateRevenueForecast();
 }
 function storeLocationMap() {
     // Add OpenStreetMap tile layer

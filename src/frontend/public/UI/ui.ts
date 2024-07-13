@@ -211,87 +211,75 @@ function visibilityCoustomDate() {
 
 
 
-function getTotalOrders(date, storeID) {
-  const endpoint = storeID ? `/api/totalOrders?date=${date}&store=${storeID}` : `/api/totalOrders?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch total orders
+async function fetchTotalOrders(date: string, storeID?: string) {
+  const response = await fetch(`/api/totalOrders?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('totalOrders').innerText = data.total_orders;
 }
 
-function getTotalRevenue(date, storeID) {
-  const endpoint = storeID ? `/api/totalRevenue?date=${date}&store=${storeID}` : `/api/totalRevenue?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch total revenue
+async function fetchTotalRevenue(date: string, storeID?: string) {
+  const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('totalRevenue').innerText = data.total_revenue;
 }
 
-function getTotalCustomers(date, storeID) {
-  const endpoint = storeID ? `/api/totalCustomers?date=${date}&store=${storeID}` : `/api/totalCustomers?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch total customers
+async function fetchTotalCustomers() {
+  const response = await fetch(`/api/totalCustomers`);
+  const data = await response.json();
+  document.getElementById('totalCustomers').innerText = data.total_customers;
 }
 
-function getTotalPizzasSold(date, storeID) {
-  const endpoint = storeID ? `/api/totalPizzasSold?date=${date}&store=${storeID}` : `/api/totalPizzasSold?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch total pizzas sold
+async function fetchTotalPizzasSold(date: string, storeID?: string) {
+  const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('totalPizzasSold').innerText = data.total_pizzas_sold;
 }
 
-function getAverageOrderCustomer(date, storeID) {
-  const endpoint = storeID ? `/api/averageOrderCustomer?date=${date}&store=${storeID}` : `/api/averageOrderCustomer?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch average orders per customer
+async function fetchAverageOrderCustomer(date: string, storeID?: string) {
+  const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
 }
 
-function getAverageOrderValueCustomer(date, storeID) {
-  const endpoint = storeID ? `/api/averageOrderValueCustomer?date=${date}&store=${storeID}` : `/api/averageOrderValueCustomer?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch average order value per customer
+async function fetchAverageOrderValueCustomer(date: string, storeID?: string) {
+  const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
 }
 
-function getAveragePizzasPerOrderCustomer(date, storeID) {
-  const endpoint = storeID ? `/api/averagePizzasPerOrderCustomer?date=${date}&store=${storeID}` : `/api/averagePizzasPerOrderCustomer?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch average pizzas per order per customer
+async function fetchAveragePizzasPerOrderCustomer(date: string, storeID?: string) {
+  const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('avgPizzasPerOrder').innerText = data.avg_pizzas_per_order;
 }
 
-function getOrderFrequencyCustomer(date, storeID) {
-  const endpoint = storeID ? `/api/orderFrequencyCustomer?date=${date}&store=${storeID}` : `/api/orderFrequencyCustomer?date=${date}`;
-  return fetch(endpoint).then((response) => response.json());
+// Function to fetch order frequency per customer
+async function fetchOrderFrequencyCustomer(date: string, storeID?: string) {
+  const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const data = await response.json();
+  document.getElementById('orderFrequency').innerText = data.avg_order_frequency_in_days;
 }
 
-function statOverview() {
-  const store = JSON.parse(localStorage.getItem("store"));
-  let date = JSON.parse(localStorage.getItem("date"));
+// Call functions on page load
+document.addEventListener('DOMContentLoaded', function () {
+  const date = '2022-12-01'; // Example date, adjust as necessary
+  fetchTotalOrders(date);
+  fetchTotalRevenue(date);
+  fetchTotalCustomers();
+  fetchTotalPizzasSold(date);
+  fetchAverageOrderCustomer(date);
+  fetchAverageOrderValueCustomer(date);
+  fetchAveragePizzasPerOrderCustomer(date);
+  fetchOrderFrequencyCustomer(date);
+});
 
-  const storeID = store ? store.storeID : null;
-  //anpassen fuer main seite 
-  // Erstellen eines Arrays von Fetch-Promises
-  const fetchPromises = [
-    getTotalRevenue(date, storeID),
-    getTotalPizzas(date, storeID),
-    getTotalOrders(date, storeID),
-    getAverageOrderValue(date, storeID),
-    getPizzasPerOrder(date, storeID),
-  ];
-  // Verwenden von Promise.all, um auf alle Fetch-Anfragen zu warten
-  return Promise.all(fetchPromises)
-    .then((dataArray) => {
-      // Kombinieren der Daten von den APIs
-      const [
-        totalRevenueData,
-        totalPizzasData,
-        totalOrdersData,
-        averageOrderValueData,
-        pizzasPerOrderData,
-      ] = dataArray;
-      var order = Math.round(totalRevenueData[0].total_revenue);
-      var order_1 = Math.round(totalPizzasData[0].total_pizza);
-      var order_2 = Math.round(totalOrdersData[0].total_orders);
-      var order_3 = Math.round(averageOrderValueData[0].average_order_value);
-      var order_4 = parseFloat(pizzasPerOrderData[0].pizzas_order).toFixed(2);
-      document.getElementById("sSales").innerHTML = order_1;
-      document.getElementById("sRevenue").innerHTML = order;
-      document.getElementById("sCustomers").innerHTML = order;
-      document.getElementById("oValue").innerHTML = order_3;
-
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      throw error;
-    });
-}
 
 function setActiveTimeButton(buttonId) {
   document.getElementById("Last-Year").classList.remove("active");
