@@ -14,7 +14,7 @@ let custom = false;
 let curColors = false;
 let firstClick = true;
 
-let colorPalette = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'];
+let colorPalette: string[] = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', /*'#a65628',*/ '#f781bf', '#999999', 'white'];
 let colorsToExclude = new Set();
 
 function getNextColor() {
@@ -262,7 +262,10 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
             axisPointer: {
               type: 'shadow'
             }
-            //, formatter: function (params) {return "TEST"}
+            , formatter: function (params) {
+              let store = params[0];
+              return `${store.marker} ${store.name}</br>Revenue: ${store.value}$`
+            }
           },
           grid: {
             left: '1%',
@@ -313,9 +316,24 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
           myChart.on('click', (params) => {
             if (storeIDsColors[params.name] == undefined) {
               if (Object.keys(storeIDsColors).length === colorPalette.length) {
-                // TODO make more elegant
-                alert("No more colors available for custom coloring.");
-                //option.tooltip.formatter = function(params2){ return "// Custom tooltip"};
+                option.tooltip.formatter = function (params) {
+                  let store = params[0];
+                  let output = `${store.marker} ${store.name}</br>Revenue: ${store.value}$`;
+                  if (!Object.keys(curColors).includes(store.name)) {
+                    output = `
+                    <div style="
+                      color: black; 
+                      font-size: 20px;
+                      font-weight: 'bold';
+                      margin: 0px;
+                      padding: 0px;">
+                        LIMIT REACHED
+                    </div>
+                    </br>` + output;
+                  }
+                  return output;
+                };
+                updateChart(myChart, option);
                 return;
               }
               storeIDsColors[params.name] = getNextColor();
@@ -339,8 +357,6 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
               ]
             };
 
-            // TODO: peter check
-            //updateChart(myChart, option);
             resolve(storeIDsColors);
           });
         }
@@ -402,33 +418,33 @@ function revenueForecast() {
     const data = await response.json();
     return data;
   }
-  
+
   async function generateRevenueForecast() {
     const periodType = 'day'; // 'day', 'month' oder 'year' - hier können Sie den gewünschten Wert festlegen
     const date = JSON.parse(localStorage.getItem("date"));
-  
+
     const dom = document.getElementById("revenueForecast");
     const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-  
+
     myChart.showLoading();
-  
+
     const revenueData = await fetchRevenueForecast(date, periodType);
-  
+
     const periods = revenueData.map(entry => entry.period);
     const avgValues = revenueData.map(entry => entry.avg);
-  
+
     const lastValue = avgValues[avgValues.length - 1];
     const growthRate = 1.05;
     const forecastValues = [];
     for (let i = 1; i <= 12; i++) {
       forecastValues.push(lastValue * Math.pow(growthRate, i));
     }
-  
+
     const allPeriods = [...periods, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
     const avgValuesWithForecast = [...avgValues, ...forecastValues];
-  
+
     const periodLabel = periodType === 'day' ? 'Day' : periodType === 'month' ? 'Month' : 'Year';
-  
+
     const option = {
       title: {
         text: 'Revenue Forecast',
@@ -476,13 +492,13 @@ function revenueForecast() {
         }
       ]
     };
-  
+
     myChart.hideLoading();
     myChart.setOption(option);
   }
-  
+
   // Funktion aufrufen
-  generateRevenueForecast();  
+  generateRevenueForecast();
 }
 
 function storeLocationMap() {

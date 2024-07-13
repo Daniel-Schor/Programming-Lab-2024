@@ -241,7 +241,7 @@ function pizzaSize() {
     "Small": "S",
     "Medium": "M",
     "Large": "L",
-    "Extra Large": "ExL"
+    "Extra Large": "XL"
   };
 
   // data needed: Pizza names, Size, sales number

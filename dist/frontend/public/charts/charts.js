@@ -12,7 +12,7 @@ let best = false;
 let custom = false;
 let curColors = false;
 let firstClick = true;
-let colorPalette = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'];
+let colorPalette = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', /*'#a65628',*/ '#f781bf', '#999999', 'white'];
 let colorsToExclude = new Set();
 function getNextColor() {
     while (true) {
@@ -229,8 +229,11 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     trigger: 'axis',
                     axisPointer: {
                         type: 'shadow'
+                    },
+                    formatter: function (params) {
+                        let store = params[0];
+                        return `${store.marker} ${store.name}</br>Revenue: ${store.value}$`;
                     }
-                    //, formatter: function (params) {return "TEST"}
                 },
                 grid: {
                     left: '1%',
@@ -280,9 +283,24 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                 myChart.on('click', (params) => {
                     if (storeIDsColors[params.name] == undefined) {
                         if (Object.keys(storeIDsColors).length === colorPalette.length) {
-                            // TODO make more elegant
-                            alert("No more colors available for custom coloring.");
-                            //option.tooltip.formatter = function(params2){ return "// Custom tooltip"};
+                            option.tooltip.formatter = function (params) {
+                                let store = params[0];
+                                let output = `${store.marker} ${store.name}</br>Revenue: ${store.value}$`;
+                                if (!Object.keys(curColors).includes(store.name)) {
+                                    output = `
+                    <div style="
+                      color: black; 
+                      font-size: 20px;
+                      font-weight: 'bold';
+                      margin: 0px;
+                      padding: 0px;">
+                        LIMIT REACHED
+                    </div>
+                    </br>` + output;
+                                }
+                                return output;
+                            };
+                            updateChart(myChart, option);
                             return;
                         }
                         storeIDsColors[params.name] = getNextColor();
@@ -305,8 +323,6 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                             }
                         ]
                     };
-                    // TODO: peter check
-                    //updateChart(myChart, option);
                     resolve(storeIDsColors);
                 });
             }

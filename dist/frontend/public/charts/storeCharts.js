@@ -202,7 +202,7 @@ function pizzaSize() {
         "Small": "S",
         "Medium": "M",
         "Large": "L",
-        "Extra Large": "ExL"
+        "Extra Large": "XL"
     };
     // data needed: Pizza names, Size, sales number
     fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
