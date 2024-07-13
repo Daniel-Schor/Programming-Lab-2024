@@ -99,6 +99,7 @@ async function customButton(update = false) {
             }
             colors = await revenueBarChart(curColors, custom);
             curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
+            colorsToExclude = new Set(Object.values(curColors));
             if (Object.keys(curColors).length === 0) {
                 bestButton();
                 break;
@@ -229,6 +230,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     axisPointer: {
                         type: 'shadow'
                     }
+                    //, formatter: function (params) {return "TEST"}
                 },
                 grid: {
                     left: '1%',
@@ -278,7 +280,9 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                 myChart.on('click', (params) => {
                     if (storeIDsColors[params.name] == undefined) {
                         if (Object.keys(storeIDsColors).length === colorPalette.length) {
+                            // TODO make more elegant
                             alert("No more colors available for custom coloring.");
+                            //option.tooltip.formatter = function(params2){ return "// Custom tooltip"};
                             return;
                         }
                         storeIDsColors[params.name] = getNextColor();
