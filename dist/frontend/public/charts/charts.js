@@ -12,21 +12,18 @@ let best = false;
 let custom = false;
 let curColors = false;
 let firstClick = true;
-// TODO move to Helper dir
-let colorsToExclude = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9'];
-let excludedColors = new Set();
-function randomColor() {
-    // If all colors have been used, reset the excludedColors set
-    if (excludedColors.size === colorsToExclude.length) {
-        excludedColors.clear();
+let colorPalette = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'];
+let colorsToExclude = new Set();
+function getNextColor() {
+    while (true) {
+        for (let i = 0; i < colorPalette.length; i++) {
+            if (!colorsToExclude.has(colorPalette[i])) {
+                colorsToExclude.add(colorPalette[i]);
+                return colorPalette[i];
+            }
+        }
+        colorsToExclude.clear();
     }
-    let color;
-    do {
-        // Randomly pick a color from colorsToExclude array
-        color = colorsToExclude[Math.floor(Math.random() * colorsToExclude.length)];
-    } while (excludedColors.has(color)); // Ensure the color hasn't been used before
-    excludedColors.add(color); // Add color to excludedColors set
-    return color;
 }
 function updateCharts(date) {
     // TODO wrong parameter 
@@ -62,6 +59,7 @@ function bestButton(colors = {}) {
         curColors = colors;
         revenueBarChart(curColors, false);
     });
+    colorsToExclude.clear();
     setActiveButton("bestButton");
     storeLocationMap();
     revenueForecast();
@@ -78,6 +76,7 @@ function worstButton(colors = {}) {
         curColors = colors;
         revenueBarChart(curColors, false);
     });
+    colorsToExclude.clear();
     setActiveButton("worstButton");
     storeLocationMap();
     revenueForecast();
@@ -144,7 +143,7 @@ function revenueChart(best = true, storeColors = {}) {
                 delete data[storeID]["changeValue"];
                 orderedStoreIDs.push(storeID);
                 if (storeColors[storeID] == undefined) {
-                    storeColors[storeID] = randomColor();
+                    storeColors[storeID] = getNextColor();
                 }
                 lineInfos.push({
                     symbolSize: 0,
@@ -278,7 +277,11 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                 myChart.off('click');
                 myChart.on('click', (params) => {
                     if (storeIDsColors[params.name] == undefined) {
-                        storeIDsColors[params.name] = randomColor();
+                        if (Object.keys(storeIDsColors).length === colorPalette.length) {
+                            alert("No more colors available for custom coloring.");
+                            return;
+                        }
+                        storeIDsColors[params.name] = getNextColor();
                     }
                     else {
                         storeIDsColors[params.name] = undefined;
