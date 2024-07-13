@@ -389,10 +389,10 @@ function revenueForecast() {
 
   myChart.showLoading();
 
-  fetch(`/api/yearly-revenue-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
+  fetch(`/api/revenue-forecast-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((data) => {
-      let avgValues = Object.keys(data).map(hour => data[hour].avg);
+      let avgValues = Object.keys(data).map(month => data[month].avg);
       var option = {
         grid: {
           top: '11%',
@@ -403,26 +403,26 @@ function revenueForecast() {
         xAxis: {
           type: "category",
           data: Object.keys(data),
-          /*name: "Hour",*/
+          /*name: "Timeline",*/
         },
         tooltip: {
           trigger: "axis",
           formatter: function (params) {
             let index = params[0].dataIndex;
             let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
-            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
+            return `month: ${index}<br/>Average Revenue: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
           },
         },
         yAxis: {
           type: "value",
-          name: "Average Revenue",
+          name: "Predicted Revenue",
         },
         series: [
           {
             data: avgValues,
             type: "line",
             smooth: true,
-            /*name: "Timeline",*/
+            /*name: "Average Orders",*/
             symbolSize: 0
           },
         ],
@@ -435,7 +435,6 @@ function revenueForecast() {
       console.error("Error fetching revenue forecast data:", error);
     });
 }
-
 
 function storeLocationMap() {
   // Add OpenStreetMap tile layer

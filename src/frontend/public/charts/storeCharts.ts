@@ -439,6 +439,7 @@ function abcAnalysis_customer_1() {
 }
 
 function abcAnalysis_customer_2() {
+  console.log("abcAnalysis_customer_2");
   var store = JSON.parse(localStorage.getItem("store"));
   let date = JSON.parse(localStorage.getItem("date"));
 
