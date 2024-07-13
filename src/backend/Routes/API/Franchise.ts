@@ -426,4 +426,33 @@ router.get('/pizzaPopularity', async (req, res) => {
     }
 });
 
+router.get('/revenue-forecast-analysis', async (req, res) => {
+    try {
+        const date = req.query.date || process.env.DEFAULT_DATE;
+        const dow = req.query.dow;
+        const store = req.query.store;
+        
+        let parameters = [date, dow];
+        let query = `
+            SELECT DATE_TRUNC('hour', purchaseDate) as hour, AVG(total) as avg
+            FROM purchase
+            WHERE purchaseDate > $1
+              AND EXTRACT(DOW FROM purchaseDate) = $2
+        `;
+
+        if (store && store !== 'all') {
+            query += ` AND storeID = $3`;
+            parameters.push(store);
+        }
+
+        query += ` GROUP BY hour ORDER BY hour`;
+
+        const result = await client.query(query, parameters);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Sorry, out of order');
+    }
+});
+
 export default router;

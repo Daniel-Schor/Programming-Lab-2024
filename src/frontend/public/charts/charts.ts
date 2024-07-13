@@ -73,6 +73,7 @@ function bestButton(colors = {}) {
   });
   setActiveButton("bestButton");
   storeLocationMap();
+  revenueForecast();
 }
 
 function worstButton(colors = {}) {
@@ -90,6 +91,7 @@ function worstButton(colors = {}) {
   });
   setActiveButton("worstButton");
   storeLocationMap();
+  revenueForecast();
 }
 
 async function customButton(update = false) {
@@ -382,62 +384,55 @@ function addMarkers(stores) {
 }
 
 function revenueForecast() {
-  let dow = JSON.parse(localStorage.getItem("dow"));
-  var store = JSON.parse(localStorage.getItem("store"));
-  let date = JSON.parse(localStorage.getItem("date"));
-
-  var dom = document.getElementById("revenueForecast");
-  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-
-  myChart.showLoading();
-
-  fetch(`/api/yearly-revenue-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
-    .then((response) => response.json())
-    .then((data) => {
-      let avgValues = Object.keys(data).map(hour => data[hour].avg);
-      var option = {
-        grid: {
-          top: '11%',
-          bottom: '7%',
-          left: '6%',
-          right: '6%'
-        },
-        xAxis: {
-          type: "category",
-          data: Object.keys(data),
-          /*name: "Hour",*/
-        },
-        tooltip: {
-          trigger: "axis",
-          formatter: function (params) {
-            let index = params[0].dataIndex;
-            let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
-            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
-          },
-        },
-        yAxis: {
-          type: "value",
-          name: "Average Revenue",
-        },
-        series: [
-          {
-            data: avgValues,
-            type: "line",
-            smooth: true,
-            /*name: "Timeline",*/
-            symbolSize: 0
-          },
-        ],
-      };
-
-      myChart.hideLoading();
-      myChart.setOption(option);
-    })
-    .catch((error) => {
-      console.error("Error fetching revenue forecast data:", error);
-    });
+  async function fetchRevenueForecast(date: string, dow: string): Promise<any> {
+    const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&dow=${dow}&store=all`);
+    const data = await response.json();
+    return data;
+  }
+  
+  async function generateRevenueForecast() {
+    let dow = JSON.parse(localStorage.getItem("dow"));
+    let date = JSON.parse(localStorage.getItem("date"));
+  
+    var dom = document.getElementById("revenueForecast");
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+  
+    myChart.showLoading();
+  
+    const revenueData = await fetchRevenueForecast(date, dow);
+  
+    const hours = revenueData.map(entry => entry.hour);
+    const avgValues = revenueData.map(entry => entry.avg);
+  
+    const lastValue = avgValues[avgValues.length - 1];
+    const growthRate = 1.05; 
+    const forecastValues = [];
+    for (let i = 1; i <= 12; i++) {
+      forecastValues.push(lastValue * Math.pow(growthRate, i));
+    }
+  
+    const allHours = [...hours, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
+    const avgValuesWithForecast = [...avgValues, ...forecastValues];
+  
+    var option = {
+      title: {
+        text: 'Revenue Forecast',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Average Revenue', 'Forecast'],
+        left: 'right'
+      },
+      grid: {
+        top: '11%',
+       
+      }
+    }  
+  }
 }
-
 
 function storeLocationMap() {
   // Add OpenStreetMap tile layer
