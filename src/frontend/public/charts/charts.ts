@@ -189,6 +189,15 @@ function revenueChart(best = true, storeColors = {}) {
           tooltip: {
             trigger: "axis",
           },
+          legend: {
+            bottom: '30',
+            data: Object.keys(storeColors),
+            textStyle: {
+              color: 'white',
+              fontWeight: 'bold'
+            },
+            inactiveColor: '#b3b3b3'
+          },
           grid: {
             left: '1%',
             right: '5%',
@@ -389,31 +398,31 @@ function revenueForecast() {
     const data = await response.json();
     return data;
   }
-  
+
   async function generateRevenueForecast() {
     let dow = JSON.parse(localStorage.getItem("dow"));
     let date = JSON.parse(localStorage.getItem("date"));
-  
+
     var dom = document.getElementById("revenueForecast");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-  
+
     myChart.showLoading();
-  
+
     const revenueData = await fetchRevenueForecast(date, dow);
-  
+
     const hours = revenueData.map(entry => entry.hour);
     const avgValues = revenueData.map(entry => entry.avg);
-  
+
     const lastValue = avgValues[avgValues.length - 1];
-    const growthRate = 1.05; 
+    const growthRate = 1.05;
     const forecastValues = [];
     for (let i = 1; i <= 12; i++) {
       forecastValues.push(lastValue * Math.pow(growthRate, i));
     }
-  
+
     const allHours = [...hours, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
     const avgValuesWithForecast = [...avgValues, ...forecastValues];
-  
+
     var option = {
       title: {
         text: 'Revenue Forecast',
@@ -428,9 +437,9 @@ function revenueForecast() {
       },
       grid: {
         top: '11%',
-       
+
       }
-    }  
+    }
   }
 }
 
@@ -565,7 +574,7 @@ async function pizzaPopularity() {
       },
       series: seriesList
     };
-        
+
     myChart.hideLoading();
     option && myChart.setOption(option);
   } catch (error) {
