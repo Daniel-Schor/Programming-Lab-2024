@@ -309,23 +309,22 @@ router.get('/pizzaPopularity', async (req, res) => {
 router.get('/revenue-forecast-analysis', async (req, res) => {
     try {
         const date = req.query.date || process.env.DEFAULT_DATE;
-        const dow = req.query.dow;
+        const periodType = req.query.periodType; // periodType kann 'day', 'month' oder 'year' sein
         const store = req.query.store;
-        
-        let parameters = [date, dow];
+
+        let parameters = [date];
         let query = `
-            SELECT DATE_TRUNC('hour', purchaseDate) as hour, AVG(total) as avg
+            SELECT DATE_TRUNC('${periodType}', purchaseDate) as period, AVG(total) as avg
             FROM purchase
             WHERE purchaseDate > $1
-              AND EXTRACT(DOW FROM purchaseDate) = $2
         `;
 
         if (store && store !== 'all') {
-            query += ` AND storeID = $3`;
+            query += ` AND storeID = $2`;
             parameters.push(store);
         }
 
-        query += ` GROUP BY hour ORDER BY hour`;
+        query += ` GROUP BY period ORDER BY period`;
 
         const result = await client.query(query, parameters);
         res.status(200).json(result.rows);
