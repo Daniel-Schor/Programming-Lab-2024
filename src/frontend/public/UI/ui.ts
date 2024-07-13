@@ -155,6 +155,8 @@ function visibilityCoustomDate() {
   setActiveTimeButton("customDate");
   const customDateButton = document.getElementById('customDate');
   const datePicker = document.getElementById('datePicker');
+  const fromButton = document.getElementById('FROM');
+  const periodButton = document.getElementById('PERIOD');
   let isDatePickerInitialized = false;
 
   customDateButton.addEventListener('click', function () {
@@ -168,8 +170,26 @@ function visibilityCoustomDate() {
   });
 
   datePicker.addEventListener('change', function () {
-    const date = datePicker.value;
-    updateCharts(date);
+    const pickedDate = new Date(datePicker.value);
+    const fixedDate = new Date('2022-12-01');
+    
+    // Format picked date to display only the date part
+    const formattedDate = pickedDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    // Calculate the difference in milliseconds
+    const timeDiff = pickedDate.getTime() - fixedDate.getTime();
+
+    // Convert milliseconds to days and take absolute value
+    const daysDiff = Math.abs(Math.ceil(timeDiff / (1000 * 3600 * 24)));
+
+    // Update button texts
+    fromButton.textContent = "FROM: " + formattedDate;
+    periodButton.textContent = 'PERIOD: ' + daysDiff + ' days';
+
     datePicker.style.display = 'none'; // Hide the date picker after date is chosen
   });
 }

@@ -206,7 +206,7 @@ function pizzaSize() {
     fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((querieResult) => {
-        console.log(querieResult);
+        //console.log(querieResult);
         var pizzaData = {};
         querieResult.forEach((pizza) => {
             // Remove "Pizza" from the pizza name
