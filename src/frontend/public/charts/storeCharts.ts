@@ -225,7 +225,7 @@ function heatmap() {
 
 
 function pizzaSize() {
-  //SELECT p.purchaseID, pr.Name, pr.SizeFROM purchaseItems piJOIN products pr ON pi.SKU = pr.SKUJOIN purchase p ON pi.purchaseID = p.purchaseID;
+  // SELECT p.purchaseID, pr.Name, pr.Size FROM purchaseItems pi JOIN products pr ON pi.SKU = pr.SKU JOIN purchase p ON pi.purchaseID = p.purchaseID;
   var store = JSON.parse(localStorage.getItem("store"));
   let date = JSON.parse(localStorage.getItem("date"));
 
@@ -234,20 +234,34 @@ function pizzaSize() {
 
   myChart.showLoading();
 
-  //data needed: Pizza names, Size, sales number
+  // Mapping of sizes to their abbreviations
+  var sizeMapping = {
+    "Small": "S",
+    "Medium": "M",
+    "Large": "L",
+    "Extra Large": "ExL"
+  };
+
+  // data needed: Pizza names, Size, sales number
   fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
     .then((querieResult) => {
+      console.log(querieResult);
       var pizzaData = {};
       querieResult.forEach((pizza) => {
+        
         // Remove "Pizza" from the pizza name
         var pizzaName = pizza.Name.replace(/ Pizza$/, "");
 
         if (!pizzaData[pizzaName]) {
           pizzaData[pizzaName] = { name: pizzaName, children: [] };
         }
+
+        // Replace size with abbreviation
+        var sizeAbbreviation = sizeMapping[pizza.Size] || pizza.Size;
+
         pizzaData[pizzaName].children.push({
-          name: pizza.Size,
+          name: sizeAbbreviation,
           value: parseInt(pizza.size_count),
         });
       });
@@ -276,22 +290,22 @@ function pizzaSize() {
           },
           levels: [
             {},
-            {
-              r0: "15%",
-              r: "35%",
+            { //inner circle radius
+              r0: '15%',
+              r: '55%',
               itemStyle: {
-                borderWidth: 2,
+                borderWidth: 2
               },
               label: {
-                rotate: "tangential",
-              },
+                rotate: 'tangential'
+              }
             },
-            {
-              r0: "35%",
-              r: "70%",
+            {// outer circle radius
+              r0: '55%',
+              r: '70%',
               label: {
-                align: "right",
-              },
+                align: 'right'
+              }
             },
             {
               r0: "70%",
