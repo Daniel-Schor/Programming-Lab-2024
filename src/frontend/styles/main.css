@@ -142,7 +142,7 @@ body::-webkit-scrollbar {
 
 }
 
-input {
+#customerSearch {
   background-color: #1b1b1b;
   width: calc(100% - 6px);
   color: #ffffff;
