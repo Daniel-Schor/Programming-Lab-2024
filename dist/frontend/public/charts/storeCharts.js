@@ -3,7 +3,9 @@
 const currentDate = "2022-12-31";
 const theme = 'infographic';
 function updateCharts(date) {
-    localStorage.setItem('date', JSON.stringify(date));
+    if (date) {
+        localStorage.setItem('date', JSON.stringify(date));
+    }
     pizzaPopularity();
     gaugeChart();
     abcAnalysis_pizza_2();

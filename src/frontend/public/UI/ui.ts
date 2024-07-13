@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
   const addPassiveEventListener = (type) => {
     document.addEventListener(type, (event) => { }, { passive: true });
@@ -108,6 +109,11 @@ function backButton() {
     });
 }
 
+function calcDayDiff(date1, date2) {
+  let timeDiff = Math.abs(Math.ceil(new Date(date1) - new Date(date2)) / (1000 * 3600 * 24)));
+  return timeDiff;
+}
+
 function ytd() {
   setActiveTimeButton("Last-Year");
   let fromButton = document.getElementById('FROM');
@@ -119,7 +125,7 @@ function ytd() {
 
   updateCharts(startDate);
   fromButton.textContent = "FROM: " + startDate;
-  periodButton.textContent = "PERIOD: 365 days";
+  periodButton.textContent = `PERIOD: ${calcDayDiff(startDate, currentDate)} days`;
 }
 
 function qtd() {
@@ -134,7 +140,7 @@ function qtd() {
   updateCharts(startDate);
 
   fromButton.textContent = "FROM: " + startDate;
-  periodButton.textContent = "PERIOD: 90 days";
+  periodButton.textContent = `PERIOD: ${calcDayDiff(startDate, currentDate)} days`;
 }
 
 function mtd(update = true) {
@@ -148,51 +154,59 @@ function mtd(update = true) {
     updateCharts(startDate);
   }
   fromButton.textContent = "FROM: " + startDate;
-  periodButton.textContent = "PERIOD: 30 days";
+  periodButton.textContent = `PERIOD: ${calcDayDiff(startDate, currentDate)} days`;
 }
 
 function visibilityCoustomDate() {
+  // Activate custom date button
   setActiveTimeButton("customDate");
-  const customDateButton = document.getElementById('customDate');
+
+  // Get DOM elements
   const datePicker = document.getElementById('datePicker');
   const fromButton = document.getElementById('FROM');
   const periodButton = document.getElementById('PERIOD');
-  let isDatePickerInitialized = false;
 
-  customDateButton.addEventListener('click', function () {
-    if (!isDatePickerInitialized) {
-      datePicker.value = '2022-12-01'; // Set the initial date only once
-      isDatePickerInitialized = true;
+  // Set date picker value from localStorage
+  datePicker.value = JSON.parse(localStorage.getItem("date"));
+
+  // Display and style date picker
+  datePicker.style.display = 'block';
+  datePicker.style.color = 'black';
+  datePicker.focus();
+
+  function acceptInput() {
+    let pickedDate = new Date(datePicker.value);
+    let formattedDate;
+    let minDate = new Date("2020-01-01");
+    if (pickedDate < minDate) {
+      pickedDate = minDate;
+    } else if (pickedDate > new Date(currentDate)) {
+      pickedDate = new Date(new Date(currentDate).getTime() - (7 * 24 * 60 * 60 * 1000))
     }
-    datePicker.style.display = 'block';
-    datePicker.style.color = 'black'; // Ensure the text color is black
-    datePicker.focus();
-  });
 
-  datePicker.addEventListener('change', function () {
-    const pickedDate = new Date(datePicker.value);
-    const fixedDate = new Date('2022-12-01');
-    
-    // Format picked date to display only the date part
-    const formattedDate = pickedDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-
-    // Calculate the difference in milliseconds
-    const timeDiff = pickedDate.getTime() - fixedDate.getTime();
-
-    // Convert milliseconds to days and take absolute value
-    const daysDiff = Math.abs(Math.ceil(timeDiff / (1000 * 3600 * 24)));
+    // Format picked date
+    formattedDate = pickedDate.toISOString().split("T")[0];
 
     // Update button texts
     fromButton.textContent = "FROM: " + formattedDate;
-    periodButton.textContent = 'PERIOD: ' + daysDiff + ' days';
+    periodButton.textContent = `PERIOD: ${calcDayDiff(formattedDate, currentDate)} days`;
 
-    datePicker.style.display = 'none'; // Hide the date picker after date is chosen
+    // Hide date picker
+    datePicker.style.display = 'none';
+
+    updateCharts(formattedDate);
+  }
+  // Add change event listener
+  datePicker.addEventListener('blur', function () {
+    acceptInput();
+  });
+  datePicker.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      acceptInput();
+    }
   });
 }
+
 
 
 
@@ -270,6 +284,6 @@ function setActiveTimeButton(buttonId) {
   document.getElementById("Last-Quarter").classList.remove("active");
   document.getElementById("Last-Month").classList.remove("active");
   document.getElementById("customDate").classList.remove("active");
-  
+
   document.getElementById(buttonId).classList.add("active");
 }

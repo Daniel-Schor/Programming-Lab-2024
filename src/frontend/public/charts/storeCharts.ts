@@ -6,8 +6,10 @@ const theme = 'infographic';
 
 
 
-function updateCharts(date: string) {
-  localStorage.setItem('date', JSON.stringify(date));
+function updateCharts(date?: string) {
+  if (date) {
+    localStorage.setItem('date', JSON.stringify(date));
+  }
 
   pizzaPopularity();
   gaugeChart();

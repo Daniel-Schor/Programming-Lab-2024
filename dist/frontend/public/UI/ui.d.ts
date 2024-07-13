@@ -1,6 +1,7 @@
 declare function subtractMonths(date: any, months: any): string;
 declare function calculatePeriod(startDate: any, endDate: any): number;
 declare function backButton(): void;
+declare function calcDayDiff(date1: any, date2: any): number;
 declare function ytd(): void;
 declare function qtd(): void;
 declare function mtd(update?: boolean): void;

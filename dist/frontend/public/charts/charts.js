@@ -30,7 +30,9 @@ function randomColor() {
 }
 function updateCharts(date) {
     // TODO wrong parameter 
-    localStorage.setItem('date', JSON.stringify(date));
+    if (date) {
+        localStorage.setItem('date', JSON.stringify(date));
+    }
     if (firstClick || best) {
         bestButton(curColors);
     }
