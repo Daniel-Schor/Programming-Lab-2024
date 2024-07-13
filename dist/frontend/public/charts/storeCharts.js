@@ -226,7 +226,6 @@ function pizzaSize() {
         var data = Object.values(pizzaData);
         var option = {
             title: {
-                subtext: `Date: ${date}`,
                 textStyle: {
                     fontSize: 14,
                     align: "center",
@@ -247,18 +246,18 @@ function pizzaSize() {
                 levels: [
                     {},
                     {
-                        r0: '15%',
-                        r: '55%',
+                        r0: '10%',
+                        r: '75%',
                         itemStyle: {
                             borderWidth: 2
                         },
                         label: {
-                            rotate: 'tangential'
+                            rotate: 'radial' //'tangential'
                         }
                     },
                     {
-                        r0: '55%',
-                        r: '70%',
+                        r0: '75%',
+                        r: '95%',
                         label: {
                             align: 'right'
                         }

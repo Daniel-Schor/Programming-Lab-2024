@@ -272,7 +272,6 @@ function pizzaSize() {
 
       var option = {
         title: {
-          subtext: `Date: ${date}`,
           textStyle: {
             fontSize: 14,
             align: "center",
@@ -293,18 +292,18 @@ function pizzaSize() {
           levels: [
             {},
             { //inner circle radius
-              r0: '15%',
-              r: '55%',
+              r0: '10%',
+              r: '75%',
               itemStyle: {
                 borderWidth: 2
               },
               label: {
-                rotate: 'tangential'
+                rotate: 'radial'//'tangential'
               }
             },
             {// outer circle radius
-              r0: '55%',
-              r: '70%',
+              r0: '75%',
+              r: '95%',
               label: {
                 align: 'right'
               }
