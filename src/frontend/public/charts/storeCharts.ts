@@ -217,7 +217,7 @@ function heatmap() {
         yAxis: { type: "category", data: cleanedPizzas, splitArea: { show: true } },
         visualMap: {
           min: min, max: max, calculable: true,
-          orient: "horizontal", bottom: "-1%", 
+          orient: "horizontal", bottom: "-1%",
           left: "0%", itemWidth: 15, itemHeight: 70,
           textGap: 10,
           //text: ['High', 'Low'],
@@ -921,6 +921,8 @@ async function pizzaPopularity() {
     const response = await fetch(`/api/pizzaPopularity?date=${date}&storeID=${store.storeID}`);
     const data = await response.json();
 
+    data.map((item) => { item.Name = item.Name.replace(/ Pizza$/, ""); return item; });
+
     const processedData = processData(data);
     const names = Array.from(new Set(processedData.map(item => item.Name)));
     const dates = Array.from(new Set(processedData.map(item => item.purchaseDate)));
@@ -979,11 +981,31 @@ async function pizzaPopularity() {
         axisPointer: {
           type: 'line'
         },
+        position: function (point, params, dom, rect, size) {
+          return [point[0], point[1] - size.contentSize[1] - 10];
+        },
         formatter: params => {
-          const item = params[0];
-          const series = seriesList.find(series => series.name === item.seriesName);
-          const revenue = series.revenueData[item.dataIndex];
-          return `${item.marker}${item.seriesName}: ${revenue.toFixed(2)}`;
+          console.log(params);
+          let param = params[0];
+          let result = "Date: " + param.name + '</br>';
+
+          for (let i = 0; i < params.length; i++) {
+            for (let j = 0; j < params.length; j++) {
+              if (params[j].value === i + 1) {
+                param = params[j];
+                break;
+              }
+            }
+            let series = seriesList.find(series => series.name === param.seriesName);
+            let revenue = series.revenueData[param.dataIndex];
+            result += `
+            ${param.data}
+            ${param.marker}
+            ${param.seriesName} Pizza - Revenue: 
+            ${revenue.toFixed(2)}$</br>`;
+          }
+
+          return result;
         }
       },
       grid: {
