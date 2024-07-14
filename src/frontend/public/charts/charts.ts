@@ -57,10 +57,10 @@ function updateChart(chart, option) {
 
 
 function bestButton(colors = {}) {
-  let date = JSON.parse(localStorage.getItem("date"));
+  /*let date = JSON.parse(localStorage.getItem("date"));
   if (best && !date) {
     return;
-  }
+  }*/
   best = true;
   custom = false;
   firstClick = false;
@@ -75,10 +75,10 @@ function bestButton(colors = {}) {
 }
 
 function worstButton(colors = {}) {
-  let date = JSON.parse(localStorage.getItem("date"));
+  /*let date = JSON.parse(localStorage.getItem("date"));
   if (!best && !custom && !date) {
     return;
-  }
+  }*/
   best = false;
   custom = false;
   firstClick = false;

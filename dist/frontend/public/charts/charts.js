@@ -49,10 +49,10 @@ function updateChart(chart, option) {
     }
 }
 function bestButton(colors = {}) {
-    let date = JSON.parse(localStorage.getItem("date"));
+    /*let date = JSON.parse(localStorage.getItem("date"));
     if (best && !date) {
-        return;
-    }
+      return;
+    }*/
     best = true;
     custom = false;
     firstClick = false;
@@ -66,10 +66,10 @@ function bestButton(colors = {}) {
     revenueForecast();
 }
 function worstButton(colors = {}) {
-    let date = JSON.parse(localStorage.getItem("date"));
+    /*let date = JSON.parse(localStorage.getItem("date"));
     if (!best && !custom && !date) {
-        return;
-    }
+      return;
+    }*/
     best = false;
     custom = false;
     firstClick = false;

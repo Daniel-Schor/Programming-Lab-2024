@@ -259,24 +259,7 @@
     </script>
     <script>
       const map = L.map('map', { attributionControl: false }).setView([39, -119], 5);
-      /*function storeLocationMap() {
-        // Add OpenStreetMap tile layer
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: '',
-        }).addTo(map);
 
-        // Function to add markers to the map
-
-        // Fetch the data and add markers
-        fetch("/api/storeLocations")
-          .then((response) => response.json())
-          .then((stores) => {
-            //console.log(stores); // Log the data for debugging
-            addMarkers(stores); // Add markers to the map
-          })
-          .catch((error) => console.error("Error fetching data:", error));
-      }*/
-      console.log(localStorage.getItem("store"));
       storeLocationMap();
       let markersLayer = L.layerGroup().addTo(map);
 
