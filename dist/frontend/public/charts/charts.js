@@ -15,6 +15,7 @@ let firstClick = true;
 let colorPalette = ['#660000', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', /*'#a65628',*/ '#f781bf', '#999999', 'white'];
 let colorsToExclude = new Set();
 function getNextColor() {
+    Object.values(curColors).forEach(color => colorsToExclude.add(color));
     while (true) {
         for (let i = 0; i < colorPalette.length; i++) {
             if (!colorsToExclude.has(colorPalette[i])) {
@@ -22,7 +23,6 @@ function getNextColor() {
                 return colorPalette[i];
             }
         }
-        // BUG toggle -> custom -> select column: first color is duplicat
         colorsToExclude.clear();
     }
 }
@@ -100,7 +100,7 @@ async function customButton(update = false) {
             }
             colors = await revenueBarChart(curColors, custom);
             curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
-            colorsToExclude = new Set(Object.values(curColors));
+            Object.values(curColors).forEach(color => colorsToExclude.add(color));
             if (Object.keys(curColors).length === 0) {
                 bestButton();
                 break;
