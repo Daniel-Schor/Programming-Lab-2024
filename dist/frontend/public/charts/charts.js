@@ -239,7 +239,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
         fetch(req)
             .then((response) => response.json())
             .then((data) => {
-            let TESTCONDITION = JSON.parse(localStorage.getItem("barChartToggle")) || false;
+            let barChartToggle = JSON.parse(localStorage.getItem("barChartToggle")) || false;
             let option = {};
             if (JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
                 myChart.clear();
@@ -253,7 +253,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
             const storeNamesRight = storeNames.slice(middleIndex);
             const storeRevenuesLeft = storeRevenues.slice(0, middleIndex);
             const storeRevenuesRight = storeRevenues.slice(middleIndex);
-            if (TESTCONDITION) {
+            if (barChartToggle) {
                 option = {
                     textStyle: {
                         color: "white"
@@ -269,12 +269,29 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                         }
                     },
                     grid: [
-                        { left: '3%', right: '50%', bottom: '5%', top: '5%', containLabel: true },
-                        { left: '50%', right: '3%', bottom: '5%', top: '5%', containLabel: true }
+                        { left: '1%', right: '50%', bottom: '6%', top: '1%', containLabel: true },
+                        { left: '51%', right: '2%', bottom: '6%', top: '1%', containLabel: true }
                     ],
                     xAxis: [
-                        { type: 'value', gridIndex: 0 },
-                        { type: 'value', gridIndex: 1 }
+                        {
+                            type: 'value', gridIndex: 0, axisLabel: {
+                                formatter: function (value) {
+                                    return value / 1000 + 'k';
+                                }
+                            },
+                            name: 'Revenue (in thousands)',
+                            nameLocation: 'middle', // Position name in the middle of the y-axis
+                            nameTextStyle: {
+                                padding: [10, 0, 0, 426], // Adjust the padding to customize position,
+                            },
+                        },
+                        {
+                            type: 'value', gridIndex: 1, axisLabel: {
+                                formatter: function (value) {
+                                    return value / 1000 + 'k';
+                                }
+                            }
+                        }
                     ],
                     yAxis: [
                         {
@@ -283,7 +300,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                             data: storeNamesLeft,
                             axisTick: { alignWithLabel: true },
                             axisLabel: {
-                                fontSize: 16,
+                                fontSize: 12,
                             }
                         },
                         {
@@ -292,7 +309,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                             data: storeNamesRight,
                             axisTick: { alignWithLabel: true },
                             axisLabel: {
-                                fontSize: 16,
+                                fontSize: 12,
                             }
                         }
                     ],
@@ -343,15 +360,25 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     },
                     grid: {
                         left: '1%',
-                        right: '4%',
-                        bottom: '1%',
+                        right: '2%',
+                        bottom: '6%',
                         top: '1%',
                         containLabel: true
                     },
                     xAxis: [
                         {
-                            type: 'value'
-                        }
+                            type: 'value',
+                            axisLabel: {
+                                formatter: function (value) {
+                                    return value / 1000 + 'k';
+                                }
+                            },
+                            name: 'Revenue (in thousands)',
+                            nameLocation: 'middle', // Position name in the middle of the y-axis
+                            nameTextStyle: {
+                                padding: [10, 0, 0, 0], // Adjust the padding to customize position,
+                            },
+                        },
                     ],
                     yAxis: [
                         {
@@ -415,7 +442,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     else {
                         storeIDsColors[params.name] = undefined;
                     }
-                    if (TESTCONDITION) {
+                    if (barChartToggle) {
                         option = {
                             series: [
                                 {
