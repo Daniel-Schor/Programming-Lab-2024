@@ -228,56 +228,57 @@ async function fetchTotalOrders(storeID?: string, dow?: number) {
 }
 
 // Function to fetch total revenue
-async function fetchTotalRevenue(storeID?: string) {
+async function fetchTotalRevenue(storeID?: string, dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('totalRevenue').innerText = data.total_revenue;
 }
 
 // Function to fetch total customers
-async function fetchTotalCustomers() {
-  const response = await fetch(`/api/totalCustomers`);
+async function fetchTotalCustomers(storeID?: string, dow?: number) {
+  let date = JSON.parse(localStorage.getItem("date"));
+  const response = await fetch(`/api/totalCustomers?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('totalCustomers').innerText = data.total_customers;
 }
 
 // Function to fetch total pizzas sold
-async function fetchTotalPizzasSold(storeID?: string) {
+async function fetchTotalPizzasSold(storeID?: string, dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('totalPizzasSold').innerText = data.total_pizzas_sold;
 }
 
 // Function to fetch average orders per customer
-async function fetchAverageOrderCustomer(storeID?: string) {
+async function fetchAverageOrderCustomer(storeID?: string, dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
 }
 
 // Function to fetch average order value per customer
-async function fetchAverageOrderValueCustomer(storeID?: string) {
+async function fetchAverageOrderValueCustomer(storeID?: string, dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
 }
 
 // Function to fetch average pizzas per order per customer
-async function fetchAveragePizzasPerOrderCustomer(storeID?: string) {
+async function fetchAveragePizzasPerOrderCustomer(storeID?: string, dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('avgPizzasPerOrder').innerText = data.avg_pizzas_per_order;
 }
 
 // Function to fetch order frequency per customer
-async function fetchOrderFrequencyCustomer(storeID?: string) {
+async function fetchOrderFrequencyCustomer(storeID?: string, dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}`);
+  const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('orderFrequency').innerText = data.avg_order_frequency_in_days;
 }
