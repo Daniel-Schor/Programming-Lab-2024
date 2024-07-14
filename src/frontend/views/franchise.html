@@ -142,13 +142,13 @@
         <div class="section">
           <div class="section-items">
             <div class="btnbox">
-              <button class="btn" id="bestButton" style="z-index: 99;" onclick="bestButton();">STABLE</button>
-              <button class="btn" id="worstButton" style="z-index: 99;" onclick="worstButton();">UNSTABLE</button>
-              <button class="btn" id="customButton" style="z-index: 99;" onclick="customButton();">CUSTOM</button>
+              <button class="btn" id="bestButton" style="z-index: 99;" data-tooltip="shows the best stores" onclick="bestButton();">STABLE</button>
+              <button class="btn" id="worstButton" style="z-index: 99;" data-tooltip="shows the worst store" onclick="worstButton();">UNSTABLE</button>
+              <button class="btn" id="customButton" style="z-index: 99;" data-tooltip="Choose custom stores from the right" onclick="customButton();">CUSTOM</button>
             </div>
             <div class="btnbox" id="toggleBarChartBox" style="width: 80px; ">
               <!--TODO add tooltip-->
-              <button class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();"></button>
+              <button data-tooltip="Changes View" class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();"></button>
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
@@ -170,7 +170,7 @@
       <!--Bottom section-->
       <div class="section-items">
         <div class="subsection">
-          <h2 class="pizzaPopularityH" data-tooltip="This is the first placeholder section">Pizza Popularity</h2>
+          <h2 class="pizzaPopularityH" data-tooltip="Shows the Popularity of all Pizzas overtime">Pizza Popularity</h2>
           <div id="pizzaPopularity" class="diagram"></div>
         </div>
         <div class="pizzaRankingChart"></div>
@@ -191,7 +191,41 @@
       <!--End of Bottom section-->
       <!-- END OF CONTENT-->
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const tooltipElements = document.querySelectorAll('[data-tooltip]');
 
+        tooltipElements.forEach(el => {
+          el.addEventListener('mouseenter', showTooltip);
+          el.addEventListener('mouseleave', hideTooltip);
+        });
+
+        function showTooltip(event) {
+          const tooltipText = event.target.getAttribute('data-tooltip');
+          let tooltip = document.createElement('div');
+          tooltip.className = 'tooltip';
+          tooltip.innerText = tooltipText;
+          document.body.appendChild(tooltip);
+
+          const rect = event.target.getBoundingClientRect();
+          tooltip.style.left = `${rect.left + window.scrollX}px`;
+          tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
+
+          event.target._tooltip = tooltip;
+          setTimeout(() => tooltip.classList.add('show'), 10); // slight delay to transition
+        }
+
+        function hideTooltip(event) {
+          const tooltip = event.target._tooltip;
+          if (tooltip) {
+            tooltip.classList.remove('show');
+            tooltip.addEventListener('transitionend', () => tooltip.remove());
+            event.target._tooltip = null;
+          }
+        }
+      });
+
+    </script>
     <script>
       setToggleBarChartButton();
 
@@ -212,49 +246,11 @@
           document.getElementById("main").classList.toggle("active");
         }
       }
-      const headings = document.querySelectorAll('h2[data-tooltip]');
+     
 
-      headings.forEach(heading => {
-        heading.addEventListener('mouseenter', showTooltip);
-        heading.addEventListener('mouseleave', hideTooltip);
-      });
+      
 
-      document.addEventListener('DOMContentLoaded', function () {
-        const headings = document.querySelectorAll('h2[data-tooltip]');
-
-        headings.forEach(heading => {
-          heading.addEventListener('mouseenter', showTooltip);
-          heading.addEventListener('mouseleave', hideTooltip);
-        });
-
-        function showTooltip(event) {
-          const tooltipText = event.target.getAttribute('data-tooltip');
-          let tooltip = document.createElement('div');
-          tooltip.className = 'tooltip';
-          tooltip.innerText = tooltipText;
-          document.body.appendChild(tooltip);
-
-          const rect = event.target.getBoundingClientRect();
-          tooltip.style.left = `${rect.left + window.scrollX}px`;
-          tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight}px`;
-
-          // Show the tooltip
-          tooltip.classList.add('show');
-
-          event.target._tooltip = tooltip;
-        }
-
-        function hideTooltip(event) {
-          const tooltip = event.target._tooltip;
-          if (tooltip) {
-            tooltip.classList.remove('show');
-            tooltip.addEventListener('transitionend', () => {
-              tooltip.remove();
-            });
-            event.target._tooltip = null;
-          }
-        }
-      });
+      
 
     </script>
     <script>
