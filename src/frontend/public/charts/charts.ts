@@ -248,16 +248,23 @@ function revenueChart(best = true, storeColors = {}) {
   });
 }
 
-function toggleBarChart() {
+function setToggleBarChartButton() {
   if (JSON.parse(localStorage.getItem("barChartToggle"))) {
     document.getElementById('toggleBarChart')!.innerHTML = `
-    <i class="fa-solid fa-chart-bar"></i>  <i class="fa-solid fa-chart-bar"></i>`;
+    <i class="fa-solid fa-chart-bar"></i>`;
+  } else {
+    document.getElementById('toggleBarChart')!.innerHTML = `
+    <i class="fa-solid fa-chart-bar"></i>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-chart-bar"></i>`;
+  }
+}
+
+function toggleBarChart() {
+  if (JSON.parse(localStorage.getItem("barChartToggle"))) {
     localStorage.setItem("barChartToggle", JSON.stringify(false));
-    } else {
-      document.getElementById('toggleBarChart')!.innerHTML = `
-      <i class="fa-solid fa-chart-bar"></i>`;
+  } else {
     localStorage.setItem("barChartToggle", JSON.stringify(true));
   }
+  setToggleBarChartButton();
   localStorage.setItem("barChartTogglePressed", JSON.stringify(true));
   updateCharts();
 }

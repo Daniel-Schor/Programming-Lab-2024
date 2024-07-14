@@ -148,11 +148,7 @@
             </div>
             <div class="btnbox" id="toggleBarChartBox" style="width: 80px; ">
               <!--TODO add tooltip-->
-              <button class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();">
-              <!--FIXME must be correct setting on view swap write in script?-->
-                <i class="fa-solid fa-chart-bar"></i>
-                <i class="fa-solid fa-chart-bar"></i>  
-              </button>
+              <button class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();"></button>
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
@@ -197,6 +193,8 @@
     </div>
 
     <script>
+      setToggleBarChartButton();
+
       localStorage.removeItem("store", JSON.stringify([]));
 
       if (firstClick) {
