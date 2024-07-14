@@ -790,7 +790,7 @@ async function pizzaPopularity() {
 }
 function processData(data) {
     const totalEntries = data.length;
-    const useWeeklyData = totalEntries > 270; // Aggregate weekly if entries are above 270, else daily
+    const useWeeklyData = totalEntries > 280; // Aggregate weekly if entries are above 270, else daily
     // Determine desiredEntriesPerPizza based on totalEntries
     let desiredEntriesPerPizza = totalEntries < 290 ? 15 : 30; // Simplified the previous conditions
     const aggregatedDataMap = new Map();
