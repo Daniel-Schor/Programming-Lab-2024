@@ -106,6 +106,25 @@ body::-webkit-scrollbar {
   border-top-style: solid;
 }
 
+.city-button-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.city-button i {
+  transition: 0.3s;
+  color: #ff4500;
+  z-index: 9999;
+}
+
+.city-button i:hover,
+.city-button i:active {
+  transition: 0.3s;
+  color: #ff7247;
+  cursor: pointer;
+  z-index: 9999;
+}
+
 .city-button:active,
 .city-button:hover {
   transition: 0.3s;
@@ -160,11 +179,6 @@ button {
   background-color: #ff4500;
   z-index: 9999;
 }
-
-#toggleBarChart, #toggleBarChartBox {
-
-}
-
 
 button:hover,
 button:active,
