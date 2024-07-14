@@ -380,60 +380,53 @@ function addMarkers(stores) {
 }
 
 function revenueForecast() {
-  let dow = JSON.parse(localStorage.getItem("dow"));
-  var store = JSON.parse(localStorage.getItem("store"));
-  let date = JSON.parse(localStorage.getItem("date"));
+  async function fetchRevenueForecast() {
+    const response = await fetch('/api/revenue-forecast');
+    const data = await response.json();
+    return data;
+  }
 
-  var dom = document.getElementById("revenueForecast");
-  var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+  async function generateRevenueForecast() {
+    const data = await fetchRevenueForecast();
 
-  myChart.showLoading();
+    const periods = data.historical.map(entry => entry.period).concat(data.forecast.map(entry => entry.period));
+    const historicalRevenues = data.historical.map(entry => entry.revenue);
+    const forecastRevenues = Array(data.historical.length).fill(null).concat(data.forecast.map(entry => entry.revenue));
 
-  fetch(`/api/revenue-forecast-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
-    .then((response) => response.json())
-    .then((data) => {
-      let avgValues = Object.keys(data).map(month => data[month].avg);
-      var option = {
-        grid: {
-          top: '11%',
-          bottom: '7%',
-          left: '6%',
-          right: '6%'
+    const option = {
+      title: {
+        text: 'Revenue Forecast'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      xAxis: {
+        type: 'category',
+        data: periods
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: 'Historical Revenue',
+          type: 'line',
+          data: historicalRevenues
         },
-        xAxis: {
-          type: "category",
-          data: Object.keys(data),
-          /*name: "Timeline",*/
-        },
-        tooltip: {
-          trigger: "axis",
-          formatter: function (params) {
-            let index = params[0].dataIndex;
-            let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
-            return `month: ${index}<br/>Average Revenue: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
-          },
-        },
-        yAxis: {
-          type: "value",
-          name: "Predicted Revenue",
-        },
-        series: [
-          {
-            data: avgValues,
-            type: "line",
-            smooth: true,
-            /*name: "Average Orders",*/
-            symbolSize: 0
-          },
-        ],
-      };
+        {
+          name: 'Forecast Revenue',
+          type: 'line',
+          data: forecastRevenues
+        }
+      ]
+    };
 
-      myChart.hideLoading();
-      myChart.setOption(option);
-    })
-    .catch((error) => {
-      console.error("Error fetching revenue forecast data:", error);
-    });
+    const dom = document.getElementById('revenueForecast');
+    const myChart = echarts.init(dom);
+    myChart.setOption(option);
+  }
+
+  generateRevenueForecast();
 }
 
 function storeLocationMap() {

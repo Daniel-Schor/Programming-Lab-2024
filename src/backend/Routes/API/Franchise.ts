@@ -22,6 +22,45 @@ router.get('/storeLocations', async (req, res) => {
     }
 });
 
+
+router.get('/revenue-forecast', async (req, res) => {
+    try {
+      const currentYear = new Date().getFullYear();
+      const startDate = `${currentYear}-01-01`;
+  
+      const result = await client.query(`
+        SELECT DATE_TRUNC('month', purchaseDate) as period, SUM(total) as revenue
+        FROM purchase
+        WHERE purchaseDate >= $1
+        GROUP BY period
+        ORDER BY period;
+      `, [startDate]);
+  
+      const data = result.rows;
+      
+      // Einfaches Prognosemodell basierend auf dem Wachstum der letzten Monate
+      const forecastData = [];
+      if (data.length > 0) {
+        const lastRevenue = data[data.length - 1].revenue;
+        const growthRate = 1.05;  // Beispiel-Wachstumsrate, anpassbar
+        for (let i = 1; i <= 12; i++) {
+          forecastData.push({
+            period: new Date(new Date(data[data.length - 1].period).setMonth(new Date(data[data.length - 1].period).getMonth() + i)).toISOString().split('T')[0],
+            revenue: lastRevenue * Math.pow(growthRate, i)
+          });
+        }
+      }
+  
+      res.status(200).json({
+        historical: data,
+        forecast: forecastData
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Sorry, out of order');
+    }
+  });
+  
 // TODO move to General.ts
 router.get('/totalRevenue', async (req, res) => {
     try {
