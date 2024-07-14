@@ -40,9 +40,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     else {
                         var cityButton = document.createElement("button");
-                        cityButton.textContent = city;
+                        let currentButton = city;
+                        cityButton.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
                         cityButton.classList.add("city-button");
-                        cityButton.onclick = function () {
+                        cityButton.onclick = function (params) {
+                            let condition = !this.nextElementSibling.classList.contains("show");
+                            if (condition) {
+                                this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-down"></i></div>`;
+                            }
+                            else {
+                                this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
+                            }
                             this.nextElementSibling.classList.toggle("show");
                         };
                         cityDiv.appendChild(cityButton);
