@@ -70,28 +70,28 @@
                     <i class="fas fa-shopping-bag"></i>
                   </div>
                   <h2>Orders<h2>
-                      <p id="totalOrders">1234</p>
+                      <p id="totalOrders">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-dollar-sign"></i>
                   </div>
                   <h2>Revenue</h2>
-                  <p id="totalRevenue">1234</p>
+                  <p id="totalRevenue">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-users"></i>
                   </div>
                   <h2>Customers</h2>
-                  <p id="totalCustomers">1234</p>
+                  <p id="totalCustomers">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Pizzas sold</h2>
-                  <p id="totalPizzasSold">1234</p>
+                  <p id="totalPizzasSold">xxxx</p>
                 </div>
               </div>
             </div>
@@ -105,28 +105,28 @@
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Orders</h2>
-                  <p id="avgOrdersPerCustomer">1234</p>
+                  <p id="avgOrdersPerCustomer">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Order Value</h2>
-                  <p id="avgOrderValuePerCustomer">1234</p>
+                  <p id="avgOrderValuePerCustomer">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Pizzas per Order</h2>
-                  <p id="avgPizzasPerOrder">1234</p>
+                  <p id="avgPizzasPerOrder">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Order frequency</h2>
-                  <p id="orderFrequency">1234</p>
+                  <p id="orderFrequency">xxxx</p>
                 </div>
               </div>
             </div>
@@ -142,6 +142,9 @@
               <button class="btn" id="bestButton" style="z-index: 99;" onclick="bestButton();">STABLE</button>
               <button class="btn" id="worstButton" style="z-index: 99;" onclick="worstButton();">UNSTABLE</button>
               <button class="btn" id="customButton" style="z-index: 99;" onclick="customButton();">CUSTOM</button>
+            </div>
+            <div class="btnbox" style="width: 80px; ">
+              <button class="btn" id="customButton" style="z-index: 99;" onclick="toggleBarChart();">TOGGLE</button>
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
@@ -186,6 +189,8 @@
     </div>
 
     <script>
+      localStorage.removeItem("store", JSON.stringify([]));
+
       if (firstClick) {
         mtd(false);
         setActiveButton("bestButton");
@@ -273,18 +278,6 @@
 
       pizzaPopularity();
       revenueForecast();
-    </script>
-    <script>
-      // Call functions to fetch and display stats
-      const date = '2022-12-01'; // Example date, adjust as necessary
-      fetchTotalOrders(date);
-      fetchTotalRevenue(date);
-      fetchTotalCustomers();
-      fetchTotalPizzasSold(date);
-      fetchAverageOrderCustomer(date);
-      fetchAverageOrderValueCustomer(date);
-      fetchAveragePizzasPerOrderCustomer(date);
-      fetchOrderFrequencyCustomer(date);
     </script>
 </body>
 

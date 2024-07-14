@@ -225,7 +225,6 @@ function pizzaSize() {
     fetch(`/api/pizzaSize?date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((querieResult) => {
-        //console.log(querieResult);
         var pizzaData = {};
         querieResult.forEach((pizza) => {
             // Remove "Pizza" from the pizza name
@@ -762,7 +761,6 @@ function pizza_price_popularity() {
                     return [point[0], point[1] - size.contentSize[1] - 10];
                 },
                 formatter: function (params) {
-                    console.log(params);
                     return `${params.marker}Pizza: ${params.value[2]}<br/>Total Sales: ${params.value[0]}<br/>Price: ${params.value[1]}`;
                 },
             },
@@ -868,7 +866,6 @@ async function pizzaPopularity() {
                     return [point[0], point[1] - size.contentSize[1] - 10];
                 },
                 formatter: params => {
-                    console.log(params);
                     let param = params[0];
                     let result = "Date: " + param.name + '</br>';
                     for (let i = 0; i < params.length; i++) {
