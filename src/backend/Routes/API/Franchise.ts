@@ -501,32 +501,36 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
     }
 });
 
-router.get('/averageOrderFrequency', async (req, res) => {
+router.get('/revenue-forecast-analysis', async (req, res) => {
     try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
-        let query = `
-            SELECT ROUND(AVG(order_frequency), 2) AS avg_order_frequency_in_days
-            FROM (
-                SELECT customerID, 
-                       COUNT(purchaseID) AS total_orders, 
-                       DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS customer_period, 
-                       COUNT(purchaseID) / DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS order_frequency
-                FROM purchase
-                WHERE "purchaseDate" > $1`;
-                
+        const startDate = '2020-01-01'; // You can change this if needed
 
-        if (req.query.store) {
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        query += ` GROUP BY customerID
-            ) AS customer_order_frequencies`;
-        let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let query = `
+        SELECT 
+            DATE_TRUNC('month', "purchaseDate") as period, 
+            SUM(total) as revenue
+        FROM 
+            purchase
+        WHERE 
+            "purchaseDate" >= $1
+        GROUP BY 
+            period
+        ORDER BY 
+            period;`;
+
+        const parameters = [startDate];
+
+        const result = await client.query(query, parameters);
+
+        const formattedData = result.rows.map(row => ({
+            period: row.period,
+            revenue: row.revenue
+        }));
+
+        res.status(200).json({ data: formattedData });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, out of order');
+        res.status(500).send('Internal Server Error');
     }
 });
 
