@@ -183,6 +183,9 @@ function revenueChart(best = true, storeColors = {}) {
         });
 
         var option = {
+          textStyle: {
+            color: "white"
+          },
           tooltip: {
             trigger: "axis",
           },
@@ -257,6 +260,9 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
       .then((response) => response.json())
       .then((data) => {
         var option = {
+          textStyle: {
+            color: "white"
+          },
           tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -589,6 +595,9 @@ async function pizzaPopularity() {
     const seriesList = generateSeriesList();
 
     option = {
+      textStyle: {
+        color: "white"
+      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -622,8 +631,8 @@ async function pizzaPopularity() {
         }
       },
       grid: {
-        left: '0%',
-        right: '16%',
+        left: '1%',
+        right: '13%',
         bottom: '0%',
         top: '6%',
         containLabel: true

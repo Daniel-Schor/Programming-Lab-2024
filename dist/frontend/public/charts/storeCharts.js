@@ -124,8 +124,8 @@ function gaugeChart() {
             },
             series: [{
                     type: "gauge",
-                    center: ['50%', '47%'],
-                    radius: "85%",
+                    center: ['50%', '50%'],
+                    radius: "90%",
                     startAngle: 90,
                     endAngle: -270,
                     pointer: { show: false },
@@ -255,7 +255,7 @@ function pizzaSize() {
             series: {
                 type: "sunburst",
                 data: data,
-                radius: [0, "95%"],
+                radius: [0, "90%"],
                 sort: undefined,
                 emphasis: {
                     focus: "ancestor",
@@ -740,19 +740,30 @@ function pizza_price_popularity() {
         });
         let sizesArray = Array.from(sizes);
         var option = {
+            grid: {
+                left: '1%',
+                right: '5%',
+                bottom: '10%',
+                top: '10%',
+                containLabel: true
+            },
             textStyle: {
                 color: "white"
             },
             tooltip: {
                 trigger: "item",
+                position: function (point, params, dom, rect, size) {
+                    return [point[0], point[1] - size.contentSize[1] - 10];
+                },
                 formatter: function (params) {
-                    return `Pizza: ${params.value[2]}<br/>Total Sales: ${params.value[0]}<br/>Price: ${params.value[1]}`;
+                    console.log(params);
+                    return `${params.marker}Pizza: ${params.value[2]}<br/>Total Sales: ${params.value[0]}<br/>Price: ${params.value[1]}`;
                 },
             },
             legend: {
                 type: "scroll",
                 orient: "horizontal",
-                bottom: 10,
+                bottom: 0,
                 data: sizesArray, // Add only distinct sizes to legend
                 textStyle: {
                     color: "white"
@@ -760,11 +771,11 @@ function pizza_price_popularity() {
             },
             xAxis: {
                 type: "value",
-                name: "Total Sales",
+                name: "Sales",
             },
             yAxis: {
                 type: "value",
-                name: "Pizza Price",
+                name: "Price in $",
             },
             series: sizesArray.map((size) => ({
                 name: size,
@@ -873,8 +884,8 @@ async function pizzaPopularity() {
                 }
             },
             grid: {
-                left: '0%',
-                right: '16%',
+                left: '1%',
+                right: '13%',
                 bottom: '0%',
                 top: '6%',
                 containLabel: true
