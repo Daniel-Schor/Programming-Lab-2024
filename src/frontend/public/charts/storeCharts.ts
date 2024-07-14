@@ -741,6 +741,7 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
       const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
 
       const option = {
+        grid: { top: '3%', left: '1%', right: '10%', bottom: '15%', containLabel: true },
         textStyle: {
           color: "white"
         },
@@ -780,8 +781,7 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
         },
         xAxis: {
           type: "category",
-          name: "Pizza SKU",
-          nameLocation: "middle",
+          name: "Pizza",
           data: productSKUs,
           axisLabel: {
             show: false,
@@ -789,10 +789,16 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
         },
         yAxis: {
           type: "value",
-          name: "Total Revenue",
+          name: "Revenue",
+          nameLocation: "middle",
           axisLabel: {
             formatter: function (value) {
-              return (value * 100).toFixed(0) + "%";
+              let newValue = "";
+              // FIXME wrong: adjust grid
+              if (value !== 15000) {
+                newValue = (value / 1000) + "k";
+              }
+              return newValue;
             },
           },
         },
