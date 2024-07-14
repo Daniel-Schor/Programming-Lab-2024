@@ -598,107 +598,53 @@ function addMarkers(stores) {
 }
 
 function revenueForecast() {
+  async function fetchRevenueForecast() {
+    const response = await fetch('/api/revenue-forecast-analysis');
+    const data = await response.json();
+    return data;
+  }
+
   async function generateRevenueForecast() {
-    const periodType = 'day'; // 'day', 'month' oder 'year' - hier können Sie den gewünschten Wert festlegen
-    const dateString = localStorage.getItem("date");
-    const date = dateString ? JSON.parse(dateString) : "2023-01-01"; // Ersetzen Sie "2023-01-01" durch einen geeigneten Standardwert
+    const data = await fetchRevenueForecast();
 
-    const dom = document.getElementById("revenueForecast");
-
-    if (!dom) {
-      console.error("Element with ID 'revenueForecast' not found");
-      return;
-    }
-
-    const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, {});
-
-    if (!JSON.parse(localStorage.getItem("barChartTogglePressed") || 'false')) {
-      myChart.showLoading({
-        color: spinnerColor,
-        text: '',
-        maskColor: 'rgba(255, 255, 255, 0)',
-        zlevel: 1000,
-        spinnerRadius: spinnerRadius,
-        lineWidth: lineWidth,
-      });
-    }
-
-    const revenueData = await fetchRevenueForecast(date, periodType);
-
-    const periods = revenueData.map((entry: any) => entry.period);
-    const avgValues = revenueData.map((entry: any) => entry.avg);
-
-    const lastValue = avgValues[avgValues.length - 1];
-    const growthRate = 1.05;
-    const forecastValues = [];
-    for (let i = 1; i <= 12; i++) {
-      forecastValues.push(lastValue * Math.pow(growthRate, i));
-    }
-
-    const allPeriods = [...periods, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
-    const avgValuesWithForecast = [...avgValues, ...forecastValues];
-
-    const periodLabel = periodType === 'day' ? 'Day' : periodType === 'month' ? 'Month' : 'Year';
+    const periods = data.historical.map(entry => entry.period).concat(data.forecast.map(entry => entry.period));
+    const historicalRevenues = data.historical.map(entry => entry.revenue);
+    const forecastRevenues = Array(data.historical.length).fill(null).concat(data.forecast.map(entry => entry.revenue));
 
     const option = {
       title: {
-        text: 'Revenue Forecast',
-        left: 'center'
+        text: 'Revenue Forecast'
       },
       tooltip: {
         trigger: 'axis'
       },
-      legend: {
-        data: ['Average Revenue', 'Forecast'],
-        left: 'right'
-      },
-      grid: {
-        top: '11%',
-        bottom: '7%',
-        left: '6%',
-        right: '6%'
-      },
       xAxis: {
         type: 'category',
-        data: allPeriods,
-        name: periodLabel,
+        data: periods
       },
       yAxis: {
-        type: 'value',
-        name: "Average Revenue",
+        type: 'value'
       },
       series: [
         {
-          name: 'Average Revenue',
-          data: avgValues,
+          name: 'Historical Revenue',
           type: 'line',
-          smooth: true,
-          symbolSize: 0
+          data: historicalRevenues
         },
         {
-          name: 'Forecast',
-          data: avgValuesWithForecast.slice(avgValues.length),
+          name: 'Forecast Revenue',
           type: 'line',
-          smooth: true,
-          lineStyle: {
-            type: 'dashed'
-          },
-          symbolSize: 0
+          data: forecastRevenues
         }
       ]
     };
 
-    myChart.hideLoading();
+    const dom = document.getElementById('revenueForecast');
+    const myChart = echarts.init(dom);
     myChart.setOption(option);
   }
 
   generateRevenueForecast();
-
-  async function fetchRevenueForecast(date: string, periodType: string): Promise<any> {
-    const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&periodType=${periodType}&store=all`);
-    const data = await response.json();
-    return data;
-  }
 }
 
 function storeLocationMap() {
