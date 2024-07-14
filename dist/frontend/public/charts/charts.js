@@ -568,48 +568,68 @@ function addMarkers(stores) {
     });
 }
 function revenueForecast() {
-    async function fetchRevenueForecast() {
-        const response = await fetch('/api/revenue-forecast-analysis');
-        const data = await response.json();
-        return data;
-    }
-    async function generateRevenueForecast() {
-        const data = await fetchRevenueForecast();
-        const periods = data.historical.map(entry => entry.period).concat(data.forecast.map(entry => entry.period));
-        const historicalRevenues = data.historical.map(entry => entry.revenue);
-        const forecastRevenues = Array(data.historical.length).fill(null).concat(data.forecast.map(entry => entry.revenue));
-        const option = {
-            title: {
-                text: 'Revenue Forecast'
+    let date = JSON.parse(localStorage.getItem("date"));
+    var dom = document.getElementById("revenueForecast");
+    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
+    fetch(`/api/revenue-forecast-analysis?date=${date}`)
+        .then((response) => response.json())
+        .then((responseData) => {
+        let data = responseData.data;
+        let periods = data.map(item => new Date(item.period).toLocaleDateString("de-DE", {
+            year: "numeric",
+            month: "short"
+        }));
+        let revenues = data.map(item => parseFloat(item.revenue));
+        var option = {
+            textStyle: {
+                color: "white"
             },
-            tooltip: {
-                trigger: 'axis'
+            grid: {
+                top: '11%',
+                bottom: '7%',
+                left: '6%',
+                right: '6%'
             },
             xAxis: {
-                type: 'category',
-                data: periods
+                type: "category",
+                data: periods,
+                name: "Period",
+            },
+            tooltip: {
+                trigger: "axis",
+                formatter: function (params) {
+                    let index = params[0].dataIndex;
+                    return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} €`;
+                },
             },
             yAxis: {
-                type: 'value'
+                type: "value",
+                name: "Revenue (€)",
             },
             series: [
                 {
-                    name: 'Historical Revenue',
-                    type: 'line',
-                    data: historicalRevenues
+                    data: revenues,
+                    type: "line",
+                    smooth: true,
+                    name: "Revenue",
+                    symbolSize: 0
                 },
-                {
-                    name: 'Forecast Revenue',
-                    type: 'line',
-                    data: forecastRevenues
-                }
-            ]
+            ],
         };
-        const dom = document.getElementById('revenueForecast');
-        const myChart = echarts.init(dom);
+        myChart.hideLoading();
         myChart.setOption(option);
-    }
-    generateRevenueForecast();
+    })
+        .catch((error) => {
+        console.error("Error fetching revenue forecast data:", error);
+    });
 }
 function storeLocationMap() {
     // Add OpenStreetMap tile layer
