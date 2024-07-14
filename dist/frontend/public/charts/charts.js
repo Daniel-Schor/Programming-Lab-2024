@@ -49,10 +49,6 @@ function updateChart(chart, option) {
     }
 }
 function bestButton(colors = {}) {
-    let date = JSON.parse(localStorage.getItem("date"));
-    if (best && !date) {
-        return;
-    }
     best = true;
     custom = false;
     firstClick = false;
@@ -66,10 +62,6 @@ function bestButton(colors = {}) {
     revenueForecast();
 }
 function worstButton(colors = {}) {
-    let date = JSON.parse(localStorage.getItem("date"));
-    if (!best && !custom && !date) {
-        return;
-    }
     best = false;
     custom = false;
     firstClick = false;
@@ -84,10 +76,6 @@ function worstButton(colors = {}) {
 }
 async function customButton(update = false) {
     colorsToExclude = new Set(Object.values(curColors));
-    let date = JSON.parse(localStorage.getItem("date"));
-    if (custom && !date) {
-        return;
-    }
     best = false;
     custom = true;
     firstClick = false;
