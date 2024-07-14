@@ -1,5 +1,8 @@
 declare const currentDate = "2022-12-31";
 declare const theme = "infographic";
+declare const spinnerRadius = 20;
+declare const lineWidth = 10;
+declare const spinnerColor = "#ff4500";
 declare function monthlyRevenue(): void;
 declare function gaugeChart(): void;
 declare function heatmap(): void;

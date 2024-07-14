@@ -2,6 +2,9 @@
 // TODO use .env variables instead
 const currentDate = "2022-12-31";
 const theme = 'infographic';
+const spinnerRadius = 20;
+const lineWidth = 10;
+const spinnerColor = '#ff4500';
 function updateCharts(date) {
     if (date) {
         localStorage.setItem('date', JSON.stringify(date));
@@ -29,7 +32,14 @@ function monthlyRevenue() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("Store-revenue");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -56,7 +66,14 @@ function gaugeChart() {
     var dom = document.getElementById("quality");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/quality?date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -153,7 +170,14 @@ function heatmap() {
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     var option;
     let newData = [];
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/pizzaPairs?date=${date}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((querieResult) => {
@@ -213,7 +237,14 @@ function pizzaSize() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("PizzaSize");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     // Mapping of sizes to their abbreviations
     var sizeMapping = {
         "Small": "S",
@@ -302,7 +333,14 @@ function abcAnalysis_customer_1() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("abcAnalysis_customer_1");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -405,7 +443,14 @@ function abcAnalysis_customer_2() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("abcAnalysis_customer_2");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -502,7 +547,14 @@ function abcAnalysis_pizza_1() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("abcAnalysis_pizza_1");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -607,7 +659,14 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
     var store = JSON.parse(localStorage.getItem("store"));
     var dom = document.getElementById("abcAnalysis_pizza_2");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -720,7 +779,14 @@ function pizza_price_popularity() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("pizza_price_popularity");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/pizza-price-popularity?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -804,7 +870,14 @@ async function pizzaPopularity() {
     var option;
     var store = JSON.parse(localStorage.getItem("store"));
     try {
-        myChart.showLoading();
+        myChart.showLoading({
+            color: spinnerColor,
+            text: '',
+            maskColor: 'rgba(255, 255, 255, 0)',
+            zlevel: 1000,
+            spinnerRadius: spinnerRadius,
+            lineWidth: lineWidth,
+        });
         const response = await fetch(`/api/pizzaPopularity?date=${date}&storeID=${store.storeID}`);
         const data = await response.json();
         data.map((item) => { item.Name = item.Name.replace(/ Pizza$/, ""); return item; });
@@ -1017,7 +1090,14 @@ function dailyOrders() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("dailyOrders");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
@@ -1073,7 +1153,14 @@ function pizzaIngredients() {
     var chartDom = document.getElementById("pizzaIngredients");
     var myChart = echarts.init(chartDom);
     var option;
-    myChart.showLoading();
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     let request = `/api/ingredientUsage?date=${date}&storeID=${store.storeID}&dow=${dow}`;
     fetch(request)
         .then((response) => response.json())

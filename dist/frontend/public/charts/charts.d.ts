@@ -1,5 +1,8 @@
 declare const theme = "#ccc";
 declare const currentDate = "2022-12-31";
+declare const spinnerRadius = 20;
+declare const lineWidth = 10;
+declare const spinnerColor = "#ff4500";
 declare let best: boolean;
 declare let custom: boolean;
 declare let curColors: boolean;

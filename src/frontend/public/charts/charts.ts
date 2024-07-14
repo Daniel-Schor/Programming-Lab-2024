@@ -7,6 +7,10 @@ dotenv.config();
 const theme = '#ccc';
 const currentDate = "2022-12-31";
 
+const spinnerRadius = 20;
+const lineWidth = 10;
+const spinnerColor = '#ff4500';
+
 let best = false;
 let custom = false;
 let curColors = false;
@@ -147,7 +151,14 @@ function revenueChart(best = true, storeColors = {}) {
     }
 
     if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
-      myChart.showLoading();
+      myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+      });
     }
 
     fetch(req)
@@ -277,7 +288,14 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
     // Standard bar color
     const standardColor = '#ff4500';
 
-    myChart.showLoading();
+    myChart.showLoading({
+      color: spinnerColor,
+      text: '',
+      maskColor: 'rgba(255, 255, 255, 0)',
+      zlevel: 1000,
+      spinnerRadius: spinnerRadius,
+      lineWidth: lineWidth,
+    });
 
     let req = `/api/total-store-revenue?date=${date}`;
     fetch(req)
@@ -607,7 +625,14 @@ function revenueForecast() {
     const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, {});
 
     if (!JSON.parse(localStorage.getItem("barChartTogglePressed") || 'false')) {
-      myChart.showLoading();
+      myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+      });
     }
 
     const revenueData = await fetchRevenueForecast(date, periodType);
@@ -716,7 +741,15 @@ async function pizzaPopularity() {
   let date = JSON.parse(localStorage.getItem("date"));
 
   if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
-    myChart.showLoading();
+    myChart.showLoading({
+      color: spinnerColor,
+      text: '',
+      maskColor: 'rgba(255, 255, 255, 0)',
+      zlevel: 1000,
+      spinnerRadius: spinnerRadius,
+      lineWidth: lineWidth,
+    });
+
   }
 
   var option;
