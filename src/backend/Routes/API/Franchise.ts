@@ -383,13 +383,26 @@ router.get('/totalRevenue', async (req, res) => {
 
 router.get('/totalCustomers', async (req, res) => {
     try {
-        let result = await client.query(QUERIES.ALL_CUSTOMER);
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `
+            SELECT COUNT(DISTINCT "customerID") AS total_customers
+            FROM "purchase"
+            WHERE "purchaseDate" > $1`;
+
+        if (req.query.store) {
+            query += ` AND "storeID" = $2`;
+            parameter.push(req.query.store);
+        }
+
+        let result = await client.query(query, parameter);
         res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error(err);
         res.status(500).send('Sorry, out of order');
     }
 });
+
 
 router.get('/totalPizzas', async (req, res) => {
     try {
@@ -420,14 +433,14 @@ router.get('/averageOrderCustomer', async (req, res) => {
                      FROM (
                          SELECT "customerID", COUNT(*) AS "order_count"
                          FROM "purchase"
-                         WHERE "purchaseDate" > $1
-                         GROUP BY "customerID"
-                     ) AS "customer_orders"`;
+                         WHERE "purchaseDate" > $1`;    
 
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
             parameter.push(req.query.store);
         }
+            query+= ` GROUP BY "customerID"
+                     ) AS "customer_orders"`;
         let result = await client.query(query, parameter);
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -444,14 +457,15 @@ router.get('/averageOrderValueCustomer', async (req, res) => {
                      FROM (
                          SELECT "customerID", SUM("total") AS "total_order_value", COUNT(*) AS "order_count"
                          FROM "purchase"
-                         WHERE "purchaseDate" > $1
-                         GROUP BY "customerID"
-                     ) AS "customer_order_values"`;
+                         WHERE "purchaseDate" > $1`;
+                         
 
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
             parameter.push(req.query.store);
         }
+            query+= ` GROUP BY "customerID"
+                     ) AS "customer_order_values"`;
         let result = await client.query(query, parameter);
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -470,14 +484,15 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
                          FROM "purchase"
                          JOIN "purchaseItems" ON "purchase"."purchaseID" = "purchaseItems"."purchaseID"
                          JOIN "products" ON "purchaseItems"."SKU" = "products"."SKU"
-                         WHERE "purchase"."purchaseDate" > $1
-                         GROUP BY "purchase"."customerID", "purchase"."purchaseID"
-                     ) AS "pizzas_per_order_data"`;
+                         WHERE "purchase"."purchaseDate" > $1`;
+                         
 
         if (req.query.store) {
             query += ` AND "purchase"."storeID" = $2`;
             parameter.push(req.query.store);
         }
+            query+= ` GROUP BY "purchase"."customerID", "purchase"."purchaseID"
+                     ) AS "pizzas_per_order_data"`;
         let result = await client.query(query, parameter);
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -498,15 +513,15 @@ router.get('/averageOrderFrequency', async (req, res) => {
                        DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS customer_period, 
                        COUNT(purchaseID) / DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS order_frequency
                 FROM purchase
-                WHERE "purchaseDate" > $1
-                GROUP BY customerID
-            ) AS customer_order_frequencies
-        `;
+                WHERE "purchaseDate" > $1`;
+                
 
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
             parameter.push(req.query.store);
         }
+        query += ` GROUP BY customerID
+            ) AS customer_order_frequencies`;
         let result = await client.query(query, parameter);
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -514,6 +529,5 @@ router.get('/averageOrderFrequency', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-
 
 export default router;
