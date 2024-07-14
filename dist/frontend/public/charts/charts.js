@@ -1,5 +1,4 @@
 "use strict";
-// TODO use env variables instead
 /* MAIN STORE SITE
 import * as dotenv from 'dotenv';
 
@@ -27,7 +26,6 @@ function getNextColor() {
     }
 }
 function updateCharts(date) {
-    // TODO wrong parameter 
     if (date) {
         localStorage.setItem('date', JSON.stringify(date));
     }
@@ -116,7 +114,6 @@ async function customButton(update = false) {
         }
     }
 }
-// TODO move to generalCharts.ts
 function revenueChart(best = true, storeColors = {}) {
     let date = JSON.parse(localStorage.getItem("date"));
     return new Promise((resolve, reject) => {
