@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 */
-import * as echarts from 'echarts';
 // TODO use .env variables instead
 const theme = '#ccc';
 const currentDate = "2022-12-31";

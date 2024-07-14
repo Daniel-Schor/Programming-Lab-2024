@@ -547,22 +547,22 @@ function addMarkers(stores) {
     });
 }
 function revenueForecast() {
-    async function fetchRevenueForecast(date, periodType) {
-        const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&periodType=${periodType}&store=all`);
-        const data = await response.json();
-        return data;
-    }
     async function generateRevenueForecast() {
         const periodType = 'day'; // 'day', 'month' oder 'year' - hier können Sie den gewünschten Wert festlegen
-        const date = JSON.parse(localStorage.getItem("date"));
+        const dateString = localStorage.getItem("date");
+        const date = dateString ? JSON.parse(dateString) : "2023-01-01"; // Ersetzen Sie "2023-01-01" durch einen geeigneten Standardwert
         const dom = document.getElementById("revenueForecast");
-        const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-        if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+        if (!dom) {
+            console.error("Element with ID 'revenueForecast' not found");
+            return;
+        }
+        const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, {});
+        if (!JSON.parse(localStorage.getItem("barChartTogglePressed") || 'false')) {
             myChart.showLoading();
         }
         const revenueData = await fetchRevenueForecast(date, periodType);
-        const periods = revenueData.map(entry => entry.period);
-        const avgValues = revenueData.map(entry => entry.avg);
+        const periods = revenueData.map((entry) => entry.period);
+        const avgValues = revenueData.map((entry) => entry.avg);
         const lastValue = avgValues[avgValues.length - 1];
         const growthRate = 1.05;
         const forecastValues = [];
@@ -622,8 +622,12 @@ function revenueForecast() {
         myChart.hideLoading();
         myChart.setOption(option);
     }
-    // Funktion aufrufen
     generateRevenueForecast();
+    async function fetchRevenueForecast(date, periodType) {
+        const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&periodType=${periodType}&store=all`);
+        const data = await response.json();
+        return data;
+    }
 }
 function storeLocationMap() {
     // Add OpenStreetMap tile layer
