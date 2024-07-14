@@ -146,8 +146,13 @@
               <button class="btn" id="worstButton" style="z-index: 99;" onclick="worstButton();">UNSTABLE</button>
               <button class="btn" id="customButton" style="z-index: 99;" onclick="customButton();">CUSTOM</button>
             </div>
-            <div class="btnbox" style="width: 80px; ">
-              <button class="btn" id="customButton" style="z-index: 99;" onclick="toggleBarChart();">TOGGLE</button>
+            <div class="btnbox" id="toggleBarChartBox" style="width: 80px; ">
+              <!--TODO add tooltip-->
+              <button class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();">
+              <!--FIXME must be correct setting on view swap write in script?-->
+                <i class="fa-solid fa-chart-bar"></i>
+                <i class="fa-solid fa-chart-bar"></i>  
+              </button>
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."

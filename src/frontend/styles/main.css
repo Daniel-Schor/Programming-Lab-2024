@@ -161,6 +161,11 @@ button {
   z-index: 9999;
 }
 
+#toggleBarChart, #toggleBarChartBox {
+
+}
+
+
 button:hover,
 button:active,
 button.active {

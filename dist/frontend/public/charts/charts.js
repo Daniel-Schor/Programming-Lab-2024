@@ -222,9 +222,13 @@ function revenueChart(best = true, storeColors = {}) {
 }
 function toggleBarChart() {
     if (JSON.parse(localStorage.getItem("barChartToggle"))) {
+        document.getElementById('toggleBarChart').innerHTML = `
+    <i class="fa-solid fa-chart-bar"></i>  <i class="fa-solid fa-chart-bar"></i>`;
         localStorage.setItem("barChartToggle", JSON.stringify(false));
     }
     else {
+        document.getElementById('toggleBarChart').innerHTML = `
+      <i class="fa-solid fa-chart-bar"></i>`;
         localStorage.setItem("barChartToggle", JSON.stringify(true));
     }
     localStorage.setItem("barChartTogglePressed", JSON.stringify(true));

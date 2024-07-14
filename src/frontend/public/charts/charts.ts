@@ -250,8 +250,12 @@ function revenueChart(best = true, storeColors = {}) {
 
 function toggleBarChart() {
   if (JSON.parse(localStorage.getItem("barChartToggle"))) {
+    document.getElementById('toggleBarChart')!.innerHTML = `
+    <i class="fa-solid fa-chart-bar"></i>  <i class="fa-solid fa-chart-bar"></i>`;
     localStorage.setItem("barChartToggle", JSON.stringify(false));
-  } else {
+    } else {
+      document.getElementById('toggleBarChart')!.innerHTML = `
+      <i class="fa-solid fa-chart-bar"></i>`;
     localStorage.setItem("barChartToggle", JSON.stringify(true));
   }
   localStorage.setItem("barChartTogglePressed", JSON.stringify(true));
@@ -585,37 +589,37 @@ function revenueForecast() {
     const periodType = 'day'; // 'day', 'month' oder 'year' - hier können Sie den gewünschten Wert festlegen
     const dateString = localStorage.getItem("date");
     const date = dateString ? JSON.parse(dateString) : "2023-01-01"; // Ersetzen Sie "2023-01-01" durch einen geeigneten Standardwert
-  
+
     const dom = document.getElementById("revenueForecast");
-    
+
     if (!dom) {
       console.error("Element with ID 'revenueForecast' not found");
       return;
     }
-  
+
     const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, {});
-  
+
     if (!JSON.parse(localStorage.getItem("barChartTogglePressed") || 'false')) {
       myChart.showLoading();
     }
-  
+
     const revenueData = await fetchRevenueForecast(date, periodType);
-  
+
     const periods = revenueData.map((entry: any) => entry.period);
     const avgValues = revenueData.map((entry: any) => entry.avg);
-  
+
     const lastValue = avgValues[avgValues.length - 1];
     const growthRate = 1.05;
     const forecastValues = [];
     for (let i = 1; i <= 12; i++) {
       forecastValues.push(lastValue * Math.pow(growthRate, i));
     }
-  
+
     const allPeriods = [...periods, ...Array.from({ length: 12 }, (_, i) => `Forecast ${i + 1}`)];
     const avgValuesWithForecast = [...avgValues, ...forecastValues];
-  
+
     const periodLabel = periodType === 'day' ? 'Day' : periodType === 'month' ? 'Month' : 'Year';
-  
+
     const option = {
       title: {
         text: 'Revenue Forecast',
@@ -663,13 +667,13 @@ function revenueForecast() {
         }
       ]
     };
-  
+
     myChart.hideLoading();
     myChart.setOption(option);
   }
-  
+
   generateRevenueForecast();
-  
+
   async function fetchRevenueForecast(date: string, periodType: string): Promise<any> {
     const response = await fetch(`/api/revenue-forecast-analysis?date=${date}&periodType=${periodType}&store=all`);
     const data = await response.json();
