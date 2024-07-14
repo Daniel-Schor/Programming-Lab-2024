@@ -25,6 +25,7 @@ function getNextColor() {
         return colorPalette[i];
       }
     }
+    // BUG toggle -> custom -> select column: first color is duplicat
     colorsToExclude.clear();
   }
 }
@@ -212,6 +213,11 @@ function revenueChart(best = true, storeColors = {}) {
               type: "category",
               boundaryGap: false,
               data: days,
+              // FIXME make it work and add name
+              /*formatter: function (value) {
+                console.log(value);
+                return value / 1000 + 'k';
+              }*/
             },
           ],
           yAxis: [
@@ -313,7 +319,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     return value / 1000 + 'k';
                   }
                 },
-                name: 'Revenue (in thousands)',
+                name: 'Revenue',
                 nameLocation: 'middle',  // Position name in the middle of the y-axis
                 nameTextStyle: {
                   padding: [10, 0, 0, 426],  // Adjust the padding to customize position,
@@ -406,7 +412,7 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     return value / 1000 + 'k';
                   }
                 },
-                name: 'Revenue (in thousands)',
+                name: 'Revenue',
                 nameLocation: 'middle',  // Position name in the middle of the y-axis
                 nameTextStyle: {
                   padding: [10, 0, 0, 0],  // Adjust the padding to customize position,
