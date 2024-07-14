@@ -17,7 +17,6 @@ let firstClick = true;
 let colorPalette = ['#660000', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', /*'#a65628',*/ '#f781bf', '#999999', 'white'];
 let colorsToExclude = new Set();
 function getNextColor() {
-    Object.values(curColors).forEach(color => colorsToExclude.add(color));
     while (true) {
         for (let i = 0; i < colorPalette.length; i++) {
             if (!colorsToExclude.has(colorPalette[i])) {
@@ -84,6 +83,7 @@ function worstButton(colors = {}) {
     revenueForecast();
 }
 async function customButton(update = false) {
+    colorsToExclude = new Set(Object.values(curColors));
     let date = JSON.parse(localStorage.getItem("date"));
     if (custom && !date) {
         return;
@@ -101,7 +101,7 @@ async function customButton(update = false) {
             }
             colors = await revenueBarChart(curColors, custom);
             curColors = Object.fromEntries(Object.entries(colors).filter(([key, value]) => value !== undefined));
-            Object.values(curColors).forEach(color => colorsToExclude.add(color));
+            colorsToExclude = new Set(Object.values(curColors));
             if (Object.keys(curColors).length === 0) {
                 bestButton();
                 break;
