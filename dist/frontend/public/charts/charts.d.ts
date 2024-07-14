@@ -11,6 +11,7 @@ declare function bestButton(colors?: {}): void;
 declare function worstButton(colors?: {}): void;
 declare function customButton(update?: boolean): Promise<void>;
 declare function revenueChart(best?: boolean, storeColors?: {}): Promise<unknown>;
+declare function toggleBarChart(): void;
 declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean): Promise<unknown>;
 declare function addMarkers(stores: any): void;
 declare function revenueForecast(): void;

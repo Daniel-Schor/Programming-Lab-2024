@@ -12,7 +12,7 @@ let best = false;
 let custom = false;
 let curColors = false;
 let firstClick = true;
-let colorPalette = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', /*'#a65628',*/ '#f781bf', '#999999', 'white'];
+let colorPalette = ['#660000', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', /*'#a65628',*/ '#f781bf', '#999999', 'white'];
 let colorsToExclude = new Set();
 function getNextColor() {
     while (true) {
@@ -133,7 +133,9 @@ function revenueChart(best = true, storeColors = {}) {
         else {
             req += "&limit=5";
         }
-        myChart.showLoading();
+        if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+            myChart.showLoading();
+        }
         fetch(req)
             .then((response) => response.json())
             .then((data) => {
@@ -197,7 +199,7 @@ function revenueChart(best = true, storeColors = {}) {
                 ],
                 series: lineInfos,
             };
-            if (Object.keys(storeColors).length != 0) {
+            if (Object.keys(storeColors).length != 0 && !JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
                 myChart.clear();
             }
             updateChart(myChart, option);
@@ -215,6 +217,16 @@ function revenueChart(best = true, storeColors = {}) {
         });
     });
 }
+function toggleBarChart() {
+    if (JSON.parse(localStorage.getItem("barChartToggle"))) {
+        localStorage.setItem("barChartToggle", JSON.stringify(false));
+    }
+    else {
+        localStorage.setItem("barChartToggle", JSON.stringify(true));
+    }
+    localStorage.setItem("barChartTogglePressed", JSON.stringify(true));
+    updateCharts();
+}
 function revenueBarChart(storeIDsColors = {}, custom = false) {
     let date = JSON.parse(localStorage.getItem("date"));
     return new Promise((resolve, reject) => {
@@ -227,55 +239,144 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
         fetch(req)
             .then((response) => response.json())
             .then((data) => {
-            var option = {
-                textStyle: {
-                    color: "white"
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
+            let TESTCONDITION = JSON.parse(localStorage.getItem("barChartToggle")) || false;
+            let option = {};
+            if (JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+                myChart.clear();
+                localStorage.setItem("barChartTogglePressed", JSON.stringify(false));
+            }
+            const storeNames = Object.keys(data);
+            const storeRevenues = Object.values(data);
+            // Split the store names and revenues into two halves
+            const middleIndex = Math.ceil(storeNames.length / 2);
+            const storeNamesLeft = storeNames.slice(0, middleIndex);
+            const storeNamesRight = storeNames.slice(middleIndex);
+            const storeRevenuesLeft = storeRevenues.slice(0, middleIndex);
+            const storeRevenuesRight = storeRevenues.slice(middleIndex);
+            if (TESTCONDITION) {
+                option = {
+                    textStyle: {
+                        color: "white"
                     },
-                    formatter: function (params) {
-                        let store = params[0];
-                        return `${store.marker} ${store.name}</br>Revenue: ${store.value}$`;
-                    }
-                },
-                grid: {
-                    left: '1%',
-                    right: '4%',
-                    bottom: '1%',
-                    top: '1%',
-                    containLabel: true
-                },
-                xAxis: [
-                    {
-                        type: 'value'
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'category',
-                        data: Object.keys(data),
-                        axisTick: {
-                            alignWithLabel: true
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function (params) {
+                            let store = params[0];
+                            return `${store.marker} ${store.name}</br>Revenue: ${store.value}$`;
                         }
-                    }
-                ],
-                series: [
-                    {
-                        name: 'Total Revenue',
-                        type: 'bar',
-                        barWidth: '60%',
-                        data: Object.values(data).map((value, index) => ({
-                            value: value,
-                            itemStyle: {
-                                color: storeIDsColors[Object.keys(data)[index]] || standardColor
+                    },
+                    grid: [
+                        { left: '3%', right: '50%', bottom: '5%', top: '5%', containLabel: true },
+                        { left: '50%', right: '3%', bottom: '5%', top: '5%', containLabel: true }
+                    ],
+                    xAxis: [
+                        { type: 'value', gridIndex: 0 },
+                        { type: 'value', gridIndex: 1 }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'category',
+                            gridIndex: 0,
+                            data: storeNamesLeft,
+                            axisTick: { alignWithLabel: true },
+                            axisLabel: {
+                                fontSize: 16,
                             }
-                        }))
-                    }
-                ]
-            };
+                        },
+                        {
+                            type: 'category',
+                            gridIndex: 1,
+                            data: storeNamesRight,
+                            axisTick: { alignWithLabel: true },
+                            axisLabel: {
+                                fontSize: 16,
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Total Revenue',
+                            type: 'bar',
+                            xAxisIndex: 0,
+                            yAxisIndex: 0,
+                            barWidth: '60%',
+                            data: storeRevenuesLeft.map((value, index) => ({
+                                value: value,
+                                itemStyle: {
+                                    color: storeIDsColors[storeNamesLeft[index]] || standardColor
+                                }
+                            }))
+                        },
+                        {
+                            name: 'Total Revenue',
+                            type: 'bar',
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            barWidth: '60%',
+                            data: storeRevenuesRight.map((value, index) => ({
+                                value: value,
+                                itemStyle: {
+                                    color: storeIDsColors[storeNamesRight[index]] || standardColor
+                                }
+                            }))
+                        }
+                    ]
+                };
+            }
+            else {
+                option = {
+                    textStyle: {
+                        color: "white"
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function (params) {
+                            let store = params[0];
+                            return `${store.marker} ${store.name}</br>Revenue: ${store.value}$`;
+                        }
+                    },
+                    grid: {
+                        left: '1%',
+                        right: '4%',
+                        bottom: '1%',
+                        top: '1%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'category',
+                            data: Object.keys(data),
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Total Revenue',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: Object.values(data).map((value, index) => ({
+                                value: value,
+                                itemStyle: {
+                                    color: storeIDsColors[Object.keys(data)[index]] || standardColor
+                                }
+                            }))
+                        }
+                    ]
+                };
+            }
             option && myChart.setOption(option);
             if (!custom) {
                 myChart.off('click');
@@ -314,21 +415,55 @@ function revenueBarChart(storeIDsColors = {}, custom = false) {
                     else {
                         storeIDsColors[params.name] = undefined;
                     }
-                    option = {
-                        series: [
-                            {
-                                name: 'Total Revenue',
-                                type: 'bar',
-                                barWidth: '60%',
-                                data: Object.values(data).map((value, index) => ({
-                                    value: value,
-                                    itemStyle: {
-                                        color: storeIDsColors[Object.keys(data)[index]]
-                                    }
-                                }))
-                            }
-                        ]
-                    };
+                    if (TESTCONDITION) {
+                        option = {
+                            series: [
+                                {
+                                    name: 'Total Revenue',
+                                    type: 'bar',
+                                    xAxisIndex: 0,
+                                    yAxisIndex: 0,
+                                    barWidth: '60%',
+                                    data: storeRevenuesLeft.map((value, index) => ({
+                                        value: value,
+                                        itemStyle: {
+                                            color: storeIDsColors[storeNamesLeft[index]]
+                                        }
+                                    }))
+                                },
+                                {
+                                    name: 'Total Revenue',
+                                    type: 'bar',
+                                    xAxisIndex: 1,
+                                    yAxisIndex: 1,
+                                    barWidth: '60%',
+                                    data: storeRevenuesRight.map((value, index) => ({
+                                        value: value,
+                                        itemStyle: {
+                                            color: storeIDsColors[storeNamesRight[index]]
+                                        }
+                                    }))
+                                }
+                            ]
+                        };
+                    }
+                    else {
+                        option = {
+                            series: [
+                                {
+                                    name: 'Total Revenue',
+                                    type: 'bar',
+                                    barWidth: '60%',
+                                    data: Object.values(data).map((value, index) => ({
+                                        value: value,
+                                        itemStyle: {
+                                            color: storeIDsColors[Object.keys(data)[index]]
+                                        }
+                                    }))
+                                }
+                            ]
+                        };
+                    }
                     resolve(storeIDsColors);
                 });
             }
@@ -389,7 +524,9 @@ function revenueForecast() {
         const date = JSON.parse(localStorage.getItem("date"));
         const dom = document.getElementById("revenueForecast");
         const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-        myChart.showLoading();
+        if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+            myChart.showLoading();
+        }
         const revenueData = await fetchRevenueForecast(date, periodType);
         const periods = revenueData.map(entry => entry.period);
         const avgValues = revenueData.map(entry => entry.avg);
@@ -479,7 +616,9 @@ async function pizzaPopularity() {
     var chartDom = document.getElementById("pizzaPopularity");
     var myChart = echarts.init(chartDom, theme);
     let date = JSON.parse(localStorage.getItem("date"));
-    myChart.showLoading();
+    if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+        myChart.showLoading();
+    }
     var option;
     try {
         const response = await fetch(`/api/pizzaPopularity?date=${date}`);
