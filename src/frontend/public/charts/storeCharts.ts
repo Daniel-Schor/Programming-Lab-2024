@@ -1136,42 +1136,60 @@ async function pizzaPopularity() {
 
 function processData(data) {
   const totalEntries = data.length;
+  const useWeeklyData = totalEntries > 280;  // Aggregate weekly if entries are above 270, else daily
 
   // Determine desiredEntriesPerPizza based on totalEntries
-  let desiredEntriesPerPizza;
-  if (totalEntries < 260) {
-    desiredEntriesPerPizza = 15;
-  } else if (totalEntries > 270 && totalEntries <= 800) {
-    desiredEntriesPerPizza = 30;
-  } else {
-    // Handle cases where totalEntries exceeds 800 (if needed)
-    desiredEntriesPerPizza = 30; // Default to 30 for cases > 800
-  }
+  let desiredEntriesPerPizza = totalEntries < 290 ? 15 : 30; // Simplified the previous conditions
 
-  // Create a map to store filtered data for each pizza type
-  const filteredDataMap = new Map();
+  const aggregatedDataMap = new Map();
 
-  // Process each entry and group by pizza type
+  // Process each entry for aggregation
   data.forEach(item => {
     const pizzaName = item.Name;
-    if (!filteredDataMap.has(pizzaName)) {
-      filteredDataMap.set(pizzaName, []);
+    const date = new Date(item.purchaseDate);
+    const aggregationKey = useWeeklyData ? `Week ${getWeekNumber(date)}, ${date.getFullYear()}` : date.toISOString().split("T")[0];
+
+    if (!aggregatedDataMap.has(pizzaName)) {
+      aggregatedDataMap.set(pizzaName, new Map());
     }
-    filteredDataMap.get(pizzaName).push(item);
+    if (!aggregatedDataMap.get(pizzaName).has(aggregationKey)) {
+      aggregatedDataMap.get(pizzaName).set(aggregationKey, {
+        revenue: 0,
+        count: 0,
+        earliestDate: date
+      });
+    }
+
+    let entry = aggregatedDataMap.get(pizzaName).get(aggregationKey);
+    entry.revenue += parseFloat(item.revenue);
+    entry.count++;
+    if (date < entry.earliestDate) {
+      entry.earliestDate = date; // Update to the earliest date in the aggregation period
+    }
   });
 
-  // Filter each pizza type to retain only the desired number of entries
+  // Create a final processed data array
   const processedData = [];
-  filteredDataMap.forEach((entries, pizzaName) => {
-    const filteredEntries = entries.slice(0, desiredEntriesPerPizza);
-    processedData.push(...filteredEntries);
+  aggregatedDataMap.forEach((datesMap, pizzaName) => {
+    datesMap.forEach((info, key) => {
+      processedData.push({
+        Name: pizzaName,
+        purchaseDate: info.earliestDate.toISOString().split("T")[0], // Always use the specific date format
+        revenue: info.revenue / info.count
+      });
+    });
   });
 
-  return processedData.map(item => ({
-    Name: item.Name,
-    purchaseDate: new Date(item.purchaseDate).toISOString().split("T")[0], // Format date to YYYY-MM-DD
-    revenue: parseFloat(item.revenue) // Convert revenue to a number
-  }));
+  return processedData.sort((a, b) => a.purchaseDate.localeCompare(b.purchaseDate)); // Sort by date
+}
+
+// Helper function to calculate week number
+function getWeekNumber(date) {
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff = (date - start) + ((start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000);
+  const oneDay = 1000 * 60 * 60 * 24;
+  const day = Math.floor(diff / oneDay);
+  return Math.ceil(day / 7);
 }
 
 function changeDow(index: number = 1) {
