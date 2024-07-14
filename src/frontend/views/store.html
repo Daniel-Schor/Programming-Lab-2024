@@ -68,7 +68,7 @@
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
-                  <h2>Orders<h2>
+                  <h2 data-tooltip="This is the first placeholder section">Orders<h2>
                       <p id="sSales">xxxx</p>
                 </div>
                 <div class="statBox">
@@ -279,7 +279,41 @@
         <!--End of section b-->
         <!--End of Revenue section-->
         <!-- END OF CONTENT-->
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const tooltipElements = document.querySelectorAll('[data-tooltip]');
 
+            tooltipElements.forEach(el => {
+              el.addEventListener('mouseenter', showTooltip);
+              el.addEventListener('mouseleave', hideTooltip);
+            });
+
+            function showTooltip(event) {
+              const tooltipText = event.target.getAttribute('data-tooltip');
+              let tooltip = document.createElement('div');
+              tooltip.className = 'tooltip';
+              tooltip.innerText = tooltipText;
+              document.body.appendChild(tooltip);
+
+              const rect = event.target.getBoundingClientRect();
+              tooltip.style.left = `${rect.left + window.scrollX}px`;
+              tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
+
+              event.target._tooltip = tooltip;
+              setTimeout(() => tooltip.classList.add('show'), 10); // slight delay to transition
+            }
+
+            function hideTooltip(event) {
+              const tooltip = event.target._tooltip;
+              if (tooltip) {
+                tooltip.classList.remove('show');
+                tooltip.addEventListener('transitionend', () => tooltip.remove());
+                event.target._tooltip = null;
+              }
+            }
+          });
+
+        </script>
         <script>
           const d = new Date();
           let dow = d.getDay();
