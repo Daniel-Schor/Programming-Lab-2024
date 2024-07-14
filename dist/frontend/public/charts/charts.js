@@ -578,14 +578,16 @@ function revenueForecast() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("revenueForecast");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
-    myChart.showLoading({
-        color: spinnerColor,
-        text: '',
-        maskColor: 'rgba(255, 255, 255, 0)',
-        zlevel: 1000,
-        spinnerRadius: spinnerRadius,
-        lineWidth: lineWidth,
-    });
+    if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+        myChart.showLoading({
+            color: spinnerColor,
+            text: '',
+            maskColor: 'rgba(255, 255, 255, 0)',
+            zlevel: 1000,
+            spinnerRadius: spinnerRadius,
+            lineWidth: lineWidth,
+        });
+    }
     fetch(`/api/revenue-forecast-analysis?date=${date}`)
         .then((response) => response.json())
         .then((responseData) => {

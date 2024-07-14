@@ -20,5 +20,4 @@ declare function revenueBarChart(storeIDsColors?: {}, custom?: boolean): Promise
 declare function addMarkers(stores: any): void;
 declare function revenueForecast(): void;
 declare function storeLocationMap(): void;
-declare function getWeekNumber(date: any): number;
 declare function setActiveButton(buttonId: any): void;
