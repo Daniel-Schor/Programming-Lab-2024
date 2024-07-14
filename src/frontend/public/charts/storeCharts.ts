@@ -105,6 +105,9 @@ function gaugeChart() {
       ];
 
       var option = {
+        textStyle: {
+          color: "white"
+        },
         tooltip: {
           trigger: "item",
           formatter: function (params) {
@@ -202,14 +205,27 @@ function heatmap() {
         });
       });
       //----
-
+      const cleanedPizzas = pizzas.map(name => name.replace(/ Pizza$/, ""));
 
       option = {
+        textStyle: {
+          color: "white"
+        },
         tooltip: { position: "top" },
-        grid: { height: "50%", top: "10%", bottom: "10%", right: "5%", left: "5%" },
-        xAxis: { type: "category", data: pizzas, splitArea: { show: true } },
-        yAxis: { type: "category", data: pizzas, splitArea: { show: true } },
-        visualMap: { min: min, max: max, calculable: true, orient: "horizontal", left: "center", bottom: "15%" },
+        grid: { top: "3%", bottom: "10%", right: "2%", left: "1%", containLabel: true },
+        xAxis: { type: "category", data: cleanedPizzas, splitArea: { show: true } },
+        yAxis: { type: "category", data: cleanedPizzas, splitArea: { show: true } },
+        visualMap: {
+          min: min, max: max, calculable: true,
+          orient: "horizontal", bottom: "-1%", 
+          left: "0%", itemWidth: 15, itemHeight: 70,
+          textGap: 10,
+          //text: ['High', 'Low'],
+          textStyle: {
+            color: 'white'
+          },
+          align: "auto"
+        },
         series: [{
           name: "Combination with",
           type: "heatmap",
@@ -251,7 +267,7 @@ function pizzaSize() {
       //console.log(querieResult);
       var pizzaData = {};
       querieResult.forEach((pizza) => {
-        
+
         // Remove "Pizza" from the pizza name
         var pizzaName = pizza.Name.replace(/ Pizza$/, "");
 
@@ -476,6 +492,9 @@ function abcAnalysis_customer_2() {
 
       function updateChart() {
         var option = {
+          textStyle: {
+            color: "white"
+          },
           grid: {
             top: '3%',   // Adjust top padding to make space for title/legend if necessary
             left: '1%',   // Adjust left padding
@@ -722,6 +741,9 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
       const sizesArray = [...new Set(sizes)]; // Get unique sizes for the legend
 
       const option = {
+        textStyle: {
+          color: "white"
+        },
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -751,6 +773,9 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
           itemStyle: {
             borderColor: 'transparent',  // Remove border color
             color: 'transparent'  // Remove fill color
+          },
+          textStyle: {
+            color: "white"
           },
         },
         xAxis: {
@@ -838,6 +863,9 @@ function pizza_price_popularity() {
       let sizesArray = Array.from(sizes);
 
       var option = {
+        textStyle: {
+          color: "white"
+        },
         tooltip: {
           trigger: "item",
           formatter: function (params) {
@@ -849,6 +877,9 @@ function pizza_price_popularity() {
           orient: "horizontal",
           bottom: 10,
           data: sizesArray, // Add only distinct sizes to legend
+          textStyle: {
+            color: "white"
+          }
         },
         xAxis: {
           type: "value",
@@ -940,6 +971,9 @@ async function pizzaPopularity() {
     const seriesList = generateSeriesList();
 
     option = {
+      textStyle: {
+        color: "white"
+      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -1101,6 +1135,9 @@ function dailyOrders() {
     .then((data) => {
       let avgValues = Object.keys(data).map(hour => data[hour].avg);
       var option = {
+        textStyle: {
+          color: "white"
+        },
         grid: {
           top: '11%',
           bottom: '7%',
@@ -1184,6 +1221,9 @@ function pizzaIngredients() {
       const seriesData = xAxisData.map(ingredient => ingredients[ingredient].toFixed(2));
 
       option = {
+        textStyle: {
+          color: "white"
+        },
         grid: {
           top: '4%',
           bottom: '9%',
@@ -1227,10 +1267,7 @@ function pizzaIngredients() {
             name: 'Used in pizzas', // Set the name of the Y-axis
             nameLocation: 'middle', // Position the name in the middle
             nameTextStyle: {
-              fontSize: 'small',
-              fontWeight: '600',
               color: 'white',
-              fontFamily: 'Source Sans Pro',
               rotate: 90 // Rotate the Y-axis name
             },
             nameGap: 7 // Adjust the distance between the axis name and the axis line
