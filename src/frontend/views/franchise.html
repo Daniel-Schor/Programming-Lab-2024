@@ -70,28 +70,28 @@
                     <i class="fas fa-shopping-bag"></i>
                   </div>
                   <h2>Orders<h2>
-                      <p id="totalOrders">1234</p>
+                      <p id="totalOrders">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-dollar-sign"></i>
                   </div>
                   <h2>Revenue</h2>
-                  <p id="totalRevenue">1234</p>
+                  <p id="totalRevenue">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-users"></i>
                   </div>
                   <h2>Customers</h2>
-                  <p id="totalCustomers">1234</p>
+                  <p id="totalCustomers">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Pizzas sold</h2>
-                  <p id="totalPizzasSold">1234</p>
+                  <p id="totalPizzasSold">xxxx</p>
                 </div>
               </div>
             </div>
@@ -105,28 +105,28 @@
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Orders</h2>
-                  <p id="avgOrdersPerCustomer">1234</p>
+                  <p id="avgOrdersPerCustomer">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Order Value</h2>
-                  <p id="avgOrderValuePerCustomer">1234</p>
+                  <p id="avgOrderValuePerCustomer">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Pizzas per Order</h2>
-                  <p id="avgPizzasPerOrder">1234</p>
+                  <p id="avgPizzasPerOrder">xxxx</p>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Order frequency</h2>
-                  <p id="orderFrequency">1234</p>
+                  <p id="orderFrequency">xxxx</p>
                 </div>
               </div>
             </div>
@@ -186,6 +186,8 @@
     </div>
 
     <script>
+      localStorage.removeItem("store", JSON.stringify([]));
+
       if (firstClick) {
         mtd(false);
         setActiveButton("bestButton");

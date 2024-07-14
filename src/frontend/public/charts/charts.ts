@@ -524,7 +524,6 @@ function storeLocationMap() {
   fetch("/api/storeLocations")
     .then((response) => response.json())
     .then((stores) => {
-      //console.log(stores); // Log the data for debugging
       addMarkers(stores); // Add markers to the map
     })
     .catch((error) => console.error("Error fetching data:", error));
@@ -607,7 +606,6 @@ async function pizzaPopularity() {
           return [point[0], point[1] - size.contentSize[1] - 10];
         },
         formatter: params => {
-          console.log(params);
           let param = params[0];
           let result = "Date: " + param.name + '</br>';
 
