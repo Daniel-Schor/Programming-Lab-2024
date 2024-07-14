@@ -9,8 +9,8 @@
   <link rel="stylesheet" type="text/css" href="/style/container.css" />
   <link rel="stylesheet" type="text/css" href="/style/diagram.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-  <!--<script src="/static/echarts/infographic.js" type="text/javascript"></script>-->
   <script src="/static/echarts/echarts.js"></script>
   <script src="/static/charts/storeCharts.js" type="text/javascript"></script>
   <script src="/static/UI/ui.js" type="text/javascript"></script>
@@ -22,8 +22,11 @@
 </head>
 
 <body>
-  <button class="openbtn" onclick="toggleSidebar()">☰</button>
-  <a id="companyname" href="/">@ PizzaHub</a>
+  <button class="openbtn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+  <a id="companyname" href="/">
+    <i class="fa-solid fa-house"></i>
+    PizzaHub
+  </a>
   <div id="user">
     <h1>Sebastian Bremm</h1>
     <p>Programming Lab Professor</p>
@@ -62,20 +65,32 @@
               <h1 id="storeName">PizzaHub</h1>
               <div class="section-items">
                 <div class="statBox">
-                  <h2>Sales<h2>
-                      <p id="sSales"></p>
+                  <div class="iconBox">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h2>Orders<h2>
+                      <p id="sSales">xxxx</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-dollar-sign"></i>
+                  </div>
                   <h2>Revenue</h2>
-                  <p id="sRevenue"></p>
+                  <p id="sRevenue">xxxx</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fas fa-users"></i>
+                  </div>
                   <h2>Customers</h2>
-                  <p id="sCustomers"></p>
+                  <p id="sCustomers">xxxx</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fa-solid fa-pizza-slice"></i>
+                  </div>
                   <h2>Pizzas sold</h2>
-                  <p id="sPizzasSold"></p>
+                  <p id="sPizzasSold">xxxx</p>
                 </div>
               </div>
             </div>
@@ -85,18 +100,30 @@
               <div class="section-items">
                 <div class="statBox">
                   <div id="stat-item"></div>
+                  <div class="iconBox">
+                    <i class="fas fa-shopping-bag"></i>
+                  </div>
                   <h2>Orders</h2>
-                  <p id="avgOrdersPerCustomer"></p>
+                  <p id="avgOrdersPerCustomer">xxxx</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                  </div>
                   <h2>Order Value</h2>
-                  <p id="avgOrderValuePerCustomer"></p>
+                  <p id="avgOrderValuePerCustomer">xxxx</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fa-solid fa-list-ol"></i>
+                  </div>
                   <h2>Pizzas per Order</h2>
-                  <p id="avgPizzasPerOrder"></p>
+                  <p id="avgPizzasPerOrder">xxxx</p>
                 </div>
                 <div class="statBox">
+                  <div class="iconBox">
+                    <i class="fa-solid fa-rotate"></i>
+                  </div>
                   <h2>Order frequency</h2>
                   <p>xxxx</p> <!-- Placeholder retained -->
                 </div>
@@ -155,8 +182,12 @@
               <div class="subsection" style="margin-top: 0px; margin-left: 0px; margin-right: 0px;">
                 <div class="section-items" style="justify-content: space-between;">
                   <div class="btnbox" style="width: 120px;">
-                    <button class="btn" id="" onclick="changeDow(-1);" style="z-index: 99;">BACK</button>
-                    <button class="btn" id="" onclick="changeDow(1);" style="z-index: 99;">NEXT</button>
+                    <button class="btn" id="" onclick="changeDow(-1);" style="z-index: 99;">
+                      <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="btn" id="" onclick="changeDow(1);" style="z-index: 99;">
+                      <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                   </div>
                   <div class="btnbox" style="width: 60px;">
                     <button class="infobox" id="dowInfo">TODAY</button>
@@ -181,20 +212,32 @@
                     <div class="section-items">
                       <div class="statBox">
                         <div id="stat-item"></div>
+                        <div class="iconBox">
+                          <i class="fa-solid fa-pizza-slice"></i>
+                        </div>
                         <h2>Pizzas</h2>
-                        <p id="totalPizzas"></p>
+                        <p id="totalPizzas">xxxx</p>
                       </div>
                       <div class="statBox">
+                        <div class="iconBox">
+                          <i class="fas fa-dollar-sign"></i>
+                        </div>
                         <h2>Revenue</h2>
-                        <p id="totalRevenue"></p>
+                        <p id="totalRevenue">xxxx</p>
                       </div>
                       <div class="statBox">
+                        <div class="iconBox">
+                          <i class="fas fa-shopping-bag"></i>
+                        </div>
                         <h2>Orders</h2>
-                        <p id="totalOrders"></p>
+                        <p id="totalOrders">xxxx</p>
                       </div>
                       <div class="statBox">
+                        <div class="iconBox">
+                          <i class="fas fa-users"></i>
+                        </div>
                         <h2>Customers</h2>
-                        <p id="totalCustomers"></p>
+                        <p id="totalCustomers">xxxx</p>
                       </div>
                     </div>
                   </div>
