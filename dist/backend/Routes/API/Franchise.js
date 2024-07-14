@@ -277,8 +277,9 @@ router.get('/pizzaPopularity', async (req, res) => {
 router.get('/revenue-forecast-analysis', async (req, res) => {
     try {
         const date = req.query.date || process.env.DEFAULT_DATE;
-        const periodType = req.query.periodType; // periodType kann 'day', 'month' oder 'year' sein
+        const periodType = req.query.periodType; // periodType can be 'day', 'month' or 'year'
         const store = req.query.store;
+        console.log("Received request with parameters:", { date, periodType, store });
         let parameters = [date];
         let query = `
             SELECT DATE_TRUNC('${periodType}', purchaseDate) as period, AVG(total) as avg
@@ -290,11 +291,13 @@ router.get('/revenue-forecast-analysis', async (req, res) => {
             parameters.push(store);
         }
         query += ` GROUP BY period ORDER BY period`;
+        console.log("Executing query:", query, "with parameters:", parameters);
         const result = await client.query(query, parameters);
+        console.log("Query result:", result.rows);
         res.status(200).json(result.rows);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error in /revenue-forecast-analysis endpoint:", err);
         res.status(500).send('Sorry, out of order');
     }
 });
@@ -434,9 +437,7 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
     }
     catch (err) {
         console.error(err);
-        res.status;
-        500.;
-        send('Sorry, out of order');
+        res.status(500).send('Sorry, out of order');
     }
 });
 router.get('/averageOrderFrequency', async (req, res) => {

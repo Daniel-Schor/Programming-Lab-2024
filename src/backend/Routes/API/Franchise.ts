@@ -482,7 +482,7 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
         res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status 500.send('Sorry, out of order');
+        res.status(500).send('Sorry, out of order');
     }
 });
 

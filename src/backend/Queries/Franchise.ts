@@ -8,24 +8,24 @@ const QUERIES = {
                         FROM purchase 
                         WHERE "purchaseDate" > $1 
                         GROUP BY "storeID" 
-                        ORDER BY total_revenue DESC`
-    ALL_ORDERS: `SELECT COUNT(*) AS total_orders FROM purchase;`
-    WHOLE_REVENUE: `SELECT SUM(total) AS total_revenue FROM purchase;`
-    ALL_CUSTOMER: `SELECT COUNT(*) AS total_customers FROM customers;`
+                        ORDER BY total_revenue DESC`,
+    ALL_ORDERS: `SELECT COUNT(*) AS total_orders FROM purchase;`,
+    WHOLE_REVENUE: `SELECT SUM(total) AS total_revenue FROM purchase;`,
+    ALL_CUSTOMER: `SELECT COUNT(*) AS total_customers FROM customers;`,
     ALL_PIZZAS_SOLD: `SELECT COUNT(*) AS "total_pizzas_sold"
-                      FROM "purchaseItems"`
+                      FROM "purchaseItems"`,
     AVERAGE_ORDER_CUSTOMER: `SELECT ROUND(AVG("order_count"), 2) AS "avg_orders_per_customer"
                             FROM (
                                 SELECT "customerID", COUNT(*) AS "order_count"
                                 FROM "purchase"
                                 GROUP BY "customerID"
-                            ) AS "customer_orders";`
+                            ) AS "customer_orders";`,
     AVERAGE_ORDER_VALUE_CUSTOMER: `SELECT ROUND(AVG("total_order_value" / "order_count"), 2) AS "avg_order_value_per_order"
                                    FROM (
                                         SELECT "customerID", SUM("total") AS "total_order_value", COUNT(*) AS "order_count"
                                         FROM "purchase"
                                         GROUP BY "customerID"
-                                   ) AS "customer_order_values";`
+                                   ) AS "customer_order_values";`,
     AVERAGE_PIZZAS_PER_ORDER_CUSTOMER: `SELECT AVG("pizzas_per_order") AS "avg_pizzas_per_order"
                                        FROM (
                                             SELECT "purchase"."customerID", "purchase"."purchaseID", COUNT("purchaseItems"."SKU") AS "pizzas_per_order"
@@ -33,7 +33,7 @@ const QUERIES = {
                                             JOIN "purchaseItems" ON "purchase"."purchaseID" = "purchaseItems"."purchaseID"
                                             JOIN "products" ON "purchaseItems"."SKU" = "products"."SKU"
                                             GROUP BY "purchase"."customerID", "purchase"."purchaseID"
-                                       ) AS "pizzas_per_order_data"`
+                                       ) AS "pizzas_per_order_data"`,
     ORDER_FREQUENCY_CUSTOMER: `SELECT AVG(order_frequency) AS avg_order_frequency_in_days
                                 FROM (
                                 SELECT customerID, 
