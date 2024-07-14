@@ -220,14 +220,16 @@ function visibilityCoustomDate() {
 
 
 // Function to fetch total orders
-async function fetchTotalOrders(date: string, storeID?: string) {
-  const response = await fetch(`/api/totalOrders?date=${date}${storeID ? `&store=${storeID}` : ''}`);
-  const data = await response.json();
+async function fetchTotalOrders(storeID?: string, dow?: number) {
+  let date = JSON.parse(localStorage.getItem("date"));
+  let response = await fetch(`/api/totalOrders?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+  let data = await response.json();
   document.getElementById('totalOrders').innerText = data.total_orders;
 }
 
 // Function to fetch total revenue
-async function fetchTotalRevenue(date: string, storeID?: string) {
+async function fetchTotalRevenue(storeID?: string) {
+  let date = JSON.parse(localStorage.getItem("date"));
   const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}`);
   const data = await response.json();
   document.getElementById('totalRevenue').innerText = data.total_revenue;
@@ -241,35 +243,40 @@ async function fetchTotalCustomers() {
 }
 
 // Function to fetch total pizzas sold
-async function fetchTotalPizzasSold(date: string, storeID?: string) {
+async function fetchTotalPizzasSold(storeID?: string) {
+  let date = JSON.parse(localStorage.getItem("date"));
   const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}`);
   const data = await response.json();
   document.getElementById('totalPizzasSold').innerText = data.total_pizzas_sold;
 }
 
 // Function to fetch average orders per customer
-async function fetchAverageOrderCustomer(date: string, storeID?: string) {
+async function fetchAverageOrderCustomer(storeID?: string) {
+  let date = JSON.parse(localStorage.getItem("date"));
   const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
   const data = await response.json();
   document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
 }
 
 // Function to fetch average order value per customer
-async function fetchAverageOrderValueCustomer(date: string, storeID?: string) {
+async function fetchAverageOrderValueCustomer(storeID?: string) {
+  let date = JSON.parse(localStorage.getItem("date"));
   const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
   const data = await response.json();
   document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
 }
 
 // Function to fetch average pizzas per order per customer
-async function fetchAveragePizzasPerOrderCustomer(date: string, storeID?: string) {
+async function fetchAveragePizzasPerOrderCustomer(storeID?: string) {
+  let date = JSON.parse(localStorage.getItem("date"));
   const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}`);
   const data = await response.json();
   document.getElementById('avgPizzasPerOrder').innerText = data.avg_pizzas_per_order;
 }
 
 // Function to fetch order frequency per customer
-async function fetchOrderFrequencyCustomer(date: string, storeID?: string) {
+async function fetchOrderFrequencyCustomer(storeID?: string) {
+  let date = JSON.parse(localStorage.getItem("date"));
   const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}`);
   const data = await response.json();
   document.getElementById('orderFrequency').innerText = data.avg_order_frequency_in_days;
@@ -277,15 +284,18 @@ async function fetchOrderFrequencyCustomer(date: string, storeID?: string) {
 
 // Call functions on page load
 document.addEventListener('DOMContentLoaded', function () {
-  const date = '2022-12-01'; // Example date, adjust as necessary
-  fetchTotalOrders(date);
-  fetchTotalRevenue(date);
+  const date = '2022-12-01';
+  if (!localStorage.getItem('date')) {
+    localStorage.setItem('date', JSON.stringify(date));
+  }
+  fetchTotalOrders();
+  fetchTotalRevenue();
   fetchTotalCustomers();
-  fetchTotalPizzasSold(date);
-  fetchAverageOrderCustomer(date);
-  fetchAverageOrderValueCustomer(date);
-  fetchAveragePizzasPerOrderCustomer(date);
-  fetchOrderFrequencyCustomer(date);
+  fetchTotalPizzasSold();
+  fetchAverageOrderCustomer();
+  fetchAverageOrderValueCustomer();
+  fetchAveragePizzasPerOrderCustomer();
+  fetchOrderFrequencyCustomer();
 });
 
 

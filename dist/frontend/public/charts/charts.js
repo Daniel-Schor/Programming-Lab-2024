@@ -40,6 +40,13 @@ function updateCharts(date) {
     else {
         worstButton(curColors);
     }
+    fetchTotalOrders();
+    fetchTotalRevenue();
+    fetchTotalCustomers();
+    fetchTotalPizzasSold();
+    fetchAverageOrderCustomer();
+    fetchAverageOrderValueCustomer();
+    fetchAveragePizzasPerOrderCustomer();
     pizzaPopularity();
 }
 // TODO move to generalCharts.ts

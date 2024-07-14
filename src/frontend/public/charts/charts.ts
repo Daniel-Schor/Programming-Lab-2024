@@ -43,7 +43,13 @@ function updateCharts(date?: string) {
   } else {
     worstButton(curColors);
   }
-
+  fetchTotalOrders();
+  fetchTotalRevenue();
+  fetchTotalCustomers();
+  fetchTotalPizzasSold();
+  fetchAverageOrderCustomer();
+  fetchAverageOrderValueCustomer();
+  fetchAveragePizzasPerOrderCustomer();
   pizzaPopularity();
 }
 
