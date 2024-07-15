@@ -119,8 +119,9 @@ function gaugeChart() {
                             return `
                 ${params.marker} 
                 Overall<br/>
-                Score compared to <br/>
-                other stores: ${params.value}
+                Average of scores compared <br/>
+                to other stores: ${params.value} <br/>
+                (0 = worst, 100 = best)
                 `;
                         case "Loyalty":
                             return `
@@ -486,14 +487,12 @@ function abcAnalysis_customer_2() {
                     trigger: "axis",
                     axisPointer: { type: "shadow" },
                     formatter: function (params) {
+                        const marker = params[0].marker;
                         const index = params[0].dataIndex;
                         return `
-                              Green good, red bad.<br/>
-                              A customer good, C customer bad.<br/>
-                              ABC Category: ${filteredData.abcCategories[index]}<br/>
-                              Customer ID: ${filteredData.customerID[index]}<br/>
-                              Total Revenue: ${filteredData.totalSales[index]}<br/>
-                              Total Orders: ${filteredData.totalOrders[index]}<br/>
+                              ${marker} ${filteredData.customerID[index]}<br/>
+                              Revenue: ${filteredData.totalSales[index]}<br/>
+                              Orders: ${filteredData.totalOrders[index]}<br/>
                               Average Order Value: ${filteredData.averageOrderValue[index]?.toFixed(2) ?? 'N/A'}
                           `;
                     },
@@ -710,12 +709,9 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
                 formatter: function (params) {
                     const index = params[0].dataIndex;
                     return `
-              Product Name: ${names[index]}<br/>
-              Product SKU: ${productSKUs[index]}<br/>
-              Total Revenue: ${totalSales[index]}<br/>
-              Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%<br/>
-              ABC Category: ${abcCategories[index]}<br/>
-              Size: ${sizes[index]}
+              ${params[0].marker} ${names[index]} - ${sizes[index]}<br/>
+              SKU: ${productSKUs[index]}<br/>
+              Revenue: ${totalSales[index]}<br/>
             `;
                 },
             },
@@ -1150,8 +1146,9 @@ function dailyOrders() {
                 trigger: "axis",
                 formatter: function (params) {
                     let index = params[0].dataIndex;
-                    let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
-                    return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
+                    let bestPizzasText = data[index].bestPizza ? `Best Pizza:</br>${data[index].bestPizza.join("<br/>")}` : '';
+                    let averageOrdersText = data[index].avg ? `Average Orders: ${data[index].avg}` : '';
+                    return `Hour: ${index}<br/>${averageOrdersText}<br/>${bestPizzasText}`;
                 },
             },
             yAxis: {
