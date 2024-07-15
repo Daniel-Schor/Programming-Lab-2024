@@ -578,7 +578,7 @@ function addMarkers(stores) {
     });
 }
 function revenueForecast() {
-    let date = JSON.parse(localStorage.getItem("date"));
+    let endDate = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("revenueForecast");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     var startPeriod = new Date("2022-12-31");
@@ -603,11 +603,15 @@ function revenueForecast() {
             }),
             parseFloat(item.revenue)
         ]);
-        // Filter to find the indices of the periods within the specified date range
+        // Sort data by date to ensure correct index calculation
+        data.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+        // Find indices for the period to be highlighted
         let startIdx = data.findIndex(([d]) => new Date(d) >= startPeriod);
-        let endIdx = data.findIndex(([d]) => new Date(d) >= new Date(date));
+        let endIdx = data.findIndex(([d]) => new Date(d) > new Date(endDate));
         if (endIdx === -1)
-            endIdx = data.length - 1; // Use the last index if the specified date exceeds the range
+            endIdx = data.length; // If end date exceeds range, use the last index
+        if (startIdx === -1)
+            startIdx = data.length; // If start date is not within data, skip coloring
         var option = {
             textStyle: {
                 color: "white"
@@ -620,7 +624,8 @@ function revenueForecast() {
             },
             xAxis: {
                 type: 'category',
-                boundaryGap: false
+                boundaryGap: false,
+                data: data.map(item => item[0]) // Setting X-axis data
             },
             yAxis: {
                 type: 'value',
@@ -631,15 +636,15 @@ function revenueForecast() {
                 show: false,
                 dimension: 0,
                 seriesIndex: 0,
-                pieces: [{
-                        gt: startIdx - 1, // "-1" because gt is exclusive
-                        lt: endIdx,
+                pieces: startIdx < endIdx ? [{
+                        gt: startIdx - 1, // Using gt (greater than), adjusting by -1 for exclusive boundary
+                        lt: endIdx, // Using lt (less than)
                         color: 'rgba(0, 0, 180, 0.4)' // Highlighting color
-                    }]
+                    }] : []
             },
             series: [
                 {
-                    data: data,
+                    data: data.map(item => item[1]),
                     type: 'line',
                     smooth: 0.6,
                     symbol: 'none',
@@ -650,7 +655,7 @@ function revenueForecast() {
                     markLine: {
                         symbol: ['none', 'none'],
                         label: { show: false },
-                        data: [{ xAxis: startIdx }, { xAxis: endIdx }]
+                        data: [{ xAxis: data[startIdx] ? data[startIdx][0] : null }, { xAxis: data[endIdx] ? data[endIdx][0] : null }]
                     },
                     areaStyle: {}
                 }
