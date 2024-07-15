@@ -43,14 +43,17 @@ function updateCharts(date?: string) {
   } else {
     worstButton(curColors);
   }
-  fetchTotalOrders();
-  fetchTotalRevenue();
-  fetchTotalCustomers();
-  fetchTotalPizzasSold();
-  fetchAverageOrderCustomer();
-  fetchAverageOrderValueCustomer();
-  fetchAveragePizzasPerOrderCustomer();
-  pizzaPopularity();
+  if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+    pizzaPopularity();
+    fetchTotalOrders();
+    fetchTotalRevenue();
+    fetchTotalCustomers();
+    fetchTotalPizzasSold();
+    fetchAverageOrderCustomer();
+    fetchAverageOrderValueCustomer();
+    fetchAveragePizzasPerOrderCustomer();
+  }
+
 }
 
 // TODO move to generalCharts.ts
@@ -711,17 +714,15 @@ async function pizzaPopularity() {
   var myChart = echarts.init(chartDom, theme);
   let date = JSON.parse(localStorage.getItem("date"));
 
-  if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
-    myChart.showLoading({
-      color: spinnerColor,
-      text: '',
-      maskColor: 'rgba(255, 255, 255, 0)',
-      zlevel: 1000,
-      spinnerRadius: spinnerRadius,
-      lineWidth: lineWidth,
-    });
+  myChart.showLoading({
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
-  }
 
   var option;
 

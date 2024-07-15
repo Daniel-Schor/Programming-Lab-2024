@@ -40,14 +40,16 @@ function updateCharts(date) {
     else {
         worstButton(curColors);
     }
-    fetchTotalOrders();
-    fetchTotalRevenue();
-    fetchTotalCustomers();
-    fetchTotalPizzasSold();
-    fetchAverageOrderCustomer();
-    fetchAverageOrderValueCustomer();
-    fetchAveragePizzasPerOrderCustomer();
-    pizzaPopularity();
+    if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+        pizzaPopularity();
+        fetchTotalOrders();
+        fetchTotalRevenue();
+        fetchTotalCustomers();
+        fetchTotalPizzasSold();
+        fetchAverageOrderCustomer();
+        fetchAverageOrderValueCustomer();
+        fetchAveragePizzasPerOrderCustomer();
+    }
 }
 // TODO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -664,16 +666,14 @@ async function pizzaPopularity() {
     var chartDom = document.getElementById("pizzaPopularity");
     var myChart = echarts.init(chartDom, theme);
     let date = JSON.parse(localStorage.getItem("date"));
-    if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
-        myChart.showLoading({
-            color: spinnerColor,
-            text: '',
-            maskColor: 'rgba(255, 255, 255, 0)',
-            zlevel: 1000,
-            spinnerRadius: spinnerRadius,
-            lineWidth: lineWidth,
-        });
-    }
+    myChart.showLoading({
+        color: spinnerColor,
+        text: '',
+        maskColor: 'rgba(255, 255, 255, 0)',
+        zlevel: 1000,
+        spinnerRadius: spinnerRadius,
+        lineWidth: lineWidth,
+    });
     var option;
     try {
         const response = await fetch(`/api/pizzaPopularity?date=${date}`);
