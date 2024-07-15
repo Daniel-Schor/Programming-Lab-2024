@@ -33,6 +33,7 @@
 ┃ ┃ ┗ 📂 API : Endpoints
 ┃ ┃ ┃ ┣ 📜 Franchise.ts
 ┃ ┃ ┃ ┗ 📜 Store.ts
+┃ ┗ 📜 *index.ts*
 ┣ 📂 frontend
 ┃ ┗ 📂 public : Charts and frontend logic
 ┃ ┗ 📂 views : Html pages
