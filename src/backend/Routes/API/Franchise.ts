@@ -503,30 +503,55 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
 router.get('/averageOrderFrequency', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameter = [date];
+        let parameters = [date];
         let query = `
-            SELECT ROUND(AVG(order_frequency), 2) AS avg_order_frequency_in_days
-            FROM (
-                SELECT customerID, 
-                       COUNT(purchaseID) AS total_orders, 
-                       DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS customer_period, 
-                       COUNT(purchaseID) / DATEDIFF(MAX(purchaseDate), MIN(purchaseDate)) AS order_frequency
-                FROM purchase
-                WHERE "purchaseDate" > $1`;
-
+            WITH customer_orders AS (
+                SELECT
+                    "customerID",
+                    COUNT("purchaseID") AS total_orders,
+                    MIN("purchaseDate") AS first_order_date,
+                    MAX("purchaseDate") AS last_order_date
+                FROM
+                    "purchase"
+                WHERE
+                    "purchaseDate" > $1
+                GROUP BY
+                    "customerID"
+            ),
+            customer_order_frequency AS (
+                SELECT
+                    "customerID",
+                    total_orders,
+                    first_order_date,
+                    last_order_date,
+                    CASE
+                        WHEN total_orders > 1 THEN
+                            (EXTRACT(EPOCH FROM last_order_date) - EXTRACT(EPOCH FROM first_order_date)) / (86400 * (total_orders - 1))
+                        ELSE NULL
+                    END AS average_order_frequency_days
+                FROM
+                    customer_orders
+            )
+            SELECT
+                ROUND(AVG(average_order_frequency_days), 2) AS average_order_frequency_for_avg_customer
+            FROM
+                customer_order_frequency
+            WHERE
+                average_order_frequency_days IS NOT NULL
+        `;
 
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
+            parameters.push(req.query.store);
         }
-        query += ` GROUP BY customerID
-            ) AS customer_order_frequencies`;
-        let result = await client.query(query, parameter);
+
+        let result = await client.query(query, parameters);
         res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error(err);
         res.status(500).send('Sorry, out of order');
     }
 });
+
 
 export default router;

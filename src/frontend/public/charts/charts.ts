@@ -50,6 +50,7 @@ function updateCharts(date?: string) {
   fetchAverageOrderCustomer();
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
+  fetchAverageOrderFrequency();
   pizzaPopularity();
 }
 
