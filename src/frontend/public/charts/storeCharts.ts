@@ -12,6 +12,15 @@ function updateCharts(date?: string) {
     localStorage.setItem('date', JSON.stringify(date));
   }
 
+  fetchTotalOrders();
+  fetchTotalRevenue();
+  fetchTotalCustomers();
+  fetchTotalPizzasSold();
+  fetchAverageOrderCustomer();
+  fetchAverageOrderValueCustomer();
+  fetchAveragePizzasPerOrderCustomer();
+  fetchAverageOrderFrequency();
+
   pizzaPopularity();
   gaugeChart();
   abcAnalysis_pizza_2();
@@ -22,7 +31,6 @@ function updateCharts(date?: string) {
 
   pizzaSize();
   heatmap();
-
 
   pizza_price_popularity();
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"CalcPercentageChange.js","sourceRoot":"","sources":["../../../src/backend/Helpers/CalcPercentageChange.ts"],"names":[],"mappings":"AACA,SAAS,yBAAyB,CAAC,MAAc,EAAE,MAAc;IAC7D,OAAO,CAAC,CAAC,MAAM,GAAG,MAAM,CAAC,GAAG,MAAM,CAAC,GAAG,GAAG,CAAC;AAC9C,CAAC;AAED,OAAO,EAAE,yBAAyB,EAAE,CAAC"}

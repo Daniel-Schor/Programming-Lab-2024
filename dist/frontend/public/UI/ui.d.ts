@@ -6,7 +6,7 @@ declare function ytd(): void;
 declare function qtd(): void;
 declare function mtd(update?: boolean): void;
 declare function visibilityCoustomDate(): void;
-declare function fetchTotalOrders(storeID?: string, dow?: number): Promise<void>;
+declare function fetchTotalOrders(dow?: number): Promise<void>;
 declare function fetchTotalRevenue(storeID?: string, dow?: number): Promise<void>;
 declare function fetchTotalCustomers(storeID?: string, dow?: number): Promise<void>;
 declare function fetchTotalPizzasSold(storeID?: string, dow?: number): Promise<void>;

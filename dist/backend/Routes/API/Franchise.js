@@ -2,6 +2,8 @@ import express from 'express';
 import client from '../../Config/DatabaseConfig.js';
 import QUERIES from '../../Queries/Franchise.js';
 import * as dotenv from 'dotenv';
+import { calculatePeriodMs } from '../../Helpers/DayDiff.js';
+import { calculatePercentageChange } from '../../Helpers/CalcPercentageChange.js';
 dotenv.config();
 const router = express.Router();
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -39,7 +41,7 @@ router.get('/pizzaSize', async (req, res) => {
         }
         query += ` GROUP BY pr."Size", pr."Name"`;
         let result = await client.query(query, parameters);
-        console.log(result.rows);
+        //console.log(result.rows);
         res.status(200).json(result.rows);
     }
     catch (err) {
@@ -265,7 +267,7 @@ router.get('/pizzaPopularity', async (req, res) => {
         }
         query += ` GROUP BY DATE(pk."purchaseDate"),pr."Name"`;
         let result = await client.query(query, parameters);
-        console.log(result.rows);
+        //console.log(result.rows);
         res.status(200).json(result.rows);
     }
     catch (err) {
@@ -315,7 +317,21 @@ router.get('/totalOrders', async (req, res) => {
             parameter.push(req.query.store);
         }
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        // -------------
+        let query2 = query.replace(">", "<=");
+        if (req.query.store) {
+            query2 += ` AND "purchaseDate" > $3`;
+        }
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].total_orders, result.rows[0].total_orders).toFixed(2) });
+        // -------------
     }
     catch (err) {
         console.error(err);

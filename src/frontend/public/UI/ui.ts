@@ -227,11 +227,19 @@ function visibilityCoustomDate() {
 
 
 // Function to fetch total orders
-async function fetchTotalOrders(storeID?: string, dow?: number) {
+async function fetchTotalOrders(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store")).storeID;
+  console.log(storeID);
   let response = await fetch(`/api/totalOrders?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   let data = await response.json();
-  document.getElementById('totalOrders').innerText = data.total_orders;
+  document.getElementById('totalOrders').innerText = data["period"].total_orders;
+  if (data["percentageChange"] > 0) {
+    document.getElementById('totalOrdersChange').style.color = 'green';
+  } else {
+    document.getElementById('totalOrdersChange').style.color = 'red';
+  }
+  document.getElementById('totalOrdersChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch total revenue
