@@ -618,7 +618,8 @@ function addMarkers(stores) {
 }
 
 function revenueForecast() {
-  let date = JSON.parse(localStorage.getItem("date"));
+  const currentYear = new Date().getFullYear().toString();
+  let startDate = `${currentYear}-01-01`;
 
   var dom = document.getElementById("revenueForecast");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
@@ -638,7 +639,7 @@ function revenueForecast() {
     .then((response) => response.json())
     .then((responseData) => {
       let data = responseData.data;
-      let periods = data.map(item => new Date(item.period).toLocaleDateString("de-DE", {
+      let periods = data.map(item => new Date(item.period).toLocaleDateString("en-US", {
         year: "numeric",
         month: "short"
       }));
@@ -663,12 +664,12 @@ function revenueForecast() {
           trigger: "axis",
           formatter: function (params) {
             let index = params[0].dataIndex;
-            return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} €`;
+            return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} $`;
           },
         },
         yAxis: {
           type: "value",
-          name: "Revenue (€)",
+          name: "Revenue ($)",
         },
         series: [
           {

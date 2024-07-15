@@ -308,7 +308,8 @@ router.get('/pizzaPopularity', async (req, res) => {
 
 router.get('/revenue-forecast-analysis', async (req, res) => {
     try {
-        const startDate = '2020-01-01'; // You can change this if needed
+        const currentYear = new Date().getFullYear().toString();
+        const startDate = `${currentYear}-01-01`;
 
         let query = `
         SELECT 
