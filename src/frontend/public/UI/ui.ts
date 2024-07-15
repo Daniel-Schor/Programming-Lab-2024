@@ -363,7 +363,7 @@ async function fetchAverageOrderFrequency(dow?: number) {
 
   const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('orderFrequency').innerText = parseFloat(data["period"].average_order_frequency).toFixed(2);
+  document.getElementById('orderFrequency').innerText = parseFloat(data["period"].average_order_frequency).toFixed(2) + " days";
   if (data["percentageChange"] > 0) {
     document.getElementById('orderFrequencyChange').style.color = 'red';
   } else {
