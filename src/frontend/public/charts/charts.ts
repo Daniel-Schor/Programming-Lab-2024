@@ -636,7 +636,7 @@ function revenueForecast() {
     });
   }
 
-  fetch(`/api/revenue-forecast-analysis?date=${date}`)
+  fetch(`/api/revenue-franchise-analysis?date=${date}`)
     .then((response) => response.json())
     .then((responseData) => {
       let data = responseData.data.map(item => [
