@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchAverageOrderCustomer();
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
-  fetchOrderFrequencyCustomer();
+  //fetchOrderFrequencyCustomer();
 });
 
 

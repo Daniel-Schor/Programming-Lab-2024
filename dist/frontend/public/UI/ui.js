@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchAverageOrderCustomer();
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
-    fetchOrderFrequencyCustomer();
+    //fetchOrderFrequencyCustomer();
 });
 function setActiveTimeButton(buttonId) {
     document.getElementById("Last-Year").classList.remove("active");

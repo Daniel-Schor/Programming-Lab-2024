@@ -762,7 +762,7 @@ function revenueForecast() {
             lineWidth: lineWidth,
         });
     }
-    fetch(/api/revenue - forecast - analysis ? date = $ : , { date })
+    fetch(`/api/revenue-forecast-analysis?date=${date}`)
         .then((response) => response.json())
         .then((responseData) => {
         let data = responseData.data;
@@ -790,12 +790,7 @@ function revenueForecast() {
                 trigger: "axis",
                 formatter: function (params) {
                     let index = params[0].dataIndex;
-                    return Period;
-                    $;
-                    {
-                        periods[index];
-                    }
-                    />Revenue: ${revenues[index].toFixed(2)} €;;
+                    return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} €`;
                 },
             },
             yAxis: {
