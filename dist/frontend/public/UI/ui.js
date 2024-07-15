@@ -261,7 +261,14 @@ async function fetchAverageOrderCustomer(dow) {
     storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
+    document.getElementById('avgOrdersPerCustomer').innerText = data["period"].avg_orders_per_customer;
+    if (data["percentageChange"] > 0) {
+        document.getElementById('avgOrdersPerCustomerChange').style.color = 'green';
+    }
+    else {
+        document.getElementById('avgOrdersPerCustomerChange').style.color = 'red';
+    }
+    document.getElementById('avgOrdersPerCustomerChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch average order value per customer
 async function fetchAverageOrderValueCustomer(dow) {
