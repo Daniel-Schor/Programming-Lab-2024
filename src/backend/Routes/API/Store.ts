@@ -416,8 +416,11 @@ router.get('/abc-analysis-customers', async (req, res) => {
         const date = req.query.date;
 
         if (!storeID || !date) {
-            return res.status(400).send('StoreID and date are required');
+            return res.status(400).json({ error: 'StoreID and date are required' });
         }
+
+        console.log(`Received storeID: ${storeID}`);
+        console.log(`Received date: ${date}`);
 
         const query = `
         WITH total_sales_per_customer AS (
@@ -479,7 +482,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
             "customerID",
             total_sale_customer,
             total_order_customer,
-            total_sale_customer / total_order_customer AS average_order_value,
+            total_sale_customer::float / total_order_customer AS average_order_value,
             total_sum_sales,
             customer_percentage_of_total,
             sorted_cumulative_customer_percentage_of_total,
@@ -493,6 +496,8 @@ router.get('/abc-analysis-customers', async (req, res) => {
         const parameters = [storeID, date];
 
         const result = await client.query(query, parameters);
+
+        console.log(result.rows); // Log the result for debugging
 
         const formattedData = {};
         result.rows.forEach(row => {
@@ -511,10 +516,9 @@ router.get('/abc-analysis-customers', async (req, res) => {
         res.status(200).json({ [storeID]: formattedData });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
