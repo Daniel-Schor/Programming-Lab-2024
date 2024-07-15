@@ -116,7 +116,6 @@ router.get('/pizzaPairs', async (req, res) => {
         let result = await client.query(query, parameter);
 
         // Log and return the result
-        console.log(result.rows);
         res.status(200).json(reformatPizzaPair(result.rows));
     } catch (err) {
         // Handle any errors that occur during the query execution
@@ -400,7 +399,6 @@ router.get('/ingredientUsage', async (req, res) => {
 
         // Parameters for the query
         const parameters = [storeID, date, process.env.DB_TIMEZONE, dayOfWeek];
-        console.log(parameters);
         // Execute the query
         const result = await client.query(query, parameters);
 
@@ -420,9 +418,6 @@ router.get('/abc-analysis-customers', async (req, res) => {
         if (!storeID || !date) {
             return res.status(400).send('StoreID and date are required');
         }
-
-        console.log(`Received storeID: ${storeID}`);
-        console.log(`Received date: ${date}`);
 
         const query = `
         WITH total_sales_per_customer AS (
@@ -530,10 +525,6 @@ router.get('/abc-analysis-pizza', async (req, res) => {
             return res.status(400).send('StoreID is required');
         }
 
-        console.log(`Received storeID: ${storeID}`);
-        console.log(`Received date: ${date}`);
-
- 
         const query = `
             WITH
             TOTAL_SALES_PER_PRODUCT AS (

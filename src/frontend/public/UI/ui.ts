@@ -287,7 +287,6 @@ async function fetchTotalPizzasSold(dow?: number) {
     document.getElementById('totalPizzasSoldChange').style.color = 'red';
   }
   document.getElementById('totalPizzasSoldChange').innerText = data["percentageChange"] + '%';
-
 }
 
 // Function to fetch average orders per customer
@@ -298,7 +297,7 @@ async function fetchAverageOrderCustomer(dow?: number) {
 
   const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgOrdersPerCustomer').innerText = data["period"].avg_orders_per_customer;
+  document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
 }
 
 // Function to fetch average order value per customer
@@ -309,7 +308,7 @@ async function fetchAverageOrderValueCustomer(dow?: number) {
 
   const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgOrderValuePerCustomer').innerText = data["period"].avg_order_value_per_order;
+  document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
 }
 
 // Function to fetch average pizzas per order per customer
@@ -320,7 +319,7 @@ async function fetchAveragePizzasPerOrderCustomer(dow?: number) {
 
   const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data["period"].avg_pizzas_per_order).toFixed(2);
+  document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data.avg_pizzas_per_order).toFixed(2);
 }
 
 // Function to fetch order frequency per customer
@@ -331,7 +330,7 @@ async function fetchAverageOrderFrequency(dow?: number) {
 
   const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('orderFrequency').innerText = data["period"].average_order_frequency_for_avg_customer;
+  document.getElementById('orderFrequency').innerText = data.average_order_frequency_for_avg_customer;
 }
 
 

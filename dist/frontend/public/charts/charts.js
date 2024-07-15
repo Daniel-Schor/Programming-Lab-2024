@@ -766,7 +766,7 @@ function revenueForecast() {
         .then((response) => response.json())
         .then((responseData) => {
         let data = responseData.data;
-        let periods = data.map(item => new Date(item.period).toLocaleDateString("de-DE", {
+        let periods = data.map(item => new Date(item.period).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short"
         }));
@@ -779,23 +779,22 @@ function revenueForecast() {
                 top: '11%',
                 bottom: '7%',
                 left: '12%',
-                right: '12%'
+                right: '9%'
             },
             xAxis: {
                 type: "category",
                 data: periods,
-                name: "Period",
             },
             tooltip: {
                 trigger: "axis",
                 formatter: function (params) {
                     let index = params[0].dataIndex;
-                    return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} €`;
+                    return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} $`;
                 },
             },
             yAxis: {
                 type: "value",
-                name: "Revenue (€)",
+                name: "Revenue ($)",
             },
             series: [
                 {

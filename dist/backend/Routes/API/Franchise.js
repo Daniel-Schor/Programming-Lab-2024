@@ -315,7 +315,7 @@ router.get('/totalOrders', async (req, res) => {
         let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
-            query2 += ` AND "purchaseDate" > $3`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
         else {
@@ -344,7 +344,7 @@ router.get('/totalRevenue', async (req, res) => {
         let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
-            query2 += ` AND "purchaseDate" > $3`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
         else {
@@ -374,7 +374,7 @@ router.get('/totalCustomers', async (req, res) => {
         let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
-            query2 += ` AND "purchaseDate" > $3`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
         else {
@@ -404,7 +404,7 @@ router.get('/totalPizzas', async (req, res) => {
         let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
-            query2 += ` AND "purchaseDate" > $3`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
         else {
@@ -531,7 +531,7 @@ router.get('/averageOrderFrequency', async (req, res) => {
             FROM
                 customer_order_frequency
             WHERE
-                average_order_frequency_days IS NOT NULL;
+                average_order_frequency_days IS NOT NULL
         `;
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
