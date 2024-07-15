@@ -45,9 +45,9 @@
       <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
     </div>
     <div class="btnbox">
-      <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
+      <button class="infobox" id="FROM">FROM: 01-12-2022</button>
       <button class="infobox">TO: 31-12-2022</button>
-      <button class="infobox" id="PERIOD">PERIOD: XXDAYS</button>
+      <button class="infobox" id="PERIOD">PERIOD: 31DAYS</button>
     </div>
   </div>
 
@@ -71,28 +71,40 @@
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Orders<h2>
-                      <p id="totalOrders">xxxx</p>
+                      <div class="section-items">
+                        <p id="totalOrders">0</p>
+                        <p id="totalOrdersChange">00.00%</p>
+                      </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-dollar-sign"></i>
                   </div>
                   <h2>Revenue</h2>
-                  <p id="totalRevenue">xxxx</p>
+                  <div class="section-items">
+                    <p id="totalRevenue">0</p>
+                    <p id="totalRevenueChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-users"></i>
                   </div>
                   <h2>Customers</h2>
-                  <p id="totalCustomers">xxxx</p>
+                  <div class="section-items">
+                    <p id="totalCustomers">0</p>
+                    <p id="totalCustomersChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-pizza-slice"></i>
                   </div>
                   <h2>Pizzas sold</h2>
-                  <p id="totalPizzasSold">xxxx</p>
+                  <div class="section-items">
+                    <p id="totalPizzasSold">0</p>
+                    <p id="totalPizzasSoldChange">00.00%</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -106,28 +118,40 @@
                     <i class="fas fa-shopping-bag"></i>
                   </div>
                   <h2>Orders</h2>
-                  <p id="avgOrdersPerCustomer">xxxx</p>
+                  <div class="section-items">
+                    <p id="avgOrdersPerCustomer">0</p>
+                    <p id="avgOrdersPerCustomerChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-hand-holding-dollar"></i>
                   </div>
                   <h2>Order Value</h2>
-                  <p id="avgOrderValuePerCustomer">xxxx</p>
+                  <div class="section-items">
+                    <p id="avgOrderValuePerCustomer">0</p>
+                    <p id="avgOrderValuePerCustomerChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-list-ol"></i>
                   </div>
                   <h2>Pizzas per Order</h2>
-                  <p id="avgPizzasPerOrder">xxxx</p>
+                  <div class="section-items">
+                    <p id="avgPizzasPerOrder">0</p>
+                    <p id="avgPizzasPerOrderChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-rotate"></i>
                   </div>
                   <h2>Order frequency</h2>
-                  <p id="orderFrequency">xxxx</p>
+                  <div class="section-items">
+                    <p id="orderFrequency">0</p>
+                    <p id="orderFrequencyChange">00.00%</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,12 +164,16 @@
         <div class="section">
           <div class="section-items">
             <div class="btnbox">
-              <button class="btn" id="bestButton" style="z-index: 99;" data-tooltip="shows the best stores" onclick="bestButton();">STABLE</button>
-              <button class="btn" id="worstButton" style="z-index: 99;" data-tooltip="shows the worst store" onclick="worstButton();">UNSTABLE</button>
-              <button class="btn" id="customButton" style="z-index: 99;" data-tooltip="Choose custom stores from the right" onclick="customButton();">CUSTOM</button>
+              <button class="btn" id="bestButton" style="z-index: 99;" data-tooltip="shows the best stores"
+                onclick="bestButton();">STABLE</button>
+              <button class="btn" id="worstButton" style="z-index: 99;" data-tooltip="shows the worst store"
+                onclick="worstButton();">UNSTABLE</button>
+              <button class="btn" id="customButton" style="z-index: 99;"
+                data-tooltip="Choose custom stores from the right" onclick="customButton();">CUSTOM</button>
             </div>
             <div class="btnbox" id="toggleBarChartBox" style="width: 80px; ">
-              <button data-tooltip="Changes the view to show every store" class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();"></button>
+              <button data-tooltip="Changes the view to show every store" class="btn" id="toggleBarChart"
+                style="z-index: 99;" onclick="toggleBarChart();"></button>
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
@@ -167,7 +195,8 @@
       <!--Bottom section-->
       <div class="section-items">
         <div class="subsection">
-          <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza Popularity</h2>
+          <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza Popularity
+          </h2>
           <div id="pizzaPopularity" class="diagram"></div>
         </div>
         <div class="pizzaRankingChart"></div>
@@ -243,11 +272,11 @@
           document.getElementById("main").classList.toggle("active");
         }
       }
-     
 
-      
 
-      
+
+
+
 
     </script>
     <script>

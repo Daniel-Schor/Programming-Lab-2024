@@ -51,6 +51,8 @@ function updateCharts(date) {
     fetchAverageOrderCustomer();
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
+    //fetchAverageOrderFrequency();
+    pizzaPopularity();
 }
 // TO DO move to generalCharts.ts
 function updateChart(chart, option) {

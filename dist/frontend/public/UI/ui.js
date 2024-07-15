@@ -237,7 +237,7 @@ async function fetchAveragePizzasPerOrderCustomer(storeID, dow) {
     let date = JSON.parse(localStorage.getItem("date"));
     const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgPizzasPerOrder').innerText = data.avg_pizzas_per_order;
+    document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data.avg_pizzas_per_order).toFixed(2);
 }
 // Function to fetch order frequency per customer
 async function fetchOrderFrequencyCustomer(storeID, dow) {

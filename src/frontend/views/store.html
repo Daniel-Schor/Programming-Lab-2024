@@ -42,9 +42,9 @@
       <input type="date" id="startDate" name="startDate" value="2022-12-01" style="display: none;" required>
     </div>
     <div class="btnbox">
-      <button class="infobox" id="FROM">FROM: XX-XX-XXXX</button>
+      <button class="infobox" id="FROM">FROM: 01-12-2022</button>
       <button class="infobox">TO: 31-12-2022</button>
-      <button class="infobox" id="PERIOD">PERIOD: XXDAYS</button>
+      <button class="infobox" id="PERIOD">PERIOD: 31DAYS</button>
     </div>
   </div>
 
@@ -69,28 +69,40 @@
                     <i class="fas fa-chart-line"></i>
                   </div>
                   <h2>Orders<h2>
-                      <p id="sSales">xxxx</p>
+                      <div class="section-items">
+                        <p id="sSales">0</p>
+                        <p id="sSalesChange">00.00%</p>
+                      </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-dollar-sign"></i>
                   </div>
                   <h2>Revenue</h2>
-                  <p id="sRevenue">xxxx</p>
+                  <div class="section-items">
+                    <p id="sRevenue">0</p>
+                    <p id="sRevenueChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fas fa-users"></i>
                   </div>
                   <h2>Customers</h2>
-                  <p id="sCustomers">xxxx</p>
+                  <div class="section-items">
+                    <p id="sCustomers">0</p>
+                    <p id="sCustomersChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-pizza-slice"></i>
                   </div>
                   <h2>Pizzas sold</h2>
-                  <p id="sPizzasSold">xxxx</p>
+                  <div class="section-items">
+                    <p id="sPizzasSold">0</p>
+                    <p id="sPizzasSoldChange">00.00%</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -104,28 +116,40 @@
                     <i class="fas fa-shopping-bag"></i>
                   </div>
                   <h2>Orders</h2>
-                  <p id="avgOrdersPerCustomer">xxxx</p>
+                  <div class="section-items">
+                    <p id="avgOrdersPerCustomer">0</p>
+                    <p id="avgOrdersPerCustomerChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-hand-holding-dollar"></i>
                   </div>
                   <h2>Order Value</h2>
-                  <p id="avgOrderValuePerCustomer">xxxx</p>
+                  <div class="section-items">
+                    <p id="avgOrderValuePerCustomer">0</p>
+                    <p id="avgOrderValuePerCustomerChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-list-ol"></i>
                   </div>
                   <h2>Pizzas per Order</h2>
-                  <p id="avgPizzasPerOrder">xxxx</p>
+                  <div class="section-items">
+                    <p id="avgPizzasPerOrder">0</p>
+                    <p id="avgPizzasPerOrderChange">00.00%</p>
+                  </div>
                 </div>
                 <div class="statBox">
                   <div class="iconBox">
                     <i class="fa-solid fa-rotate"></i>
                   </div>
                   <h2>Order frequency</h2>
-                  <p>xxxx</p> <!-- Placeholder retained -->
+                  <div class="section-items">
+                    <p>0</p> <!-- Placeholder retained -->
+                    <p>00.00%</p> <!-- Placeholder retained -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -166,7 +190,8 @@
               </div>
               <div class="section-items">
                 <div class="subsection">
-                  <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza Popularity
+                  <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza
+                    Popularity
                   </h2>
                   <div id="pizzaPopularity" class="diagram"></div>
                 </div>
@@ -200,7 +225,9 @@
                 </div>
                 <div class="section-items">
                   <div class="subsection">
-                    <h2 data-tooltip="It shows a forecast of average ingredients used, which can be changed with buttons in the forecast. ">Average ingredients used</h2>
+                    <h2
+                      data-tooltip="It shows a forecast of average ingredients used, which can be changed with buttons in the forecast. ">
+                      Average ingredients used</h2>
                     <div id="pizzaIngredients" class="diagram"></div>
                   </div>
                 </div>
@@ -214,28 +241,28 @@
                           <i class="fa-solid fa-pizza-slice"></i>
                         </div>
                         <h2>Pizzas</h2>
-                        <p id="totalPizzas">xxxx</p>
+                        <p id="totalPizzas">0</p>
                       </div>
                       <div class="statBox">
                         <div class="iconBox">
                           <i class="fas fa-dollar-sign"></i>
                         </div>
                         <h2>Revenue</h2>
-                        <p id="totalRevenue">xxxx</p>
+                        <p id="totalRevenue">0</p>
                       </div>
                       <div class="statBox">
                         <div class="iconBox">
                           <i class="fas fa-shopping-bag"></i>
                         </div>
                         <h2>Orders</h2>
-                        <p id="totalOrders">xxxx</p>
+                        <p id="totalOrders">0</p>
                       </div>
                       <div class="statBox">
                         <div class="iconBox">
                           <i class="fas fa-users"></i>
                         </div>
                         <h2>Customers</h2>
-                        <p id="totalCustomers">xxxx</p>
+                        <p id="totalCustomers">0</p>
                       </div>
                     </div>
                   </div>
