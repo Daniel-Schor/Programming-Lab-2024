@@ -641,7 +641,7 @@ router.get('/averageOrdersByDayOfWeek', async (req, res) => {
     try {
         // Extract storeID, startDate, and dayOfWeek from query parameters
         const storeID = req.query.storeID;
-        const startDate = req.query.startDate || '2022-11-12';  // Default start date if none provided
+        const startDate = req.query.date || '2022-11-12';  // Default start date if none provided
         const dayOfWeek = req.query.dow || '4';  // Default day of the week (Thursday if day starts from Sunday = 0)
 
         // Validate the presence of required parameters
@@ -677,7 +677,7 @@ router.get('/averageOrdersByDayOfWeek', async (req, res) => {
 router.get('/averageRevenueByDayOfWeek', async (req, res) => {
     try {
         const storeID = req.query.storeID;
-        const startDate = req.query.startDate || '2022-11-12';
+        const startDate = req.query.date || '2022-11-12';
         const dayOfWeek = req.query.dow || '4';
 
         if (!storeID) {
@@ -708,7 +708,7 @@ router.get('/averageRevenueByDayOfWeek', async (req, res) => {
 router.get('/averageCustomersByDayOfWeek', async (req, res) => {
     try {
         const storeID = req.query.storeID;
-        const startDate = req.query.startDate || '2022-11-12';
+        const startDate = req.query.date || '2022-11-12';
         const dayOfWeek = req.query.dow || '4';
 
         if (!storeID) {
@@ -740,7 +740,7 @@ router.get('/averageCustomersByDayOfWeek', async (req, res) => {
 router.get('/averagePizzasSoldByDayOfWeek', async (req, res) => {
     try {
         const storeID = req.query.storeID;
-        const startDate = req.query.startDate || '2022-11-12';
+        const startDate = req.query.date || '2022-11-12';
         const dayOfWeek = req.query.dow || '4';
 
         if (!storeID) {
