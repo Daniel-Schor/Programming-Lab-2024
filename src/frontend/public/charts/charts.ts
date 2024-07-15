@@ -655,8 +655,14 @@ function revenueForecast() {
           right: '9%'
         },
         xAxis: {
-          type: "category",
+          type: 'category',
           data: periods,
+          boundaryGap: false
+        },
+        yAxis: {
+          type: 'value',
+          name: "Revenue ($)",
+          boundaryGap: [0, '30%']
         },
         tooltip: {
           trigger: "axis",
@@ -665,17 +671,35 @@ function revenueForecast() {
             return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} $`;
           },
         },
-        yAxis: {
-          type: "value",
-          name: "Revenue ($)",
+        visualMap: {
+          type: 'piecewise',
+          show: false,
+          dimension: 0,
+          seriesIndex: 0,
+          pieces: [
+            {
+              gt: 5,
+              lt: 9,
+              color: 'rgba(0, 0, 180, 0.4)'
+            }
+          ]
         },
         series: [
           {
             data: revenues,
-            type: "line",
-            smooth: true,
-            name: "Revenue",
-            symbolSize: 0
+            type: 'line',
+            smooth: 0.6,
+            symbol: 'none',
+            lineStyle: {
+              color: '#5470C6',
+              width: 5
+            },
+            markLine: {
+              symbol: ['none', 'none'],
+              label: { show: false },
+              data: [{ xAxis: 5 }]
+            },
+            areaStyle: {}
           },
         ],
       };
@@ -687,6 +711,7 @@ function revenueForecast() {
       console.error("Error fetching revenue forecast data:", error);
     });
 }
+
 
 function storeLocationMap() {
   // Add OpenStreetMap tile layer
