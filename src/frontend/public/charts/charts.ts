@@ -48,6 +48,7 @@ function updateCharts(date?: string) {
   }
 
   pizzaPopularity();
+
   fetchTotalOrders();
   fetchTotalRevenue();
   fetchTotalCustomers();
@@ -56,7 +57,8 @@ function updateCharts(date?: string) {
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
   fetchAverageOrderFrequency();
-  pizzaPopularity();
+
+  revenueForecast();
 }
 
 // TO DO move to generalCharts.ts
@@ -83,7 +85,6 @@ function bestButton(colors = {}) {
   colorsToExclude.clear();
   setActiveButton("bestButton");
   storeLocationMap();
-  revenueForecast();
 }
 
 function worstButton(colors = {}) {
@@ -102,7 +103,6 @@ function worstButton(colors = {}) {
   colorsToExclude.clear();
   setActiveButton("worstButton");
   storeLocationMap();
-  revenueForecast();
 }
 
 async function customButton(update = false) {

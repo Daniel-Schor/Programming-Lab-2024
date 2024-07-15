@@ -52,7 +52,7 @@ function updateCharts(date) {
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
     fetchAverageOrderFrequency();
-    pizzaPopularity();
+    revenueForecast();
 }
 // TO DO move to generalCharts.ts
 function updateChart(chart, option) {
@@ -75,7 +75,6 @@ function bestButton(colors = {}) {
     colorsToExclude.clear();
     setActiveButton("bestButton");
     storeLocationMap();
-    revenueForecast();
 }
 function worstButton(colors = {}) {
     /*let date = JSON.parse(localStorage.getItem("date"));
@@ -92,7 +91,6 @@ function worstButton(colors = {}) {
     colorsToExclude.clear();
     setActiveButton("worstButton");
     storeLocationMap();
-    revenueForecast();
 }
 async function customButton(update = false) {
     colorsToExclude = new Set(Object.values(curColors));

@@ -278,8 +278,8 @@ router.get('/pizzaPopularity', async (req, res) => {
 });
 router.get('/revenue-forecast-analysis', async (req, res) => {
     try {
-        const currentYear = new Date().getFullYear().toString();
-        const startDate = `${currentYear}-01-01`;
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        const startDate = `${date.split("-")[0]}-01-01`;
         let query = `
         SELECT 
             DATE_TRUNC('month', "purchaseDate") as period, 
@@ -465,14 +465,24 @@ router.get('/averageOrderValueCustomer', async (req, res) => {
                          SELECT "customerID", SUM("total") AS "total_order_value", COUNT(*) AS "order_count"
                          FROM "purchase"
                          WHERE "purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
-        query += ` GROUP BY "customerID"
-                     ) AS "customer_order_values"`;
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
+        query += ` GROUP BY "customerID") AS "customer_order_values"`;
+        query2 += ` GROUP BY "customerID") AS "customer_order_values"`;
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].avg_order_value_per_order, result.rows[0].avg_order_value_per_order).toFixed(2) });
     }
     catch (err) {
         console.error(err);
@@ -490,14 +500,24 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
                          JOIN "purchaseItems" ON "purchase"."purchaseID" = "purchaseItems"."purchaseID"
                          JOIN "products" ON "purchaseItems"."SKU" = "products"."SKU"
                          WHERE "purchase"."purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "purchase"."storeID" = $2`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
-        query += ` GROUP BY "purchase"."customerID", "purchase"."purchaseID"
-                     ) AS "pizzas_per_order_data"`;
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
+        query += ` GROUP BY "purchase"."customerID", "purchase"."purchaseID") AS "pizzas_per_order_data"`;
+        query2 += ` GROUP BY "purchase"."customerID", "purchase"."purchaseID") AS "pizzas_per_order_data"`;
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].avg_pizzas_per_order, result.rows[0].avg_pizzas_per_order).toFixed(2) });
     }
     catch (err) {
         console.error(err);

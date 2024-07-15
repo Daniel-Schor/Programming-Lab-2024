@@ -277,7 +277,14 @@ async function fetchAverageOrderValueCustomer(dow) {
     storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
+    document.getElementById('avgOrderValuePerCustomer').innerText = data["period"].avg_order_value_per_order;
+    if (data["percentageChange"] > 0) {
+        document.getElementById('avgOrderValuePerCustomerChange').style.color = 'green';
+    }
+    else {
+        document.getElementById('avgOrderValuePerCustomerChange').style.color = 'red';
+    }
+    document.getElementById('avgOrderValuePerCustomerChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch average pizzas per order per customer
 async function fetchAveragePizzasPerOrderCustomer(dow) {
@@ -286,7 +293,14 @@ async function fetchAveragePizzasPerOrderCustomer(dow) {
     storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data.avg_pizzas_per_order).toFixed(2);
+    document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data["period"].avg_pizzas_per_order).toFixed(2);
+    if (data["percentageChange"] > 0) {
+        document.getElementById('avgPizzasPerOrderChange').style.color = 'green';
+    }
+    else {
+        document.getElementById('avgPizzasPerOrderChange').style.color = 'red';
+    }
+    document.getElementById('avgPizzasPerOrderChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch order frequency per customer
 async function fetchAverageOrderFrequency(dow) {
