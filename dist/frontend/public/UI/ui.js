@@ -360,4 +360,36 @@ function setActiveTimeButton(buttonId) {
     document.getElementById("customDate").classList.remove("active");
     document.getElementById(buttonId).classList.add("active");
 }
+async function fetchAverageOrdersByDayOfWeek() {
+    let date = JSON.parse(localStorage.getItem("date"));
+    let store = JSON.parse(localStorage.getItem("store"));
+    let storeID = store ? store.storeID : null;
+    let response = await fetch(`/api/averageOrdersByDayOfWeek?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+    let data = await response.json();
+    document.getElementById('totalOrders').innerText = data.avg_orders;
+}
+async function fetchAverageRevenueByDayOfWeek() {
+    let date = JSON.parse(localStorage.getItem("date"));
+    let store = JSON.parse(localStorage.getItem("store"));
+    let storeID = store ? store.storeID : null;
+    const response = await fetch(`/api/averageRevenueByDayOfWeek?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+    const data = await response.json();
+    document.getElementById('totalRevenue').innerText = data.avg_revenue + "$";
+}
+async function fetchAverageCustomersByDayOfWeek() {
+    let date = JSON.parse(localStorage.getItem("date"));
+    let store = JSON.parse(localStorage.getItem("store"));
+    let storeID = store ? store.storeID : null;
+    const response = await fetch(`/api/averageCustomersByDayOfWeek?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+    const data = await response.json();
+    document.getElementById('totalCustomers').innerText = data.avg_customers;
+}
+async function fetchAveragePizzasSoldByDayOfWeek() {
+    let date = JSON.parse(localStorage.getItem("date"));
+    let store = JSON.parse(localStorage.getItem("store"));
+    let storeID = store ? store.storeID : null;
+    const response = await fetch(`/api/averagePizzasSoldByDayOfWeek?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+    const data = await response.json();
+    document.getElementById('totalPizzasSold').innerText = data.avg_pizzas_sold;
+}
 //# sourceMappingURL=ui.js.map

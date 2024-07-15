@@ -52,6 +52,10 @@ function updateCharts(date) {
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
     fetchAverageOrderFrequency();
+    fetchAverageOrdersByDayOfWeek();
+    fetchAverageRevenueByDayOfWeek();
+    fetchAverageCustomersByDayOfWeek();
+    fetchAveragePizzasSoldByDayOfWeek();
     revenueForecast();
 }
 // TO DO move to generalCharts.ts

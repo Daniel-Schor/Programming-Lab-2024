@@ -15,3 +15,7 @@ declare function fetchAverageOrderValueCustomer(dow?: number): Promise<void>;
 declare function fetchAveragePizzasPerOrderCustomer(dow?: number): Promise<void>;
 declare function fetchAverageOrderFrequency(dow?: number): Promise<void>;
 declare function setActiveTimeButton(buttonId: any): void;
+declare function fetchAverageOrdersByDayOfWeek(): Promise<void>;
+declare function fetchAverageRevenueByDayOfWeek(): Promise<void>;
+declare function fetchAverageCustomersByDayOfWeek(): Promise<void>;
+declare function fetchAveragePizzasSoldByDayOfWeek(): Promise<void>;
