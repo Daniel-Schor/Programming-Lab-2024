@@ -57,10 +57,7 @@ function updateCharts(date?: string) {
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
   fetchAverageOrderFrequency();
-  fetchAverageOrdersByDayOfWeek();
-  fetchAverageRevenueByDayOfWeek();
-  fetchAverageCustomersByDayOfWeek();
-  fetchAveragePizzasSoldByDayOfWeek();
+
   revenueForecast();
 }
 

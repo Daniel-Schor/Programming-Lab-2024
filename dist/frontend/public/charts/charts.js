@@ -52,10 +52,6 @@ function updateCharts(date) {
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
     fetchAverageOrderFrequency();
-    fetchAverageOrdersByDayOfWeek();
-    fetchAverageRevenueByDayOfWeek();
-    fetchAverageCustomersByDayOfWeek();
-    fetchAveragePizzasSoldByDayOfWeek();
     revenueForecast();
 }
 // TO DO move to generalCharts.ts
@@ -630,8 +626,7 @@ function revenueForecast() {
                 dimension: 0,
                 seriesIndex: 0,
                 pieces: [
-                    { gt: 1, lt: 3, color: 'rgba(0, 0, 180, 0.4)' },
-                    { gt: 5, lt: 7, color: 'rgba(0, 0, 180, 0.4)' }
+                    { gt: 1, lt: 3, color: 'rgba(0, 0, 180, 0.4)' }
                 ]
             },
             series: [
@@ -647,7 +642,7 @@ function revenueForecast() {
                     markLine: {
                         symbol: ['none', 'none'],
                         label: { show: false },
-                        data: [{ xAxis: 1 }, { xAxis: 3 }, { xAxis: 5 }, { xAxis: 7 }]
+                        data: [{ xAxis: 1 }, { xAxis: 3 }]
                     },
                     areaStyle: {}
                 }

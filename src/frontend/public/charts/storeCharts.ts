@@ -21,6 +21,11 @@ function updateCharts(date?: string) {
   fetchAveragePizzasPerOrderCustomer();
   fetchAverageOrderFrequency();
 
+  fetchAverageOrdersByDayOfWeek();
+  fetchAverageRevenueByDayOfWeek();
+  fetchAverageCustomersByDayOfWeek();
+  fetchAveragePizzasSoldByDayOfWeek();
+
   pizzaPopularity();
   gaugeChart();
   abcAnalysis_pizza_2();
