@@ -581,6 +581,7 @@ function revenueForecast() {
     let date = JSON.parse(localStorage.getItem("date"));
     var dom = document.getElementById("revenueForecast");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
+    var startPeriod = new Date("2022-12-31");
     if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
         myChart.showLoading({
             color: spinnerColor,
@@ -591,7 +592,7 @@ function revenueForecast() {
             lineWidth: lineWidth,
         });
     }
-    fetch(`/api/revenue-franchise-analysis?date=${date}`)
+    fetch(`/api/revenue-franchise-analysis?date=01-01-2020`)
         .then((response) => response.json())
         .then((responseData) => {
         let data = responseData.data.map(item => [
@@ -602,6 +603,11 @@ function revenueForecast() {
             }),
             parseFloat(item.revenue)
         ]);
+        // Filter to find the indices of the periods within the specified date range
+        let startIdx = data.findIndex(([d]) => new Date(d) >= startPeriod);
+        let endIdx = data.findIndex(([d]) => new Date(d) >= new Date(date));
+        if (endIdx === -1)
+            endIdx = data.length - 1; // Use the last index if the specified date exceeds the range
         var option = {
             textStyle: {
                 color: "white"
@@ -625,9 +631,11 @@ function revenueForecast() {
                 show: false,
                 dimension: 0,
                 seriesIndex: 0,
-                pieces: [
-                    { gt: 1, lt: 3, color: 'rgba(0, 0, 180, 0.4)' }
-                ]
+                pieces: [{
+                        gt: startIdx - 1, // "-1" because gt is exclusive
+                        lt: endIdx,
+                        color: 'rgba(0, 0, 180, 0.4)' // Highlighting color
+                    }]
             },
             series: [
                 {
@@ -642,7 +650,7 @@ function revenueForecast() {
                     markLine: {
                         symbol: ['none', 'none'],
                         label: { show: false },
-                        data: [{ xAxis: 1 }, { xAxis: 3 }]
+                        data: [{ xAxis: startIdx }, { xAxis: endIdx }]
                     },
                     areaStyle: {}
                 }
