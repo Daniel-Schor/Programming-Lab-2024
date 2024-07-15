@@ -582,7 +582,7 @@ function revenueForecast() {
     var dom = document.getElementById("revenueForecast");
     var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
     var startPeriod = new Date("2022-12-31");
-    var endperoid = new Date(date);
+    var endPeriod = new Date(date);
     if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
         myChart.showLoading({
             color: spinnerColor,
@@ -606,9 +606,9 @@ function revenueForecast() {
         ]);
         // Filter to find the indices of the periods within the specified date range
         let startIdx = data.findIndex(([d]) => new Date(d) >= startPeriod);
-        let endIdx = data.findIndex(([d]) => new Date(d) >= endperoid);
+        let endIdx = data.findIndex(([d]) => new Date(d) >= endPeriod);
         if (endIdx === -1)
-            endIdx = data.length - 1; // Use the last index if the specified date exceeds the range
+            endIdx = data.length; // Use the last index if the specified date exceeds the range
         var option = {
             textStyle: {
                 color: "white"
@@ -632,11 +632,10 @@ function revenueForecast() {
                 show: false,
                 dimension: 0,
                 seriesIndex: 0,
-                pieces: [{
-                        gt: startIdx - 1, // "-1" because gt is exclusive
-                        lt: endIdx,
-                        color: 'rgba(0, 0, 180, 0.4)' // Highlighting color
-                    }]
+                pieces: [
+                    { lt: startIdx, color: 'rgba(204, 204, 204, 0.5)' }, // Color before the period
+                    { gt: endIdx - 1, color: 'rgba(204, 204, 204, 0.5)' } // Color after the period
+                ]
             },
             series: [
                 {
@@ -645,13 +644,8 @@ function revenueForecast() {
                     smooth: 0.6,
                     symbol: 'none',
                     lineStyle: {
-                        color: '#5470C6',
+                        color: '#5470C6', // Default line color
                         width: 5
-                    },
-                    markLine: {
-                        symbol: ['none', 'none'],
-                        label: { show: false },
-                        data: [{ xAxis: startIdx }, { xAxis: endIdx }]
                     },
                     areaStyle: {}
                 }
