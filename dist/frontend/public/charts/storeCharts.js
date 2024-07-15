@@ -439,10 +439,10 @@ function abcAnalysis_customer_1() {
     });
 }
 function abcAnalysis_customer_2() {
-    var store = JSON.parse(localStorage.getItem("store"));
-    let date = JSON.parse(localStorage.getItem("date"));
-    var dom = document.getElementById("abcAnalysis_customer_2");
-    var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    const store = JSON.parse(localStorage.getItem("store"));
+    const date = JSON.parse(localStorage.getItem("date"));
+    const dom = document.getElementById("abcAnalysis_customer_2");
+    const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
     myChart.showLoading({
         color: spinnerColor,
         text: '',
@@ -454,38 +454,33 @@ function abcAnalysis_customer_2() {
     fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
         .then((response) => response.json())
         .then((data) => {
-        let analysisData = data[store.storeID];
+        const analysisData = data[store.storeID];
         let customerID = Object.keys(analysisData);
-        let totalSales = Object.values(analysisData).map((item) => item.total_sale_customer);
-        let abcCategories = Object.values(analysisData).map((item) => item.abc_category);
-        function updateChart() {
-            var option = {
-                textStyle: {
-                    color: "white"
-                },
+        let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
+        let abcCategories = Object.values(analysisData).map(item => item.abc_category);
+        let totalOrders = Object.values(analysisData).map(item => item.total_order_customer);
+        async function updateChart() {
+            const option = {
+                textStyle: { color: "white" },
                 grid: {
-                    top: '3%', // Adjust top padding to make space for title/legend if necessary
-                    left: '1%', // Adjust left padding
-                    right: '1%', // Adjust right padding
-                    bottom: '2%', // Adjust bottom padding
-                    containLabel: true // Ensure the chart size includes the labels
+                    top: '3%',
+                    left: '1%',
+                    right: '1%',
+                    bottom: '2%',
+                    containLabel: true
                 },
                 tooltip: {
                     trigger: "axis",
-                    axisPointer: {
-                        type: "shadow",
-                    },
+                    axisPointer: { type: "shadow" },
                     formatter: function (params) {
-                        let index = params[0].dataIndex;
-                        return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}`;
+                        const index = params[0].dataIndex;
+                        return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Order total: ${totalOrders[index]}`;
                     },
                 },
                 xAxis: {
                     type: "category",
                     data: abcCategories,
-                    axisLabel: {
-                        show: false,
-                    },
+                    axisLabel: { show: false },
                 },
                 yAxis: {
                     type: "value",
@@ -496,10 +491,7 @@ function abcAnalysis_customer_2() {
                         name: "Total Revenue",
                         type: "bar",
                         data: totalSales,
-                        label: {
-                            show: false,
-                            position: "insideBottom",
-                        },
+                        label: { show: false, position: "insideBottom" },
                         itemStyle: {
                             color: function (params) {
                                 const abcCategory = abcCategories[params.dataIndex];
@@ -516,9 +508,7 @@ function abcAnalysis_customer_2() {
             myChart.hideLoading();
             myChart.setOption(option);
         }
-        // Initialize the chart with all data
         updateChart();
-        // Add event listener for the search input
         const searchInput = document.getElementById("customerSearch");
         searchInput.addEventListener("input", function () {
             const searchQuery = searchInput.value.toLowerCase();
@@ -527,13 +517,14 @@ function abcAnalysis_customer_2() {
                     acc.customerID.push(key);
                     acc.totalSales.push(analysisData[key].total_sale_customer);
                     acc.abcCategories.push(analysisData[key].abc_category);
+                    acc.totalOrders.push(analysisData[key].total_order_customer);
                 }
                 return acc;
-            }, { customerID: [], totalSales: [], abcCategories: [] });
+            }, { customerID: [], totalSales: [], abcCategories: [], totalOrders: [] });
             customerID = filteredData.customerID;
             totalSales = filteredData.totalSales;
             abcCategories = filteredData.abcCategories;
-            myChart.hideLoading();
+            totalOrders = filteredData.totalOrders;
             updateChart();
         });
     })

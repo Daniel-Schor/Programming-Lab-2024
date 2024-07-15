@@ -363,80 +363,86 @@ router.get('/abc-analysis-customers', async (req, res) => {
         const storeID = req.query.storeID;
         const date = req.query.date;
         if (!storeID || !date) {
-            return res.status(400).send('StoreID is required');
+            return res.status(400).send('StoreID and date are required');
         }
         console.log(`Received storeID: ${storeID}`);
         console.log(`Received date: ${date}`);
         const query = `
-WITH total_sales_per_customer AS (
-    SELECT
-        c."customerID",
-        SUM(p.total) AS total_sale_customer
-    FROM
-        public.customers c
-    JOIN
-        public.purchase p ON c."customerID" = p."customerID"
-    JOIN 
-        public.stores s ON p."storeID" = s."storeID"
-    WHERE
-        p."storeID" = $1 AND p."purchaseDate" > $2
-    GROUP BY
-        c."customerID"
-    ORDER BY
-        total_sale_customer DESC
-),
-percentage_sales_customer AS (
-    SELECT
-        "customerID",
-        total_sale_customer,
-        SUM(total_sale_customer) OVER () AS total_sum_sales,
-        (total_sale_customer / SUM(total_sale_customer) OVER ()) AS customer_percentage_of_total
-    FROM
-        total_sales_per_customer
-),
-cumulative_sales_customer AS (
-    SELECT
-        "customerID",
-        total_sale_customer,
-        total_sum_sales,
-        customer_percentage_of_total,
-        SUM(customer_percentage_of_total) OVER (ORDER BY total_sale_customer DESC) AS sorted_cumulative_customer_percentage_of_total
-    FROM
-        percentage_sales_customer
-),
-abc_analysis AS (
-    SELECT
-        "customerID",
-        total_sale_customer,
-        total_sum_sales,
-        customer_percentage_of_total,
-        sorted_cumulative_customer_percentage_of_total,
-        CASE
-            WHEN sorted_cumulative_customer_percentage_of_total <= 0.8 THEN 'A'
-            WHEN sorted_cumulative_customer_percentage_of_total <= 0.95 THEN 'B'
-            ELSE 'C'
-        END AS abc_category
-    FROM
-        cumulative_sales_customer
-)
-SELECT
-    "customerID",
-    total_sale_customer,
-    total_sum_sales,
-    customer_percentage_of_total,
-    sorted_cumulative_customer_percentage_of_total,
-    abc_category
-FROM
-    abc_analysis
-ORDER BY
-    total_sale_customer DESC;
-      `;
+        WITH total_sales_per_customer AS (
+            SELECT
+                c."customerID",
+                SUM(p.total) AS total_sale_customer,
+                COUNT(p."purchaseID") AS total_order_customer
+            FROM
+                public.customers c
+            JOIN
+                public.purchase p ON c."customerID" = p."customerID"
+            JOIN 
+                public.stores s ON p."storeID" = s."storeID"
+            WHERE
+                p."storeID" = $1 AND p."purchaseDate" > $2
+            GROUP BY
+                c."customerID"
+            ORDER BY
+                total_sale_customer DESC
+        ),
+        percentage_sales_customer AS (
+            SELECT
+                "customerID",
+                total_sale_customer,
+                total_order_customer,
+                SUM(total_sale_customer) OVER () AS total_sum_sales,
+                (total_sale_customer / SUM(total_sale_customer) OVER ()) AS customer_percentage_of_total
+            FROM
+                total_sales_per_customer
+        ),
+        cumulative_sales_customer AS (
+            SELECT
+                "customerID",
+                total_sale_customer,
+                total_order_customer,
+                total_sum_sales,
+                customer_percentage_of_total,
+                SUM(customer_percentage_of_total) OVER (ORDER BY total_sale_customer DESC) AS sorted_cumulative_customer_percentage_of_total
+            FROM
+                percentage_sales_customer
+        ),
+        abc_analysis AS (
+            SELECT
+                "customerID",
+                total_sale_customer,
+                total_order_customer,
+                total_sum_sales,
+                customer_percentage_of_total,
+                sorted_cumulative_customer_percentage_of_total,
+                CASE
+                    WHEN sorted_cumulative_customer_percentage_of_total <= 0.8 THEN 'A'
+                    WHEN sorted_cumulative_customer_percentage_of_total <= 0.95 THEN 'B'
+                    ELSE 'C'
+                END AS abc_category
+            FROM
+                cumulative_sales_customer
+        )
+        SELECT
+            "customerID",
+            total_sale_customer,
+            total_order_customer,
+            total_sum_sales,
+            customer_percentage_of_total,
+            sorted_cumulative_customer_percentage_of_total,
+            abc_category
+        FROM
+            abc_analysis
+        ORDER BY
+            total_sale_customer DESC;
+        `;
         const parameters = [storeID, date];
         const result = await client.query(query, parameters);
         const formattedData = {};
         result.rows.forEach(row => {
             formattedData[row.customerID] = {
                 total_sale_customer: row.total_sale_customer,
+                total_order_customer: row.total_order_customer,
                 total_sum_sales: row.total_sum_sales,
                 customer_percentage_of_total: row.customer_percentage_of_total,
                 sorted_cumulative_customer_percentage_of_total: row.sorted_cumulative_customer_percentage_of_total,
