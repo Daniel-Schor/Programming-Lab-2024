@@ -1,5 +1,5 @@
 "use strict";
-// TODO use .env variables instead
+// TO DO use .env variables instead
 const currentDate = "2022-12-31";
 const theme = 'infographic';
 const spinnerRadius = 20;
@@ -20,13 +20,13 @@ function updateCharts(date) {
     heatmap();
     pizza_price_popularity();
 }
-// TODO move to generalCharts.ts
+// TO DO move to generalCharts.ts
 function updateChart(chart, option) {
     if (option && typeof option === "object") {
         chart.setOption(option, true);
     }
 }
-// TODO move to generalCharts.ts
+// TO DO move to generalCharts.ts
 function monthlyRevenue() {
     var store = JSON.parse(localStorage.getItem("store"));
     let date = JSON.parse(localStorage.getItem("date"));

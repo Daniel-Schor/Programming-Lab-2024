@@ -57,8 +57,6 @@
   <div id="main" class="main" onclick="toggleSidebar(true)">
     <div id="content">
       <!-- Put content here -->
-      <!-- TODO insert real data -->
-      <!-- TODO modify icon -->
       <!--Stats section-->
       <div class="section-items">
         <div class="section">
@@ -66,7 +64,7 @@
           <div class="section-items">
             <!--PizzaHub-->
             <div class="subsection">
-              <h1 data-tooltip="This section shows the general data of the PizzaHub Franchise">PizzaHub</h1>
+              <h1>PizzaHub</h1>
               <div class="section-items">
                 <div class="statBox">
                   <div class="iconBox">
@@ -147,8 +145,7 @@
               <button class="btn" id="customButton" style="z-index: 99;" data-tooltip="Choose custom stores from the right" onclick="customButton();">CUSTOM</button>
             </div>
             <div class="btnbox" id="toggleBarChartBox" style="width: 80px; ">
-              <!--TODO add tooltip-->
-              <button data-tooltip="Changes View" class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();"></button>
+              <button data-tooltip="Changes the view to show every store" class="btn" id="toggleBarChart" style="z-index: 99;" onclick="toggleBarChart();"></button>
             </div>
             <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
                 'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
@@ -170,7 +167,7 @@
       <!--Bottom section-->
       <div class="section-items">
         <div class="subsection">
-          <h2 class="pizzaPopularityH" data-tooltip="Shows the Popularity of all Pizzas overtime">Pizza Popularity</h2>
+          <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza Popularity</h2>
           <div id="pizzaPopularity" class="diagram"></div>
         </div>
         <div class="pizzaRankingChart"></div>
