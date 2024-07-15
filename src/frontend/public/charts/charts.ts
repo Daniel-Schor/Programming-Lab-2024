@@ -617,7 +617,7 @@ function addMarkers(stores) {
   });
 }
 
-function revenueForecast() {
+/*function revenueForecast() {
   const currentYear = new Date().getFullYear().toString();
   let startDate = `${currentYear}-01-01`;
   let date = JSON.parse(localStorage.getItem("date")) || currentDate;
@@ -713,9 +713,9 @@ function revenueForecast() {
     .catch((error) => {
       console.error("Error fetching revenue forecast data:", error);
     });
-}
+}*/
 
-/*function revenueForecast() {
+function revenueForecast() {
   const currentYear = new Date().getFullYear().toString();
   let startDate = `${currentYear}-01-01`;
 
@@ -786,7 +786,7 @@ function revenueForecast() {
     .catch((error) => {
       console.error("Error fetching revenue forecast data:", error);
     });
-}*/
+}
 
 
 function storeLocationMap() {
