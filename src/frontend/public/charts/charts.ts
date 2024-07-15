@@ -822,8 +822,8 @@ function revenueForecast() {
         grid: {
           top: '11%',
           bottom: '7%',
-          left: '6%',
-          right: '6%'
+          left: '12%',
+          right: '12%'
         },
         xAxis: {
           type: "category",
