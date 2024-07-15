@@ -571,25 +571,35 @@ router.get('/abc-analysis-pizza', async (req, res) => {
 });
 router.get('/averageOrdersByDayOfWeek', async (req, res) => {
     try {
-        let day_of_week = req.query.dow || 5;
-        let storeID = req.query.store || 'S302800';
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let query = `
-            SELECT EXTRACT(DOW FROM "purchaseDate") AS day_of_week, AVG(total_orders) AS avg_orders
-            FROM (
-                SELECT "purchaseID", COUNT(*) AS total_orders
+        // Extract storeID, startDate, and dayOfWeek from query parameters
+        const storeID = req.query.storeID;
+        const startDate = req.query.startDate || '2022-11-12'; // Default start date if none provided
+        const dayOfWeek = req.query.dayOfWeek || '4'; // Default day of the week (Thursday if day starts from Sunday = 0)
+        // Validate the presence of required parameters
+        if (!storeID) {
+            return res.status(400).send('storeID parameter is required');
+        }
+        // SQL query with the provided logic
+        const query = `
+            WITH abc AS (
+                SELECT COUNT(*) AS counter, EXTRACT(DAY FROM "purchaseDate") AS day_of_month
                 FROM "purchase"
-                WHERE "purchaseDate" > $1 AND "day_of_week"=$2 AND "storeID"=$3
-                GROUP BY "purchaseID"
-            ) subquery
-            GROUP BY day_of_week;
+                WHERE "purchaseDate" > $1 AND "storeID" = $2 AND EXTRACT(DOW FROM "purchaseDate") = $3
+                GROUP BY EXTRACT(DAY FROM "purchaseDate")
+            )
+            SELECT AVG("counter") AS average_daily_purchases
+            FROM abc;
         `;
-        let result = await client.query(query, [date]);
-        res.status(200).json(result.rows);
+        // Parameters for the query
+        const parameters = [startDate, storeID, parseInt(dayOfWeek)];
+        // Execute the query
+        const result = await client.query(query, parameters);
+        // Send the result as JSON
+        res.status(200).json(result.rows[0]); // Send the first row, which contains the average
     }
     catch (err) {
         console.error(err);
-        res.status(500).send('Sorrys, out of order');
+        res.status(500).send('Internal server error');
     }
 });
 router.get('/averageRevenueByDayOfWeek', async (req, res) => {
