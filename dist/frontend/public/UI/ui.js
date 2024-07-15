@@ -207,53 +207,88 @@ async function fetchTotalOrders(dow) {
     document.getElementById('totalOrdersChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch total revenue
-async function fetchTotalRevenue(storeID, dow) {
+async function fetchTotalRevenue(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalRevenue').innerText = data.total_revenue;
+    document.getElementById('totalRevenue').innerText = data["period"].total_revenue;
+    if (data["percentageChange"] > 0) {
+        document.getElementById('totalRevenueChange').style.color = 'green';
+    }
+    else {
+        document.getElementById('totalRevenueChange').style.color = 'red';
+    }
+    document.getElementById('totalRevenueChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch total customers
-async function fetchTotalCustomers(storeID, dow) {
+async function fetchTotalCustomers(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/totalCustomers?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalCustomers').innerText = data.total_customers;
+    document.getElementById('totalCustomers').innerText = data["period"].total_customers;
+    if (data["percentageChange"] > 0) {
+        document.getElementById('totalCustomersChange').style.color = 'green';
+    }
+    else {
+        document.getElementById('totalCustomersChange').style.color = 'red';
+    }
+    document.getElementById('totalCustomersChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch total pizzas sold
-async function fetchTotalPizzasSold(storeID, dow) {
+async function fetchTotalPizzasSold(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalPizzasSold').innerText = data.total_pizzas_sold;
+    document.getElementById('totalPizzasSold').innerText = data["period"].total_pizzas_sold;
+    if (data["percentageChange"] > 0) {
+        document.getElementById('totalPizzasSoldChange').style.color = 'green';
+    }
+    else {
+        document.getElementById('totalPizzasSoldChange').style.color = 'red';
+    }
+    document.getElementById('totalPizzasSoldChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch average orders per customer
-async function fetchAverageOrderCustomer(storeID, dow) {
+async function fetchAverageOrderCustomer(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
+    document.getElementById('avgOrdersPerCustomer').innerText = data["period"].avg_orders_per_customer;
 }
 // Function to fetch average order value per customer
-async function fetchAverageOrderValueCustomer(storeID, dow) {
+async function fetchAverageOrderValueCustomer(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
+    document.getElementById('avgOrderValuePerCustomer').innerText = data["period"].avg_order_value_per_order;
 }
 // Function to fetch average pizzas per order per customer
-async function fetchAveragePizzasPerOrderCustomer(storeID, dow) {
+async function fetchAveragePizzasPerOrderCustomer(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data.avg_pizzas_per_order).toFixed(2);
+    document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data["period"].avg_pizzas_per_order).toFixed(2);
 }
 // Function to fetch order frequency per customer
-async function fetchAverageOrderFrequency(storeID, dow) {
+async function fetchAverageOrderFrequency(dow) {
     let date = JSON.parse(localStorage.getItem("date"));
+    let storeID = JSON.parse(localStorage.getItem("store"));
+    storeID = storeID ? storeID.storeID : null;
     const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('orderFrequency').innerText = data.average_order_frequency_for_avg_customer;
+    document.getElementById('orderFrequency').innerText = data["period"].average_order_frequency_for_avg_customer;
 }
 // Call functions on page load
 document.addEventListener('DOMContentLoaded', function () {

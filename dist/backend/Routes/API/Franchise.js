@@ -312,26 +312,22 @@ router.get('/totalOrders', async (req, res) => {
         let query = `SELECT COUNT("purchaseID") AS total_orders
                      FROM "purchase"
                      WHERE "purchaseDate" > $1`;
-        if (req.query.store) {
-            query += ` AND "storeID" = $2`;
-            parameter.push(req.query.store);
-        }
-        let result = await client.query(query, parameter);
-        // -------------
         let query2 = query.replace(">", "<=");
         if (req.query.store) {
+            query += ` AND "storeID" = $2`;
             query2 += ` AND "purchaseDate" > $3`;
+            parameter.push(req.query.store);
         }
         else {
             query2 += ` AND "purchaseDate" > $2`;
         }
+        let result = await client.query(query, parameter);
         let newDate = new Date(date);
         let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
         newDate.setTime(newDate.getTime() - period);
         parameter.push(newDate.toISOString().split('T')[0]);
         let result2 = await client.query(query2, parameter);
         res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].total_orders, result.rows[0].total_orders).toFixed(2) });
-        // -------------
     }
     catch (err) {
         console.error(err);
@@ -345,12 +341,22 @@ router.get('/totalRevenue', async (req, res) => {
         let query = `SELECT SUM(total) AS total_revenue
                      FROM "purchase"
                      WHERE "purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
+            query2 += ` AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].total_revenue, result.rows[0].total_revenue).toFixed(2) });
     }
     catch (err) {
         console.error(err);
@@ -365,12 +371,22 @@ router.get('/totalCustomers', async (req, res) => {
             SELECT COUNT(DISTINCT "customerID") AS total_customers
             FROM "purchase"
             WHERE "purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
+            query2 += ` AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].total_customers, result.rows[0].total_customers).toFixed(2) });
     }
     catch (err) {
         console.error(err);
@@ -385,12 +401,22 @@ router.get('/totalPizzas', async (req, res) => {
                      FROM "purchaseItems"
                      JOIN "purchase" ON "purchaseItems"."purchaseID" = "purchase"."purchaseID"
                      WHERE "purchase"."purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
-            query += ` AND "purchase"."storeID" = $2`;
+            query += ` AND "storeID" = $2`;
+            query2 += ` AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].total_pizzas_sold, result.rows[0].total_pizzas_sold).toFixed(2) });
     }
     catch (err) {
         console.error(err);

@@ -467,6 +467,7 @@ function abcAnalysis_customer_2() {
         let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
         let abcCategories = Object.values(analysisData).map(item => item.abc_category);
         let totalOrders = Object.values(analysisData).map(item => item.total_order_customer);
+        let averageOrderValue = Object.values(analysisData).map(item => parseFloat(item.average_order_value));
         async function updateChart() {
             const option = {
                 textStyle: { color: "white" },
@@ -482,7 +483,15 @@ function abcAnalysis_customer_2() {
                     axisPointer: { type: "shadow" },
                     formatter: function (params) {
                         const index = params[0].dataIndex;
-                        return `Green good, red bad.<br/>A customer good, C customer bad.<br/>ABC Category: ${abcCategories[index]}<br/>Customer ID: ${customerID[index]}<br/>Total Revenue: ${totalSales[index]}<br/>Order total: ${totalOrders[index]}`;
+                        return `
+                              Green good, red bad.<br/>
+                              A customer good, C customer bad.<br/>
+                              ABC Category: ${abcCategories[index]}<br/>
+                              Customer ID: ${customerID[index]}<br/>
+                              Total Revenue: ${totalSales[index]}<br/>
+                              Total Orders: ${totalOrders[index]}<br/>
+                              Average Order Value: ${averageOrderValue[index].toFixed(2)}
+                          `;
                     },
                 },
                 xAxis: {
@@ -526,13 +535,15 @@ function abcAnalysis_customer_2() {
                     acc.totalSales.push(analysisData[key].total_sale_customer);
                     acc.abcCategories.push(analysisData[key].abc_category);
                     acc.totalOrders.push(analysisData[key].total_order_customer);
+                    acc.averageOrderValue.push(analysisData[key].average_order_value);
                 }
                 return acc;
-            }, { customerID: [], totalSales: [], abcCategories: [], totalOrders: [] });
+            }, { customerID: [], totalSales: [], abcCategories: [], totalOrders: [], averageOrderValue: [] });
             customerID = filteredData.customerID;
             totalSales = filteredData.totalSales;
             abcCategories = filteredData.abcCategories;
             totalOrders = filteredData.totalOrders;
+            averageOrderValue = filteredData.averageOrderValue;
             updateChart();
         });
     })

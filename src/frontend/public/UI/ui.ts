@@ -19,74 +19,74 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((groupedStores) => {
         var sidebar = document.querySelector("#sidebar");
-    
+
         // Clear existing sidebar content
         sidebar.innerHTML = "";
-    
+
         // Sort the keys (cities) of groupedStores
         var sortedCities = Object.keys(groupedStores).sort();
-    
+
         // Loop through each sorted city in groupedStores
         sortedCities.forEach((city) => {
-            if (groupedStores.hasOwnProperty(city)) {
-                // Create a button for the city
-                var cityDiv = document.createElement("div");
-                cityDiv.classList.add("city-section");
-                if (groupedStores[city].length === 1) {
-                    var cityLink = document.createElement("button");
-                    let storeID = groupedStores[city][0].storeID;
-                    cityLink.textContent = city + " - " + storeID;
-                    cityLink.classList.add("city-button");
-                    cityLink.onclick = function () {
-                        window.location.href = `/store`;
-                        localStorage.setItem('store', JSON.stringify({ "storeID": storeID }));
-                    };
-                    cityDiv.appendChild(cityLink);
+          if (groupedStores.hasOwnProperty(city)) {
+            // Create a button for the city
+            var cityDiv = document.createElement("div");
+            cityDiv.classList.add("city-section");
+            if (groupedStores[city].length === 1) {
+              var cityLink = document.createElement("button");
+              let storeID = groupedStores[city][0].storeID;
+              cityLink.textContent = city + " - " + storeID;
+              cityLink.classList.add("city-button");
+              cityLink.onclick = function () {
+                window.location.href = `/store`;
+                localStorage.setItem('store', JSON.stringify({ "storeID": storeID }));
+              };
+              cityDiv.appendChild(cityLink);
+            } else {
+              var cityButton = document.createElement("button");
+              let currentButton = city;
+              cityButton.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
+              cityButton.classList.add("city-button");
+              cityButton.onclick = function (params) {
+                let condition = !this.nextElementSibling.classList.contains("show")
+                if (condition) {
+                  this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-down"></i></div>`;
                 } else {
-                    var cityButton = document.createElement("button");
-                    let currentButton = city;
-                    cityButton.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
-                    cityButton.classList.add("city-button");
-                    cityButton.onclick = function (params) {
-                        let condition = !this.nextElementSibling.classList.contains("show")
-                        if (condition) {
-                            this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-down"></i></div>`;
-                        } else {
-                            this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
-                        }
-                        this.nextElementSibling.classList.toggle("show");
-                    };
-    
-                    cityDiv.appendChild(cityButton);
+                  this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
                 }
-                // Create a list for the stores in the city
-                var cityUl = document.createElement("ul");
-                cityUl.classList.add("store-list", "hidden");
-    
-                groupedStores[city].forEach(function (store) {
-                    var storeLi = document.createElement("li");
-                    var a = document.createElement("a");
-                    a.href = `/store`;
-                    a.onclick = function () {
-                        localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
-                        window.location.href = `/store`;
-                    }
-                    a.textContent = store.storeID;
-                    storeLi.appendChild(a);
-                    cityUl.appendChild(storeLi);
-                });
-    
-                cityDiv.appendChild(cityUl);
-                sidebar.appendChild(cityDiv);
-    
+                this.nextElementSibling.classList.toggle("show");
+              };
+
+              cityDiv.appendChild(cityButton);
             }
+            // Create a list for the stores in the city
+            var cityUl = document.createElement("ul");
+            cityUl.classList.add("store-list", "hidden");
+
+            groupedStores[city].forEach(function (store) {
+              var storeLi = document.createElement("li");
+              var a = document.createElement("a");
+              a.href = `/store`;
+              a.onclick = function () {
+                localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
+                window.location.href = `/store`;
+              }
+              a.textContent = store.storeID;
+              storeLi.appendChild(a);
+              cityUl.appendChild(storeLi);
+            });
+
+            cityDiv.appendChild(cityUl);
+            sidebar.appendChild(cityDiv);
+
+          }
         });
         let testdiv = document.createElement("h1");
         //testdiv.textContent = "End of content";
         testdiv.classList.add("spacer");
         sidebar.appendChild(testdiv);
-    })
-    
+      })
+
       .catch((error) => {
         console.error("Error fetching stores:", error);
       });
@@ -239,59 +239,99 @@ async function fetchTotalOrders(dow?: number) {
 }
 
 // Function to fetch total revenue
-async function fetchTotalRevenue(storeID?: string, dow?: number) {
+async function fetchTotalRevenue(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('totalRevenue').innerText = data.total_revenue;
+  document.getElementById('totalRevenue').innerText = data["period"].total_revenue;
+  if (data["percentageChange"] > 0) {
+    document.getElementById('totalRevenueChange').style.color = 'green';
+  } else {
+    document.getElementById('totalRevenueChange').style.color = 'red';
+  }
+  document.getElementById('totalRevenueChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch total customers
-async function fetchTotalCustomers(storeID?: string, dow?: number) {
+async function fetchTotalCustomers(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/totalCustomers?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('totalCustomers').innerText = data.total_customers;
+  document.getElementById('totalCustomers').innerText = data["period"].total_customers;
+  if (data["percentageChange"] > 0) {
+    document.getElementById('totalCustomersChange').style.color = 'green';
+  } else {
+    document.getElementById('totalCustomersChange').style.color = 'red';
+  }
+  document.getElementById('totalCustomersChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch total pizzas sold
-async function fetchTotalPizzasSold(storeID?: string, dow?: number) {
+async function fetchTotalPizzasSold(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('totalPizzasSold').innerText = data.total_pizzas_sold;
+  document.getElementById('totalPizzasSold').innerText = data["period"].total_pizzas_sold;
+  if (data["percentageChange"] > 0) {
+    document.getElementById('totalPizzasSoldChange').style.color = 'green';
+  } else {
+    document.getElementById('totalPizzasSoldChange').style.color = 'red';
+  }
+  document.getElementById('totalPizzasSoldChange').innerText = data["percentageChange"] + '%';
+
 }
 
 // Function to fetch average orders per customer
-async function fetchAverageOrderCustomer(storeID?: string, dow?: number) {
+async function fetchAverageOrderCustomer(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgOrdersPerCustomer').innerText = data.avg_orders_per_customer;
+  document.getElementById('avgOrdersPerCustomer').innerText = data["period"].avg_orders_per_customer;
 }
 
 // Function to fetch average order value per customer
-async function fetchAverageOrderValueCustomer(storeID?: string, dow?: number) {
+async function fetchAverageOrderValueCustomer(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgOrderValuePerCustomer').innerText = data.avg_order_value_per_order;
+  document.getElementById('avgOrderValuePerCustomer').innerText = data["period"].avg_order_value_per_order;
 }
 
 // Function to fetch average pizzas per order per customer
-async function fetchAveragePizzasPerOrderCustomer(storeID?: string, dow?: number) {
+async function fetchAveragePizzasPerOrderCustomer(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data.avg_pizzas_per_order).toFixed(2);
+  document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data["period"].avg_pizzas_per_order).toFixed(2);
 }
 
 // Function to fetch order frequency per customer
-async function fetchAverageOrderFrequency(storeID?: string, dow?: number) {
+async function fetchAverageOrderFrequency(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('orderFrequency').innerText = data.average_order_frequency_for_avg_customer;
+  document.getElementById('orderFrequency').innerText = data["period"].average_order_frequency_for_avg_customer;
 }
 
 
