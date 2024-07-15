@@ -619,7 +619,6 @@ function addMarkers(stores) {
 
 function revenueForecast() {
   let date = JSON.parse(localStorage.getItem("date"));
-
   var dom = document.getElementById("revenueForecast");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
@@ -637,12 +636,14 @@ function revenueForecast() {
   fetch(`/api/revenue-forecast-analysis?date=${date}`)
     .then((response) => response.json())
     .then((responseData) => {
-      let data = responseData.data;
-      let periods = data.map(item => new Date(item.period).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short"
-      }));
-      let revenues = data.map(item => parseFloat(item.revenue));
+      let data = responseData.data.map(item => [
+        new Date(item.period).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit"
+        }),
+        parseFloat(item.revenue)
+      ]);
 
       var option = {
         textStyle: {
@@ -656,20 +657,11 @@ function revenueForecast() {
         },
         xAxis: {
           type: 'category',
-          data: periods,
           boundaryGap: false
         },
         yAxis: {
           type: 'value',
-          name: "Revenue ($)",
           boundaryGap: [0, '30%']
-        },
-        tooltip: {
-          trigger: "axis",
-          formatter: function (params) {
-            let index = params[0].dataIndex;
-            return `Period: ${periods[index]}<br/>Revenue: ${revenues[index].toFixed(2)} $`;
-          },
         },
         visualMap: {
           type: 'piecewise',
@@ -677,16 +669,13 @@ function revenueForecast() {
           dimension: 0,
           seriesIndex: 0,
           pieces: [
-            {
-              gt: 5,
-              lt: 9,
-              color: 'rgba(0, 0, 180, 0.4)'
-            }
+            { gt: 1, lt: 3, color: 'rgba(0, 0, 180, 0.4)' },
+            { gt: 5, lt: 7, color: 'rgba(0, 0, 180, 0.4)' }
           ]
         },
         series: [
           {
-            data: revenues,
+            data: data,
             type: 'line',
             smooth: 0.6,
             symbol: 'none',
@@ -697,10 +686,10 @@ function revenueForecast() {
             markLine: {
               symbol: ['none', 'none'],
               label: { show: false },
-              data: [{ xAxis: 5 }]
+              data: [{ xAxis: 1 }, { xAxis: 3 }, { xAxis: 5 }, { xAxis: 7 }]
             },
             areaStyle: {}
-          },
+          }
         ],
       };
 
