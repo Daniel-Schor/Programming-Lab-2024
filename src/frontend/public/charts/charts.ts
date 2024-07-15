@@ -620,7 +620,8 @@ function addMarkers(stores) {
 function revenueForecast() {
   const currentYear = new Date().getFullYear().toString();
   let startDate = `${currentYear}-01-01`;
-
+  let date = JSON.parse(localStorage.getItem("date")) || currentDate;
+  
   var dom = document.getElementById("revenueForecast");
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
