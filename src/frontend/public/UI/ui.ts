@@ -64,7 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
               var storeLi = document.createElement("li");
               var a = document.createElement("a");
               a.href = `/store`;
-              localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
+              a.onclick = function () {
+                localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
+                window.location.href = `/store`;
+              }
               a.textContent = store.storeID;
               storeLi.appendChild(a);
               cityUl.appendChild(storeLi);
