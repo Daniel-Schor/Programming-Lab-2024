@@ -62,7 +62,7 @@
           <div class="section-items">
             <!--PizzaHub-->
             <div class="subsection">
-              <h1 id="storeName">PizzaHub</h1>
+              <h1 id="storeName" data-tooltip="General stats for the store">PizzaHub</h1>
               <div class="section-items">
                 <div class="statBox">
                   <div class="iconBox">
@@ -108,7 +108,7 @@
             </div>
             <!--Customers-->
             <div class="subsection">
-              <h1>Average Customer</h1>
+              <h1 data-tooltip="How does an average customer look like?">Average Customer</h1>
               <div class="section-items">
                 <div class="statBox">
                   <div id="stat-item"></div>
@@ -172,25 +172,25 @@
                   <div id="PizzaSize" class="diagram"></div>
                 </div>
                 <div class="subsection">
-                  <h2 data-tooltip="Shows a ABC Analysis of all Pizza sorted by total revenue">ABC - Analysis</h2>
+                  <h2 data-tooltip="ABC-Analysis of the Pizzas, A-Pizza most valuable, C-Pizza least">ABC - Analysis</h2>
                   <div id="abcAnalysis_pizza_2" class="diagram"></div>
                 </div>
               </div>
               <div class="section-items">
                 <div class="subsection">
-                  <h2>Relationship between price and popularity of pizzas</h2>
+                  <h2>Relationship between price and popularity</h2>
                   <div id="pizza_price_popularity" class="diagram"></div>
                 </div>
               </div>
               <div class="section-items">
                 <div class="subsection">
-                  <h2 data-tooltip="The heatmap shows how often one pizza is ordered with another.">Heatmap</h2>
+                  <h2 data-tooltip="Pizzas often sold together">Heatmap</h2>
                   <div id="Heatmap" class="diagram"></div>
                 </div>
               </div>
               <div class="section-items">
                 <div class="subsection">
-                  <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza
+                  <h2 class="pizzaPopularityH" data-tooltip="Popularity of pizzas over time">Pizza
                     Popularity
                   </h2>
                   <div id="pizzaPopularity" class="diagram"></div>
@@ -207,26 +207,26 @@
               <div class="subsection" style="margin-top: 0px; margin-left: 0px; margin-right: 0px;">
                 <div class="section-items" style="justify-content: space-between;">
                   <div class="btnbox" style="width: 90px;">
-                    <button class="btn" id="" onclick="changeDow(-1);" style="z-index: 99;">
+                    <button class="btn" id="" onclick="changeDow(-1);" style="z-index: 99;" data-tooltip="Previous day">
                       <i class="fa-solid fa-caret-left"></i> </button>
-                    <button class="btn" id="" onclick="changeDow(1);" style="z-index: 99;">
+                    <button class="btn" id="" onclick="changeDow(1);" style="z-index: 99;" data-tooltip="Next day">
                       <i class="fa-solid fa-caret-right"></i> </button>
                   </div>
                   <div class="btnbox" style="width: 60px;">
-                    <button class="infobox" id="dowInfo">TODAY</button>
+                    <button class="infobox" id="dowInfo" data-tooltip="Selected day of week">TODAY</button>
                   </div>
-                  <h1 class="centered">Forecast</h1>
+                  <h1 class="centered" data-tooltip="What will my day look like?">Forecast</h1>
                 </div>
                 <div class="section-items">
                   <div class="subsection">
-                    <h2>Average orders per hour</h2>
+                    <h2 data-tooltip="When will the most orderes come in?">Average orders per hour</h2>
                     <div id="dailyOrders" class="diagram" style="height: 365px;"></div>
                   </div>
                 </div>
                 <div class="section-items">
                   <div class="subsection">
                     <h2
-                      data-tooltip="It shows a forecast of average ingredients used, which can be changed with buttons in the forecast. ">
+                      data-tooltip="How much ingredients will i need?">
                       Average ingredients used</h2>
                     <div id="pizzaIngredients" class="diagram" style="height: 365px;"></div>
                   </div>
@@ -276,12 +276,12 @@
                 <h1>Customer</h1>
                 <div class="section-items">
                   <div class="subsection">
-                    <h2 data-tooltip="Shows a ABC Analysis of the Customers sorted by total revenue">ABC - Analysis</h2>
+                    <h2 data-tooltip="ABC-Analysis of the Customers, A-Customer most valuable, C-Customer least">ABC - Analysis</h2>
                     <div class="diagram" id="abcAnalysis_customer_2"></div>
                     <input type="text" id="customerSearch" placeholder="Search..">
                   </div>
                   <div class="subsection">
-                    <h2>Customer relationship</h2>
+                    <h2 data-tooltip="How much do customers enjoy my service?">Customer relationship</h2>
                     <div class="diagram" id="quality"></div>
                   </div>
                 </div>

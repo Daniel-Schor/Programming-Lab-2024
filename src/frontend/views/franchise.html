@@ -64,7 +64,7 @@
           <div class="section-items">
             <!--PizzaHub-->
             <div class="subsection">
-              <h1>PizzaHub</h1>
+              <h1 data-tooltip="General stats for the franchise">PizzaHub</h1>
               <div class="section-items">
                 <div class="statBox">
                   <div class="iconBox">
@@ -110,7 +110,7 @@
             </div>
             <!--Customers-->
             <div class="subsection">
-              <h1>Average Customer</h1>
+              <h1 data-tooltip="How does an average customer look like?">Average Customer</h1>
               <div class="section-items">
                 <div class="statBox">
                   <div id="stat-item"></div>
@@ -168,24 +168,22 @@
                 onclick="bestButton();">STABLE</button>
               <button class="btn" id="worstButton" style="z-index: 99;" data-tooltip="Most unstable stores"
                 onclick="worstButton();">UNSTABLE</button>
-              <button class="btn" id="customButton" style="z-index: 99;"
-                data-tooltip="Select stores from the bar chart" onclick="customButton();">CUSTOM</button>
+              <button class="btn" id="customButton" style="z-index: 99;" data-tooltip="Select stores from the bar chart"
+                onclick="customButton();">CUSTOM</button>
             </div>
             <div class="btnbox" id="toggleBarChartBox" style="width: 80px; ">
-              <button data-tooltip="Changes the view to show every store" class="btn" id="toggleBarChart"
-                style="z-index: 99;" onclick="toggleBarChart();"></button>
+              <button data-tooltip="Change view of bar chart" class="btn" id="toggleBarChart" style="z-index: 99;"
+                onclick="toggleBarChart();"></button>
             </div>
-            <h1 class="centered" data-tooltip="The right chart shows the revenue with your chosen condition. You can choose between the buttons 
-                'STABLE','UNSTABLE','CUSTOM'. You can add stores by clicking those in the bar chart to the right."
-              id="revenueTitle" style="margin-top: 4px;">Revenue</h1>
+            <h1 class="centered" id="revenueTitle" style="margin-top: 4px;">Revenue</h1>
           </div>
           <div class="section-items">
             <div class="subsection">
-              <h2>Revenue over time</h2>
+              <h2 data-tooltip="Revenue over time for selected timeframe">Revenue over time</h2>
               <div id="revenue" class="diagram"></div>
             </div>
             <div class="subsection">
-              <h2>Total revenue</h2>
+              <h2 data-tooltip="Total revenue for selected timeframe">Total revenue</h2>
               <div id="revenueBar" class="diagram" style="height: 100%"></div>
             </div>
           </div>
@@ -195,7 +193,7 @@
       <!--Bottom section-->
       <div class="section-items">
         <div class="subsection">
-          <h2 class="pizzaPopularityH" data-tooltip="Shows the popularity of all pizzas over time.">Pizza Popularity
+          <h2 class="pizzaPopularityH" data-tooltip="Popularity of pizzas over time">Pizza Popularity
           </h2>
           <div id="pizzaPopularity" class="diagram"></div>
         </div>
@@ -203,13 +201,13 @@
 
         <div class="section-items" style="width: 50%;">
           <div class="subsection">
-            <h2>Total Franchise Revenue</h2>
+            <h2 data-tooltip="Total revenue over time (marked is selected timeframe)">Total Franchise Revenue</h2>
             <div id="revenueForecast" class="diagram" style="height: 300px;"></div>
           </div>
           <div class="subsection">
             <!--<h2 data-tooltip="This is the a Map showing all Stores" id="mapTitel">Store locations</h2>-->
             <!--<h2 id="mapTitel">Store locations</h2>-->
-            <h2>Store locations</h2>
+            <h2 data-tooltip="Location of selected stores">Store locations</h2>
             <div id="map" class="diagram"></div>
           </div>
         </div>

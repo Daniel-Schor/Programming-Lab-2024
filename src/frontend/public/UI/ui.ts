@@ -389,7 +389,10 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
   fetchAverageOrderFrequency();
+<<<<<<< HEAD
   
+=======
+>>>>>>> be494e28eccac8e5e8c5de5f0460ca09ab34ddac
 });
 
 
