@@ -230,12 +230,14 @@ async function fetchTotalOrders(dow?: number) {
   let response = await fetch(`/api/totalOrders?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   let data = await response.json();
   document.getElementById('totalOrders').innerText = data["period"].total_orders;
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('totalOrdersChange').style.color = 'green';
+    document.getElementById('totalOrdersChange').innerText = "+" + data["percentageChange"] + '%';
   } else {
     document.getElementById('totalOrdersChange').style.color = 'red';
+    document.getElementById('totalOrdersChange').innerText = data["percentageChange"] + '%';
   }
-  document.getElementById('totalOrdersChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch total revenue
@@ -246,13 +248,15 @@ async function fetchTotalRevenue(dow?: number) {
 
   const response = await fetch(`/api/totalRevenue?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('totalRevenue').innerText = data["period"].total_revenue;
+  document.getElementById('totalRevenue').innerText = data["period"].total_revenue + "$";
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('totalRevenueChange').style.color = 'green';
+    document.getElementById('totalRevenueChange').innerText = "+" + data["percentageChange"] + '%';
   } else {
     document.getElementById('totalRevenueChange').style.color = 'red';
+    document.getElementById('totalRevenueChange').innerText = data["percentageChange"] + '%';
   }
-  document.getElementById('totalRevenueChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch total customers
@@ -264,12 +268,15 @@ async function fetchTotalCustomers(dow?: number) {
   const response = await fetch(`/api/totalCustomers?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('totalCustomers').innerText = data["period"].total_customers;
+
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('totalCustomersChange').style.color = 'green';
+    document.getElementById('totalCustomersChange').innerText = "+" + data["percentageChange"] + '%';
   } else {
     document.getElementById('totalCustomersChange').style.color = 'red';
+    document.getElementById('totalCustomersChange').innerText = data["percentageChange"] + '%';
   }
-  document.getElementById('totalCustomersChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch total pizzas sold
@@ -281,12 +288,14 @@ async function fetchTotalPizzasSold(dow?: number) {
   const response = await fetch(`/api/totalPizzas?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('totalPizzasSold').innerText = data["period"].total_pizzas_sold;
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('totalPizzasSoldChange').style.color = 'green';
+    document.getElementById('totalPizzasSoldChange').innerText = "+" + data["percentageChange"] + '%';
   } else {
     document.getElementById('totalPizzasSoldChange').style.color = 'red';
+    document.getElementById('totalPizzasSoldChange').innerText = data["percentageChange"] + '%';
   }
-  document.getElementById('totalPizzasSoldChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch average orders per customer
@@ -298,12 +307,14 @@ async function fetchAverageOrderCustomer(dow?: number) {
   const response = await fetch(`/api/averageOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('avgOrdersPerCustomer').innerText = data["period"].avg_orders_per_customer;
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('avgOrdersPerCustomerChange').style.color = 'green';
+    document.getElementById('avgOrdersPerCustomerChange').innerText = "+" + data["percentageChange"] + '%';
   } else {
     document.getElementById('avgOrdersPerCustomerChange').style.color = 'red';
+    document.getElementById('avgOrdersPerCustomerChange').innerText = data["percentageChange"] + '%';
   }
-  document.getElementById('avgOrdersPerCustomerChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch average order value per customer
@@ -314,13 +325,15 @@ async function fetchAverageOrderValueCustomer(dow?: number) {
 
   const response = await fetch(`/api/averageOrderValueCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('avgOrderValuePerCustomer').innerText = data["period"].avg_order_value_per_order;
+  document.getElementById('avgOrderValuePerCustomer').innerText = data["period"].avg_order_value_per_order + "$";
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('avgOrderValuePerCustomerChange').style.color = 'green';
+    document.getElementById('avgOrderValuePerCustomerChange').innerText = "+" + data["percentageChange"] + '%';
   } else {
     document.getElementById('avgOrderValuePerCustomerChange').style.color = 'red';
+    document.getElementById('avgOrderValuePerCustomerChange').innerText = data["percentageChange"] + '%';
   }
-  document.getElementById('avgOrderValuePerCustomerChange').innerText = data["percentageChange"] + '%';
 }
 
 // Function to fetch average pizzas per order per customer
@@ -332,6 +345,7 @@ async function fetchAveragePizzasPerOrderCustomer(dow?: number) {
   const response = await fetch(`/api/averagePizzasPerOrderCustomer?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
   document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data["period"].avg_pizzas_per_order).toFixed(2);
+  if (data["percentageChange"] === "0.00") { return; }
   if (data["percentageChange"] > 0) {
     document.getElementById('avgPizzasPerOrderChange').style.color = 'green';
   } else {
