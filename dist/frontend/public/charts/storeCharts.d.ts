@@ -15,3 +15,7 @@ declare function pizza_price_popularity(): void;
 declare function changeDow(index?: number): void;
 declare function dailyOrders(): void;
 declare function pizzaIngredients(): void;
+declare function fetchAverageOrdersByDayOfWeek(): Promise<void>;
+declare function fetchAverageRevenueByDayOfWeek(): Promise<void>;
+declare function fetchAverageCustomersByDayOfWeek(): Promise<void>;
+declare function fetchAveragePizzasSoldByDayOfWeek(): Promise<void>;

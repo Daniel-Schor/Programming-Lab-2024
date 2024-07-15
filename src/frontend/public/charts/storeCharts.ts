@@ -25,6 +25,7 @@ function updateCharts(date?: string) {
   fetchAverageRevenueByDayOfWeek();
   fetchAverageCustomersByDayOfWeek();
   fetchAveragePizzasSoldByDayOfWeek();
+  
 
   pizzaPopularity();
   gaugeChart();
@@ -275,8 +276,6 @@ function heatmap() {
     });
 
 }
-
-
 
 function pizzaSize() {
   // SELECT p.purchaseID, pr.Name, pr.Size FROM purchaseItems pi JOIN products pr ON pi.SKU = pr.SKU JOIN purchase p ON pi.purchaseID = p.purchaseID;
@@ -1246,6 +1245,10 @@ function changeDow(index: number = 1) {
   dailyOrders();
   pizzaIngredients();
   // TODO stats
+  fetchAveragePizzasSoldByDayOfWeek();
+  fetchAverageCustomersByDayOfWeek();
+  fetchAverageRevenueByDayOfWeek();
+  fetchAverageOrdersByDayOfWeek();
 }
 
 function dailyOrders() {
@@ -1447,4 +1450,47 @@ function pizzaIngredients() {
       myChart.setOption(option);
     })
     .catch((error) => console.error("Error fetching ingredient data:", error));
+}
+async function fetchAverageOrdersByDayOfWeek() {
+  let date = JSON.parse(localStorage.getItem("date"));
+  let store = JSON.parse(localStorage.getItem("store"));
+  let storeID = store ? store.storeID : null;
+
+  let response = await fetch(`/api/averageOrdersByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+  let data = await response.json();
+  
+  document.getElementById('dowOrder').innerText = parseFloat(data.average_daily_purchases).toFixed(2);
+}
+
+async function fetchAverageRevenueByDayOfWeek() {
+  let date = JSON.parse(localStorage.getItem("date"));
+  let store = JSON.parse(localStorage.getItem("store"));
+  let storeID = store ? store.storeID : null;
+
+  const response = await fetch(`/api/averageRevenueByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+  const data = await response.json();
+  
+  document.getElementById('dowRevenue').innerText = parseFloat(data.average_daily_revenue).toFixed(2) + "$";
+}
+
+async function fetchAverageCustomersByDayOfWeek() {
+  let date = JSON.parse(localStorage.getItem("date"));
+  let store = JSON.parse(localStorage.getItem("store"));
+  let storeID = store ? store.storeID : null;
+
+  const response = await fetch(`/api/averageCustomersByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+  const data = await response.json();
+  
+  document.getElementById('dowCustomer').innerText = parseFloat(data.average_daily_customers).toFixed(2);
+}
+
+async function fetchAveragePizzasSoldByDayOfWeek() {
+  let date = JSON.parse(localStorage.getItem("date"));
+  let store = JSON.parse(localStorage.getItem("store"));
+  let storeID = store ? store.storeID : null;
+  
+  const response = await fetch(`/api/averagePizzasSoldByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
+  const data = await response.json();
+  
+  document.getElementById('dowPizza').innerText = parseFloat(data.average_daily_pizzas_sold).toFixed(2);
 }
