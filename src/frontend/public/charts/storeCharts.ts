@@ -1454,6 +1454,7 @@ function pizzaIngredients() {
 async function fetchAverageOrdersByDayOfWeek() {
   let date = JSON.parse(localStorage.getItem("date"));
   let store = JSON.parse(localStorage.getItem("store"));
+  let dow = JSON.parse(localStorage.getItem("dow"));
   let storeID = store ? store.storeID : null;
 
   let response = await fetch(`/api/averageOrdersByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
@@ -1465,6 +1466,7 @@ async function fetchAverageOrdersByDayOfWeek() {
 async function fetchAverageRevenueByDayOfWeek() {
   let date = JSON.parse(localStorage.getItem("date"));
   let store = JSON.parse(localStorage.getItem("store"));
+  let dow = JSON.parse(localStorage.getItem("dow"));
   let storeID = store ? store.storeID : null;
 
   const response = await fetch(`/api/averageRevenueByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
@@ -1476,6 +1478,7 @@ async function fetchAverageRevenueByDayOfWeek() {
 async function fetchAverageCustomersByDayOfWeek() {
   let date = JSON.parse(localStorage.getItem("date"));
   let store = JSON.parse(localStorage.getItem("store"));
+  let dow = JSON.parse(localStorage.getItem("dow"));
   let storeID = store ? store.storeID : null;
 
   const response = await fetch(`/api/averageCustomersByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
@@ -1487,6 +1490,7 @@ async function fetchAverageCustomersByDayOfWeek() {
 async function fetchAveragePizzasSoldByDayOfWeek() {
   let date = JSON.parse(localStorage.getItem("date"));
   let store = JSON.parse(localStorage.getItem("store"));
+  let dow = JSON.parse(localStorage.getItem("dow"));
   let storeID = store ? store.storeID : null;
   
   const response = await fetch(`/api/averagePizzasSoldByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
