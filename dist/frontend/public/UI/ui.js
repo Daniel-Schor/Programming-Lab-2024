@@ -323,11 +323,12 @@ async function fetchAveragePizzasPerOrderCustomer(dow) {
     }
     if (data["percentageChange"] > 0) {
         document.getElementById('avgPizzasPerOrderChange').style.color = 'green';
+        document.getElementById('avgPizzasPerOrderChange').innerText = "+" + data["percentageChange"] + '%';
     }
     else {
         document.getElementById('avgPizzasPerOrderChange').style.color = 'red';
+        document.getElementById('avgPizzasPerOrderChange').innerText = data["percentageChange"] + '%';
     }
-    document.getElementById('avgPizzasPerOrderChange').innerText = data["percentageChange"] + '%';
 }
 // Function to fetch order frequency per customer
 async function fetchAverageOrderFrequency(dow) {
@@ -339,11 +340,12 @@ async function fetchAverageOrderFrequency(dow) {
     document.getElementById('orderFrequency').innerText = parseFloat(data["period"].average_order_frequency).toFixed(2) + " days";
     if (data["percentageChange"] > 0) {
         document.getElementById('orderFrequencyChange').style.color = 'red';
+        document.getElementById('orderFrequencyChange').innerText = "+" + data["percentageChange"] + '%';
     }
     else {
         document.getElementById('orderFrequencyChange').style.color = 'green';
+        document.getElementById('orderFrequencyChange').innerText = data["percentageChange"] + '%';
     }
-    document.getElementById('orderFrequencyChange').innerText = data["percentageChange"] + '%';
 }
 // Call functions on page load
 document.addEventListener('DOMContentLoaded', function () {
