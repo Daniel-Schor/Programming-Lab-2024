@@ -56,13 +56,13 @@ function monthlyRevenue() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/revenue?reverse=true&date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -97,13 +97,13 @@ function gaugeChart() {
   //document.getElementById("Store-quality").innerHTML = `Store: ${store.storeID} Quality`;
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/quality?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -144,8 +144,9 @@ function gaugeChart() {
                 return `
                 ${params.marker} 
                 Overall<br/>
-                Score compared to <br/>
-                other stores: ${params.value}
+                Average of scores compared <br/>
+                to other stores: ${params.value} <br/>
+                (0 = worst, 100 = best)
                 `;
               case "Loyalty":
                 return `
@@ -211,13 +212,13 @@ function heatmap() {
   let newData: any[] = [];
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/pizzaPairs?date=${date}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -286,13 +287,13 @@ function pizzaSize() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   // Mapping of sizes to their abbreviations
   var sizeMapping = {
@@ -392,13 +393,13 @@ function abcAnalysis_customer_1() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
@@ -516,7 +517,7 @@ function abcAnalysis_customer_1() {
       console.error("Error fetching or processing data:", error);
     });
 }
-   
+
 function abcAnalysis_customer_2() {
   const store = JSON.parse(localStorage.getItem("store"));
   const date = JSON.parse(localStorage.getItem("date"));
@@ -524,112 +525,110 @@ function abcAnalysis_customer_2() {
   const myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
   myChart.showLoading({
-      color: spinnerColor,
-      text: '',
-      maskColor: 'rgba(255, 255, 255, 0)',
-      zlevel: 1000,
-      spinnerRadius: spinnerRadius,
-      lineWidth: lineWidth,
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
   });
 
   fetch(`/api/abc-analysis-customers?date=${date}&storeID=${store.storeID}`)
-      .then((response) => response.json())
-      .then((data) => {
-          const analysisData = data[store.storeID];
-          let customerID = Object.keys(analysisData);
-          let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
-          let abcCategories = Object.values(analysisData).map(item => item.abc_category);
-          let totalOrders = Object.values(analysisData).map(item => item.total_order_customer);
-          let averageOrderValue = Object.values(analysisData).map(item => parseFloat(item.average_order_value));
+    .then((response) => response.json())
+    .then((data) => {
+      const analysisData = data[store.storeID];
+      let customerID = Object.keys(analysisData);
+      let totalSales = Object.values(analysisData).map(item => item.total_sale_customer);
+      let abcCategories = Object.values(analysisData).map(item => item.abc_category);
+      let totalOrders = Object.values(analysisData).map(item => item.total_order_customer);
+      let averageOrderValue = Object.values(analysisData).map(item => parseFloat(item.average_order_value));
 
-          function updateChart(filteredData) {
-              const option = {
-                  textStyle: { color: "white" },
-                  grid: {
-                      top: '3%',
-                      left: '1%',
-                      right: '1%',
-                      bottom: '2%',
-                      containLabel: true
-                  },
-                  tooltip: {
-                      trigger: "axis",
-                      axisPointer: { type: "shadow" },
-                      formatter: function (params) {
-                          const index = params[0].dataIndex;
-                          return `
-                              Green good, red bad.<br/>
-                              A customer good, C customer bad.<br/>
-                              ABC Category: ${filteredData.abcCategories[index]}<br/>
-                              Customer ID: ${filteredData.customerID[index]}<br/>
-                              Total Revenue: ${filteredData.totalSales[index]}<br/>
-                              Total Orders: ${filteredData.totalOrders[index]}<br/>
+      function updateChart(filteredData) {
+        const option = {
+          textStyle: { color: "white" },
+          grid: {
+            top: '3%',
+            left: '1%',
+            right: '1%',
+            bottom: '2%',
+            containLabel: true
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "shadow" },
+            formatter: function (params) {
+              const marker = params[0].marker
+              const index = params[0].dataIndex;
+              return `
+                              ${marker} ${filteredData.customerID[index]}<br/>
+                              Revenue: ${filteredData.totalSales[index]}<br/>
+                              Orders: ${filteredData.totalOrders[index]}<br/>
                               Average Order Value: ${filteredData.averageOrderValue[index]?.toFixed(2) ?? 'N/A'}
                           `;
-                      },
-                  },
-                  xAxis: {
-                      type: "category",
-                      data: filteredData.abcCategories,
-                      axisLabel: { show: false },
-                  },
-                  yAxis: {
-                      type: "value",
-                      name: "Total Revenue",
-                  },
-                  series: [
-                      {
-                          name: "Total Revenue",
-                          type: "bar",
-                          data: filteredData.totalSales,
-                          label: { show: false, position: "insideBottom" },
-                          itemStyle: {
-                              color: function (params) {
-                                  const abcCategory = filteredData.abcCategories[params.dataIndex];
-                                  if (abcCategory === "A") return "green";
-                                  if (abcCategory === "B") return "yellow";
-                                  return "red";
-                              },
-                          },
-                      },
-                  ],
-              };
+            },
+          },
+          xAxis: {
+            type: "category",
+            data: filteredData.abcCategories,
+            axisLabel: { show: false },
+          },
+          yAxis: {
+            type: "value",
+            name: "Total Revenue",
+          },
+          series: [
+            {
+              name: "Total Revenue",
+              type: "bar",
+              data: filteredData.totalSales,
+              label: { show: false, position: "insideBottom" },
+              itemStyle: {
+                color: function (params) {
+                  const abcCategory = filteredData.abcCategories[params.dataIndex];
+                  if (abcCategory === "A") return "green";
+                  if (abcCategory === "B") return "yellow";
+                  return "red";
+                },
+              },
+            },
+          ],
+        };
 
-              myChart.hideLoading();
-              myChart.setOption(option);
+        myChart.hideLoading();
+        myChart.setOption(option);
+      }
+
+      const initialData = {
+        customerID,
+        totalSales,
+        abcCategories,
+        totalOrders,
+        averageOrderValue
+      };
+
+      updateChart(initialData);
+
+      const searchInput = document.getElementById("customerSearch");
+      searchInput.addEventListener("input", function () {
+        const searchQuery = searchInput.value.toLowerCase();
+        const filteredData = Object.keys(analysisData).reduce((acc, key) => {
+          if (key.toLowerCase().includes(searchQuery)) {
+            acc.customerID.push(key);
+            acc.totalSales.push(analysisData[key].total_sale_customer);
+            acc.abcCategories.push(analysisData[key].abc_category);
+            acc.totalOrders.push(analysisData[key].total_order_customer);
+            acc.averageOrderValue.push(parseFloat(analysisData[key].average_order_value));
           }
+          return acc;
+        }, { customerID: [], totalSales: [], abcCategories: [], totalOrders: [], averageOrderValue: [] });
 
-          const initialData = {
-              customerID,
-              totalSales,
-              abcCategories,
-              totalOrders,
-              averageOrderValue
-          };
-
-          updateChart(initialData);
-
-          const searchInput = document.getElementById("customerSearch");
-          searchInput.addEventListener("input", function () {
-              const searchQuery = searchInput.value.toLowerCase();
-              const filteredData = Object.keys(analysisData).reduce((acc, key) => {
-                  if (key.toLowerCase().includes(searchQuery)) {
-                      acc.customerID.push(key);
-                      acc.totalSales.push(analysisData[key].total_sale_customer);
-                      acc.abcCategories.push(analysisData[key].abc_category);
-                      acc.totalOrders.push(analysisData[key].total_order_customer);
-                      acc.averageOrderValue.push(parseFloat(analysisData[key].average_order_value));
-                  }
-                  return acc;
-              }, { customerID: [], totalSales: [], abcCategories: [], totalOrders: [], averageOrderValue: [] });
-
-              updateChart(filteredData);
-          });
-      })
-      .catch((error) => {
-          myChart.hideLoading();
-          console.error("Error fetching or processing data:", error);
+        updateChart(filteredData);
       });
+    })
+    .catch((error) => {
+      myChart.hideLoading();
+      console.error("Error fetching or processing data:", error);
+    });
 }
 
 
@@ -641,13 +640,13 @@ function abcAnalysis_pizza_1() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
@@ -769,13 +768,13 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/abc-analysis-pizza?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
@@ -816,12 +815,9 @@ function abcAnalysis_pizza_2(date = "2022-12-01") {
           formatter: function (params) {
             const index = params[0].dataIndex;
             return `
-              Product Name: ${names[index]}<br/>
-              Product SKU: ${productSKUs[index]}<br/>
-              Total Revenue: ${totalSales[index]}<br/>
-              Cumulative Percentage: ${(cumulativePercentage[index] * 100).toFixed(2)}%<br/>
-              ABC Category: ${abcCategories[index]}<br/>
-              Size: ${sizes[index]}
+              ${params[0].marker} ${names[index]} - ${sizes[index]}<br/>
+              SKU: ${productSKUs[index]}<br/>
+              Revenue: ${totalSales[index]}<br/>
             `;
           },
         },
@@ -904,13 +900,13 @@ function pizza_price_popularity() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/pizza-price-popularity?date=${date}&storeID=${store.storeID}`)
     .then((response) => response.json())
@@ -1003,13 +999,13 @@ async function pizzaPopularity() {
 
   try {
     myChart.showLoading({
-    color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+      color: spinnerColor,
+      text: '',
+      maskColor: 'rgba(255, 255, 255, 0)',
+      zlevel: 1000,
+      spinnerRadius: spinnerRadius,
+      lineWidth: lineWidth,
+    });
 
     const response = await fetch(`/api/pizzaPopularity?date=${date}&storeID=${store.storeID}`);
     const data = await response.json();
@@ -1261,13 +1257,13 @@ function dailyOrders() {
   var myChart = echarts.getInstanceByDom(dom) || echarts.init(dom, theme);
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   fetch(`/api/daily-orders-analysis?date=${date}&dow=${dow}&store=${store.storeID}`)
     .then((response) => response.json())
@@ -1292,8 +1288,10 @@ function dailyOrders() {
           trigger: "axis",
           formatter: function (params) {
             let index = params[0].dataIndex;
-            let bestPizzas = data[index].bestPizza ? data[index].bestPizza.join('<br/>') : 'N/A';
-            return `Hour: ${index}<br/>Average Orders: ${data[index].avg}<br/>bestPizza:<br/>${bestPizzas}`;
+
+            let bestPizzasText = data[index].bestPizza ? `Best Pizza:</br>${data[index].bestPizza.join("<br/>")}` : '';
+            let averageOrdersText = data[index].avg ? `Average Orders: ${data[index].avg}` : '';
+            return `Hour: ${index}<br/>${averageOrdersText}<br/>${bestPizzasText}`;
           },
         },
         yAxis: {
@@ -1328,13 +1326,13 @@ function pizzaIngredients() {
   var option;
 
   myChart.showLoading({
-  color: spinnerColor,
-  text: '',
-  maskColor: 'rgba(255, 255, 255, 0)',
-  zlevel: 1000,
-  spinnerRadius: spinnerRadius, 
-  lineWidth: lineWidth, 
-});
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
   let request = `/api/ingredientUsage?date=${date}&storeID=${store.storeID}&dow=${dow}`;
   fetch(request)

@@ -613,6 +613,15 @@ function revenueForecast() {
             textStyle: {
                 color: "white"
             },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                formatter: function (params) {
+                    return `${params[0].value[0]}</br>${params[0].value[1]}$`;
+                }
+            },
             grid: {
                 top: '11%',
                 bottom: '7%',
