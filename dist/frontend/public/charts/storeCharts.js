@@ -1151,7 +1151,7 @@ function dailyOrders() {
                 formatter: function (params) {
                     let index = params[0].dataIndex;
                     let bestPizzasText = data[index].bestPizza ? `Best Pizza:</br>${data[index].bestPizza.join("<br/>")}` : '';
-                    let averageOrdersText = data[index].avg ? `Average Orders: ${data[index].avg}` : '';
+                    let averageOrdersText = data[index].avg ? `Average Orders: ${data[index].avg.toFixed(2)}` : '';
                     return `Hour: ${index}<br/>${averageOrdersText}<br/>${bestPizzasText}`;
                 },
             },
