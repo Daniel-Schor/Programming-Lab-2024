@@ -16,7 +16,7 @@ function updateCharts(date) {
     fetchAverageOrderCustomer();
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
-    //fetchAverageOrderFrequency();
+    fetchAverageOrderFrequency();
     pizzaPopularity();
     gaugeChart();
     abcAnalysis_pizza_2();

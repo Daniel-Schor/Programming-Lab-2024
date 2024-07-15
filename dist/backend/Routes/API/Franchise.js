@@ -526,53 +526,35 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
 });
 router.get('/averageOrderFrequency', async (req, res) => {
     try {
-        const currentYear = new Date().getFullYear().toString();
-        let startDate = req.query.startDate || `${currentYear}-01-01`;
-        let endDate = req.query.endDate || `${currentYear}-12-31`;
-        let parameters = [startDate, endDate];
-        let query = `
-            WITH customer_orders AS (
-                SELECT
-                    "customerID",
-                    COUNT("purchaseID") AS total_orders,
-                    MIN("purchaseDate") AS first_order_date,
-                    MAX("purchaseDate") AS last_order_date
-                FROM
-                    "purchase"
-                WHERE
-                    "purchaseDate" >= $1
-                    AND "purchaseDate" <= $2
-                GROUP BY
-                    "customerID"
-            ),
-            customer_order_frequency AS (
-                SELECT
-                    "customerID",
-                    total_orders,
-                    EXTRACT(EPOCH FROM ("last_order_date" - "first_order_date")) / 86400 AS total_days,
-                    CASE
-                        WHEN total_orders > 1 THEN
-                            EXTRACT(EPOCH FROM ("last_order_date" - "first_order_date")) / 86400 / (total_orders - 1)
-                        ELSE NULL
-                    END AS average_order_frequency_days
-                FROM
-                    customer_orders
-                WHERE
-                    total_orders > 1
-            )
-            SELECT
-                ROUND(AVG(average_order_frequency_days), 2) AS average_order_frequency_for_avg_customer
-            FROM
-                customer_order_frequency
-            WHERE
-                average_order_frequency_days IS NOT NULL
-        `;
+        let date = req.query.date || process.env.DEFAULT_DATE;
+        let parameter = [date];
+        let query = `WITH abc AS (
+            SELECT 
+                p."customerID", 
+                COUNT(*) AS "order_count", 
+                EXTRACT(EPOCH FROM (MAX(p."purchaseDate") - MIN(p."purchaseDate"))) / NULLIF((COUNT(*) - 1), 0) / 86400 AS "order_frequency"
+            FROM 
+                purchase p
+            WHERE 
+                p."purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
-            query += ` AND "storeID" = $3`;
-            parameters.push(req.query.store);
+            query += ` AND "storeID" = $2`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
+            parameter.push(req.query.store);
         }
-        let result = await client.query(query, parameters);
-        res.status(200).json(result.rows[0]);
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
+        query += ` GROUP BY p."customerID") SELECT AVG("order_frequency") AS "average_order_frequency" FROM abc WHERE "order_count" > 1;`;
+        query2 += ` GROUP BY p."customerID") SELECT AVG("order_frequency") AS "average_order_frequency" FROM abc WHERE "order_count" > 1;`;
+        let result = await client.query(query, parameter);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].average_order_frequency, result.rows[0].average_order_frequency).toFixed(2) });
     }
     catch (err) {
         console.error(err);

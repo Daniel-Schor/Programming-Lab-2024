@@ -419,8 +419,8 @@ router.get('/abc-analysis-customers', async (req, res) => {
             return res.status(400).json({ error: 'StoreID and date are required' });
         }
 
-        console.log(`Received storeID: ${storeID}`);
-        console.log(`Received date: ${date}`);
+        //console.log(`Received storeID: ${storeID}`);
+        //console.log(`Received date: ${date}`);
 
         const query = `
         WITH total_sales_per_customer AS (
@@ -497,7 +497,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
 
         const result = await client.query(query, parameters);
 
-        console.log(result.rows); // Log the result for debugging
+        //console.log(result.rows); // Log the result for debugging
 
         const formattedData = {};
         result.rows.forEach(row => {

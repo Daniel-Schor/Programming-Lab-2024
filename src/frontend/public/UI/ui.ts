@@ -363,7 +363,13 @@ async function fetchAverageOrderFrequency(dow?: number) {
 
   const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('orderFrequency').innerText = data.average_order_frequency_for_avg_customer;
+  document.getElementById('orderFrequency').innerText = parseFloat(data["period"].average_order_frequency).toFixed(2);
+  if (data["percentageChange"] > 0) {
+    document.getElementById('orderFrequencyChange').style.color = 'red';
+  } else {
+    document.getElementById('orderFrequencyChange').style.color = 'green';
+  }
+  document.getElementById('orderFrequencyChange').innerText = data["percentageChange"] + '%';
 }
 
 
@@ -380,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchAverageOrderCustomer();
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
-  //fetchOrderFrequencyCustomer();
+  fetchAverageOrderFrequency();
 });
 
 

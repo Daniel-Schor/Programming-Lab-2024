@@ -19,7 +19,7 @@ function updateCharts(date?: string) {
   fetchAverageOrderCustomer();
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
-  //fetchAverageOrderFrequency();
+  fetchAverageOrderFrequency();
 
   pizzaPopularity();
   gaugeChart();
