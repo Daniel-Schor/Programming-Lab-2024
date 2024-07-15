@@ -537,7 +537,7 @@ function abcAnalysis_customer_2() {
           let totalOrders = Object.values(analysisData).map(item => item.total_order_customer);
           let averageOrderValue = Object.values(analysisData).map(item => parseFloat(item.average_order_value));
 
-          async function updateChart() {
+          function updateChart(filteredData) {
               const option = {
                   textStyle: { color: "white" },
                   grid: {
@@ -555,17 +555,17 @@ function abcAnalysis_customer_2() {
                           return `
                               Green good, red bad.<br/>
                               A customer good, C customer bad.<br/>
-                              ABC Category: ${abcCategories[index]}<br/>
-                              Customer ID: ${customerID[index]}<br/>
-                              Total Revenue: ${totalSales[index]}<br/>
-                              Total Orders: ${totalOrders[index]}<br/>
-                              Average Order Value: ${averageOrderValue[index].toFixed(2)}
+                              ABC Category: ${filteredData.abcCategories[index]}<br/>
+                              Customer ID: ${filteredData.customerID[index]}<br/>
+                              Total Revenue: ${filteredData.totalSales[index]}<br/>
+                              Total Orders: ${filteredData.totalOrders[index]}<br/>
+                              Average Order Value: ${filteredData.averageOrderValue[index]?.toFixed(2) ?? 'N/A'}
                           `;
                       },
                   },
                   xAxis: {
                       type: "category",
-                      data: abcCategories,
+                      data: filteredData.abcCategories,
                       axisLabel: { show: false },
                   },
                   yAxis: {
@@ -576,11 +576,11 @@ function abcAnalysis_customer_2() {
                       {
                           name: "Total Revenue",
                           type: "bar",
-                          data: totalSales,
+                          data: filteredData.totalSales,
                           label: { show: false, position: "insideBottom" },
                           itemStyle: {
                               color: function (params) {
-                                  const abcCategory = abcCategories[params.dataIndex];
+                                  const abcCategory = filteredData.abcCategories[params.dataIndex];
                                   if (abcCategory === "A") return "green";
                                   if (abcCategory === "B") return "yellow";
                                   return "red";
@@ -594,7 +594,15 @@ function abcAnalysis_customer_2() {
               myChart.setOption(option);
           }
 
-          updateChart();
+          const initialData = {
+              customerID,
+              totalSales,
+              abcCategories,
+              totalOrders,
+              averageOrderValue
+          };
+
+          updateChart(initialData);
 
           const searchInput = document.getElementById("customerSearch");
           searchInput.addEventListener("input", function () {
@@ -605,18 +613,12 @@ function abcAnalysis_customer_2() {
                       acc.totalSales.push(analysisData[key].total_sale_customer);
                       acc.abcCategories.push(analysisData[key].abc_category);
                       acc.totalOrders.push(analysisData[key].total_order_customer);
-                      acc.averageOrderValue.push(analysisData[key].average_order_value);
+                      acc.averageOrderValue.push(parseFloat(analysisData[key].average_order_value));
                   }
                   return acc;
               }, { customerID: [], totalSales: [], abcCategories: [], totalOrders: [], averageOrderValue: [] });
 
-              customerID = filteredData.customerID;
-              totalSales = filteredData.totalSales;
-              abcCategories = filteredData.abcCategories;
-              totalOrders = filteredData.totalOrders;
-              averageOrderValue = filteredData.averageOrderValue;
-
-              updateChart();
+              updateChart(filteredData);
           });
       })
       .catch((error) => {
