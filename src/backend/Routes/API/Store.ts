@@ -676,71 +676,96 @@ router.get('/averageOrdersByDayOfWeek', async (req, res) => {
 
 router.get('/averageRevenueByDayOfWeek', async (req, res) => {
     try {
-        let day_of_week = req.query.dow || 5;
-        let storeID = req.query.store || 'S302800';
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let query = `
-            SELECT EXTRACT(DOW FROM "purchaseDate") AS day_of_week, AVG(total_revenue) AS avg_revenue
-            FROM (
-                SELECT SUM(total) AS total_revenue
+        const storeID = req.query.storeID;
+        const startDate = req.query.startDate || '2022-11-12';
+        const dayOfWeek = req.query.dayOfWeek || '4';
+
+        if (!storeID) {
+            return res.status(400).send('storeID parameter is required');
+        }
+
+        const query = `
+            WITH abc AS (
+                SELECT SUM("total") AS total_revenue, EXTRACT(DAY FROM "purchaseDate") AS day_of_month
                 FROM "purchase"
-                WHERE "purchaseDate" > $1 AND "day_of_week"=$2 AND "storeID"=$3
-                GROUP BY "purchaseDate"
-            ) subquery
-            GROUP BY day_of_week;
+                WHERE "purchaseDate" > $1 AND "storeID" = $2 AND EXTRACT(DOW FROM "purchaseDate") = $3
+                GROUP BY EXTRACT(DAY FROM "purchaseDate")
+            )
+            SELECT AVG(total_revenue) AS average_daily_revenue
+            FROM abc;
         `;
-        let result = await client.query(query, [date]);
-        res.status(200).json(result.rows);
+
+        const parameters = [startDate, storeID, parseInt(dayOfWeek)];
+        const result = await client.query(query, parameters);
+
+        res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, out of order');
+        res.status(500).send('Internal server error');
     }
 });
 
 router.get('/averageCustomersByDayOfWeek', async (req, res) => {
     try {
-        let day_of_week = req.query.dow || 5;
-        let storeID = req.query.store || 'S302800';
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let query = `
-            SELECT EXTRACT(DOW FROM "purchaseDate") AS day_of_week, AVG(total_customers) AS avg_customers
-            FROM (
-                SELECT COUNT(DISTINCT "customerID") AS total_customers
+        const storeID = req.query.storeID;
+        const startDate = req.query.startDate || '2022-11-12';
+        const dayOfWeek = req.query.dayOfWeek || '4';
+
+        if (!storeID) {
+            return res.status(400).send('storeID parameter is required');
+        }
+
+        const query = `
+            WITH abc AS (
+                SELECT COUNT(DISTINCT "customerID") AS total_customers, EXTRACT(DAY FROM "purchaseDate") AS day_of_month
                 FROM "purchase"
-                WHERE "purchaseDate" > $1 AND "day_of_week"=$2 AND "storeID"=$3
-                GROUP BY "purchaseDate"
-            ) subquery
-            GROUP BY day_of_week;
+                WHERE "purchaseDate" > $1 AND "storeID" = $2 AND EXTRACT(DOW FROM "purchaseDate") = $3
+                GROUP BY EXTRACT(DAY FROM "purchaseDate")
+            )
+            SELECT AVG(total_customers) AS average_daily_customers
+            FROM abc;
         `;
-        let result = await client.query(query, [date]);
-        res.status(200).json(result.rows);
+
+        const parameters = [startDate, storeID, parseInt(dayOfWeek)];
+        const result = await client.query(query, parameters);
+
+        res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, out of order');
+        res.status(500).send('Internal server error');
     }
 });
 
+
 router.get('/averagePizzasSoldByDayOfWeek', async (req, res) => {
     try {
-        let day_of_week = req.query.dow || 5;
-        let storeID = req.query.store || 'S302800';
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let query = `
-            SELECT EXTRACT(DOW FROM "purchaseDate") AS day_of_week, AVG(total_pizzas_sold) AS avg_pizzas_sold
-            FROM (
-                SELECT COUNT(*) AS total_pizzas_sold
+        const storeID = req.query.storeID;
+        const startDate = req.query.startDate || '2022-11-12';
+        const dayOfWeek = req.query.dayOfWeek || '4';
+
+        if (!storeID) {
+            return res.status(400).send('storeID parameter is required');
+        }
+
+        const query = `
+            WITH abc AS (
+                SELECT COUNT(*) AS total_pizzas_sold, EXTRACT(DAY FROM "purchaseDate") AS day_of_month
                 FROM "purchaseItems"
                 JOIN "purchase" ON "purchaseItems"."purchaseID" = "purchase"."purchaseID"
-                WHERE "purchase"."purchaseDate" > $1 AND "day_of_week"=$2 AND "storeID"=$3
-                GROUP BY "purchaseDate"
-            ) subquery
-            GROUP BY day_of_week;
+                WHERE "purchase"."purchaseDate" > $1 AND "purchase"."storeID" = $2 AND EXTRACT(DOW FROM "purchase"."purchaseDate") = $3
+                GROUP BY EXTRACT(DAY FROM "purchase"."purchaseDate")
+            )
+            SELECT AVG(total_pizzas_sold) AS average_daily_pizzas_sold
+            FROM abc;
         `;
-        let result = await client.query(query, [date]);
-        res.status(200).json(result.rows);
+
+        const parameters = [startDate, storeID, parseInt(dayOfWeek)];
+        const result = await client.query(query, parameters);
+
+        res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, out of order');
+        res.status(500).send('Internal server error');
     }
 });
 
