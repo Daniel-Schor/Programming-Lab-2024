@@ -553,8 +553,11 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
 
 router.get('/averageOrderFrequency', async (req, res) => {
     try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameters = [date];
+        const currentYear = new Date().getFullYear().toString();
+        let startDate = req.query.startDate || `${currentYear}-01-01`;
+        let endDate = req.query.endDate || `${currentYear}-12-31`;
+        let parameters = [startDate, endDate];
+        
         let query = `
             WITH customer_orders AS (
                 SELECT
@@ -565,7 +568,8 @@ router.get('/averageOrderFrequency', async (req, res) => {
                 FROM
                     "purchase"
                 WHERE
-                    "purchaseDate" > $1
+                    "purchaseDate" >= $1
+                    AND "purchaseDate" <= $2
                 GROUP BY
                     "customerID"
             ),
@@ -573,15 +577,16 @@ router.get('/averageOrderFrequency', async (req, res) => {
                 SELECT
                     "customerID",
                     total_orders,
-                    first_order_date,
-                    last_order_date,
+                    EXTRACT(EPOCH FROM ("last_order_date" - "first_order_date")) / 86400 AS total_days,
                     CASE
                         WHEN total_orders > 1 THEN
-                            (EXTRACT(EPOCH FROM last_order_date) - EXTRACT(EPOCH FROM first_order_date)) / (86400 * (total_orders - 1))
+                            EXTRACT(EPOCH FROM ("last_order_date" - "first_order_date")) / 86400 / (total_orders - 1)
                         ELSE NULL
                     END AS average_order_frequency_days
                 FROM
                     customer_orders
+                WHERE
+                    total_orders > 1
             )
             SELECT
                 ROUND(AVG(average_order_frequency_days), 2) AS average_order_frequency_for_avg_customer
@@ -592,7 +597,7 @@ router.get('/averageOrderFrequency', async (req, res) => {
         `;
 
         if (req.query.store) {
-            query += ` AND "storeID" = $2`;
+            query += ` AND "storeID" = $3`;
             parameters.push(req.query.store);
         }
 
@@ -603,7 +608,5 @@ router.get('/averageOrderFrequency', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
-
-
 
 export default router;
