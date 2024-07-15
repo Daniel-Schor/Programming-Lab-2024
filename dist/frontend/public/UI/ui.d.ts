@@ -13,5 +13,5 @@ declare function fetchTotalPizzasSold(storeID?: string, dow?: number): Promise<v
 declare function fetchAverageOrderCustomer(storeID?: string, dow?: number): Promise<void>;
 declare function fetchAverageOrderValueCustomer(storeID?: string, dow?: number): Promise<void>;
 declare function fetchAveragePizzasPerOrderCustomer(storeID?: string, dow?: number): Promise<void>;
-declare function fetchOrderFrequencyCustomer(storeID?: string, dow?: number): Promise<void>;
+declare function fetchAverageOrderFrequency(storeID?: string, dow?: number): Promise<void>;
 declare function setActiveTimeButton(buttonId: any): void;

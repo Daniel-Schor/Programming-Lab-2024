@@ -537,7 +537,7 @@ router.get('/averageOrderFrequency', async (req, res) => {
             FROM
                 customer_order_frequency
             WHERE
-                average_order_frequency_days IS NOT NULL
+                average_order_frequency_days IS NOT NULL;
         `;
 
         if (req.query.store) {
@@ -552,6 +552,7 @@ router.get('/averageOrderFrequency', async (req, res) => {
         res.status(500).send('Sorry, out of order');
     }
 });
+
 
 
 export default router;
