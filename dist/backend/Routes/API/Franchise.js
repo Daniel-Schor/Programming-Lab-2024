@@ -432,14 +432,24 @@ router.get('/averageOrderCustomer', async (req, res) => {
                          SELECT "customerID", COUNT(*) AS "order_count"
                          FROM "purchase"
                          WHERE "purchaseDate" > $1`;
+        let query2 = query.replace(">", "<=");
         if (req.query.store) {
             query += ` AND "storeID" = $2`;
+            query2 += ` AND "storeID" = $2 AND "purchaseDate" > $3`;
             parameter.push(req.query.store);
         }
-        query += ` GROUP BY "customerID"
-                     ) AS "customer_orders"`;
+        else {
+            query2 += ` AND "purchaseDate" > $2`;
+        }
+        query += ` GROUP BY "customerID") AS "customer_orders"`;
+        query2 += ` GROUP BY "customerID") AS "customer_orders"`;
         let result = await client.query(query, parameter);
-        res.status(200).json(result.rows[0]);
+        let newDate = new Date(date);
+        let period = calculatePeriodMs(newDate, new Date(process.env.CURRENT_DATE));
+        newDate.setTime(newDate.getTime() - period);
+        parameter.push(newDate.toISOString().split('T')[0]);
+        let result2 = await client.query(query2, parameter);
+        res.status(200).json({ period: result.rows[0], percentageChange: calculatePercentageChange(result2.rows[0].avg_orders_per_customer, result.rows[0].avg_orders_per_customer).toFixed(2) });
     }
     catch (err) {
         console.error(err);
@@ -496,8 +506,10 @@ router.get('/averagePizzasPerOrderCustomer', async (req, res) => {
 });
 router.get('/averageOrderFrequency', async (req, res) => {
     try {
-        let date = req.query.date || process.env.DEFAULT_DATE;
-        let parameters = [date];
+        const currentYear = new Date().getFullYear().toString();
+        let startDate = req.query.startDate || `${currentYear}-01-01`;
+        let endDate = req.query.endDate || `${currentYear}-12-31`;
+        let parameters = [startDate, endDate];
         let query = `
             WITH customer_orders AS (
                 SELECT
@@ -508,7 +520,8 @@ router.get('/averageOrderFrequency', async (req, res) => {
                 FROM
                     "purchase"
                 WHERE
-                    "purchaseDate" > $1
+                    "purchaseDate" >= $1
+                    AND "purchaseDate" <= $2
                 GROUP BY
                     "customerID"
             ),
@@ -516,15 +529,16 @@ router.get('/averageOrderFrequency', async (req, res) => {
                 SELECT
                     "customerID",
                     total_orders,
-                    first_order_date,
-                    last_order_date,
+                    EXTRACT(EPOCH FROM ("last_order_date" - "first_order_date")) / 86400 AS total_days,
                     CASE
                         WHEN total_orders > 1 THEN
-                            (EXTRACT(EPOCH FROM last_order_date) - EXTRACT(EPOCH FROM first_order_date)) / (86400 * (total_orders - 1))
+                            EXTRACT(EPOCH FROM ("last_order_date" - "first_order_date")) / 86400 / (total_orders - 1)
                         ELSE NULL
                     END AS average_order_frequency_days
                 FROM
                     customer_orders
+                WHERE
+                    total_orders > 1
             )
             SELECT
                 ROUND(AVG(average_order_frequency_days), 2) AS average_order_frequency_for_avg_customer
@@ -534,7 +548,7 @@ router.get('/averageOrderFrequency', async (req, res) => {
                 average_order_frequency_days IS NOT NULL
         `;
         if (req.query.store) {
-            query += ` AND "storeID" = $2`;
+            query += ` AND "storeID" = $3`;
             parameters.push(req.query.store);
         }
         let result = await client.query(query, parameters);
