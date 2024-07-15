@@ -488,7 +488,7 @@ router.get('/averageOrderFrequency', async (req, res) => {
             FROM
                 customer_order_frequency
             WHERE
-                average_order_frequency_days IS NOT NULL
+                average_order_frequency_days IS NOT NULL;
         `;
         if (req.query.store) {
             query += ` AND "storeID" = $2`;

@@ -240,11 +240,11 @@ async function fetchAveragePizzasPerOrderCustomer(storeID, dow) {
     document.getElementById('avgPizzasPerOrder').innerText = parseFloat(data.avg_pizzas_per_order).toFixed(2);
 }
 // Function to fetch order frequency per customer
-async function fetchOrderFrequencyCustomer(storeID, dow) {
+async function fetchAverageOrderFrequency(storeID, dow) {
     let date = JSON.parse(localStorage.getItem("date"));
     const response = await fetch(`/api/averageOrderFrequency?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('orderFrequency').innerText = data.avg_order_frequency_in_days;
+    document.getElementById('orderFrequency').innerText = data.average_order_frequency_for_avg_customer;
 }
 // Call functions on page load
 document.addEventListener('DOMContentLoaded', function () {
