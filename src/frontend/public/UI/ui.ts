@@ -221,16 +221,12 @@ function visibilityCoustomDate() {
   });
 }
 
-
-
-
-
-
 // Function to fetch total orders
 async function fetchTotalOrders(dow?: number) {
   let date = JSON.parse(localStorage.getItem("date"));
-  let storeID = JSON.parse(localStorage.getItem("store")).storeID;
-  console.log(storeID);
+  let storeID = JSON.parse(localStorage.getItem("store"));
+  storeID = storeID ? storeID.storeID : null;
+
   let response = await fetch(`/api/totalOrders?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   let data = await response.json();
   document.getElementById('totalOrders').innerText = data["period"].total_orders;
