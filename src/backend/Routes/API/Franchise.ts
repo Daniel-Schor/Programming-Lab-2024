@@ -308,7 +308,7 @@ router.get('/pizzaPopularity', async (req, res) => {
     }
 });
 
-router.get('/revenue-forecast-analysis', async (req, res) => {
+router.get('/revenue-franchise-analysis', async (req, res) => {
     try {
         let date = req.query.date || process.env.DEFAULT_DATE;
         const startDate = `${date.split("-")[0]}-01-01`;
