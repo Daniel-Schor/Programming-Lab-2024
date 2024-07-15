@@ -361,6 +361,10 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
     fetchAverageOrderFrequency();
+    fetchAveragePizzasSoldByDayOfWeek();
+    fetchAverageCustomersByDayOfWeek();
+    fetchAverageRevenueByDayOfWeek();
+    fetchAverageOrdersByDayOfWeek();
 });
 function setActiveTimeButton(buttonId) {
     document.getElementById("Last-Year").classList.remove("active");
@@ -375,7 +379,7 @@ async function fetchAverageOrdersByDayOfWeek() {
     let storeID = store ? store.storeID : null;
     let response = await fetch(`/api/averageOrdersByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     let data = await response.json();
-    document.getElementById('totalOrders').innerText = data.avg_orders;
+    document.getElementById('dowOrders').innerText = data.avg_orders;
 }
 async function fetchAverageRevenueByDayOfWeek() {
     let date = JSON.parse(localStorage.getItem("date"));
@@ -383,7 +387,7 @@ async function fetchAverageRevenueByDayOfWeek() {
     let storeID = store ? store.storeID : null;
     const response = await fetch(`/api/averageRevenueByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalRevenue').innerText = data.avg_revenue + "$";
+    document.getElementById('dowRevenue').innerText = data.avg_revenue + "$";
 }
 async function fetchAverageCustomersByDayOfWeek() {
     let date = JSON.parse(localStorage.getItem("date"));
@@ -391,7 +395,7 @@ async function fetchAverageCustomersByDayOfWeek() {
     let storeID = store ? store.storeID : null;
     const response = await fetch(`/api/averageCustomersByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalCustomers').innerText = data.avg_customers;
+    document.getElementById('dowCustomers').innerText = data.avg_customers;
 }
 async function fetchAveragePizzasSoldByDayOfWeek() {
     let date = JSON.parse(localStorage.getItem("date"));
@@ -399,6 +403,6 @@ async function fetchAveragePizzasSoldByDayOfWeek() {
     let storeID = store ? store.storeID : null;
     const response = await fetch(`/api/averagePizzasSoldByDayOfWeek?date=${date}${storeID ? `&storeID=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalPizzasSold').innerText = data.avg_pizzas_sold;
+    document.getElementById('dowPizzasSold').innerText = data.avg_pizzas_sold;
 }
 //# sourceMappingURL=ui.js.map
