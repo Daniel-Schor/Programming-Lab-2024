@@ -589,7 +589,7 @@ router.get('/averageOrdersByDayOfWeek', async (req, res) => {
     }
     catch (err) {
         console.error(err);
-        res.status(500).send('Sorry, out of order');
+        res.status(500).send('Sorrys, out of order');
     }
 });
 router.get('/averageRevenueByDayOfWeek', async (req, res) => {
