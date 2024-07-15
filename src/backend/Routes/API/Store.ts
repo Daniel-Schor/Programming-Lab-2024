@@ -484,6 +484,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
             "customerID",
             total_sale_customer,
             total_order_customer,
+            total_sale_customer / total_order_customer AS average_order_value,
             total_sum_sales,
             customer_percentage_of_total,
             sorted_cumulative_customer_percentage_of_total,
@@ -503,6 +504,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
             formattedData[row.customerID] = {
                 total_sale_customer: row.total_sale_customer,
                 total_order_customer: row.total_order_customer,
+                average_order_value: row.average_order_value,
                 total_sum_sales: row.total_sum_sales,
                 customer_percentage_of_total: row.customer_percentage_of_total,
                 sorted_cumulative_customer_percentage_of_total: row.sorted_cumulative_customer_percentage_of_total,
@@ -517,6 +519,7 @@ router.get('/abc-analysis-customers', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 router.get('/abc-analysis-pizza', async (req, res) => {
     try {
