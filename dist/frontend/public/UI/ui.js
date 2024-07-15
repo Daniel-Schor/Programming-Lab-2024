@@ -361,6 +361,10 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchAverageOrderValueCustomer();
     fetchAveragePizzasPerOrderCustomer();
     fetchAverageOrderFrequency();
+    fetchAveragePizzasSoldByDayOfWeek();
+    fetchAverageCustomersByDayOfWeek();
+    fetchAverageRevenueByDayOfWeek();
+    fetchAverageOrdersByDayOfWeek();
 });
 function setActiveTimeButton(buttonId) {
     document.getElementById("Last-Year").classList.remove("active");
@@ -383,7 +387,7 @@ async function fetchAverageRevenueByDayOfWeek() {
     let storeID = store ? store.storeID : null;
     const response = await fetch(`/api/averageRevenueByDayOfWeek?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
     const data = await response.json();
-    document.getElementById('totalRevenue').innerText = data.avg_revenue + "$";
+    document.getElementById('dowRevenue').innerText = data.avg_revenue + "$";
 }
 async function fetchAverageCustomersByDayOfWeek() {
     let date = JSON.parse(localStorage.getItem("date"));

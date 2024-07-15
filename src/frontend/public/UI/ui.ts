@@ -389,6 +389,10 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
   fetchAverageOrderFrequency();
+  fetchAveragePizzasSoldByDayOfWeek();
+  fetchAverageCustomersByDayOfWeek();
+  fetchAverageRevenueByDayOfWeek();
+  fetchAverageOrdersByDayOfWeek();
 });
 
 
@@ -418,7 +422,7 @@ async function fetchAverageRevenueByDayOfWeek() {
 
   const response = await fetch(`/api/averageRevenueByDayOfWeek?date=${date}${storeID ? `&store=${storeID}` : ''}${dow ? `&dow=${dow}` : ''}`);
   const data = await response.json();
-  document.getElementById('totalRevenue').innerText = data.avg_revenue + "$";
+  document.getElementById('dowRevenue').innerText = data.avg_revenue + "$";
 }
 
 async function fetchAverageCustomersByDayOfWeek() {
