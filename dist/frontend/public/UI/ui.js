@@ -21,8 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
             var sidebar = document.querySelector("#sidebar");
             // Clear existing sidebar content
             sidebar.innerHTML = "";
-            // Loop through each city in groupedStores
-            for (var city in groupedStores) {
+            // Sort the keys (cities) of groupedStores
+            var sortedCities = Object.keys(groupedStores).sort();
+            // Loop through each sorted city in groupedStores
+            sortedCities.forEach((city) => {
                 if (groupedStores.hasOwnProperty(city)) {
                     // Create a button for the city
                     var cityDiv = document.createElement("div");
@@ -73,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     cityDiv.appendChild(cityUl);
                     sidebar.appendChild(cityDiv);
                 }
-            }
+            });
             let testdiv = document.createElement("h1");
             //testdiv.textContent = "End of content";
             testdiv.classList.add("spacer");

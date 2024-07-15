@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 */
-// TODO use .env variables instead
+// TO DO use .env variables instead
 const theme = '#ccc';
 const currentDate = "2022-12-31";
 
@@ -43,6 +43,11 @@ function updateCharts(date?: string) {
   } else {
     worstButton(curColors);
   }
+  if (JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
+    return;
+  }
+
+  pizzaPopularity();
   fetchTotalOrders();
   fetchTotalRevenue();
   fetchTotalCustomers();
@@ -50,10 +55,9 @@ function updateCharts(date?: string) {
   fetchAverageOrderCustomer();
   fetchAverageOrderValueCustomer();
   fetchAveragePizzasPerOrderCustomer();
-  pizzaPopularity();
 }
 
-// TODO move to generalCharts.ts
+// TO DO move to generalCharts.ts
 function updateChart(chart, option) {
 
   if (option && typeof option === "object") {
@@ -711,17 +715,15 @@ async function pizzaPopularity() {
   var myChart = echarts.init(chartDom, theme);
   let date = JSON.parse(localStorage.getItem("date"));
 
-  if (!JSON.parse(localStorage.getItem("barChartTogglePressed"))) {
-    myChart.showLoading({
-      color: spinnerColor,
-      text: '',
-      maskColor: 'rgba(255, 255, 255, 0)',
-      zlevel: 1000,
-      spinnerRadius: spinnerRadius,
-      lineWidth: lineWidth,
-    });
+  myChart.showLoading({
+    color: spinnerColor,
+    text: '',
+    maskColor: 'rgba(255, 255, 255, 0)',
+    zlevel: 1000,
+    spinnerRadius: spinnerRadius,
+    lineWidth: lineWidth,
+  });
 
-  }
 
   var option;
 

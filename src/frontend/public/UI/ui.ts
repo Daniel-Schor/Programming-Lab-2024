@@ -19,70 +19,74 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((groupedStores) => {
         var sidebar = document.querySelector("#sidebar");
-
+    
         // Clear existing sidebar content
         sidebar.innerHTML = "";
-
-        // Loop through each city in groupedStores
-        for (var city in groupedStores) {
-          if (groupedStores.hasOwnProperty(city)) {
-            // Create a button for the city
-            var cityDiv = document.createElement("div");
-            cityDiv.classList.add("city-section");
-            if (groupedStores[city].length === 1) {
-              var cityLink = document.createElement("button");
-              let storeID = groupedStores[city][0].storeID;
-              cityLink.textContent = city + " - " + storeID;
-              cityLink.classList.add("city-button");
-              cityLink.onclick = function () {
-                window.location.href = `/store`;
-                localStorage.setItem('store', JSON.stringify({ "storeID": storeID }));
-              };
-              cityDiv.appendChild(cityLink);
-            } else {
-              var cityButton = document.createElement("button");
-              let currentButton = city;
-              cityButton.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
-              cityButton.classList.add("city-button");
-              cityButton.onclick = function (params) {
-                let condition = !this.nextElementSibling.classList.contains("show")
-                if (condition) {
-                  this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-down"></i></div>`;
+    
+        // Sort the keys (cities) of groupedStores
+        var sortedCities = Object.keys(groupedStores).sort();
+    
+        // Loop through each sorted city in groupedStores
+        sortedCities.forEach((city) => {
+            if (groupedStores.hasOwnProperty(city)) {
+                // Create a button for the city
+                var cityDiv = document.createElement("div");
+                cityDiv.classList.add("city-section");
+                if (groupedStores[city].length === 1) {
+                    var cityLink = document.createElement("button");
+                    let storeID = groupedStores[city][0].storeID;
+                    cityLink.textContent = city + " - " + storeID;
+                    cityLink.classList.add("city-button");
+                    cityLink.onclick = function () {
+                        window.location.href = `/store`;
+                        localStorage.setItem('store', JSON.stringify({ "storeID": storeID }));
+                    };
+                    cityDiv.appendChild(cityLink);
                 } else {
-                  this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
+                    var cityButton = document.createElement("button");
+                    let currentButton = city;
+                    cityButton.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
+                    cityButton.classList.add("city-button");
+                    cityButton.onclick = function (params) {
+                        let condition = !this.nextElementSibling.classList.contains("show")
+                        if (condition) {
+                            this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-down"></i></div>`;
+                        } else {
+                            this.innerHTML = `<div class="city-button-content"><a style='font-size: 14px;'>${currentButton}</a> <i class="fa-solid fa-angle-left"></i></div>`;
+                        }
+                        this.nextElementSibling.classList.toggle("show");
+                    };
+    
+                    cityDiv.appendChild(cityButton);
                 }
-                this.nextElementSibling.classList.toggle("show");
-              };
-
-              cityDiv.appendChild(cityButton);
+                // Create a list for the stores in the city
+                var cityUl = document.createElement("ul");
+                cityUl.classList.add("store-list", "hidden");
+    
+                groupedStores[city].forEach(function (store) {
+                    var storeLi = document.createElement("li");
+                    var a = document.createElement("a");
+                    a.href = `/store`;
+                    a.onclick = function () {
+                        localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
+                        window.location.href = `/store`;
+                    }
+                    a.textContent = store.storeID;
+                    storeLi.appendChild(a);
+                    cityUl.appendChild(storeLi);
+                });
+    
+                cityDiv.appendChild(cityUl);
+                sidebar.appendChild(cityDiv);
+    
             }
-            // Create a list for the stores in the city
-            var cityUl = document.createElement("ul");
-            cityUl.classList.add("store-list", "hidden");
-
-            groupedStores[city].forEach(function (store) {
-              var storeLi = document.createElement("li");
-              var a = document.createElement("a");
-              a.href = `/store`;
-              a.onclick = function () {
-                localStorage.setItem('store', JSON.stringify({ "storeID": store.storeID }));
-                window.location.href = `/store`;
-              }
-              a.textContent = store.storeID;
-              storeLi.appendChild(a);
-              cityUl.appendChild(storeLi);
-            });
-
-            cityDiv.appendChild(cityUl);
-            sidebar.appendChild(cityDiv);
-
-          }
-        }
+        });
         let testdiv = document.createElement("h1");
         //testdiv.textContent = "End of content";
         testdiv.classList.add("spacer");
         sidebar.appendChild(testdiv);
-      })
+    })
+    
       .catch((error) => {
         console.error("Error fetching stores:", error);
       });
