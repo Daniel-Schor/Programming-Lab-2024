@@ -15,7 +15,6 @@ app.use("/static", express.static(path.join(__dirname, '../../../dist/frontend/p
 app.use("/style", express.static(path.join(__dirname, '../../../src/frontend/styles')));
 app.use("/img", express.static(path.join(__dirname, '../../../src/frontend/img')));
 
-
 app.use(cors({
     origin: 'http://localhost:3000' // replace with the origin of your client
 }));
