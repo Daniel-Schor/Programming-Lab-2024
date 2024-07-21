@@ -1,19 +1,21 @@
 # Programming-Lab-2024
 
 ## Setup
-Requirments: Node.js, PostgresSQL Version 16, SQL Database File
-Dependencies
+### Requirments
+Node.js, PostgresSQL Version 16, SQL Database File
+
+### Dependencies
 1.	Download and install [NODE](https://nodejs.org/en/download)
-PostgresSQL
+### PostgresSQL
 2.	Download and install [PostgresSQL Version 16](https://www.postgresql.org/download/)
     a.	Choose the password: admin
     b.	Choose your own Port or choose the default Port: 5432
 3.	Configuration of PostgresSQL
-   a.	Start pgAdmin4
+   a.   Start pgAdmin4
    b.	Click File => Preferences => Paths => Binary Path => PostgreSQL Binary Path => choose PostgreSQL 16 and edit the binary Path to "C:\Program Files\PostgreSQL\16\bin"
    c.	If default Port was changed
        i.	Click Servers => Right Click on PostgresSQL => choose Properties => choose connection -> change the port number to your port
-Database
+### Database
 4.	Download the [Database](https://studfrauasde-my.sharepoint.com/:u:/g/personal/yannis_koerner_stud_fra-uas_de/EZvGVpPy49pIoH4PIbFGx2ABaNo38A277FUR4gqsklbdQA?e=dA7DX2)
     a.	start pgAdmin4
     b.	Click on servers => Click on PostgresSQL => Type your Password here: admin => Right click on databases => create database
@@ -21,19 +23,19 @@ Database
         ii.	owner: postgres
     c.	Right Click on the new database pizza => Click on restore
         i.	Role Name: postgres
-Project
+### Project
 5.	Clone the Repository to your local machine from GitHub or download a zip of the whole repository from here
 6.	Open your terminal or command prompt
     a.	Navigate to the directory of the repository
     b.	Type “node dist/backend/index.js”
     c.	Open the link in the terminal
  
-Changing Port of the Dashboard
+### Changing Port of the Dashboard
 1.	Navigate to the directory of the repository
 2.	Open the file “.env”
 3.	Change the value: WEB_PORT = 3000
 
-Changing Port of the PostgresSQL Server
+### Changing Port of the PostgresSQL Server
 1.	Navigate to the directory: C:\Program Files\PostgreSQL\16\data
 2.	Open the file: postgresql.conf
     a.	Change the value: port = 5432
@@ -43,7 +45,7 @@ Changing Port of the PostgresSQL Server
         ii.	net start postgresql-x64-16
 4.	Navigate to the repository
 5.	Open the file “.env”
-a.	Change the value: DB_PORT: 5432
+    a.	Change the value: DB_PORT: 5432
 
 ## How to code:
 - **autocompiler:** F1 -> Tasks: Run Build Task -> tsc: watch - tsconfig.json (only compiles if no errors)
