@@ -29,6 +29,7 @@
     "express": "^4.19.2",
     "leaflet": "^1.9.4",
     "pg": "^8.11.5",
+    "programming-lab-2024": "file:",
     "promises": "^0.2.5"
   }
 }

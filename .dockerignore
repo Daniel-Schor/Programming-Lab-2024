@@ -1,0 +1,11 @@
+node_modules
+.vscode
+*.log
+*.bat
+*.pdf
+*.xlsx
+tsconfig*.json
+README.md
+requirements.txt
+Planing/
+Outdated/
