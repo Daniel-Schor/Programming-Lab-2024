@@ -1,7 +1,7 @@
-import app from './Config/serverConfig.js';
 import * as dotenv from 'dotenv';
-
 dotenv.config();
+
+import app from './Config/serverConfig.js';
 
 const PORT = process.env.WEB_PORT || 3000;
 
